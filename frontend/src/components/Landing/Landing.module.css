@@ -825,7 +825,8 @@ html {
 
 .workshopGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  /* grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); */
+  grid-template-columns: repeat(3, 1fr);
   gap: 30px;
 }
 
@@ -855,7 +856,7 @@ html {
   border-color: var(--primary-light);
 }
 
-.workshopImage {
+/* .workshopImage {
   height: 180px;
   background: var(--gradient-accent);
   display: flex;
@@ -863,15 +864,15 @@ html {
   align-items: center;
   position: relative;
   overflow: hidden;
-}
-
+} */
+/* 
 .imagePlaceholder {
   font-size: 64px;
   position: relative;
   z-index: 1;
-}
+} */
 
-.workshopBadge {
+/* .workshopBadge {
   position: absolute;
   top: 16px;
   right: 16px;
@@ -883,7 +884,7 @@ html {
   font-weight: 700;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   z-index: 2;
-}
+} */
 
 .workshopContent {
   padding: 24px;
@@ -978,6 +979,50 @@ html {
 .btnWorkshop:hover {
   transform: scale(1.05);
   box-shadow: 0 8px 25px rgba(46, 90, 136, 0.3);
+}
+
+.workshopImage {
+  height: 200px;
+  background: var(--gradient-primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ✅ استایل برای تصویر کارگاه */
+.workshopImageCustom {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: var(--transition);
+}
+
+.workshopCard:hover .workshopImageCustom {
+  transform: scale(1.05);
+}
+
+/* ✅ استایل برای placeholder (اگر تصویر نبود) */
+.imagePlaceholder {
+  font-size: 64px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ✅ بدج پیش‌رو */
+.workshopBadge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--primary);
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  z-index: 2;
 }
 
 /* ========== PODCASTS ========== */

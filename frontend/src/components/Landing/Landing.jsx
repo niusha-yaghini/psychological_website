@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./Landing.module.css";
 import seedData from "../../../../backend/seed";
 
-import backImage from "../../assets/back3.png";
+import backImage from "../../../public/images/back3.png";
 
 // تابع کمکی برای تبدیل تاریخ شمسی به نمایش فارسی
 const formatPersianDate = (dateStr) => {
@@ -59,7 +59,6 @@ function Landing() {
           <button className={styles.menuToggle}>☰</button>
         </div>
       </header>
-
       {/* ======== HERO ======== */}
       <section className={styles.hero}>
         <div className={styles.container}>
@@ -96,9 +95,9 @@ function Landing() {
               <button className={styles.btnPrimary}>
                 <span>📅</span> رزرو وقت مشاوره
               </button>
-              <button className={styles.btnSecondary}>
+              {/* <button className={styles.btnSecondary}>
                 <span>🎙️</span> پادکست‌ها
-              </button>
+              </button> */}
             </div>
           </div>
           <div className={styles.heroImage}>
@@ -118,9 +117,89 @@ function Landing() {
           </svg>
         </div>
       </section>
-
+      {/* ======== WORKSHOPS ======== */}
+      // src/components/Landing/Landing.jsx
       {/* ======== WORKSHOPS ======== */}
       <section id="workshops" className={styles.workshops}>
+        <div className={styles.container}>
+          <div className={styles.sectionHeader}>
+            <div>
+              <span className={styles.sectionTag}>📚 آموزش</span>
+              <h2>کارگاه‌های آموزشی</h2>
+            </div>
+            <div className={styles.tabs}>
+              <button
+                className={`${styles.tabBtn} ${
+                  activeTab === "upcoming" ? styles.active : ""
+                }`}
+                onClick={() => setActiveTab("upcoming")}
+              >
+                کارگاه‌های پیش‌رو
+              </button>
+              <button
+                className={`${styles.tabBtn} ${
+                  activeTab === "past" ? styles.active : ""
+                }`}
+                onClick={() => setActiveTab("past")}
+              >
+                کارگاه‌های گذشته
+              </button>
+            </div>
+          </div>
+          <div className={styles.workshopGrid}>
+            {(activeTab === "upcoming" ? upcomingWorkshops : pastWorkshops).map(
+              (workshop) => (
+                <div key={workshop.id} className={styles.workshopCard}>
+                  <div className={styles.workshopImage}>
+                    {/* ✅ جایگزین کردن placeholder با تصویر واقعی */}
+                    <img
+                      src={workshop.image}
+                      alt={workshop.title}
+                      className={styles.workshopImageCustom}
+                      onError={(e) => {
+                        // اگر تصویر پیدا نشد، ایموجی نمایش داده شود
+                        e.target.style.display = "none";
+                        e.target.parentElement.innerHTML = `<div class="${styles.imagePlaceholder}">📘</div>`;
+                      }}
+                    />
+                    {workshop.isUpcoming && (
+                      <div className={styles.workshopBadge}>پیش‌رو</div>
+                    )}
+                  </div>
+                  <div className={styles.workshopContent}>
+                    <h3>{workshop.title}</h3>
+                    <div className={styles.workshopMeta}>
+                      <span>📅 {formatPersianDate(workshop.date)}</span>
+                    </div>
+                    <p className={styles.workshopDescription}>
+                      {workshop.description}
+                    </p>
+                    <div className={styles.workshopTags}>
+                      {workshop.tags.map((tag, i) => (
+                        <span key={i} className={styles.tag}>
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <div className={styles.workshopFooter}>
+                      <div>
+                        <span className={styles.workshopPrice}>
+                          {workshop.price}
+                        </span>
+                      </div>
+                      <button className={styles.btnWorkshop}>
+                        {workshop.isUpcoming ? "ثبت‌نام ✨" : "مشاهده سرفصل‌ها"}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )
+            )}
+          </div>
+        </div>
+      </section>
+      
+      {/* <section id="workshops" className={styles.workshops}>
         <div className={styles.container}>
           <div className={styles.sectionHeader}>
             <div>
@@ -160,7 +239,6 @@ function Landing() {
                     <h3>{workshop.title}</h3>
                     <div className={styles.workshopMeta}>
                       <span>📅 {formatPersianDate(workshop.date)}</span>
-                      <span>⏰ {workshop.time}</span>
                     </div>
                     <p className={styles.workshopDescription}>
                       {workshop.description}
@@ -177,9 +255,6 @@ function Landing() {
                         <span className={styles.workshopPrice}>
                           {workshop.price}
                         </span>
-                        <span className={styles.workshopCapacity}>
-                          {workshop.registered}/{workshop.capacity} نفر
-                        </span>
                       </div>
                       <button className={styles.btnWorkshop}>
                         {workshop.isUpcoming ? "ثبت‌نام ✨" : "مشاهده سرفصل‌ها"}
@@ -191,8 +266,7 @@ function Landing() {
             )}
           </div>
         </div>
-      </section>
-
+      </section> */}
       {/* ======== PODCASTS ======== */}
       <section id="podcasts" className={styles.podcasts}>
         <div className={styles.container}>
@@ -245,7 +319,6 @@ function Landing() {
           </div>
         </div>
       </section>
-
       {/* ======== ABOUT ======== */}
       <section id="about" className={styles.about}>
         <div className={styles.container}>
@@ -302,7 +375,6 @@ function Landing() {
           </div>
         </div>
       </section>
-
       {/* ======== CLINICS ======== */}
       <section id="clinics" className={styles.clinics}>
         <div className={styles.container}>
@@ -330,7 +402,6 @@ function Landing() {
           </div>
         </div>
       </section>
-
       {/* ======== SOCIAL & CONTACT ======== */}
       <section className={styles.contact}>
         <div className={styles.container}>
@@ -387,7 +458,6 @@ function Landing() {
           </div>
         </div>
       </section>
-
       {/* ======== FOOTER ======== */}
       <footer className={styles.footer}>
         <div className={styles.container}>
