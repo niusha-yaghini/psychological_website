@@ -1,9 +1,7 @@
-// src/components/PatientPanel/PatientPanel.jsx
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom"; // ✅ useNavigate اضافه شد
 import styles from "./PatientPanel.module.css";
 
-// داده‌های نمونه
 const mockSessions = [
   {
     id: 1,

@@ -1,4 +1,3 @@
-// src/components/Auth/PhoneVerification/PhoneVerification.jsx
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./PhoneVerification.module.css";

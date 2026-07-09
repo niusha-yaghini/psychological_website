@@ -1,4 +1,3 @@
-// src/components/Auth/Signup/Signup.jsx
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom"; // ✅ useNavigate اضافه شد
 import styles from "./Signup.module.css";
