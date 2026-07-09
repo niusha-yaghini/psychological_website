@@ -83,10 +83,9 @@ function Landing() {
       <section className={styles.hero}>
         <div className={styles.container}>
           <div className={styles.heroContent}>
-            <h1 className={styles.heroTitle}>
-              {doctor.name}
-              <span className={styles.heroSubtitle}>{doctor.specialty}</span>
-            </h1>
+            <h1 className={styles.heroTitle}>{doctor.name}</h1>
+            <span className={styles.heroSubtitle}>{doctor.specialty}</span>
+
             <p className={styles.heroDescription}>{doctor.bio}</p>
             {/* <div className={styles.heroStats}>
               <div>
@@ -109,13 +108,14 @@ function Landing() {
               </div>
             </div> */}
             <div className={styles.heroButtons}>
+              
               {/* ✅ استفاده از Link برای ورود و ثبت‌نام */}
               <Link to="/login" className={styles.btnPrimary}>
-                <span>👤</span> ورود به پنل بیماران
+              چطوری اولین قدم رو بردارم؟
               </Link>
-              <Link to="/signup" className={styles.btnSecondary}>
+              {/* <Link to="/signup" className={styles.btnSecondary}>
                 <span>📝</span> ثبت‌نام جدید
-              </Link>
+              </Link> */}
             </div>
           </div>
           {/* <div className={styles.heroImage}>

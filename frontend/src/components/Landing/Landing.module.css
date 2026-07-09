@@ -698,6 +698,9 @@ html {
   align-items: center;
   gap: 60px;
   /* position: relative; */
+  /* padding: 5%; */
+  padding-right: 5%;
+  padding-bottom: 3%;
   z-index: 1;
 }
 
@@ -706,7 +709,7 @@ html {
   animation: fadeInLeft 1s ease;
 }
 
-.heroBadge {
+/* .heroBadge {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -720,12 +723,12 @@ html {
   margin-bottom: 24px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   animation: pulse 2s ease-in-out infinite;
-}
+} */
 
 .heroTitle {
-  font-size: 52px;
-  font-weight: 800;
-  color: white;
+  font-size: 48px;
+  font-weight: 500;
+  color: rgb(0, 0, 0);
   line-height: 1.1;
   margin-bottom: 8px;
 }
@@ -740,14 +743,14 @@ html {
 .heroSubtitle {
   display: block;
   font-size: 22px;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.9);
-  margin-top: 8px;
+  font-weight: 400;
+  color: rgba(27, 27, 27, 0.9);
+  margin-top: 3%;
 }
 
 .heroDescription {
   font-size: 17px;
-  color: rgba(255, 255, 255, 0.85);
+  color: rgb(106, 106, 106);
   line-height: 1.8;
   margin: 20px 0 30px;
   max-width: 550px;
@@ -788,12 +791,16 @@ html {
 
 .heroButtons {
   display: flex;
-  gap: 16px;
+  margin-top: 5%;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
-.btnPrimary {
+/* .btnPrimary {
   background: white;
+  
+  text-decoration: none;
+
   color: var(--primary);
   border: none;
   padding: 16px 36px;
@@ -812,9 +819,40 @@ html {
 .btnPrimary:hover {
   transform: translateY(-4px) scale(1.03);
   box-shadow: 0 16px 50px rgba(0, 0, 0, 0.25);
+} */
+
+/* ===== دکمه Primary با پس‌زمینه کرمی ===== */
+.btnPrimary {
+  background: #F5F0EB;
+  color: #2D7D6E;
+  padding: 16px 40px;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: 700;
+  border: 2px solid #2D7D6E;
+  text-decoration: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  box-shadow: 0 4px 20px rgba(45, 125, 110, 0.15);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: inherit;
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
 }
 
-.btnSecondary {
+.btnPrimary:hover {
+  background: linear-gradient(135deg, #2D7D6E 0%, #3CA89A 100%);
+  color: #FFFFFF;
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 8px 35px rgba(45, 125, 110, 0.3);
+  border-color: transparent;
+}
+
+/* .btnSecondary {
   background: rgba(255, 255, 255, 0.12);
   color: white;
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -828,12 +866,12 @@ html {
   align-items: center;
   gap: 10px;
   backdrop-filter: blur(10px);
-}
+} */
 
-.btnSecondary:hover {
+/* .btnSecondary:hover {
   background: rgba(255, 255, 255, 0.25);
   transform: translateY(-4px);
-}
+} */
 
 .heroImage {
   flex: 1;
@@ -893,7 +931,7 @@ html {
 }
 
 .waveDivider {
-  margin-top: 100px;
+  margin-top: 25px;
   width: 100%;
   line-height: 0;
 }
@@ -1185,7 +1223,8 @@ html {
 /* ========== PODCASTS ========== */
 .podcasts {
   padding: 80px 0;
-  background: var(--gradient-warm);
+  /* background: var(--gradient-warm); */
+  background: #f5f0ebb3;
 }
 
 .podcastFeatured {
@@ -1489,7 +1528,8 @@ html {
 /* ========== CLINICS ========== */
 .clinics {
   padding: 80px 0;
-  background: var(--primary-lightest);
+  /* background: var(--primary-lightest); */
+  background: #17681011;
 }
 
 .clinicsGrid {
