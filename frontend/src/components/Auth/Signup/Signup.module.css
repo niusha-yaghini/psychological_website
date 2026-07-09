@@ -1,0 +1,225 @@
+/* src/components/Auth/Signup/Signup.module.css */
+.signupContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f0f7ff 0%, #c5e0ec 50%, #8cb8d4 100%);
+  padding: 20px;
+  animation: fadeIn 0.6s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.signupCard {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  padding: 40px 36px;
+  max-width: 520px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(27, 58, 92, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  animation: scaleIn 0.5s ease;
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.progressBar {
+  height: 6px;
+  background: #e8edf2;
+  border-radius: 4px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #2e5a88, #5a8db5);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+.stepIndicator {
+  text-align: center;
+  font-size: 14px;
+  color: #6a8aaa;
+  margin-bottom: 24px;
+}
+
+.questionContainer {
+  margin-bottom: 32px;
+}
+
+.question {
+  font-size: 22px;
+  color: #1b3a5c;
+  margin-bottom: 24px;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.optionsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.singleOptions,
+.multiOptions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.optionBtn {
+  padding: 14px 20px;
+  border: 2px solid #e8edf2;
+  border-radius: 12px;
+  background: white;
+  font-size: 16px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.optionBtn:hover {
+  border-color: #5a8db5;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(46, 90, 136, 0.08);
+}
+
+.optionBtn.selected {
+  border-color: #2e5a88;
+  background: linear-gradient(135deg, #e8f4f8, #c5e0ec);
+  box-shadow: 0 4px 20px rgba(46, 90, 136, 0.12);
+}
+
+.checkmark {
+  color: #2e5a88;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.textArea {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid #e8edf2;
+  border-radius: 12px;
+  font-size: 16px;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.8);
+  resize: vertical;
+  min-height: 100px;
+}
+
+.textArea:focus {
+  border-color: #2e5a88;
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(46, 90, 136, 0.1);
+  background: white;
+}
+
+.navigation {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.navBtn {
+  flex: 1;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.prevBtn {
+  background: #e8edf2;
+  color: #6a8aaa;
+}
+
+.prevBtn:hover:not(:disabled) {
+  background: #d5dde6;
+  transform: translateX(-3px);
+}
+
+.prevBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.nextBtn {
+  background: linear-gradient(135deg, #2e5a88 0%, #5a8db5 100%);
+  color: white;
+}
+
+.nextBtn:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(46, 90, 136, 0.3);
+}
+
+.nextBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.switchBtn {
+  display: block;
+  margin: 16px auto 0;
+  background: none;
+  border: none;
+  color: #6a8aaa;
+  font-size: 14px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.3s ease;
+}
+
+.switchBtn:hover {
+  color: #2e5a88;
+  transform: scale(1.02);
+}
+
+.backHome {
+  display: block;
+  margin-top: 12px;
+  text-align: center;
+  color: #6a8aaa;
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.backHome:hover {
+  color: #2e5a88;
+  transform: scale(1.02);
+}

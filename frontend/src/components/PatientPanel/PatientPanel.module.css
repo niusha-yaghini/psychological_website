@@ -1,0 +1,444 @@
+/* src/components/PatientPanel/PatientPanel.module.css */
+.panelContainer {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f0f7ff 0%, #c5e0ec 50%, #8cb8d4 100%);
+  padding-bottom: 30px;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== HEADER ===== */
+.panelHeader {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  padding: 16px 24px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.headerContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.userAvatar {
+  font-size: 40px;
+}
+
+.userInfo h2 {
+  font-size: 20px;
+  color: #1b3a5c;
+  margin: 0;
+}
+
+.userInfo p {
+  font-size: 14px;
+  color: #6a8aaa;
+  margin: 0;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.notifBtn {
+  position: relative;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.notifBtn:hover {
+  background: #e8f4f8;
+  transform: scale(1.05);
+}
+
+.notifBadge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  background: #dc2626;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logoutBtn {
+  padding: 8px 20px;
+  background: #fee2e2;
+  color: #dc2626;
+  border: none;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.logoutBtn:hover {
+  background: #fecaca;
+  transform: scale(1.05);
+}
+
+/* ===== TABS ===== */
+.tabsContainer {
+  max-width: 1200px;
+  margin: 20px auto 0;
+  padding: 0 20px;
+  display: flex;
+  gap: 12px;
+}
+
+.tabBtn {
+  padding: 12px 28px;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border: none;
+  border-radius: 16px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #6a8aaa;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.tabBtn:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-2px);
+}
+
+.tabBtn.active {
+  background: linear-gradient(135deg, #2e5a88, #5a8db5);
+  color: white;
+  box-shadow: 0 8px 30px rgba(46, 90, 136, 0.2);
+}
+
+/* ===== CONTENT ===== */
+.panelContent {
+  max-width: 1200px;
+  margin: 20px auto 0;
+  padding: 0 20px;
+}
+
+/* ===== HISTORY ===== */
+.historySection h3 {
+  font-size: 24px;
+  color: #1b3a5c;
+  margin-bottom: 20px;
+}
+
+.sessionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sessionCard {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  padding: 20px 24px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+  animation: slideUp 0.4s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sessionCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(27, 58, 92, 0.08);
+}
+
+.sessionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.sessionDate {
+  display: flex;
+  gap: 16px;
+  font-size: 16px;
+  color: #1b3a5c;
+  font-weight: 500;
+}
+
+.sessionStatus {
+  padding: 4px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.sessionStatus.completed {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.sessionStatus.scheduled {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.sessionStatus.pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.doctorNote {
+  background: #f0f7ff;
+  padding: 12px 16px;
+  border-radius: 12px;
+  margin-top: 8px;
+}
+
+.doctorNote span {
+  font-weight: 600;
+  color: #2e5a88;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.doctorNote p {
+  color: #475569;
+  font-size: 14px;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ===== BOOK SESSION ===== */
+.bookSection h3 {
+  font-size: 24px;
+  color: #1b3a5c;
+  margin-bottom: 20px;
+}
+
+.bookForm {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  padding: 32px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  max-width: 500px;
+}
+
+.formGroup {
+  margin-bottom: 20px;
+}
+
+.formGroup label {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+  color: #2c5f7a;
+  margin-bottom: 8px;
+}
+
+.input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid #e8edf2;
+  border-radius: 12px;
+  font-size: 16px;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.input:focus {
+  border-color: #2e5a88;
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(46, 90, 136, 0.1);
+}
+
+.timeGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.timeBtn {
+  padding: 12px;
+  border: 2px solid #e8edf2;
+  border-radius: 12px;
+  background: white;
+  font-size: 15px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.timeBtn:hover {
+  border-color: #5a8db5;
+  transform: translateY(-2px);
+}
+
+.timeBtn.selected {
+  border-color: #2e5a88;
+  background: #e8f4f8;
+  box-shadow: 0 4px 12px rgba(46, 90, 136, 0.1);
+}
+
+.bookBtn {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #2e5a88, #5a8db5);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  margin-top: 8px;
+}
+
+.bookBtn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(46, 90, 136, 0.3);
+}
+
+/* ===== REMINDER ===== */
+.reminder {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  max-width: 380px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  padding: 16px 20px;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  animation: slideUp 0.6s ease;
+}
+
+.reminderIcon {
+  font-size: 28px;
+  flex-shrink: 0;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.reminderText h4 {
+  font-size: 16px;
+  color: #1b3a5c;
+  margin: 0 0 4px 0;
+}
+
+.reminderText p {
+  font-size: 14px;
+  color: #6a8aaa;
+  margin: 0;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .headerContent {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+
+  .userInfo {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .headerActions {
+    justify-content: center;
+  }
+
+  .tabsContainer {
+    flex-direction: column;
+  }
+
+  .tabBtn {
+    text-align: center;
+  }
+
+  .sessionHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .sessionDate {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .timeGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .reminder {
+    bottom: 16px;
+    right: 16px;
+    left: 16px;
+    max-width: none;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+}
