@@ -42,36 +42,19 @@ function Landing() {
       <header className={styles.header}>
         <div className={styles.container}>
           <div className={styles.logo}>
-            {/* <div> */}
-            {/* <span className={styles.logoText}>شکوفا</span> */}
-            {/* <span className={styles.logoSubtext}>{doctor.name}</span> */}
-            {/* </div> */}
-            {/* <div className={styles.heroImage}> */}
-            {/* <div className={styles.imageWrapper}> */}
-            {/* <div className={styles.heroPlaceholder}> */}
             <img src={logo} alt="لوگو" className={styles.logoImage} />
-            {/* </div> */}
-            {/* </div> */}
-            {/* </div> */}
-            {/* <span className={styles.logoSubtext}>{doctor.name}</span> */}
           </div>
           <nav className={styles.nav}>
             <a href="#workshops">کارگاه‌ها</a>
             <a href="#podcasts">پادکست‌ها</a>
             <a href="#about">درباره من</a>
             <a href="#clinics">مطب‌ها</a>
-            {/* ✅ استفاده از Link برای ورود */}
-            {/* <Link to="/login" className={styles.btnPatient}>
-              ورود
-            </Link> */}
           </nav>
           <div className={styles.auth}>
             <Link to="/login" className={styles.btnlogin}>
-              {/* <span></span>  */}
               ورود
             </Link>
             <Link to="/signup" className={styles.btnsignup}>
-              {/* <span></span>  */}
               ثبت‌نام
             </Link>
           </div>
@@ -87,44 +70,12 @@ function Landing() {
             <span className={styles.heroSubtitle}>{doctor.specialty}</span>
 
             <p className={styles.heroDescription}>{doctor.bio}</p>
-            {/* <div className={styles.heroStats}>
-              <div>
-                <span className={styles.statNumber}>
-                  {doctor.yearsOfExperience}+
-                </span>
-                <span>سال تجربه</span>
-              </div>
-              <div>
-                <span className={styles.statNumber}>
-                  {doctor.patientsCount}+
-                </span>
-                <span>مراجع</span>
-              </div>
-              <div>
-                <span className={styles.statNumber}>
-                  {doctor.workshopsCount}+
-                </span>
-                <span>کارگاه</span>
-              </div>
-            </div> */}
             <div className={styles.heroButtons}>
-              
-              {/* ✅ استفاده از Link برای ورود و ثبت‌نام */}
               <Link to="/login" className={styles.btnPrimary}>
-              چطوری اولین قدم رو بردارم؟
+                چطوری اولین قدم رو بردارم؟
               </Link>
-              {/* <Link to="/signup" className={styles.btnSecondary}>
-                <span>📝</span> ثبت‌نام جدید
-              </Link> */}
             </div>
           </div>
-          {/* <div className={styles.heroImage}>
-            <div className={styles.imageWrapper}>
-              <div className={styles.heroPlaceholder}>
-                <img src={backImage} alt="لوگو" className={styles.logoImage} />
-              </div>
-            </div>
-          </div> */}
         </div>
         <div className={styles.waveDivider}>
           <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
