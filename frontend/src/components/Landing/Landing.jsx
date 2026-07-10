@@ -45,10 +45,13 @@ function Landing() {
             <img src={logo} alt="لوگو" className={styles.logoImage} />
           </div>
           <nav className={styles.nav}>
+            <a href="#">خانه</a>
+            <a href="#howItWorks">مسیر درمان</a>
+            <a href="#theapyArea">خدمات</a>
             <a href="#workshops">کارگاه‌ها</a>
             <a href="#podcasts">پادکست‌ها</a>
             <a href="#about">درباره من</a>
-            <a href="#clinics">مطب‌ها</a>
+            <a href="#clinics">آدرس</a>
           </nav>
           <div className={styles.auth}>
             <Link to="/login" className={styles.btnlogin}>
@@ -61,7 +64,6 @@ function Landing() {
           <button className={styles.menuToggle}>☰</button>
         </div>
       </header>
-
       {/* ======== HERO ======== */}
       <section className={styles.hero}>
         <div className={styles.container}>
@@ -87,14 +89,379 @@ function Landing() {
         </div>
       </section>
 
+      {/* ======== HOW IT WORKS - مراحل درمان ======== */}
+      {/* <section className={styles.howItWorks}>
+        <div className={styles.container}>
+          <div className={styles.sectionHeader}>
+            <div>
+              <span className={styles.sectionTag}>🌱 مسیر درمان</span>
+              <h2>
+                مراحل <span>درمان</span> در کلینیک
+              </h2>
+              <p className={styles.sectionDescription}>
+                با ما همراه باشید تا گام‌به‌گام در مسیر بهبودی و آرامش قدم
+                بردارید
+              </p>
+            </div>
+          </div>
+
+          <div className={styles.stepsContainer}>
+            <div className={styles.stepCard}>
+              <div className={styles.stepNumber}>۰۱</div>
+              <div className={styles.stepIcon}>📋</div>
+              <h3>ارزیابی اولیه</h3>
+              <p>
+                در این مرحله، فرم‌های ارزیابی را تکمیل می‌کنید و اطلاعات اولیه
+                درباره وضعیت خود را در اختیار دکتر قرار می‌دهید.
+              </p>
+              <div className={styles.stepDetail}>
+                <span>⏱️ زمان: ۳۰ دقیقه</span>
+                <span>📍 روش: آنلاین / حضوری</span>
+              </div>
+            </div>
+
+            <div className={styles.stepCard}>
+              <div className={styles.stepNumber}>۰۲</div>
+              <div className={styles.stepIcon}>🧠</div>
+              <h3>جلسات مشاوره</h3>
+              <p>
+                جلسات درمانی با توجه به نیاز شما برنامه‌ریزی می‌شود. هر جلسه با
+                هدف مشخص و بر اساس طرح درمان پیش می‌رود.
+              </p>
+              <div className={styles.stepDetail}>
+                <span>⏱️ هر جلسه: ۶۰-۹۰ دقیقه</span>
+                <span>📅 هفتگی / دو هفته‌ای</span>
+              </div>
+            </div>
+
+            <div className={styles.stepCard}>
+              <div className={styles.stepNumber}>۰۳</div>
+              <div className={styles.stepIcon}>🌿</div>
+              <h3>پیگیری و تداوم</h3>
+              <p>
+                پس از پایان جلسات، برنامه‌های پیگیری و تمرینات عملی برای تثبیت
+                تغییرات مثبت در زندگی روزمره ارائه می‌شود.
+              </p>
+              <div className={styles.stepDetail}>
+                <span>📊 ارزیابی پیشرفت</span>
+                <span>💪 تمرینات عملی</span>
+              </div>
+            </div>
+          </div>
+
+          <div className={styles.stepsCTA}>
+            <p>آماده شروع مسیر بهبودی هستید؟</p>
+            <Link to="/signup" className={styles.btnPrimary}>
+              شروع کنید
+              <span>→</span>
+            </Link>
+          </div>
+        </div>
+      </section> */}
+
+      {/* version 2 */}
+      {/* ======== HOW IT WORKS - مراحل درمان ======== */}
+      {/* <section className={styles.howItWorks}>
+        <div className={styles.container}>
+          <div className={styles.sectionHeader}>
+            <div>
+              <span className={styles.sectionTag}>🌱 مسیر درمان</span>
+              <h2>
+                مراحل <span>درمان</span> در کلینیک
+              </h2>
+              <p className={styles.sectionDescription}>
+                با ما همراه باشید تا گام‌به‌گام در مسیر بهبودی و آرامش قدم
+                بردارید
+              </p>
+            </div>
+          </div>
+
+          <div className={styles.timeline}>
+            <div className={styles.timelineItem}>
+              <div className={styles.timelineConnector}>
+                <div className={styles.timelineDot}>
+                  <span className={styles.dotNumber}>۱</span>
+                </div>
+                <div className={styles.timelineLine}></div>
+              </div>
+              <div className={styles.timelineContent}>
+                <div className={styles.timelineCard}>
+                  <div className={styles.timelineIcon}>📋</div>
+                  <div className={styles.timelineText}>
+                    <h3>ارزیابی اولیه</h3>
+                    <p>
+                      در این مرحله، فرم‌های ارزیابی را تکمیل می‌کنید و اطلاعات
+                      اولیه درباره وضعیت خود را در اختیار دکتر قرار می‌دهید.
+                    </p>
+                    <div className={styles.timelineDetails}>
+                      <span>⏱️ زمان: ۳۰ دقیقه</span>
+                      <span>📍 روش: آنلاین / حضوری</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.timelineItem}>
+              <div className={styles.timelineConnector}>
+                <div className={styles.timelineDot}>
+                  <span className={styles.dotNumber}>۲</span>
+                </div>
+                <div className={styles.timelineLine}></div>
+              </div>
+              <div className={styles.timelineContent}>
+                <div className={styles.timelineCard}>
+                  <div className={styles.timelineIcon}>🧠</div>
+                  <div className={styles.timelineText}>
+                    <h3>جلسات مشاوره</h3>
+                    <p>
+                      جلسات درمانی با توجه به نیاز شما برنامه‌ریزی می‌شود. هر
+                      جلسه با هدف مشخص و بر اساس طرح درمان پیش می‌رود.
+                    </p>
+                    <div className={styles.timelineDetails}>
+                      <span>⏱️ هر جلسه: ۶۰-۹۰ دقیقه</span>
+                      <span>📅 هفتگی / دو هفته‌ای</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.timelineItem}>
+              <div className={styles.timelineConnector}>
+                <div className={styles.timelineDot}>
+                  <span className={styles.dotNumber}>۳</span>
+                </div>
+                <div className={styles.timelineLine}></div>
+              </div>
+              <div className={styles.timelineContent}>
+                <div className={styles.timelineCard}>
+                  <div className={styles.timelineIcon}>🌿</div>
+                  <div className={styles.timelineText}>
+                    <h3>پیگیری و تداوم</h3>
+                    <p>
+                      پس از پایان جلسات، برنامه‌های پیگیری و تمرینات عملی برای
+                      تثبیت تغییرات مثبت در زندگی روزمره ارائه می‌شود.
+                    </p>
+                    <div className={styles.timelineDetails}>
+                      <span>📊 ارزیابی پیشرفت</span>
+                      <span>💪 تمرینات عملی</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.timelineItem}>
+              <div className={styles.timelineConnector}>
+                <div
+                  className={`${styles.timelineDot} ${styles.timelineDotEnd}`}
+                >
+                  <span className={styles.dotNumber}>🎯</span>
+                </div>
+              </div>
+              <div className={styles.timelineContent}>
+                <div className={styles.timelineEnd}>
+                  <h4>رسیدن به آرامش و تعادل</h4>
+                  <p>شما در این مسیر تنها نیستید، ما در کنار شما هستیم</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className={styles.stepsCTA}>
+            <p>آماده شروع مسیر بهبودی هستید؟</p>
+            <Link to="/signup" className={styles.btnPrimary}>
+              شروع کنید
+              <span>→</span>
+            </Link>
+          </div>
+        </div>
+      </section> */}
+
+      {/* ======== HOW IT WORKS - مراحل درمان ======== */}
+      <section id="howItWorks" className={styles.howItWorks}>
+        <div className={styles.container}>
+          <div className={styles.sectionHeader}>
+            <div>
+              <h2>مسیر درمان</h2>
+              <p className={styles.sectionDescription}>
+                با ما همراه باشید تا گام‌به‌گام در مسیر بهبودی و آرامش قدم
+                بردارید.
+              </p>
+            </div>
+          </div>
+
+          <div className={styles.stepsContainer}>
+            {/* ===== گام اول ===== */}
+            <div className={styles.stepWrapper}>
+              <div className={styles.stepCard}>
+                <div className={styles.stepNumber}>۰۱</div>
+                {/* <div className={styles.stepIcon}>📋</div> */}
+                <h3>ارزیابی اولیه</h3>
+                <p>
+                  تکمیل فرم‌های ارزیابی و ارائه اطلاعات اولیه درباره وضعیت خود
+                  به دکتر
+                </p>
+                <div className={styles.stepDetail}>
+                  <span>⏱️ ۳۰ دقیقه</span>
+                  <span>📍 آنلاین / حضوری</span>
+                </div>
+              </div>
+            </div>
+
+            {/* ===== گام دوم ===== */}
+            <div className={styles.stepWrapper}>
+              <div className={styles.stepCard}>
+                <div className={styles.stepNumber}>۰۲</div>
+                {/* <div className={styles.stepIcon}>🧠</div> */}
+                <h3>جلسات مشاوره</h3>
+                <p>
+                  جلسات درمانی با توجه به نیاز شما و بر اساس طرح درمان تخصصی پیش
+                  می‌رود
+                </p>
+                <div className={styles.stepDetail}>
+                  <span>⏱️ ۶۰-۹۰ دقیقه</span>
+                  <span>📅 هفتگی / دو هفته‌ای</span>
+                </div>
+              </div>
+            </div>
+
+            {/* ===== گام سوم ===== */}
+            <div className={styles.stepWrapper}>
+              <div className={styles.stepCard}>
+                <div className={styles.stepNumber}>۰۳</div>
+                {/* <div className={styles.stepIcon}>🌿</div> */}
+                <h3>پیگیری و تداوم</h3>
+                <p>
+                  برنامه‌های پیگیری و تمرینات عملی برای تثبیت تغییرات مثبت در
+                  زندگی روزمره
+                </p>
+                <div className={styles.stepDetail}>
+                  <span>📊 ارزیابی پیشرفت</span>
+                  <span>💪 تمرینات عملی</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* ===== CTA ===== */}
+          <div className={styles.stepsCTA}>
+            <p>آماده شروع مسیر بهبودی هستید؟</p>
+            <Link to="/signup" className={styles.btnPrimary}>
+              شروع کنید
+              <span>→</span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ======== THERAPY AREAS - حوزه‌های تخصصی ======== */}
+      <section id="theapyArea" className={styles.therapyAreas}>
+        <div className={styles.container}>
+          <div className={styles.sectionHeader}>
+            <div>
+              <h2>حوزه‌های تخصصی</h2>
+              <p className={styles.sectionDescription}>
+                با بهره‌گیری از روش‌های علمی و تخصصی، در کنار شما هستیم
+              </p>
+            </div>
+          </div>
+
+          <div className={styles.areasGrid}>
+            {/* ===== درمان فردی ===== */}
+            <div className={styles.areaCard}>
+              <div className={styles.areaIcon}>🧘</div>
+              <div className={styles.areaContent}>
+                <h3>درمان فردی</h3>
+                <p>
+                  جلسات یک‌به‌یک با دکتر برای بررسی عمیق مسائل فردی، شناسایی
+                  ریشه‌های مشکلات و ارائه راهکارهای تخصصی.
+                </p>
+                <div className={styles.areaTags}>
+                  <span>اضطراب</span>
+                  <span>افسردگی</span>
+                  <span>استرس</span>
+                  <span>اعتماد به نفس</span>
+                </div>
+                <button className={styles.areaBtn}>بیشتر بدانید</button>
+              </div>
+            </div>
+
+            {/* ===== زوج درمانی ===== */}
+            <div className={styles.areaCard}>
+              <div className={styles.areaIcon}>💑</div>
+              <div className={styles.areaContent}>
+                <h3>زوج درمانی</h3>
+                <p>
+                  بهبود روابط زوجین، حل تعارضات، تقویت ارتباط عاطفی و ایجاد درک
+                  متقابل برای زندگی مشترک سالم‌تر.
+                </p>
+                <div className={styles.areaTags}>
+                  <span>ارتباط مؤثر</span>
+                  <span>حل تعارض</span>
+                  <span>صمیمیت</span>
+                  <span>اعتماد</span>
+                </div>
+                <button className={styles.areaBtn}>بیشتر بدانید</button>
+              </div>
+            </div>
+
+            {/* ===== درمان نوجوان ===== */}
+            <div className={styles.areaCard}>
+              <div className={styles.areaIcon}>🧑‍🎓</div>
+              <div className={styles.areaContent}>
+                <h3>درمان نوجوانان</h3>
+                <p>
+                  مشاوره تخصصی برای نوجوانان با رویکردی متناسب با سن، کمک به
+                  مدیریت چالش‌های دوران بلوغ و رشد سالم.
+                </p>
+                <div className={styles.areaTags}>
+                  <span>مدیریت خشم</span>
+                  <span>اعتماد به نفس</span>
+                  <span>مشکلات تحصیلی</span>
+                  <span>هویت‌یابی</span>
+                </div>
+                <button className={styles.areaBtn}>بیشتر بدانید</button>
+              </div>
+            </div>
+          </div>
+
+          {/* ===== چرا تراپی؟ ===== */}
+          <div className={styles.whyTherapy}>
+            <div className={styles.whyTherapyContent}>
+              <div className={styles.whyIcon}>💚</div>
+              <h3>چرا درمان روانشناسی؟</h3>
+              <p>
+                درمان روانشناسی به شما کمک می‌کند تا با شناخت بهتر خود، الگوهای
+                فکری و رفتاری ناسالم را شناسایی و تغییر دهید. این مسیر به شما
+                امکان می‌دهد تا زندگی متعادل‌تر، آرام‌تر و رضایت‌بخش‌تری داشته
+                باشید.
+              </p>
+              <div className={styles.whyStats}>
+                <div>
+                  <span>۱۰۰۰+</span>
+                  <span>مراجع موفق</span>
+                </div>
+                <div>
+                  <span>۹۵٪</span>
+                  <span>رضایت مراجعین</span>
+                </div>
+                <div>
+                  <span>۱۲+</span>
+                  <span>سال تجربه</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ======== WORKSHOPS ======== */}
       <section id="workshops" className={styles.workshops}>
         <div className={styles.container}>
           <div className={styles.sectionHeader}>
-            <div>
-              <span className={styles.sectionTag}>📚 آموزش</span>
-              <h2>کارگاه‌های آموزشی</h2>
-            </div>
+            <h2>کارگاه‌های آموزشی</h2>
             <div className={styles.tabs}>
               <button
                 className={`${styles.tabBtn} ${
@@ -170,10 +537,7 @@ function Landing() {
       <section id="podcasts" className={styles.podcasts}>
         <div className={styles.container}>
           <div className={styles.sectionHeader}>
-            <div>
-              <span className={styles.sectionTag}>🎙️ رسانه</span>
-              <h2>پادکست‌های روانشناسی</h2>
-            </div>
+            <h2>پادکست‌های روانشناسی</h2>
             <Link to="/podcasts" className={styles.viewAll}>
               مشاهده همه ←
             </Link>
@@ -224,8 +588,8 @@ function Landing() {
         <div className={styles.container}>
           <div className={styles.aboutGrid}>
             <div className={styles.aboutText}>
-              <span className={styles.sectionTag}>👩‍⚕️ درباره من</span>
-              <h2>دکتر {doctor.name}</h2>
+              <h2>درباره من</h2>
+              {/* <h2>{doctor.name}</h2> */}
               <p className={styles.aboutBio}>{doctor.bio}</p>
               <div className={styles.aboutSpecialties}>
                 <div className={styles.specialtyItem}>
@@ -280,10 +644,7 @@ function Landing() {
       <section id="clinics" className={styles.clinics}>
         <div className={styles.container}>
           <div className={styles.sectionHeader}>
-            <div>
-              <span className={styles.sectionTag}>📍 آدرس</span>
-              <h2>مطب‌های دکتر {doctor.name}</h2>
-            </div>
+            <h2>مطب‌های {doctor.name}</h2>
           </div>
           <div className={styles.clinicsGrid}>
             {clinics.map((clinic) => (
@@ -303,7 +664,6 @@ function Landing() {
           </div>
         </div>
       </section>
-
       {/* ======== SOCIAL & CONTACT ======== */}
       <section className={styles.contact}>
         <div className={styles.container}>
@@ -360,7 +720,6 @@ function Landing() {
           </div>
         </div>
       </section>
-
       {/* ======== FOOTER ======== */}
       <footer className={styles.footer}>
         <div className={styles.container}>
@@ -371,10 +730,17 @@ function Landing() {
               <p>دکتر {doctor.name}</p>
             </div>
             <div className={styles.footerLinks}>
+              {/* <a href="#workshops">کارگاه‌ها</a>
+              <a href="#podcasts">پادکست‌ها</a>
+              <a href="#about">درباره من</a>
+              <a href="#clinics">مطب‌ها</a> */}
+              <a href="#">خانه</a>
+              <a href="#howItWorks">مسیر درمان</a>
+              <a href="#theapyArea">خدمات</a>
               <a href="#workshops">کارگاه‌ها</a>
               <a href="#podcasts">پادکست‌ها</a>
               <a href="#about">درباره من</a>
-              <a href="#clinics">مطب‌ها</a>
+              <a href="#clinics">آدرس</a>
             </div>
             <div className={styles.footerSocial}>
               <a href={socialMedia.instagram}>📸</a>
