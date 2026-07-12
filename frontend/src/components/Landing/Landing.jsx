@@ -6,6 +6,10 @@ import backImage from "../../../public/images/back12.png";
 
 import logo from "../../../public/images/logo1.png";
 
+import individual_therapy from "../../../public/images/Individual_Therapy.png";
+import couple_therapy from "../../../public/images/Couple_Therapy.png";
+import teenage_therapy from "../../../public/images/Teenage_Therapy.png";
+
 const formatPersianDate = (dateStr) => {
   if (!dateStr) return "";
   const parts = dateStr.split("/");
@@ -73,7 +77,7 @@ function Landing() {
 
             <p className={styles.heroDescription}>{doctor.bio}</p>
             <div className={styles.heroButtons}>
-              <Link to="/login" className={styles.btnPrimary}>
+              <Link to="/login" className={styles.herobtnPrimary}>
                 چطوری اولین قدم رو بردارم؟
               </Link>
             </div>
@@ -296,51 +300,51 @@ function Landing() {
             {/* ===== گام اول ===== */}
             <div className={styles.stepWrapper}>
               <div className={styles.stepCard}>
-                <div className={styles.stepNumber}>۰۱</div>
+                <div className={styles.stepNumber}>۱</div>
                 {/* <div className={styles.stepIcon}>📋</div> */}
                 <h3>ارزیابی اولیه</h3>
                 <p>
                   تکمیل فرم‌های ارزیابی و ارائه اطلاعات اولیه درباره وضعیت خود
                   به دکتر
                 </p>
-                <div className={styles.stepDetail}>
+                {/* <div className={styles.stepDetail}>
                   <span>⏱️ ۳۰ دقیقه</span>
                   <span>📍 آنلاین / حضوری</span>
-                </div>
+                </div> */}
               </div>
             </div>
 
             {/* ===== گام دوم ===== */}
             <div className={styles.stepWrapper}>
               <div className={styles.stepCard}>
-                <div className={styles.stepNumber}>۰۲</div>
+                <div className={styles.stepNumber}>۲</div>
                 {/* <div className={styles.stepIcon}>🧠</div> */}
                 <h3>جلسات مشاوره</h3>
                 <p>
                   جلسات درمانی با توجه به نیاز شما و بر اساس طرح درمان تخصصی پیش
                   می‌رود
                 </p>
-                <div className={styles.stepDetail}>
+                {/* <div className={styles.stepDetail}>
                   <span>⏱️ ۶۰-۹۰ دقیقه</span>
                   <span>📅 هفتگی / دو هفته‌ای</span>
-                </div>
+                </div> */}
               </div>
             </div>
 
             {/* ===== گام سوم ===== */}
             <div className={styles.stepWrapper}>
               <div className={styles.stepCard}>
-                <div className={styles.stepNumber}>۰۳</div>
+                <div className={styles.stepNumber}>۳</div>
                 {/* <div className={styles.stepIcon}>🌿</div> */}
                 <h3>پیگیری و تداوم</h3>
                 <p>
                   برنامه‌های پیگیری و تمرینات عملی برای تثبیت تغییرات مثبت در
                   زندگی روزمره
                 </p>
-                <div className={styles.stepDetail}>
+                {/* <div className={styles.stepDetail}>
                   <span>📊 ارزیابی پیشرفت</span>
                   <span>💪 تمرینات عملی</span>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
@@ -350,7 +354,7 @@ function Landing() {
             <p>آماده شروع مسیر بهبودی هستید؟</p>
             <Link to="/signup" className={styles.btnPrimary}>
               شروع کنید
-              <span>→</span>
+              {/* <span>→</span> */}
             </Link>
           </div>
         </div>
@@ -363,7 +367,7 @@ function Landing() {
             <div>
               <h2>حوزه‌های تخصصی</h2>
               <p className={styles.sectionDescription}>
-                با بهره‌گیری از روش‌های علمی و تخصصی، در کنار شما هستیم
+                با بهره‌گیری از روش‌های علمی و تخصصی، در کنار شما هستیم.
               </p>
             </div>
           </div>
@@ -371,58 +375,106 @@ function Landing() {
           <div className={styles.areasGrid}>
             {/* ===== درمان فردی ===== */}
             <div className={styles.areaCard}>
-              <div className={styles.areaIcon}>🧘</div>
-              <div className={styles.areaContent}>
+              <div className={styles.cardGlow}></div>
+              <div className={styles.areaCardHeader}>
+                <div className={styles.areaIconWrapper}>
+                  <div className={styles.areaIcon}>
+                    <img
+                      src={individual_therapy}
+                      alt="درمان فردی"
+                      className={styles.areaIconImage}
+                    />
+                  </div>
+                  <div className={styles.iconRing}></div>
+                </div>
                 <h3>درمان فردی</h3>
+              </div>
+
+              <div className={styles.areaContent}>
                 <p>
-                  جلسات یک‌به‌یک با دکتر برای بررسی عمیق مسائل فردی، شناسایی
-                  ریشه‌های مشکلات و ارائه راهکارهای تخصصی.
+                  جلسات اختصاصی و عمیق برای کشف ریشه‌های چالش‌های زندگی، شکوفایی
+                  استعدادها و دستیابی به آرامش درونی.
                 </p>
                 <div className={styles.areaTags}>
+                  {/* <span>🌱 اضطراب</span>
+                  <span>💭 افسردگی</span>
+                  <span>🌀 استرس</span>
+                  <span>✨ اعتماد به نفس</span> */}
                   <span>اضطراب</span>
                   <span>افسردگی</span>
                   <span>استرس</span>
                   <span>اعتماد به نفس</span>
                 </div>
-                <button className={styles.areaBtn}>بیشتر بدانید</button>
               </div>
             </div>
 
             {/* ===== زوج درمانی ===== */}
             <div className={styles.areaCard}>
-              <div className={styles.areaIcon}>💑</div>
-              <div className={styles.areaContent}>
+              <div className={styles.cardGlow}></div>
+              <div className={styles.areaCardHeader}>
+                <div className={styles.areaIconWrapper}>
+                  <div className={styles.areaIcon}>
+                    <img
+                      src={couple_therapy}
+                      alt="زوج درمان"
+                      className={styles.areaIconImage}
+                    />
+                  </div>
+                  <div className={styles.iconRing}></div>
+                </div>
                 <h3>زوج درمانی</h3>
+              </div>
+
+              <div className={styles.areaContent}>
                 <p>
-                  بهبود روابط زوجین، حل تعارضات، تقویت ارتباط عاطفی و ایجاد درک
-                  متقابل برای زندگی مشترک سالم‌تر.
+                  بازسازی اعتماد، بهبود ارتباط و افزایش صمیمیت برای ساختن
+                  رابطه‌ای مستحکم‌تر و پایدارتر در کنار هم.
                 </p>
                 <div className={styles.areaTags}>
+                  {/* <span>💬 ارتباط مؤثر</span>
+                  <span>🤝 حل تعارض</span>
+                  <span>❤️ صمیمیت</span>
+                  <span>🔐 اعتماد</span> */}
                   <span>ارتباط مؤثر</span>
                   <span>حل تعارض</span>
                   <span>صمیمیت</span>
                   <span>اعتماد</span>
                 </div>
-                <button className={styles.areaBtn}>بیشتر بدانید</button>
               </div>
             </div>
 
             {/* ===== درمان نوجوان ===== */}
             <div className={styles.areaCard}>
-              <div className={styles.areaIcon}>🧑‍🎓</div>
-              <div className={styles.areaContent}>
+              <div className={styles.cardGlow}></div>
+              <div className={styles.areaCardHeader}>
+                <div className={styles.areaIconWrapper}>
+                  <div className={styles.areaIcon}>
+                    <img
+                      src={teenage_therapy}
+                      alt="درمان نوجوان"
+                      className={styles.areaIconImage}
+                    />
+                  </div>
+                  <div className={styles.iconRing}></div>
+                </div>
                 <h3>درمان نوجوانان</h3>
+              </div>
+
+              <div className={styles.areaContent}>
                 <p>
-                  مشاوره تخصصی برای نوجوانان با رویکردی متناسب با سن، کمک به
-                  مدیریت چالش‌های دوران بلوغ و رشد سالم.
+                  همراهی تخصصی در مسیر رشد نوجوانان، مدیریت چالش‌های دوران حساس
+                  بلوغ و کشف هویت واقعی‌شان.
                 </p>
                 <div className={styles.areaTags}>
+                  {/* <span>🔥 مدیریت خشم</span>
+                  <span>⭐ اعتماد به نفس</span>
+                  <span>📚 مشکلات تحصیلی</span>
+                  <span>🔍 هویت‌یابی</span> */}
                   <span>مدیریت خشم</span>
                   <span>اعتماد به نفس</span>
                   <span>مشکلات تحصیلی</span>
                   <span>هویت‌یابی</span>
                 </div>
-                <button className={styles.areaBtn}>بیشتر بدانید</button>
               </div>
             </div>
           </div>
@@ -431,27 +483,49 @@ function Landing() {
           <div className={styles.whyTherapy}>
             <div className={styles.whyTherapyContent}>
               <div className={styles.whyIcon}>💚</div>
-              <h3>چرا درمان روانشناسی؟</h3>
+              <h3>
+                چرا مسیر <span>درمان</span> را انتخاب کنیم؟
+              </h3>
               <p>
-                درمان روانشناسی به شما کمک می‌کند تا با شناخت بهتر خود، الگوهای
-                فکری و رفتاری ناسالم را شناسایی و تغییر دهید. این مسیر به شما
-                امکان می‌دهد تا زندگی متعادل‌تر، آرام‌تر و رضایت‌بخش‌تری داشته
-                باشید.
+                اگر دوست دارید که خودتان را بیشتر دوست داشته باشید. یا برای
+                عزیزانتان فرد بهتری باشید این مسیری ست که میتوانید از آن کمک
+                بگیرید. خیلی وقتها ما فکر میکنیم که میتوانیم به تنهایی از پس
+                مشکلات بر بیاییم، اما وقتی داخل مشکل هستیم و مهارت های لازم را
+                نداریم اینکار تقریبا غیر ممکن بنظر میره. درمان روانشناسی، سفری
+                است برای کشف خود واقعی‌تان. این مسیر به شما کمک می‌کند تا از
+                الگوهای تکراری و ناسالم رها شوید، مهارت‌های جدید بیاموزید و
+                زندگی‌ای سرشار از آرامش، معنا و رضایت را تجربه کنید.
               </p>
-              <div className={styles.whyStats}>
-                <div>
-                  <span>۱۰۰۰+</span>
-                  <span>مراجع موفق</span>
+              {/* <div className={styles.whyStats}>
+                <div className={styles.statItem}>
+                  <span className={styles.statNumber}>۱۰۰۰+</span>
+                  <span className={styles.statLabel}>مراجع موفق</span>
                 </div>
-                <div>
-                  <span>۹۵٪</span>
-                  <span>رضایت مراجعین</span>
+                <div className={styles.statDivider}></div>
+                <div className={styles.statItem}>
+                  <span className={styles.statNumber}>۹۵٪</span>
+                  <span className={styles.statLabel}>رضایت مراجعین</span>
                 </div>
-                <div>
-                  <span>۱۲+</span>
-                  <span>سال تجربه</span>
+                <div className={styles.statDivider}></div>
+                <div className={styles.statItem}>
+                  <span className={styles.statNumber}>۱۲+</span>
+                  <span className={styles.statLabel}>سال تجربه</span>
                 </div>
-              </div>
+              </div> */}
+              {/* <div className={styles.whyCTA}>
+                <button className={styles.whyBtn}>
+                  شروع مسیر درمان
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <path
+                      d="M5 12H19M19 12L12 5M19 12L12 19"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
+              </div> */}
             </div>
           </div>
         </div>
@@ -633,7 +707,7 @@ function Landing() {
               <div className={styles.statCard}>
                 <span className={styles.statIcon}>⭐</span>
                 <span className={styles.statNumber}>{doctor.rating}</span>
-                <span>امتیاز از ۵</span>
+                <span>امتیاز از ۵- سال تجربه</span>
               </div>
             </div>
           </div>

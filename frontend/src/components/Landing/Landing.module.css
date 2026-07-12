@@ -376,9 +376,13 @@ html {
   position: absolute;
 }
 
-/* ===== دکمه ورود ===== */
 .btnlogin {
-  background: linear-gradient(135deg, #186a35 0%, #3ca886 50%, #71ca95 100%);
+  /* background: linear-gradient(135deg, #186a35af 0%, #c1c96f93 100%); */
+
+  background: linear-gradient(135deg, #316a18d3 0%, #ebe3da 100%);
+
+  /* background: linear-gradient(135deg, #18594de7, #80ad6b); */
+
   color: white;
   border: none;
   padding: 10px 32px;
@@ -397,7 +401,6 @@ html {
   overflow: hidden;
 }
 
-/* ===== انیمیشن شیمی‌ر روی دکمه ورود ===== */
 .btnlogin::before {
   content: "";
   position: absolute;
@@ -412,6 +415,9 @@ html {
     rgba(255, 255, 255, 0.05) 60%,
     transparent 100%
   );
+
+  /* background: linear-gradient(135deg, #186a35af 0%, #c1c96f93 100%); */
+
   transform: skewX(-20deg);
   transition: left 0.6s ease;
 }
@@ -423,18 +429,19 @@ html {
 .btnlogin:hover {
   transform: translateY(-3px) scale(1.03);
   box-shadow: 0 8px 30px rgba(45, 125, 110, 0.35);
-  background: linear-gradient(135deg, #256d5e 0%, #2d8f7e 50%, #4ab0a0 100%);
+  /* background: linear-gradient(135deg, #256d5e 0%, #2d8f7e 50%, #4ab0a0 100%); */
+  /* background: linear-gradient(135deg, #186a35ee 0%, #c1c96fe6 100%); */
+  background: linear-gradient(135deg, #316a18eb 0%, #d4c8bb 100%);
 }
 
 .btnlogin:active {
   transform: scale(0.96);
 }
 
-/* ===== دکمه ثبت‌نام ===== */
 .btnsignup {
   background: transparent;
-  color: #2d7d6e;
-  border: 2px solid #2d7d6e;
+  color: #0d4b3f;
+  border: 1.5px solid #165348;
   padding: 10px 32px;
   border-radius: 8px;
   font-size: 14px;
@@ -450,7 +457,6 @@ html {
   overflow: hidden;
 }
 
-/* ===== انیمیشن شیمی‌ر روی دکمه ثبت‌نام ===== */
 .btnsignup::before {
   content: "";
   position: absolute;
@@ -602,14 +608,14 @@ html {
   justify-content: center;
 }
 
-.btnPrimary {
-  background: #f5f0eb;
-  color: #2d7d6e;
+.herobtnPrimary {
+  background: #f5f0ebc0;
+  color: #061703a8;
   padding: 16px 40px;
   border-radius: 50px;
   font-size: 16px;
   font-weight: 700;
-  border: 2px solid #2d7d6e;
+  border: 2px solid #10300aaa;
   text-decoration: none;
   cursor: pointer;
   display: inline-flex;
@@ -621,40 +627,21 @@ html {
   font-family: inherit;
   letter-spacing: 0.5px;
   position: relative;
-  overflow: hidden;
-}
-
-.btnPrimary:hover {
-  background: linear-gradient(135deg, #2d7d6e 0%, #3ca89a 100%);
-  color: #ffffff;
-  transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 8px 35px rgba(45, 125, 110, 0.3);
-  border-color: transparent;
-}
-
-/* .btnPrimary {
-  background: #f5f0eb;
-  color: #2d7d6e;
-  padding: 16px 60px;
-  border-radius: 50px;
-  font-size: 16px;
-  font-weight: 700;
-  border: 2px solid #2d7d6e;
-  text-decoration: none;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  box-shadow: 0 4px 20px rgba(45, 125, 110, 0.15);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  font-family: inherit;
-  letter-spacing: 0.5px;
-  position: relative;
+  /* overflow: hidden; */
   overflow: visible;
 }
 
-.btnPrimary::after {
+.herobtnPrimary:hover {
+  /* background: linear-gradient(135deg, #2d7d6e 0%, #3ca89a 100%); */
+  background: rgba(255, 255, 255, 0.675);
+  color: #0e1201;
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 8px 35px rgba(45, 125, 110, 0.3);
+  border: 2px solid #0e1201;
+}
+
+/* version1 */
+/* .btnPrimary::after {
   content: '';
   position: absolute;
   right: -25px;
@@ -667,9 +654,9 @@ html {
   
   filter: drop-shadow(0 2px 10px rgba(45, 125, 110, 0.2));
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
+} */
 
-.btnPrimary::before {
+/* .btnPrimary::before {
   content: '';
   position: absolute;
   left: -25px;
@@ -682,9 +669,9 @@ html {
   
   filter: drop-shadow(0 2px 10px rgba(45, 125, 110, 0.2));
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
+} */
 
-.btnPrimary:hover::before {
+/* .btnPrimary:hover::before {
   transform: translateY(-50%) scaleX(-1) rotate(-30deg) scale(1.15);
   filter: drop-shadow(0 4px 20px rgba(45, 125, 110, 0.3));
 }
@@ -692,14 +679,6 @@ html {
 .btnPrimary:hover::after {
   transform: translateY(-50%) rotate(30deg) scale(1.15);
   filter: drop-shadow(0 4px 20px rgba(45, 125, 110, 0.3));
-}
-
-.btnPrimary:hover {
-  background: linear-gradient(135deg, #2d7d6e 0%, #3ca89a 100%);
-  color: #ffffff;
-  transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 8px 35px rgba(45, 125, 110, 0.3);
-  border-color: transparent;
 } */
 
 .heroImage {
@@ -1322,6 +1301,8 @@ html {
 /* ========== HOW IT WORKS ==================== */
 .howItWorks {
   padding: 110px 0;
+  background: linear-gradient(180deg, #ffffff 0%, #f8f6f3d5 100%);
+
   /* padding-top: ; */
   /* background: #faf6f2; */
   position: relative;
@@ -1363,8 +1344,9 @@ html {
   top: 50%; /* وسط آیکون */
   left: -50%; /* از وسط مرحله فعلی تا وسط مرحله بعد */
   width: 100%;
-  height: 3px;
-  background: linear-gradient(90deg, #2d7d6e 0%, #3ca89a 50%, #6bc8b8 100%);
+  height: 2px;
+  /* background: linear-gradient(90deg, #2d7d6e 0%, #3ca89a 50%, #6bc8b8 100%); */
+  background: #18594de5;
   z-index: 0;
 }
 
@@ -1372,16 +1354,16 @@ html {
 .stepWrapper:not(:last-child)::before {
   content: "";
   position: absolute;
-  top: 45%;
+  top: 46%;
   left: -8px;
-  width: 14px;
-  height: 14px;
-  background: #3ca89a;
+  width: 12px;
+  height: 12px;
+  background: #18594de5;
   border-radius: 50%;
   border: 3px solid #ffffff;
-  box-shadow: 0 0 0 4px #3ca89a;
+  box-shadow: 0 0 0 2px #18594de5;
   z-index: 2;
-  animation: pulseDot 2s ease-in-out infinite;
+  /* animation: pulseDot 2s ease-in-out infinite; */
 }
 
 /* ===== استایل کارت هر مرحله ===== */
@@ -1410,7 +1392,7 @@ html {
   position: absolute;
   top: -14px;
   right: 20px;
-  background: linear-gradient(135deg, #2d7d6e, #3ca89a);
+  background: linear-gradient(135deg, #18594de7, #80ad6b);
   color: white;
   width: 40px;
   height: 40px;
@@ -1483,6 +1465,54 @@ html {
   color: #000000c9;
   font-weight: 600;
   margin-bottom: 16px;
+}
+
+.btnPrimary {
+  background: #ffffffd4;
+  color: #061703a8;
+  padding: 16px 50px;
+  border-radius: 40px;
+  font-size: 16px;
+  font-weight: 700;
+  border: 2px solid #10300aaa;
+  text-decoration: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  box-shadow: 0 4px 20px rgba(45, 125, 110, 0.15);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: inherit;
+  letter-spacing: 0.5px;
+  position: relative;
+  /* overflow: hidden; */
+  overflow: visible;
+}
+
+.btnPrimary:hover {
+  /* background: linear-gradient(135deg, #2d7d6e 0%, #3ca89a 100%); */
+  background: rgba(255, 255, 255, 0.675);
+  color: #061703cb;
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 8px 35px rgba(45, 125, 110, 0.3);
+  border: 2px solid #061703e2;
+}
+
+/* version1 */
+.btnPrimary::after {
+  content: "";
+  position: absolute;
+  right: -25px;
+  top: 80%;
+  transform: translateY(-50%) rotate(40deg);
+
+  width: 80px;
+  height: 80px;
+  background: url("/images/leaf3.png") center/contain no-repeat;
+
+  filter: drop-shadow(0 2px 10px rgba(45, 125, 110, 0.2));
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* ========== ANIMATIONS ====================== */
@@ -1562,7 +1592,7 @@ html {
 }
 
 /* ========== THERAPY AREAS =================== */
-.therapyAreas {
+/* .therapyAreas {
   padding: 110px 0;
   background: #ffffff;
 }
@@ -1654,7 +1684,6 @@ html {
   box-shadow: 0 4px 20px rgba(45, 125, 110, 0.25);
 }
 
-/* ===== چرا تراپی ===== */
 .whyTherapy {
   margin-top: 50px;
   background: linear-gradient(135deg, #2d7d6e, #3ca89a);
@@ -1727,7 +1756,6 @@ html {
   opacity: 0.8;
 }
 
-/* ========== RESPONSIVE ====================== */
 @media (max-width: 992px) {
   .stepsContainer {
     grid-template-columns: repeat(2, 1fr);
@@ -1794,12 +1822,562 @@ html {
   .stepsCTA {
     padding: 20px;
   }
+} */
+
+/* ========== THERAPY AREAS =================== */
+.therapyAreas {
+  padding: 110px 0;
+  /* background: linear-gradient(180deg, #ffffff 0%, #f8f6f3 100%); */
+  background: linear-gradient(180deg, #f8f6f3d5 0%, #f9fffb 100%);
+
+  position: relative;
+}
+
+/* ===== HEADER ===== */
+/* .sectionHeader {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.headerBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(45, 125, 110, 0.08);
+  color: #2d7d6e;
+  padding: 6px 20px;
+  border-radius: 50px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 16px;
+}
+
+.badgeIcon {
+  font-size: 12px;
+}
+
+.sectionTitle {
+  font-size: 42px;
+  font-weight: 800;
+  color: #1b3a5c;
+  margin-bottom: 16px;
+}
+
+.sectionTitle span {
+  color: #2d7d6e;
+  position: relative;
+}
+
+.sectionTitle span::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #2d7d6e, #3ca89a);
+  border-radius: 2px;
+}
+
+.sectionDescription {
+  font-size: 18px;
+  color: #6a8aaa;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.8;
+} */
+
+/* ===== GRID ===== */
+.areasGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  margin-bottom: 60px;
+}
+
+/* ===== CARDS ===== */
+.areaCard {
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 40px 32px 32px;
+  border: 1px solid rgba(45, 125, 110, 0.06);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.cardGlow {
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle,
+    rgba(45, 125, 110, 0.03),
+    transparent 70%
+  );
+  transition: all 0.6s ease;
+}
+
+.areaCard:hover .cardGlow {
+  transform: scale(1.5);
+  opacity: 0.5;
+}
+
+.areaCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 60px rgba(45, 125, 110, 0.12);
+  border-color: rgba(45, 125, 110, 0.15);
+}
+
+/* ===== Header ===== */
+.areaCardHeader {
+  display: flex;
+  align-items: center;
+  gap: 35px;
+  margin-bottom: 16px;
+}
+
+.areaCardHeader h3 {
+  font-size: 25px;
+  color: #043013;
+  margin: 0;
+  font-weight: 700;
+  /* align-items: center; */
+  /* justify-content: center;
+  justify-self: center;
+  justify-items: center;
+  align-items: center;
+  align-self: center;
+  align-content: center;
+  text-align: center; */
+  padding-bottom: 6%;
+  transition: all 0.3s ease;
+}
+
+.areaCard:hover .areaCardHeader h3 {
+  color: #2d7d6e;
+}
+
+/* ===== ICON ===== */
+.areaIconWrapper {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  margin-bottom: 20px;
+}
+
+.areaIcon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: #e8e0d8;
+  display: flex;
+  margin-right: 5%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.areaIconImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.areaCard:hover .areaIcon {
+  transform: scale(1.01) rotate(-3deg);
+  box-shadow: 0 1px 2px rgba(45, 125, 110, 0.1);
+}
+
+/* .areaIcon {
+  font-size: 40px;
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #2d7d6e, #3ca89a);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+  transition: all 0.4s ease;
+  box-shadow: 0 8px 24px rgba(45, 125, 110, 0.2);
+} */
+
+.iconRing {
+  position: absolute;
+  top: -7.5px;
+  right: -4px;
+  width: 88px;
+  height: 88px;
+  border: 2px dashed rgba(45, 125, 110, 0.15);
+  border-radius: 22px;
+  animation: spin 20s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===== CONTENT ===== */
+.areaContent {
+  position: relative;
+  z-index: 2;
+}
+
+/* .cardNumber {
+  font-size: 12px;
+  font-weight: 700;
+  color: #2d7d6e;
+  opacity: 0.2;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+} */
+/* 
+.areaContent h3 {
+  font-size: 22px;
+  color: #1b3a5c;
+  margin-bottom: 12px;
+  font-weight: 700;
+} */
+
+.areaContent p {
+  font-size: 15px;
+  color: #042e25bd;
+  line-height: 1.8;
+  margin-bottom: 20px;
+}
+
+.areaTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.areaTags span {
+  background: #f8f6f3;
+  color: #247645;
+  padding: 6px 16px;
+  border-radius: 50px;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.areaCard:hover .areaTags span {
+  background: rgba(45, 125, 110, 0.08);
+  color: #2d7d6e;
+}
+
+/* ===== BUTTON ===== */
+.areaBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: transparent;
+  color: #2d7d6e;
+  border: none;
+  padding: 0;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.areaBtn svg {
+  transition: transform 0.3s ease;
+}
+
+.areaBtn:hover {
+  color: #1b5a4e;
+}
+
+.areaBtn:hover svg {
+  transform: translateX(-4px);
+}
+
+/* ===== WHY THERAPY ===== */
+.whyTherapy {
+  margin-top: 20px;
+  background: linear-gradient(135deg, #1b3a5c 0%, #2d7d6e 50%, #3ca89a 100%);
+  border-radius: 28px;
+  padding: 60px 50px;
+  position: relative;
+  overflow: hidden;
+}
+
+.whyTherapy::before {
+  content: "";
+  position: absolute;
+  top: -30%;
+  right: -10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.04),
+    transparent 70%
+  );
+  border-radius: 50%;
+}
+
+.whyTherapy::after {
+  content: "";
+  position: absolute;
+  bottom: -20%;
+  left: -5%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.03),
+    transparent 70%
+  );
+  border-radius: 50%;
+}
+
+.whyTherapyContent {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  color: white;
+}
+
+.whyIcon {
+  font-size: 72px;
+  margin-bottom: 16px;
+  display: inline-block;
+  animation: gentlePulse 3s ease-in-out infinite;
+}
+
+@keyframes gentlePulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.whyTherapyContent h3 {
+  font-size: 32px;
+  font-weight: 800;
+  margin-bottom: 16px;
+}
+
+.whyTherapyContent h3 span {
+  position: relative;
+  display: inline-block;
+}
+
+.whyTherapyContent h3 span::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+}
+
+.whyTherapyContent p {
+  font-size: 18px;
+  opacity: 0.92;
+  max-width: 700px;
+  margin: 0 auto 36px;
+  line-height: 1.9;
+}
+
+.whyStats {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.statItem {
+  text-align: center;
+}
+
+.statNumber {
+  display: block;
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  background: linear-gradient(to right, #ffffff, rgba(255, 255, 255, 0.8));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.statLabel {
+  font-size: 14px;
+  opacity: 0.75;
+  font-weight: 400;
+}
+
+.statDivider {
+  width: 1px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.whyCTA {
+  margin-top: 8px;
+}
+
+.whyBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: white;
+  color: #1b3a5c;
+  border: none;
+  padding: 16px 40px;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+
+.whyBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+}
+
+.whyBtn svg {
+  transition: transform 0.3s ease;
+}
+
+.whyBtn:hover svg {
+  transform: translateX(-4px);
+}
+
+/* ========== RESPONSIVE ====================== */
+@media (max-width: 992px) {
+  .areasGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .sectionTitle {
+    font-size: 34px;
+  }
+
+  .whyTherapy {
+    padding: 40px 30px;
+  }
+
+  .whyStats {
+    gap: 20px;
+  }
+
+  .statDivider {
+    height: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .therapyAreas {
+    padding: 70px 0;
+  }
+
+  .areasGrid {
+    grid-template-columns: 1fr;
+    max-width: 500px;
+    margin: 0 auto 40px;
+  }
+
+  .sectionTitle {
+    font-size: 28px;
+  }
+
+  .sectionDescription {
+    font-size: 16px;
+  }
+
+  .areaCard {
+    padding: 32px 24px;
+  }
+
+  .whyTherapy {
+    padding: 36px 24px;
+    border-radius: 20px;
+  }
+
+  .whyTherapyContent h3 {
+    font-size: 24px;
+  }
+
+  .whyTherapyContent p {
+    font-size: 16px;
+  }
+
+  .statNumber {
+    font-size: 28px;
+  }
+
+  .whyStats {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .statDivider {
+    width: 40px;
+    height: 1px;
+  }
+
+  .whyBtn {
+    padding: 14px 32px;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .areaIconWrapper {
+    width: 64px;
+    height: 64px;
+  }
+
+  .areaIcon {
+    font-size: 30px;
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+  }
+
+  .iconRing {
+    width: 72px;
+    height: 72px;
+    border-radius: 18px;
+  }
+
+  .areaContent h3 {
+    font-size: 19px;
+  }
 }
 
 /* ========== WORKSHOPS ========== */
 .workshops {
   padding: 110px 0;
-  background: var(--white);
+  /* background: var(--white); */
+  /* background: linear-gradient(180deg, #f8f6f3 0%, #ffffff 100%); f8f6f3d5*/
+  background: linear-gradient(180deg, #f9fffb 0%, #ffffff 100%);
+
 }
 
 .tabs {
@@ -2018,7 +2596,9 @@ html {
 /* ========== PODCASTS ========== */
 .podcasts {
   padding: 110px 0;
-  background: #f5f0ebb3;
+  /* background: #f5f0ebb3; f8f6f3d5*/
+  background: linear-gradient(180deg, #ffffff 0%, #f8f6f3d5 100%);
+
 }
 
 .podcastFeatured {
@@ -2203,7 +2783,9 @@ html {
 /* ========== ABOUT ========== */
 .about {
   padding: 110px 0;
-  background: var(--white);
+  /* background: var(--white); */
+  background: linear-gradient(180deg, #f8f6f3d5 0%, #f9fffb 100%);
+
 }
 
 .aboutGrid {
@@ -2322,7 +2904,9 @@ html {
 /* ========== CLINICS ========== */
 .clinics {
   padding: 110px 0;
-  background: #17681011;
+  /* background: #17681011; */
+  background: linear-gradient(180deg, #f9fffb 0%, #ffffff 100%);
+
 }
 
 .clinicsGrid {
