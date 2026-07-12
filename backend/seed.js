@@ -1,4 +1,3 @@
-// backend/seed.js
 const seedData = {
   doctor: {
     name: "دکتر لیلا سامع کریمی",
@@ -86,7 +85,7 @@ const seedData = {
       isUpcoming: false,
       description:
         "کارگاه خودشناسی اولین قدم در راه درمان و پذیرش خود است.",
-      image: "/images/kargah3.png",
+      image: "/images/kargah_khodshenasi.png",
       tags: ["خودآگاهی", "پذیرش", "رواندرمانی"],
       syllabus: [
         "مبانی نظری ACT",

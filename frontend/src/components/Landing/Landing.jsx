@@ -288,7 +288,10 @@ function Landing() {
         <div className={styles.container}>
           <div className={styles.sectionHeader}>
             <div>
-              <h2>مسیر درمان</h2>
+              {/* <h2>مسیر درمان</h2> */}
+              <h2 className={styles.sectionTitle}>
+              مسیر <span>درمان</span>
+            </h2>
               <p className={styles.sectionDescription}>
                 با ما همراه باشید تا گام‌به‌گام در مسیر بهبودی و آرامش قدم
                 بردارید.
@@ -365,7 +368,10 @@ function Landing() {
         <div className={styles.container}>
           <div className={styles.sectionHeader}>
             <div>
-              <h2>حوزه‌های تخصصی</h2>
+              {/* <h2>حوزه‌های تخصصی</h2> */}
+              <h2 className={styles.sectionTitle}>
+              حوزه‌های <span>تخصصی</span>
+            </h2>
               <p className={styles.sectionDescription}>
                 با بهره‌گیری از روش‌های علمی و تخصصی، در کنار شما هستیم.
               </p>
@@ -532,7 +538,7 @@ function Landing() {
       </section>
 
       {/* ======== WORKSHOPS ======== */}
-      <section id="workshops" className={styles.workshops}>
+      {/* <section id="workshops" className={styles.workshops}>
         <div className={styles.container}>
           <div className={styles.sectionHeader}>
             <h2>کارگاه‌های آموزشی</h2>
@@ -598,6 +604,169 @@ function Landing() {
                       <button className={styles.btnWorkshop}>
                         {workshop.isUpcoming ? "ثبت‌نام ✨" : "مشاهده سرفصل‌ها"}
                       </button>
+                    </div>
+                  </div>
+                </div>
+              )
+            )}
+          </div>
+        </div>
+      </section> */}
+
+      {/* ======== WORKSHOPS - کارگاه‌های آموزشی ======== */}
+      {/* ======== WORKSHOPS ======== */}
+      <section id="workshops" className={styles.workshops}>
+        <div className={styles.container}>
+          <div className={styles.sectionHeader}>
+            {/* <div className={styles.headerBadge}>
+              <span className={styles.badgeIcon}>✦</span>
+              رویدادهای آموزشی
+            </div> */}
+            <h2 className={styles.sectionTitle}>
+              کارگاه‌های <span>تخصصی</span>
+            </h2>
+            {/* <p className={styles.sectionDescription}>
+              با شرکت در کارگاه‌های عملی و تعاملی، مهارت‌های جدیدی بیاموزید و
+              مسیر رشد خود را هموار کنید.
+            </p> */}
+            <div className={styles.tabs}>
+              <button
+                className={`${styles.tabBtn} ${
+                  activeTab === "upcoming" ? styles.active : ""
+                }`}
+                onClick={() => setActiveTab("upcoming")}
+              >
+                {/* <span className={styles.tabIcon}>📅</span> */}
+                کارگاه‌های پیش‌رو
+              </button>
+              <button
+                className={`${styles.tabBtn} ${
+                  activeTab === "past" ? styles.active : ""
+                }`}
+                onClick={() => setActiveTab("past")}
+              >
+                {/* <span className={styles.tabIcon}>📚</span> */}
+                کارگاه‌های گذشته
+              </button>
+            </div>
+          </div>
+
+          <div className={styles.workshopGrid}>
+            {(activeTab === "upcoming" ? upcomingWorkshops : pastWorkshops).map(
+              (workshop, index) => (
+                <div key={workshop.id} className={styles.workshopCard}>
+                  <div className={styles.workshopImageWrapper}>
+                    <div className={styles.workshopImage}>
+                      {!imageErrors[workshop.id] ? (
+                        <img
+                          src={workshop.image}
+                          alt={workshop.title}
+                          className={styles.workshopImageCustom}
+                          onError={() => handleImageError(workshop.id)}
+                        />
+                      ) : (
+                        <div className={styles.imagePlaceholder}>📘</div>
+                      )}
+                    </div>
+                    {workshop.isUpcoming && (
+                      <div className={styles.workshopBadge}>
+                        <span className={styles.badgeDot}></span>
+                        پیش‌رو
+                      </div>
+                    )}
+                  </div>
+
+                  <div className={styles.workshopContent}>
+                    <div className={styles.workshopHeader}>
+                      {/* <div className={styles.workshopNumber}>#{String(index + 1).padStart(2, '0')}</div> */}
+                      <h3>{workshop.title}</h3>
+                    </div>
+
+                    <div className={styles.workshopMeta}>
+                      <span>📅 {formatPersianDate(workshop.date)}</span>
+                      <span className={styles.metaDivider}>•</span>
+                      <span>⏰ {workshop.time || "۱۰:۰۰ - ۱۳:۰۰"}</span>
+                    </div>
+
+                    <p className={styles.workshopDescription}>
+                      {workshop.description}
+                    </p>
+
+                    <div className={styles.workshopTags}>
+                      {workshop.tags.map((tag, i) => (
+                        <span key={i} className={styles.tag}>
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className={styles.workshopFooter}>
+                      <button className={styles.btnWorkshop}>
+                        {workshop.isUpcoming ? (
+                          <>
+                            <span>ثبت‌نام</span>
+                            <svg
+                              width="18"
+                              height="18"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                            >
+                              <path
+                                d="M5 12H19M19 12L12 5M19 12L12 19"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                            </svg>
+                          </>
+                        ) : (
+                          <>
+                            <span>مشاهده سرفصل‌ها</span>
+                            <svg
+                              width="18"
+                              height="18"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                            >
+                              <path
+                                d="M5 12H19M19 12L12 5M19 12L12 19"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                            </svg>
+                          </>
+                        )}
+                      </button>
+                      <div className={styles.priceSection}>
+                        <span className={styles.workshopPrice}>
+                          {workshop.price}
+                        </span>
+                        {workshop.capacity && (
+                          <span className={styles.workshopCapacity}>
+                            ظرفیت: {workshop.capacity} نفر
+                          </span>
+                        )}
+                      </div>
+                      {/* <button className={styles.btnWorkshop}>
+                  {workshop.isUpcoming ? (
+                    <>
+                      <span>ثبت‌نام</span>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                        <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </>
+                  ) : (
+                    <>
+                      <span>مشاهده سرفصل‌ها</span>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                        <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </>
+                  )}
+                </button> */}
                     </div>
                   </div>
                 </div>
