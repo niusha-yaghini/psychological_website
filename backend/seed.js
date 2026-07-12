@@ -103,7 +103,7 @@ const seedData = {
       isUpcoming: false,
       description:
         "کارگاه یادگیری مهارت های زندگی اعم از مهارت ارتباط ماثر، مهارت های ارتباط اجتماعی، کنترل خشم، ...",
-      image: '/images/kargah2.png',
+      image: '/images/kargah_maharathayezendegi.png',
       tags: ["فرسودگی شغلی", "خودمراقبتی", "تعادل زندگی"],
       syllabus: [
         "شناخت فرسودگی شغلی",

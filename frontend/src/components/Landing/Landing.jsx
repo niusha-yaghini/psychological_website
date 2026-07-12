@@ -94,204 +94,13 @@ function Landing() {
       </section>
 
       {/* ======== HOW IT WORKS - مراحل درمان ======== */}
-      {/* <section className={styles.howItWorks}>
-        <div className={styles.container}>
-          <div className={styles.sectionHeader}>
-            <div>
-              <span className={styles.sectionTag}>🌱 مسیر درمان</span>
-              <h2>
-                مراحل <span>درمان</span> در کلینیک
-              </h2>
-              <p className={styles.sectionDescription}>
-                با ما همراه باشید تا گام‌به‌گام در مسیر بهبودی و آرامش قدم
-                بردارید
-              </p>
-            </div>
-          </div>
-
-          <div className={styles.stepsContainer}>
-            <div className={styles.stepCard}>
-              <div className={styles.stepNumber}>۰۱</div>
-              <div className={styles.stepIcon}>📋</div>
-              <h3>ارزیابی اولیه</h3>
-              <p>
-                در این مرحله، فرم‌های ارزیابی را تکمیل می‌کنید و اطلاعات اولیه
-                درباره وضعیت خود را در اختیار دکتر قرار می‌دهید.
-              </p>
-              <div className={styles.stepDetail}>
-                <span>⏱️ زمان: ۳۰ دقیقه</span>
-                <span>📍 روش: آنلاین / حضوری</span>
-              </div>
-            </div>
-
-            <div className={styles.stepCard}>
-              <div className={styles.stepNumber}>۰۲</div>
-              <div className={styles.stepIcon}>🧠</div>
-              <h3>جلسات مشاوره</h3>
-              <p>
-                جلسات درمانی با توجه به نیاز شما برنامه‌ریزی می‌شود. هر جلسه با
-                هدف مشخص و بر اساس طرح درمان پیش می‌رود.
-              </p>
-              <div className={styles.stepDetail}>
-                <span>⏱️ هر جلسه: ۶۰-۹۰ دقیقه</span>
-                <span>📅 هفتگی / دو هفته‌ای</span>
-              </div>
-            </div>
-
-            <div className={styles.stepCard}>
-              <div className={styles.stepNumber}>۰۳</div>
-              <div className={styles.stepIcon}>🌿</div>
-              <h3>پیگیری و تداوم</h3>
-              <p>
-                پس از پایان جلسات، برنامه‌های پیگیری و تمرینات عملی برای تثبیت
-                تغییرات مثبت در زندگی روزمره ارائه می‌شود.
-              </p>
-              <div className={styles.stepDetail}>
-                <span>📊 ارزیابی پیشرفت</span>
-                <span>💪 تمرینات عملی</span>
-              </div>
-            </div>
-          </div>
-
-          <div className={styles.stepsCTA}>
-            <p>آماده شروع مسیر بهبودی هستید؟</p>
-            <Link to="/signup" className={styles.btnPrimary}>
-              شروع کنید
-              <span>→</span>
-            </Link>
-          </div>
-        </div>
-      </section> */}
-
-      {/* version 2 */}
-      {/* ======== HOW IT WORKS - مراحل درمان ======== */}
-      {/* <section className={styles.howItWorks}>
-        <div className={styles.container}>
-          <div className={styles.sectionHeader}>
-            <div>
-              <span className={styles.sectionTag}>🌱 مسیر درمان</span>
-              <h2>
-                مراحل <span>درمان</span> در کلینیک
-              </h2>
-              <p className={styles.sectionDescription}>
-                با ما همراه باشید تا گام‌به‌گام در مسیر بهبودی و آرامش قدم
-                بردارید
-              </p>
-            </div>
-          </div>
-
-          <div className={styles.timeline}>
-            <div className={styles.timelineItem}>
-              <div className={styles.timelineConnector}>
-                <div className={styles.timelineDot}>
-                  <span className={styles.dotNumber}>۱</span>
-                </div>
-                <div className={styles.timelineLine}></div>
-              </div>
-              <div className={styles.timelineContent}>
-                <div className={styles.timelineCard}>
-                  <div className={styles.timelineIcon}>📋</div>
-                  <div className={styles.timelineText}>
-                    <h3>ارزیابی اولیه</h3>
-                    <p>
-                      در این مرحله، فرم‌های ارزیابی را تکمیل می‌کنید و اطلاعات
-                      اولیه درباره وضعیت خود را در اختیار دکتر قرار می‌دهید.
-                    </p>
-                    <div className={styles.timelineDetails}>
-                      <span>⏱️ زمان: ۳۰ دقیقه</span>
-                      <span>📍 روش: آنلاین / حضوری</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className={styles.timelineItem}>
-              <div className={styles.timelineConnector}>
-                <div className={styles.timelineDot}>
-                  <span className={styles.dotNumber}>۲</span>
-                </div>
-                <div className={styles.timelineLine}></div>
-              </div>
-              <div className={styles.timelineContent}>
-                <div className={styles.timelineCard}>
-                  <div className={styles.timelineIcon}>🧠</div>
-                  <div className={styles.timelineText}>
-                    <h3>جلسات مشاوره</h3>
-                    <p>
-                      جلسات درمانی با توجه به نیاز شما برنامه‌ریزی می‌شود. هر
-                      جلسه با هدف مشخص و بر اساس طرح درمان پیش می‌رود.
-                    </p>
-                    <div className={styles.timelineDetails}>
-                      <span>⏱️ هر جلسه: ۶۰-۹۰ دقیقه</span>
-                      <span>📅 هفتگی / دو هفته‌ای</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className={styles.timelineItem}>
-              <div className={styles.timelineConnector}>
-                <div className={styles.timelineDot}>
-                  <span className={styles.dotNumber}>۳</span>
-                </div>
-                <div className={styles.timelineLine}></div>
-              </div>
-              <div className={styles.timelineContent}>
-                <div className={styles.timelineCard}>
-                  <div className={styles.timelineIcon}>🌿</div>
-                  <div className={styles.timelineText}>
-                    <h3>پیگیری و تداوم</h3>
-                    <p>
-                      پس از پایان جلسات، برنامه‌های پیگیری و تمرینات عملی برای
-                      تثبیت تغییرات مثبت در زندگی روزمره ارائه می‌شود.
-                    </p>
-                    <div className={styles.timelineDetails}>
-                      <span>📊 ارزیابی پیشرفت</span>
-                      <span>💪 تمرینات عملی</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className={styles.timelineItem}>
-              <div className={styles.timelineConnector}>
-                <div
-                  className={`${styles.timelineDot} ${styles.timelineDotEnd}`}
-                >
-                  <span className={styles.dotNumber}>🎯</span>
-                </div>
-              </div>
-              <div className={styles.timelineContent}>
-                <div className={styles.timelineEnd}>
-                  <h4>رسیدن به آرامش و تعادل</h4>
-                  <p>شما در این مسیر تنها نیستید، ما در کنار شما هستیم</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className={styles.stepsCTA}>
-            <p>آماده شروع مسیر بهبودی هستید؟</p>
-            <Link to="/signup" className={styles.btnPrimary}>
-              شروع کنید
-              <span>→</span>
-            </Link>
-          </div>
-        </div>
-      </section> */}
-
-      {/* ======== HOW IT WORKS - مراحل درمان ======== */}
       <section id="howItWorks" className={styles.howItWorks}>
         <div className={styles.container}>
           <div className={styles.sectionHeader}>
             <div>
-              {/* <h2>مسیر درمان</h2> */}
               <h2 className={styles.sectionTitle}>
-              مسیر <span>درمان</span>
-            </h2>
+                مسیر <span>درمان</span>
+              </h2>
               <p className={styles.sectionDescription}>
                 با ما همراه باشید تا گام‌به‌گام در مسیر بهبودی و آرامش قدم
                 بردارید.
@@ -304,16 +113,15 @@ function Landing() {
             <div className={styles.stepWrapper}>
               <div className={styles.stepCard}>
                 <div className={styles.stepNumber}>۱</div>
-                {/* <div className={styles.stepIcon}>📋</div> */}
                 <h3>ارزیابی اولیه</h3>
                 <p>
                   تکمیل فرم‌های ارزیابی و ارائه اطلاعات اولیه درباره وضعیت خود
                   به دکتر
                 </p>
-                {/* <div className={styles.stepDetail}>
+                <div className={styles.stepDetail}>
                   <span>⏱️ ۳۰ دقیقه</span>
                   <span>📍 آنلاین / حضوری</span>
-                </div> */}
+                </div>
               </div>
             </div>
 
@@ -321,16 +129,15 @@ function Landing() {
             <div className={styles.stepWrapper}>
               <div className={styles.stepCard}>
                 <div className={styles.stepNumber}>۲</div>
-                {/* <div className={styles.stepIcon}>🧠</div> */}
                 <h3>جلسات مشاوره</h3>
                 <p>
                   جلسات درمانی با توجه به نیاز شما و بر اساس طرح درمان تخصصی پیش
                   می‌رود
                 </p>
-                {/* <div className={styles.stepDetail}>
+                <div className={styles.stepDetail}>
                   <span>⏱️ ۶۰-۹۰ دقیقه</span>
                   <span>📅 هفتگی / دو هفته‌ای</span>
-                </div> */}
+                </div>
               </div>
             </div>
 
@@ -338,16 +145,15 @@ function Landing() {
             <div className={styles.stepWrapper}>
               <div className={styles.stepCard}>
                 <div className={styles.stepNumber}>۳</div>
-                {/* <div className={styles.stepIcon}>🌿</div> */}
                 <h3>پیگیری و تداوم</h3>
                 <p>
                   برنامه‌های پیگیری و تمرینات عملی برای تثبیت تغییرات مثبت در
                   زندگی روزمره
                 </p>
-                {/* <div className={styles.stepDetail}>
+                <div className={styles.stepDetail}>
                   <span>📊 ارزیابی پیشرفت</span>
                   <span>💪 تمرینات عملی</span>
-                </div> */}
+                </div>
               </div>
             </div>
           </div>
@@ -357,7 +163,6 @@ function Landing() {
             <p>آماده شروع مسیر بهبودی هستید؟</p>
             <Link to="/signup" className={styles.btnPrimary}>
               شروع کنید
-              {/* <span>→</span> */}
             </Link>
           </div>
         </div>
@@ -368,10 +173,9 @@ function Landing() {
         <div className={styles.container}>
           <div className={styles.sectionHeader}>
             <div>
-              {/* <h2>حوزه‌های تخصصی</h2> */}
               <h2 className={styles.sectionTitle}>
-              حوزه‌های <span>تخصصی</span>
-            </h2>
+                حوزه‌های <span>تخصصی</span>
+              </h2>
               <p className={styles.sectionDescription}>
                 با بهره‌گیری از روش‌های علمی و تخصصی، در کنار شما هستیم.
               </p>
@@ -502,133 +306,18 @@ function Landing() {
                 الگوهای تکراری و ناسالم رها شوید، مهارت‌های جدید بیاموزید و
                 زندگی‌ای سرشار از آرامش، معنا و رضایت را تجربه کنید.
               </p>
-              {/* <div className={styles.whyStats}>
-                <div className={styles.statItem}>
-                  <span className={styles.statNumber}>۱۰۰۰+</span>
-                  <span className={styles.statLabel}>مراجع موفق</span>
-                </div>
-                <div className={styles.statDivider}></div>
-                <div className={styles.statItem}>
-                  <span className={styles.statNumber}>۹۵٪</span>
-                  <span className={styles.statLabel}>رضایت مراجعین</span>
-                </div>
-                <div className={styles.statDivider}></div>
-                <div className={styles.statItem}>
-                  <span className={styles.statNumber}>۱۲+</span>
-                  <span className={styles.statLabel}>سال تجربه</span>
-                </div>
-              </div> */}
-              {/* <div className={styles.whyCTA}>
-                <button className={styles.whyBtn}>
-                  شروع مسیر درمان
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                    <path
-                      d="M5 12H19M19 12L12 5M19 12L12 19"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </button>
-              </div> */}
             </div>
           </div>
         </div>
       </section>
 
       {/* ======== WORKSHOPS ======== */}
-      {/* <section id="workshops" className={styles.workshops}>
-        <div className={styles.container}>
-          <div className={styles.sectionHeader}>
-            <h2>کارگاه‌های آموزشی</h2>
-            <div className={styles.tabs}>
-              <button
-                className={`${styles.tabBtn} ${
-                  activeTab === "upcoming" ? styles.active : ""
-                }`}
-                onClick={() => setActiveTab("upcoming")}
-              >
-                کارگاه‌های پیش‌رو
-              </button>
-              <button
-                className={`${styles.tabBtn} ${
-                  activeTab === "past" ? styles.active : ""
-                }`}
-                onClick={() => setActiveTab("past")}
-              >
-                کارگاه‌های گذشته
-              </button>
-            </div>
-          </div>
-          <div className={styles.workshopGrid}>
-            {(activeTab === "upcoming" ? upcomingWorkshops : pastWorkshops).map(
-              (workshop) => (
-                <div key={workshop.id} className={styles.workshopCard}>
-                  <div className={styles.workshopImage}>
-                    {!imageErrors[workshop.id] ? (
-                      <img
-                        src={workshop.image}
-                        alt={workshop.title}
-                        className={styles.workshopImageCustom}
-                        onError={() => handleImageError(workshop.id)}
-                      />
-                    ) : (
-                      <div className={styles.imagePlaceholder}>📘</div>
-                    )}
-                    {workshop.isUpcoming && (
-                      <div className={styles.workshopBadge}>پیش‌رو</div>
-                    )}
-                  </div>
-                  <div className={styles.workshopContent}>
-                    <h3>{workshop.title}</h3>
-                    <div className={styles.workshopMeta}>
-                      <span>📅 {formatPersianDate(workshop.date)}</span>
-                    </div>
-                    <p className={styles.workshopDescription}>
-                      {workshop.description}
-                    </p>
-                    <div className={styles.workshopTags}>
-                      {workshop.tags.map((tag, i) => (
-                        <span key={i} className={styles.tag}>
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                    <div className={styles.workshopFooter}>
-                      <div>
-                        <span className={styles.workshopPrice}>
-                          {workshop.price}
-                        </span>
-                      </div>
-                      <button className={styles.btnWorkshop}>
-                        {workshop.isUpcoming ? "ثبت‌نام ✨" : "مشاهده سرفصل‌ها"}
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              )
-            )}
-          </div>
-        </div>
-      </section> */}
-
-      {/* ======== WORKSHOPS - کارگاه‌های آموزشی ======== */}
-      {/* ======== WORKSHOPS ======== */}
       <section id="workshops" className={styles.workshops}>
         <div className={styles.container}>
           <div className={styles.sectionHeader}>
-            {/* <div className={styles.headerBadge}>
-              <span className={styles.badgeIcon}>✦</span>
-              رویدادهای آموزشی
-            </div> */}
             <h2 className={styles.sectionTitle}>
               کارگاه‌های <span>تخصصی</span>
             </h2>
-            {/* <p className={styles.sectionDescription}>
-              با شرکت در کارگاه‌های عملی و تعاملی، مهارت‌های جدیدی بیاموزید و
-              مسیر رشد خود را هموار کنید.
-            </p> */}
             <div className={styles.tabs}>
               <button
                 className={`${styles.tabBtn} ${
@@ -636,7 +325,6 @@ function Landing() {
                 }`}
                 onClick={() => setActiveTab("upcoming")}
               >
-                {/* <span className={styles.tabIcon}>📅</span> */}
                 کارگاه‌های پیش‌رو
               </button>
               <button
@@ -645,7 +333,6 @@ function Landing() {
                 }`}
                 onClick={() => setActiveTab("past")}
               >
-                {/* <span className={styles.tabIcon}>📚</span> */}
                 کارگاه‌های گذشته
               </button>
             </div>
@@ -678,7 +365,6 @@ function Landing() {
 
                   <div className={styles.workshopContent}>
                     <div className={styles.workshopHeader}>
-                      {/* <div className={styles.workshopNumber}>#{String(index + 1).padStart(2, '0')}</div> */}
                       <h3>{workshop.title}</h3>
                     </div>
 
@@ -750,23 +436,6 @@ function Landing() {
                           </span>
                         )}
                       </div>
-                      {/* <button className={styles.btnWorkshop}>
-                  {workshop.isUpcoming ? (
-                    <>
-                      <span>ثبت‌نام</span>
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                        <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </>
-                  ) : (
-                    <>
-                      <span>مشاهده سرفصل‌ها</span>
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                        <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </>
-                  )}
-                </button> */}
                     </div>
                   </div>
                 </div>
@@ -832,7 +501,6 @@ function Landing() {
           <div className={styles.aboutGrid}>
             <div className={styles.aboutText}>
               <h2>درباره من</h2>
-              {/* <h2>{doctor.name}</h2> */}
               <p className={styles.aboutBio}>{doctor.bio}</p>
               <div className={styles.aboutSpecialties}>
                 <div className={styles.specialtyItem}>
@@ -907,6 +575,7 @@ function Landing() {
           </div>
         </div>
       </section>
+
       {/* ======== SOCIAL & CONTACT ======== */}
       <section className={styles.contact}>
         <div className={styles.container}>
@@ -963,6 +632,7 @@ function Landing() {
           </div>
         </div>
       </section>
+
       {/* ======== FOOTER ======== */}
       <footer className={styles.footer}>
         <div className={styles.container}>
@@ -973,10 +643,6 @@ function Landing() {
               <p>دکتر {doctor.name}</p>
             </div>
             <div className={styles.footerLinks}>
-              {/* <a href="#workshops">کارگاه‌ها</a>
-              <a href="#podcasts">پادکست‌ها</a>
-              <a href="#about">درباره من</a>
-              <a href="#clinics">مطب‌ها</a> */}
               <a href="#">خانه</a>
               <a href="#howItWorks">مسیر درمان</a>
               <a href="#theapyArea">خدمات</a>

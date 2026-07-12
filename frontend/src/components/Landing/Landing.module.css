@@ -377,16 +377,10 @@ html {
 }
 
 .btnlogin {
-  /* background: linear-gradient(135deg, #186a35af 0%, #c1c96f93 100%); */
-
   background: linear-gradient(135deg, #316a18d3 0%, #ebe3da 100%);
-
-  /* background: linear-gradient(135deg, #18594de7, #80ad6b); */
-
   color: white;
   border: none;
   padding: 10px 32px;
-
   border-radius: 8px;
   font-size: 14px;
   font-weight: 600;
@@ -415,9 +409,6 @@ html {
     rgba(255, 255, 255, 0.05) 60%,
     transparent 100%
   );
-
-  /* background: linear-gradient(135deg, #186a35af 0%, #c1c96f93 100%); */
-
   transform: skewX(-20deg);
   transition: left 0.6s ease;
 }
@@ -429,8 +420,6 @@ html {
 .btnlogin:hover {
   transform: translateY(-3px) scale(1.03);
   box-shadow: 0 8px 30px rgba(45, 125, 110, 0.35);
-  /* background: linear-gradient(135deg, #256d5e 0%, #2d8f7e 50%, #4ab0a0 100%); */
-  /* background: linear-gradient(135deg, #186a35ee 0%, #c1c96fe6 100%); */
   background: linear-gradient(135deg, #316a18eb 0%, #d4c8bb 100%);
 }
 
@@ -627,12 +616,10 @@ html {
   font-family: inherit;
   letter-spacing: 0.5px;
   position: relative;
-  /* overflow: hidden; */
   overflow: visible;
 }
 
 .herobtnPrimary:hover {
-  /* background: linear-gradient(135deg, #2d7d6e 0%, #3ca89a 100%); */
   background: rgba(255, 255, 255, 0.675);
   color: #0e1201;
   transform: translateY(-4px) scale(1.01);
@@ -787,12 +774,6 @@ html {
   background: var(--secondary);
 }
 
-
-
-/* .sectionHeader h2 span {
-  color: var(--secondary);
-} */
-
 .viewAll {
   color: var(--secondary);
   text-decoration: none;
@@ -810,502 +791,9 @@ html {
 }
 
 /* ========== HOW IT WORKS ==================== */
-
-/* .howItWorks {
-  padding: 80px 0;
-}
-
-.sectionDescription {
-  font-size: 17px;
-  color: #6a8aaa;
-  margin-top: 8px;
-  max-width: 500px;
-  line-height: 1.6;
-}
-
-.stepsContainer {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 30px;
-  margin-top: 20px;
-}
-
-.stepCard {
-  background: #ffffff;
-  padding: 36px 28px;
-  border-radius: 20px;
-  text-align: center;
-  position: relative;
-  border: 1px solid rgba(45, 125, 110, 0.08);
-  box-shadow: 0 4px 20px rgba(45, 125, 110, 0.06);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.stepCard:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 40px rgba(45, 125, 110, 0.12);
-  border-color: rgba(45, 125, 110, 0.15);
-}
-
-.stepNumber {
-  position: absolute;
-  top: -14px;
-  right: 20px;
-  background: linear-gradient(135deg, #2d7d6e, #3ca89a);
-  color: white;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  font-weight: 800;
-  box-shadow: 0 4px 15px rgba(45, 125, 110, 0.25);
-}
-
-.stepIcon {
-  font-size: 48px;
-  margin-bottom: 16px;
-  display: block;
-}
-
-.stepCard h3 {
-  font-size: 20px;
-  color: #1b3a5c;
-  margin-bottom: 12px;
-}
-
-.stepCard p {
-  font-size: 15px;
-  color: #6a8aaa;
-  line-height: 1.7;
-  margin-bottom: 16px;
-}
-
-.stepDetail {
-  display: flex;
-  justify-content: center;
-  gap: 16px;
-  font-size: 13px;
-  color: #2d7d6e;
-  background: #f5f0eb;
-  padding: 8px 16px;
-  border-radius: 30px;
-  flex-wrap: wrap;
-}
-
-.stepDetail span {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.stepsCTA {
-  text-align: center;
-  margin-top: 48px;
-  padding: 32px;
-  background: linear-gradient(135deg, #f5f0eb, #e8e0d8);
-  border-radius: 20px;
-}
-
-.stepsCTA p {
-  font-size: 18px;
-  color: #1b3a5c;
-  font-weight: 600;
-  margin-bottom: 16px;
-} */
-
-/* version2 */
-/* ========== HOW IT WORKS - TIMELINE ========= */
-
-/* .howItWorks {
-  padding: 80px 0;
-  background: #FAF6F2;
-}
-
-.sectionDescription {
-  font-size: 17px;
-  color: #6A8AAA;
-  margin-top: 8px;
-  max-width: 500px;
-  line-height: 1.6;
-}
-
-.timeline {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  margin-top: 40px;
-  position: relative;
-  padding: 0 20px;
-}
-
-.timeline::before {
-  content: '';
-  position: absolute;
-  right: 50%;
-  top: 0;
-  bottom: 0;
-  width: 3px;
-  background: linear-gradient(
-    180deg,
-    #2D7D6E 0%,
-    #3CA89A 30%,
-    #4DB8A8 60%,
-    #6BC8B8 100%
-  );
-  transform: translateX(50%);
-  border-radius: 2px;
-  opacity: 0.3;
-}
-
-.timelineItem {
-  display: flex;
-  align-items: center;
-  gap: 40px;
-  margin-bottom: 30px;
-  position: relative;
-}
-
-.timelineItem:last-child {
-  margin-bottom: 0;
-}
-
-.timelineConnector {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex-shrink: 0;
-  width: 60px;
-  position: relative;
-  z-index: 2;
-}
-
-.timelineDot {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #2D7D6E, #3CA89A);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 20px rgba(45, 125, 110, 0.3);
-  position: relative;
-  z-index: 3;
-  flex-shrink: 0;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.timelineItem:hover .timelineDot {
-  transform: scale(1.12);
-  box-shadow: 0 8px 30px rgba(45, 125, 110, 0.4);
-}
-
-.dotNumber {
-  font-size: 18px;
-  font-weight: 800;
-  color: white;
-}
-
-.timelineLine {
-  width: 3px;
-  height: 40px;
-  background: linear-gradient(180deg, #3CA89A, #6BC8B8);
-  opacity: 0.3;
-  flex-shrink: 0;
-  margin-top: 4px;
-  border-radius: 2px;
-}
-
-.timelineItem:last-child .timelineLine {
-  display: none;
-}
-
-.timelineDotEnd {
-  background: linear-gradient(135deg, #6BC8B8, #4DB8A8);
-  width: 55px;
-  height: 55px;
-  animation: pulseGreen 2s ease-in-out infinite;
-}
-
-@keyframes pulseGreen {
-  0%, 100% {
-    box-shadow: 0 4px 20px rgba(45, 125, 110, 0.3);
-  }
-  50% {
-    box-shadow: 0 4px 40px rgba(45, 125, 110, 0.5);
-  }
-}
-
-.timelineDotEnd .dotNumber {
-  font-size: 22px;
-}
-
-.timelineContent {
-  flex: 1;
-  padding: 10px 0;
-}
-
-.timelineCard {
-  background: #FFFFFF;
-  border-radius: 16px;
-  padding: 28px 32px;
-  display: flex;
-  align-items: flex-start;
-  gap: 20px;
-  border: 1px solid rgba(45, 125, 110, 0.08);
-  box-shadow: 0 4px 20px rgba(45, 125, 110, 0.05);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-}
-
-.timelineCard::before {
-  content: '';
-  position: absolute;
-  right: -12px;
-  top: 50%;
-  transform: translateY(-50%);
-  border: 6px solid transparent;
-  border-right-color: #FFFFFF;
-}
-
-.timelineItem:hover .timelineCard {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(45, 125, 110, 0.1);
-  border-color: rgba(45, 125, 110, 0.15);
-}
-
-.timelineIcon {
-  font-size: 36px;
-  flex-shrink: 0;
-  background: #F5F0EB;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.timelineText {
-  flex: 1;
-}
-
-.timelineText h3 {
-  font-size: 20px;
-  color: #1B3A5C;
-  margin-bottom: 8px;
-}
-
-.timelineText p {
-  font-size: 15px;
-  color: #6A8AAA;
-  line-height: 1.7;
-  margin-bottom: 12px;
-}
-
-.timelineDetails {
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-
-.timelineDetails span {
-  font-size: 13px;
-  color: #2D7D6E;
-  background: #F5F0EB;
-  padding: 4px 14px;
-  border-radius: 20px;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.timelineEnd {
-  background: linear-gradient(135deg, #F5F0EB, #E8E0D8);
-  border-radius: 16px;
-  padding: 24px 32px;
-  text-align: center;
-  border: 2px dashed rgba(45, 125, 110, 0.2);
-}
-
-.timelineEnd h4 {
-  font-size: 20px;
-  color: #2D7D6E;
-  margin-bottom: 4px;
-}
-
-.timelineEnd p {
-  font-size: 15px;
-  color: #6A8AAA;
-  margin: 0;
-}
-
-.stepsCTA {
-  text-align: center;
-  margin-top: 48px;
-  padding: 32px;
-  background: linear-gradient(135deg, #F5F0EB, #E8E0D8);
-  border-radius: 20px;
-}
-
-.stepsCTA p {
-  font-size: 18px;
-  color: #1B3A5C;
-  font-weight: 600;
-  margin-bottom: 16px;
-}
-
-@media (max-width: 992px) {
-  .timeline::before {
-    right: 30px;
-  }
-
-  .timelineItem {
-    flex-direction: row;
-    gap: 20px;
-  }
-
-  .timelineConnector {
-    width: 50px;
-  }
-
-  .timelineCard::before {
-    display: none;
-  }
-
-  .timelineContent {
-    flex: 1;
-  }
-}
-
-@media (max-width: 768px) {
-  .timeline::before {
-    right: 20px;
-  }
-
-  .timelineItem {
-    gap: 16px;
-  }
-
-  .timelineConnector {
-    width: 40px;
-  }
-
-  .timelineDot {
-    width: 40px;
-    height: 40px;
-  }
-
-  .dotNumber {
-    font-size: 14px;
-  }
-
-  .timelineDotEnd {
-    width: 44px;
-    height: 44px;
-  }
-
-  .timelineDotEnd .dotNumber {
-    font-size: 18px;
-  }
-
-  .timelineLine {
-    height: 30px;
-  }
-
-  .timelineCard {
-    padding: 20px;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-  .timelineIcon {
-    width: 48px;
-    height: 48px;
-    font-size: 28px;
-  }
-
-  .timelineText h3 {
-    font-size: 18px;
-  }
-
-  .timelineDetails {
-    justify-content: center;
-  }
-
-  .timelineEnd {
-    padding: 16px 20px;
-  }
-
-  .timelineEnd h4 {
-    font-size: 17px;
-  }
-
-  .stepsCTA {
-    padding: 20px 16px;
-  }
-
-  .stepsCTA p {
-    font-size: 16px;
-  }
-}
-
-@media (max-width: 480px) {
-  .timeline::before {
-    right: 14px;
-  }
-
-  .timelineConnector {
-    width: 30px;
-  }
-
-  .timelineDot {
-    width: 32px;
-    height: 32px;
-  }
-
-  .dotNumber {
-    font-size: 11px;
-  }
-
-  .timelineDotEnd {
-    width: 36px;
-    height: 36px;
-  }
-
-  .timelineDotEnd .dotNumber {
-    font-size: 14px;
-  }
-
-  .timelineLine {
-    height: 20px;
-  }
-
-  .timelineCard {
-    padding: 16px;
-  }
-
-  .timelineDetails {
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .timelineText p {
-    font-size: 14px;
-  }
-} */
-
-/* ========== HOW IT WORKS ==================== */
 .howItWorks {
   padding: 110px 0;
   background: linear-gradient(180deg, #ffffff 0%, #f8f6f3d5 100%);
-
-  /* padding-top: ; */
-  /* background: #faf6f2; */
   position: relative;
 }
 
@@ -1346,7 +834,6 @@ html {
   left: -50%; /* از وسط مرحله فعلی تا وسط مرحله بعد */
   width: 100%;
   height: 2px;
-  /* background: linear-gradient(90deg, #2d7d6e 0%, #3ca89a 50%, #6bc8b8 100%); */
   background: #18594de5;
   z-index: 0;
 }
@@ -1364,7 +851,6 @@ html {
   border: 3px solid #ffffff;
   box-shadow: 0 0 0 2px #18594de5;
   z-index: 2;
-  /* animation: pulseDot 2s ease-in-out infinite; */
 }
 
 /* ===== استایل کارت هر مرحله ===== */
@@ -1455,8 +941,6 @@ html {
   text-align: center;
   margin-top: 48px;
   padding: 32px;
-  /* background: linear-gradient(135deg, #f5f0eb, #e8e0d8); */
-  /* background: linear-gradient(135deg, #4c9456a4, #e8e0d8); */
   background: #4c94563f;
   border-radius: 20px;
 }
@@ -1487,12 +971,10 @@ html {
   font-family: inherit;
   letter-spacing: 0.5px;
   position: relative;
-  /* overflow: hidden; */
   overflow: visible;
 }
 
 .btnPrimary:hover {
-  /* background: linear-gradient(135deg, #2d7d6e 0%, #3ca89a 100%); */
   background: rgba(255, 255, 255, 0.675);
   color: #061703cb;
   transform: translateY(-4px) scale(1.01);
@@ -1500,7 +982,6 @@ html {
   border: 2px solid #061703e2;
 }
 
-/* version1 */
 .btnPrimary::after {
   content: "";
   position: absolute;
@@ -1593,301 +1074,11 @@ html {
 }
 
 /* ========== THERAPY AREAS =================== */
-/* .therapyAreas {
-  padding: 110px 0;
-  background: #ffffff;
-}
-
-.areasGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 30px;
-  margin-top: 20px;
-}
-
-.areaCard {
-  background: #faf6f2;
-  border-radius: 20px;
-  padding: 32px 28px;
-  border: 1px solid rgba(45, 125, 110, 0.08);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.areaCard:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 12px 40px rgba(45, 125, 110, 0.1);
-  border-color: #2d7d6e;
-}
-
-.areaIcon {
-  font-size: 48px;
-  margin-bottom: 16px;
-  background: #e8e0d8;
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.areaContent h3 {
-  font-size: 20px;
-  color: #1b3a5c;
-  margin-bottom: 10px;
-}
-
-.areaContent p {
-  font-size: 15px;
-  color: #6a8aaa;
-  line-height: 1.7;
-  margin-bottom: 16px;
-}
-
-.areaTags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 16px;
-}
-
-.areaTags span {
-  background: #ffffff;
-  color: #2d7d6e;
-  padding: 4px 14px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 500;
-  border: 1px solid rgba(45, 125, 110, 0.12);
-}
-
-.areaBtn {
-  background: transparent;
-  color: #2d7d6e;
-  border: 2px solid #2d7d6e;
-  padding: 8px 24px;
-  border-radius: 30px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-family: inherit;
-}
-
-.areaBtn:hover {
-  background: linear-gradient(135deg, #2d7d6e, #3ca89a);
-  color: white;
-  border-color: transparent;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 20px rgba(45, 125, 110, 0.25);
-}
-
-.whyTherapy {
-  margin-top: 50px;
-  background: linear-gradient(135deg, #2d7d6e, #3ca89a);
-  border-radius: 24px;
-  padding: 50px 40px;
-  position: relative;
-  overflow: hidden;
-}
-
-.whyTherapy::before {
-  content: "";
-  position: absolute;
-  top: -50%;
-  right: -20%;
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(
-    circle,
-    rgba(255, 255, 255, 0.05),
-    transparent 70%
-  );
-  border-radius: 50%;
-}
-
-.whyTherapyContent {
-  position: relative;
-  z-index: 1;
-  text-align: center;
-  color: white;
-}
-
-.whyIcon {
-  font-size: 64px;
-  margin-bottom: 16px;
-  display: block;
-  animation: pulse 2s ease-in-out infinite;
-}
-
-.whyTherapyContent h3 {
-  font-size: 28px;
-  margin-bottom: 16px;
-}
-
-.whyTherapyContent p {
-  font-size: 17px;
-  opacity: 0.9;
-  max-width: 700px;
-  margin: 0 auto 32px;
-  line-height: 1.8;
-}
-
-.whyStats {
-  display: flex;
-  justify-content: center;
-  gap: 50px;
-}
-
-.whyStats > div {
-  text-align: center;
-}
-
-.whyStats > div span:first-child {
-  display: block;
-  font-size: 32px;
-  font-weight: 800;
-}
-
-.whyStats > div span:last-child {
-  font-size: 14px;
-  opacity: 0.8;
-}
-
-@media (max-width: 992px) {
-  .stepsContainer {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .areasGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .whyStats {
-    gap: 30px;
-    flex-wrap: wrap;
-  }
-}
-
-@media (max-width: 768px) {
-  .stepsContainer {
-    grid-template-columns: 1fr;
-  }
-
-  .areasGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .stepNumber {
-    top: -12px;
-    right: 16px;
-    width: 34px;
-    height: 34px;
-    font-size: 12px;
-  }
-
-  .whyTherapy {
-    padding: 30px 20px;
-  }
-
-  .whyTherapyContent h3 {
-    font-size: 22px;
-  }
-
-  .whyStats {
-    gap: 20px;
-  }
-
-  .whyStats > div span:first-child {
-    font-size: 24px;
-  }
-
-  .stepCard {
-    padding: 28px 20px;
-  }
-
-  .areaCard {
-    padding: 24px 20px;
-  }
-}
-
-@media (max-width: 480px) {
-  .stepDetail {
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .stepsCTA {
-    padding: 20px;
-  }
-} */
-
-/* ========== THERAPY AREAS =================== */
 .therapyAreas {
   padding: 110px 0;
-  /* background: linear-gradient(180deg, #ffffff 0%, #f8f6f3 100%); */
   background: linear-gradient(180deg, #f8f6f3d5 0%, #f9fffb 100%);
-
   position: relative;
 }
-
-/* ===== HEADER ===== */
-/* .sectionHeader {
-  text-align: center;
-  margin-bottom: 60px;
-}
-
-.headerBadge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(45, 125, 110, 0.08);
-  color: #2d7d6e;
-  padding: 6px 20px;
-  border-radius: 50px;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 1px;
-  margin-bottom: 16px;
-}
-
-.badgeIcon {
-  font-size: 12px;
-}
-
-.sectionTitle {
-  font-size: 42px;
-  font-weight: 800;
-  color: #1b3a5c;
-  margin-bottom: 16px;
-}
-
-.sectionTitle span {
-  color: #2d7d6e;
-  position: relative;
-}
-
-.sectionTitle span::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 4px;
-  background: linear-gradient(90deg, #2d7d6e, #3ca89a);
-  border-radius: 2px;
-}
-
-.sectionDescription {
-  font-size: 18px;
-  color: #6a8aaa;
-  max-width: 600px;
-  margin: 0 auto;
-  line-height: 1.8;
-} */
 
 /* ===== GRID ===== */
 .areasGrid {
@@ -1946,14 +1137,6 @@ html {
   color: #043013;
   margin: 0;
   font-weight: 700;
-  /* align-items: center; */
-  /* justify-content: center;
-  justify-self: center;
-  justify-items: center;
-  align-items: center;
-  align-self: center;
-  align-content: center;
-  text-align: center; */
   padding-bottom: 6%;
   transition: all 0.3s ease;
 }
@@ -1992,21 +1175,6 @@ html {
   box-shadow: 0 1px 2px rgba(45, 125, 110, 0.1);
 }
 
-/* .areaIcon {
-  font-size: 40px;
-  width: 80px;
-  height: 80px;
-  background: linear-gradient(135deg, #2d7d6e, #3ca89a);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  z-index: 2;
-  transition: all 0.4s ease;
-  box-shadow: 0 8px 24px rgba(45, 125, 110, 0.2);
-} */
-
 .iconRing {
   position: absolute;
   top: -7.5px;
@@ -2032,22 +1200,6 @@ html {
   position: relative;
   z-index: 2;
 }
-
-/* .cardNumber {
-  font-size: 12px;
-  font-weight: 700;
-  color: #2d7d6e;
-  opacity: 0.2;
-  letter-spacing: 2px;
-  margin-bottom: 8px;
-} */
-/* 
-.areaContent h3 {
-  font-size: 22px;
-  color: #1b3a5c;
-  margin-bottom: 12px;
-  font-weight: 700;
-} */
 
 .areaContent p {
   font-size: 15px;
@@ -2395,12 +1547,6 @@ html {
   pointer-events: none;
 }
 
-/* ===== HEADER ===== */
-/* .sectionHeader { */
-  /* text-align: center; */
-  /* margin-bottom: 100px; */
-/* } */
-
 .headerBadge {
   display: inline-flex;
   align-items: center;
@@ -2560,8 +1706,6 @@ html {
 }
 
 .workshopImage {
-  /* width: 100%; */
-  /* aspect-ratio: 1/1; */
   width: 100px;
   height: 100px;
   border-radius: 50%;
@@ -2897,218 +2041,9 @@ html {
   }
 }
 
-/* .tabs {
-  display: flex;
-  gap: 8px;
-  background: var(--primary-lightest);
-  padding: 6px;
-  border-radius: 30px;
-}
-
-.tabBtn {
-  padding: 10px 24px;
-  border: none;
-  border-radius: 30px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: var(--transition);
-  background: transparent;
-  color: var(--text-secondary);
-}
-
-.tabBtn.active {
-  background: var(--gradient-primary);
-  color: white;
-  box-shadow: 0 4px 20px rgba(46, 90, 136, 0.3);
-}
-
-.tabBtn:hover:not(.active) {
-  background: rgba(46, 90, 136, 0.08);
-}
-
-.workshopGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 30px;
-}
-
-.workshopGrid:has(.workshopCard:nth-child(2):last-child) {
-  grid-template-columns: repeat(2, 1fr);
-}
-
-.workshopGrid:has(.workshopCard:only-child) {
-  grid-template-columns: 1fr;
-  max-width: 400px;
-  margin: 0 auto;
-}
-
-.workshopCard {
-  background: var(--white);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
-  border: 1px solid rgba(46, 90, 136, 0.06);
-  transition: var(--transition);
-  animation: slideIn 0.6s ease;
-}
-
-.workshopCard:nth-child(1) {
-  animation-delay: 0.1s;
-}
-.workshopCard:nth-child(2) {
-  animation-delay: 0.2s;
-}
-.workshopCard:nth-child(3) {
-  animation-delay: 0.3s;
-}
-
-.workshopCard:hover {
-  transform: translateY(-10px);
-  box-shadow: var(--shadow-lg);
-  border-color: var(--primary-light);
-}
-
-.workshopContent {
-  padding: 24px;
-}
-
-.workshopContent h3 {
-  font-size: 20px;
-  color: var(--text-dark);
-  margin-bottom: 12px;
-  line-height: 1.3;
-  transition: var(--transition);
-}
-
-.workshopCard:hover .workshopContent h3 {
-  color: var(--primary);
-}
-
-.workshopMeta {
-  display: flex;
-  gap: 16px;
-  font-size: 14px;
-  color: var(--text-secondary);
-  margin-bottom: 12px;
-}
-
-.workshopDescription {
-  font-size: 14px;
-  color: var(--text-secondary);
-  line-height: 1.7;
-  margin-bottom: 16px;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.workshopTags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 16px;
-}
-
-.tag {
-  background: var(--primary-lightest);
-  color: var(--primary);
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 500;
-  transition: var(--transition);
-}
-
-.tag:hover {
-  background: var(--gradient-primary);
-  color: white;
-  transform: scale(1.05);
-}
-
-.workshopFooter {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 16px;
-  border-top: 1px solid var(--gray-light);
-}
-
-.workshopPrice {
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--primary);
-}
-
-.workshopCapacity {
-  display: block;
-  font-size: 13px;
-  color: var(--gray);
-}
-
-.btnWorkshop {
-  background: var(--gradient-primary);
-  color: white;
-  border: none;
-  padding: 10px 24px;
-  border-radius: 25px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.btnWorkshop:hover {
-  transform: scale(1.05);
-  box-shadow: 0 8px 25px rgba(46, 90, 136, 0.3);
-}
-
-.workshopImage {
-  height: 200px;
-  background: var(--gradient-primary);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  overflow: hidden;
-}
-
-.workshopImageCustom {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: var(--transition);
-}
-
-.workshopCard:hover .workshopImageCustom {
-  transform: scale(1.05);
-}
-
-.imagePlaceholder {
-  font-size: 64px;
-  position: relative;
-  z-index: 1;
-}
-
-.workshopBadge {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  background: rgba(255, 255, 255, 0.95);
-  color: var(--primary);
-  padding: 6px 16px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 700;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  z-index: 2;
-} */
-
 /* ========== PODCASTS ========== */
 .podcasts {
   padding: 110px 0;
-  /* background: #f5f0ebb3; f8f6f3d5*/
   background: linear-gradient(180deg, #ffffff 0%, #f8f6f3d5 100%);
 }
 
@@ -3294,7 +2229,6 @@ html {
 /* ========== ABOUT ========== */
 .about {
   padding: 110px 0;
-  /* background: var(--white); */
   background: linear-gradient(180deg, #f8f6f3d5 0%, #f9fffb 100%);
 }
 
@@ -3414,7 +2348,6 @@ html {
 /* ========== CLINICS ========== */
 .clinics {
   padding: 110px 0;
-  /* background: #17681011; */
   background: linear-gradient(180deg, #f9fffb 0%, #ffffff 100%);
 }
 
