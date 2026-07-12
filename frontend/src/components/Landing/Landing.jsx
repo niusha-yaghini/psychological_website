@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./Landing.module.css";
 import seedData from "../../../../backend/seed";
-import backImage from "../../../public/images/back12.png";
-
 import logo from "../../../public/images/logo1.png";
 
 import individual_therapy from "../../../public/images/Individual_Therapy.png";
@@ -42,6 +40,7 @@ function Landing() {
 
   return (
     <div className={styles.landing}>
+      
       {/* ======== HEADER ======== */}
       <header className={styles.header}>
         <div className={styles.container}>
@@ -54,8 +53,8 @@ function Landing() {
             <a href="#theapyArea">خدمات</a>
             <a href="#workshops">کارگاه‌ها</a>
             <a href="#podcasts">پادکست‌ها</a>
-            <a href="#about">درباره من</a>
-            <a href="#clinics">آدرس</a>
+            {/* <a href="#about">درباره من</a> */}
+            {/* <a href="#clinics">آدرس</a> */}
           </nav>
           <div className={styles.auth}>
             <Link to="/login" className={styles.btnlogin}>
@@ -68,6 +67,7 @@ function Landing() {
           <button className={styles.menuToggle}>☰</button>
         </div>
       </header>
+
       {/* ======== HERO ======== */}
       <section className={styles.hero}>
         <div className={styles.container}>
@@ -449,46 +449,185 @@ function Landing() {
       <section id="podcasts" className={styles.podcasts}>
         <div className={styles.container}>
           <div className={styles.sectionHeader}>
-            <h2>پادکست‌های روانشناسی</h2>
+            <h2 className={styles.sectionTitle}>
+              پادکست‌های <span>روانشناسی</span>
+            </h2>
+          </div>
+
+          <div className={styles.podcastBelowHeader}>
+            <p className={styles.podcastDescription}>
+              با گوش دادن به پادکست‌های روانشناسی، گام‌های مؤثری در مسیر رشد
+              فردی و سلامت روان بردارید.
+            </p>
             <Link to="/podcasts" className={styles.viewAll}>
               مشاهده همه ←
             </Link>
           </div>
+
           {latestPodcast && (
             <div className={styles.podcastFeatured}>
-              <div className={styles.podcastImage}>
-                <div className={styles.podcastPlaceholder}>🎙️</div>
-                <div className={styles.playButton}>▶</div>
+              <div className={styles.podcastImageWrapper}>
+                <div className={styles.podcastImage}>
+                  {!imageErrors[latestPodcast.id] ? (
+                    <img
+                      src={latestPodcast.image}
+                      alt={latestPodcast.title}
+                      className={styles.podcastImageCustom}
+                      onError={() => handleImageError(latestPodcast.id)}
+                    />
+                  ) : (
+                    <div className={styles.podcastPlaceholder}>🎙️</div>
+                  )}
+                  <div className={styles.playButton}>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                      <path d="M8 5V19L19 12L8 5Z" fill="currentColor" />
+                    </svg>
+                  </div>
+                </div>
+                <div className={styles.imageWave}>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
               </div>
+
               <div className={styles.podcastInfo}>
-                <div className={styles.podcastBadge}>🔥 جدیدترین</div>
+                <div className={styles.podcastBadge}>
+                  <span className={styles.badgePulse}></span>
+                  جدیدترین اپیزود
+                </div>
                 <h3>{latestPodcast.title}</h3>
                 <div className={styles.podcastMeta}>
-                  <span>📅 {formatPersianDate(latestPodcast.date)}</span>
-                  <span>⏱️ {latestPodcast.duration}</span>
-                  <span>📊 {latestPodcast.episodes} قسمت</span>
+                  <span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <path
+                        d="M3 9H21M7 3V5M17 3V5M6 12H8M11 12H13M16 12H18M6 16H8M11 16H13M16 16H18"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                      />
+                      <rect
+                        x="3"
+                        y="6"
+                        width="18"
+                        height="15"
+                        rx="2"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      />
+                    </svg>
+                    {formatPersianDate(latestPodcast.date)}
+                  </span>
+                  <span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      />
+                      <path
+                        d="M12 6V12L16 14"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                    {latestPodcast.duration}
+                  </span>
+                  <span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <path
+                        d="M20 12H4M12 4V20"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                    {latestPodcast.episodes} قسمت
+                  </span>
                 </div>
                 <p className={styles.podcastDescription}>
                   {latestPodcast.description}
                 </p>
-                <button className={styles.btnPodcast}>
-                  <span>▶</span> گوش دادن به پادکست
-                </button>
+                <div className={styles.podcastActions}>
+                  <button className={styles.btnPodcast}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                      <path d="M8 5V19L19 12L8 5Z" fill="currentColor" />
+                    </svg>
+                    گوش دادن به پادکست
+                  </button>
+                  <button className={styles.btnShare}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                      <circle
+                        cx="18"
+                        cy="5"
+                        r="3"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      />
+                      <circle
+                        cx="6"
+                        cy="12"
+                        r="3"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      />
+                      <circle
+                        cx="18"
+                        cy="19"
+                        r="3"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      />
+                      <path
+                        d="M8.59 13.51L15.42 17.49M15.41 6.51L8.59 10.49"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      />
+                    </svg>
+                  </button>
+                </div>
               </div>
             </div>
           )}
+
           <div className={styles.podcastList}>
-            {otherPodcasts.map((podcast) => (
+            {otherPodcasts.map((podcast, index) => (
               <div key={podcast.id} className={styles.podcastItem}>
-                <div className={styles.podcastItemIcon}>🎙️</div>
+                <div className={styles.podcastItemNumber}>
+                  #{String(index + 1).padStart(2, "0")}
+                </div>
+                <div className={styles.podcastItemIcon}>
+                  {!imageErrors[podcast.id] ? (
+                    <img
+                      src={podcast.image}
+                      alt={podcast.title}
+                      className={styles.podcastItemImage}
+                      onError={() => handleImageError(podcast.id)}
+                    />
+                  ) : (
+                    <span>🎙️</span>
+                  )}
+                </div>
                 <div className={styles.podcastItemInfo}>
                   <h4>{podcast.title}</h4>
-                  <p>
-                    {formatPersianDate(podcast.date)} • {podcast.duration} •{" "}
-                    {podcast.episodes} قسمت
-                  </p>
+                  <div className={styles.podcastItemMeta}>
+                    <span>📅 {formatPersianDate(podcast.date)}</span>
+                    <span className={styles.metaDot}>•</span>
+                    <span>⏱️ {podcast.duration}</span>
+                    <span className={styles.metaDot}>•</span>
+                    <span>📊 {podcast.episodes} قسمت</span>
+                  </div>
                 </div>
-                <button className={styles.btnListen}>▶ گوش دادن</button>
+                <button className={styles.btnListen}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="M8 5V19L19 12L8 5Z" fill="currentColor" />
+                  </svg>
+                  گوش دادن
+                </button>
               </div>
             ))}
           </div>
@@ -496,7 +635,7 @@ function Landing() {
       </section>
 
       {/* ======== ABOUT ======== */}
-      <section id="about" className={styles.about}>
+      {/* <section id="about" className={styles.about}>
         <div className={styles.container}>
           <div className={styles.aboutGrid}>
             <div className={styles.aboutText}>
@@ -549,10 +688,10 @@ function Landing() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* ======== CLINICS ======== */}
-      <section id="clinics" className={styles.clinics}>
+      {/* <section id="clinics" className={styles.clinics}>
         <div className={styles.container}>
           <div className={styles.sectionHeader}>
             <h2>مطب‌های {doctor.name}</h2>
@@ -574,7 +713,7 @@ function Landing() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* ======== SOCIAL & CONTACT ======== */}
       <section className={styles.contact}>
