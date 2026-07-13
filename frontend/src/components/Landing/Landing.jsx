@@ -40,7 +40,6 @@ function Landing() {
 
   return (
     <div className={styles.landing}>
-      
       {/* ======== HEADER ======== */}
       <header className={styles.header}>
         <div className={styles.container}>
@@ -484,80 +483,146 @@ function Landing() {
                     </svg>
                   </div>
                 </div>
-                <div className={styles.imageWave}>
+                {/* <div className={styles.imageWave}>
                   <span></span>
                   <span></span>
                   <span></span>
                   <span></span>
-                </div>
+                </div> */}
               </div>
 
               <div className={styles.podcastInfo}>
-                <div className={styles.podcastBadge}>
+                {/* <div className={styles.podcastBadge}>
                   <span className={styles.badgePulse}></span>
                   جدیدترین اپیزود
-                </div>
-                <h3>{latestPodcast.title}</h3>
-                <div className={styles.podcastMeta}>
-                  <span>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                      <path
-                        d="M3 9H21M7 3V5M17 3V5M6 12H8M11 12H13M16 12H18M6 16H8M11 16H13M16 16H18"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                      />
-                      <rect
-                        x="3"
-                        y="6"
-                        width="18"
-                        height="15"
-                        rx="2"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                      />
-                    </svg>
-                    {formatPersianDate(latestPodcast.date)}
-                  </span>
-                  <span>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                      <circle
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                      />
-                      <path
-                        d="M12 6V12L16 14"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                      />
-                    </svg>
-                    {latestPodcast.duration}
-                  </span>
-                  <span>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                      <path
-                        d="M20 12H4M12 4V20"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                      />
-                    </svg>
-                    {latestPodcast.episodes} قسمت
-                  </span>
+                </div> */}
+
+                <div>
+                  <div className={styles.podcastHeader}>
+                    <h3>{latestPodcast.title}</h3>
+                    <div className={styles.podcastActions}>
+                      <button className={styles.btnPodcast}>
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                        >
+                          <path d="M8 5V19L19 12L8 5Z" fill="currentColor" />
+                        </svg>
+                      </button>
+                      <button className={styles.btnShare}>
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                        >
+                          <circle
+                            cx="18"
+                            cy="5"
+                            r="3"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          />
+                          <circle
+                            cx="6"
+                            cy="12"
+                            r="3"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          />
+                          <circle
+                            cx="18"
+                            cy="19"
+                            r="3"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          />
+                          <path
+                            d="M8.59 13.51L15.42 17.49M15.41 6.51L8.59 10.49"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                  <div className={styles.podcastMeta}>
+                    <span>
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                      >
+                        <path
+                          d="M3 9H21M7 3V5M17 3V5M6 12H8M11 12H13M16 12H18M6 16H8M11 16H13M16 16H18"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                        />
+                        <rect
+                          x="3"
+                          y="6"
+                          width="18"
+                          height="15"
+                          rx="2"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                        />
+                      </svg>
+                      {formatPersianDate(latestPodcast.date)}
+                    </span>
+                    <span>
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                      >
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                        />
+                        <path
+                          d="M12 6V12L16 14"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                      {latestPodcast.duration}
+                    </span>
+                    <span>
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                      >
+                        <path
+                          d="M20 12H4M12 4V20"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                      {latestPodcast.episodes} قسمت
+                    </span>
+                  </div>
                 </div>
                 <p className={styles.podcastDescription}>
                   {latestPodcast.description}
                 </p>
-                <div className={styles.podcastActions}>
+                {/* <div className={styles.podcastActions}>
                   <button className={styles.btnPodcast}>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                       <path d="M8 5V19L19 12L8 5Z" fill="currentColor" />
                     </svg>
-                    گوش دادن به پادکست
                   </button>
                   <button className={styles.btnShare}>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -589,7 +654,7 @@ function Landing() {
                       />
                     </svg>
                   </button>
-                </div>
+                </div> */}
               </div>
             </div>
           )}
@@ -615,18 +680,18 @@ function Landing() {
                 <div className={styles.podcastItemInfo}>
                   <h4>{podcast.title}</h4>
                   <div className={styles.podcastItemMeta}>
-                    <span>📅 {formatPersianDate(podcast.date)}</span>
+                    <span>{formatPersianDate(podcast.date)}</span>
                     <span className={styles.metaDot}>•</span>
-                    <span>⏱️ {podcast.duration}</span>
+                    <span>{podcast.duration}</span>
                     <span className={styles.metaDot}>•</span>
-                    <span>📊 {podcast.episodes} قسمت</span>
+                    <span>{podcast.episodes} قسمت</span>
                   </div>
                 </div>
                 <button className={styles.btnListen}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                     <path d="M8 5V19L19 12L8 5Z" fill="currentColor" />
                   </svg>
-                  گوش دادن
+                  {/* گوش دادن */}
                 </button>
               </div>
             ))}
@@ -779,7 +844,7 @@ function Landing() {
             <div className={styles.footerBrand}>
               <span>🧠</span>
               <h3>کلینیک روانشناسی</h3>
-              <p>دکتر {doctor.name}</p>
+              <p>{doctor.name}</p>
             </div>
             <div className={styles.footerLinks}>
               <a href="#">خانه</a>
@@ -788,14 +853,14 @@ function Landing() {
               <a href="#workshops">کارگاه‌ها</a>
               <a href="#podcasts">پادکست‌ها</a>
               <a href="#about">درباره من</a>
-              <a href="#clinics">آدرس</a>
+              {/* <a href="#clinics">آدرس</a> */}
             </div>
-            <div className={styles.footerSocial}>
+            {/* <div className={styles.footerSocial}>
               <a href={socialMedia.instagram}>📸</a>
               <a href={socialMedia.telegram}>✈️</a>
               <a href={socialMedia.youtube}>▶️</a>
               <a href={`mailto:${socialMedia.email}`}>✉️</a>
-            </div>
+            </div> */}
           </div>
           <div className={styles.footerBottom}>
             <p>© {new Date().getFullYear()} تمامی حقوق محفوظ است.</p>
