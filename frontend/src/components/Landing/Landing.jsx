@@ -52,8 +52,6 @@ function Landing() {
             <a href="#theapyArea">خدمات</a>
             <a href="#workshops">کارگاه‌ها</a>
             <a href="#podcasts">پادکست‌ها</a>
-            {/* <a href="#about">درباره من</a> */}
-            {/* <a href="#clinics">آدرس</a> */}
           </nav>
           <div className={styles.auth}>
             <Link to="/login" className={styles.btnlogin}>
@@ -483,20 +481,9 @@ function Landing() {
                     </svg>
                   </div>
                 </div>
-                {/* <div className={styles.imageWave}>
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                </div> */}
               </div>
 
               <div className={styles.podcastInfo}>
-                {/* <div className={styles.podcastBadge}>
-                  <span className={styles.badgePulse}></span>
-                  جدیدترین اپیزود
-                </div> */}
-
                 <div>
                   <div className={styles.podcastHeader}>
                     <h3>{latestPodcast.title}</h3>
@@ -618,43 +605,6 @@ function Landing() {
                 <p className={styles.podcastDescription}>
                   {latestPodcast.description}
                 </p>
-                {/* <div className={styles.podcastActions}>
-                  <button className={styles.btnPodcast}>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                      <path d="M8 5V19L19 12L8 5Z" fill="currentColor" />
-                    </svg>
-                  </button>
-                  <button className={styles.btnShare}>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                      <circle
-                        cx="18"
-                        cy="5"
-                        r="3"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                      />
-                      <circle
-                        cx="6"
-                        cy="12"
-                        r="3"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                      />
-                      <circle
-                        cx="18"
-                        cy="19"
-                        r="3"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                      />
-                      <path
-                        d="M8.59 13.51L15.42 17.49M15.41 6.51L8.59 10.49"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                      />
-                    </svg>
-                  </button>
-                </div> */}
               </div>
             </div>
           )}
@@ -691,94 +641,12 @@ function Landing() {
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                     <path d="M8 5V19L19 12L8 5Z" fill="currentColor" />
                   </svg>
-                  {/* گوش دادن */}
                 </button>
               </div>
             ))}
           </div>
         </div>
       </section>
-
-      {/* ======== ABOUT ======== */}
-      {/* <section id="about" className={styles.about}>
-        <div className={styles.container}>
-          <div className={styles.aboutGrid}>
-            <div className={styles.aboutText}>
-              <h2>درباره من</h2>
-              <p className={styles.aboutBio}>{doctor.bio}</p>
-              <div className={styles.aboutSpecialties}>
-                <div className={styles.specialtyItem}>
-                  <span>🧠</span>
-                  <div>
-                    <h4>رواندرمانی تحلیلی</h4>
-                    <p>درمان عمیق و ریشه‌ای مشکلات</p>
-                  </div>
-                </div>
-                <div className={styles.specialtyItem}>
-                  <span>💭</span>
-                  <div>
-                    <h4>درمان شناختی-رفتاری</h4>
-                    <p>تغییر الگوهای فکری و رفتاری</p>
-                  </div>
-                </div>
-                <div className={styles.specialtyItem}>
-                  <span>❤️</span>
-                  <div>
-                    <h4>مشاوره خانواده</h4>
-                    <p>بهبود روابط خانوادگی</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className={styles.aboutStats}>
-              <div className={styles.statCard}>
-                <span className={styles.statIcon}>👥</span>
-                <span className={styles.statNumber}>
-                  {doctor.patientsCount}+
-                </span>
-                <span>مراجع راضی</span>
-              </div>
-              <div className={styles.statCard}>
-                <span className={styles.statIcon}>📚</span>
-                <span className={styles.statNumber}>
-                  {doctor.workshopsCount}+
-                </span>
-                <span>کارگاه برگزار شده</span>
-              </div>
-              <div className={styles.statCard}>
-                <span className={styles.statIcon}>⭐</span>
-                <span className={styles.statNumber}>{doctor.rating}</span>
-                <span>امتیاز از ۵- سال تجربه</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section> */}
-
-      {/* ======== CLINICS ======== */}
-      {/* <section id="clinics" className={styles.clinics}>
-        <div className={styles.container}>
-          <div className={styles.sectionHeader}>
-            <h2>مطب‌های {doctor.name}</h2>
-          </div>
-          <div className={styles.clinicsGrid}>
-            {clinics.map((clinic) => (
-              <div key={clinic.id} className={styles.clinicCard}>
-                <div className={styles.clinicIcon}>🏥</div>
-                <h3>{clinic.name}</h3>
-                <p className={styles.clinicAddress}>{clinic.address}</p>
-                <div className={styles.clinicContact}>
-                  <p>📞 {clinic.phone}</p>
-                  <p>📞 {clinic.phone2}</p>
-                  <p>🕐 {clinic.hours}</p>
-                  <p>🕐 {clinic.hoursFriday}</p>
-                </div>
-                <button className={styles.btnClinic}>📍 مشاهده در نقشه</button>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section> */}
 
       {/* ======== SOCIAL & CONTACT ======== */}
       <section className={styles.contact}>
@@ -852,15 +720,7 @@ function Landing() {
               <a href="#theapyArea">خدمات</a>
               <a href="#workshops">کارگاه‌ها</a>
               <a href="#podcasts">پادکست‌ها</a>
-              <a href="#about">درباره من</a>
-              {/* <a href="#clinics">آدرس</a> */}
             </div>
-            {/* <div className={styles.footerSocial}>
-              <a href={socialMedia.instagram}>📸</a>
-              <a href={socialMedia.telegram}>✈️</a>
-              <a href={socialMedia.youtube}>▶️</a>
-              <a href={`mailto:${socialMedia.email}`}>✉️</a>
-            </div> */}
           </div>
           <div className={styles.footerBottom}>
             <p>© {new Date().getFullYear()} تمامی حقوق محفوظ است.</p>
