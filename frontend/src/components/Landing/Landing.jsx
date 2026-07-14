@@ -74,7 +74,7 @@ function Landing() {
 
             <p className={styles.heroDescription}>{doctor.bio}</p>
             <div className={styles.heroButtons}>
-              <Link to="/login" className={styles.herobtnPrimary}>
+              <Link to="/signup" className={styles.herobtnPrimary}>
                 چطوری اولین قدم رو بردارم؟
               </Link>
             </div>
