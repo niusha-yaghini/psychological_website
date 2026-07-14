@@ -648,83 +648,88 @@ function Landing() {
         </div>
       </section>
 
-      {/* ======== SOCIAL & CONTACT ======== */}
-      <section className={styles.contact}>
+      {/* ======== FOOTER ======== */}
+      <footer className={styles.footer}>
         <div className={styles.container}>
-          <div className={styles.contactWrapper}>
-            <div className={styles.contactContent}>
-              <span className={styles.sectionTag}>📱 ارتباط با ما</span>
-              <h2>در شبکه‌های اجتماعی با ما همراه باشید</h2>
-              <p>
-                برای دریافت آخرین مطالب، کارگاه‌ها و پادکست‌ها، ما را دنبال
-                کنید.
-              </p>
+          <div className={styles.socialHeader}>
+            <span className={styles.socialTitle}>ما را دنبال کنید</span>
+            <p className={styles.socialDesc}>
+              برای دریافت آخرین مطالب، کارگاه‌ها و پادکست‌ها
+            </p>
+          </div>
+
+          {/* ===== بخش میانی فوتر: لینک‌ها ===== */}
+          <div className={styles.footerMiddle}>
+            <div className={styles.footerSocial}>
               <div className={styles.socialLinks}>
                 <a
                   href={socialMedia.instagram}
                   className={styles.socialLink}
                   style={{ "--social-color": "#E4405F" }}
                 >
-                  <span>📸</span> اینستاگرام
+                  <span className={styles.socialIcon}>📷</span>
+                  اینستاگرام
                 </a>
                 <a
                   href={socialMedia.telegram}
                   className={styles.socialLink}
                   style={{ "--social-color": "#26A5E4" }}
                 >
-                  <span>✈️</span> تلگرام
+                  <span className={styles.socialIcon}>✈️</span>
+                  تلگرام
                 </a>
                 <a
                   href={socialMedia.whatsapp}
                   className={styles.socialLink}
                   style={{ "--social-color": "#25D366" }}
                 >
-                  <span>💬</span> واتس‌اپ
+                  <span className={styles.socialIcon}>💬</span>
+                  واتس‌اپ
                 </a>
                 <a
                   href={socialMedia.youtube}
                   className={styles.socialLink}
                   style={{ "--social-color": "#FF0000" }}
                 >
-                  <span>▶️</span> یوتیوب
+                  <span className={styles.socialIcon}>▶️</span>
+                  بله
                 </a>
               </div>
             </div>
-            <div className={styles.contactInfo}>
-              <h3>اطلاعات تماس</h3>
-              <p>📞 {socialMedia.phone}</p>
-              <p>📱 {socialMedia.phone2}</p>
-              <p>✉️ {socialMedia.email}</p>
-              <div className={styles.contactHours}>
-                <h4>ساعات پاسخگویی</h4>
-                <p>شنبه تا چهارشنبه: ۹:۰۰ - ۱۸:۰۰</p>
-                <p>پنجشنبه: ۱۴:۰۰ - ۲۰:۰۰</p>
+
+            <div className={styles.footerLinks}>
+              <div className={styles.linkGroup}>
+                <h4>دسترسی سریع</h4>
+                <a href="#">خانه</a>
+                <a href="#howItWorks">مسیر درمان</a>
+                <a href="#theapyArea">خدمات تخصصی</a>
+              </div>
+              <div className={styles.linkGroup}>
+                <h4>آموزشی</h4>
+                <a href="#workshops">کارگاه‌ها</a>
+                <a href="#podcasts">پادکست‌ها</a>
+                <a href="#">مقالات</a>
+              </div>
+              <div className={styles.linkGroup}>
+                <h4>ارتباط</h4>
+                <a href="#">تماس با ما</a>
+                <a href="#">درباره ما</a>
+                <a href="#">سوالات متداول</a>
               </div>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* ======== FOOTER ======== */}
-      <footer className={styles.footer}>
-        <div className={styles.container}>
-          <div className={styles.footerContent}>
-            <div className={styles.footerBrand}>
-              <span>🧠</span>
-              <h3>کلینیک روانشناسی</h3>
-              <p>{doctor.name}</p>
-            </div>
-            <div className={styles.footerLinks}>
-              <a href="#">خانه</a>
-              <a href="#howItWorks">مسیر درمان</a>
-              <a href="#theapyArea">خدمات</a>
-              <a href="#workshops">کارگاه‌ها</a>
-              <a href="#podcasts">پادکست‌ها</a>
-            </div>
-          </div>
+          {/* ===== بخش پایینی فوتر: کپی‌رایت ===== */}
           <div className={styles.footerBottom}>
-            <p>© {new Date().getFullYear()} تمامی حقوق محفوظ است.</p>
-            <p>طراحی و توسعه با ❤️</p>
+            <div className={styles.bottomContent}>
+              <p>
+                © {new Date().getFullYear()} کلینیک روانشناسی. تمامی حقوق محفوظ
+                است.
+              </p>
+              <p className={styles.developer}>
+                طراحی و توسعه با <span>❤️</span> توسط تیم حرفه‌ای
+              </p>
+            </div>
           </div>
         </div>
       </footer>
