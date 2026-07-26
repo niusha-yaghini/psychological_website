@@ -489,7 +489,7 @@ html {
 
 .logoImage {
   transition: all 0.3s ease;
-  width: 70px;
+  width: 100px;
 }
 
 .logoImage:hover {

@@ -1,7 +1,12 @@
-// pages/Onboarding/OnboardingFlow.jsx
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Signup.module.css";
+
+import face_emoji_1 from "../../../../public/images/face_emojies/face_emoji_1.png";
+import face_emoji_2 from "../../../../public/images/face_emojies/face_emoji_2.png";
+import face_emoji_3 from "../../../../public/images/face_emojies/face_emoji_3.png";
+import face_emoji_4 from "../../../../public/images/face_emojies/face_emoji_4.png";
+import face_emoji_5 from "../../../../public/images/face_emojies/face_emoji_5.png";
 
 const QUESTIONS = [
   {
@@ -10,23 +15,39 @@ const QUESTIONS = [
     subtitle: "چه چیزی باعث شد امروز به فکر شروع درمان بیوفتی؟",
     type: "single",
     options: [
-      { id: "anxiety", label: "اضطراب و نگرانی بیش از حد"},
-      { id: "depression", label: "احساس غم و افسردگی"},
-      { id: "relationship", label: "مشکلات ارتباطی با دیگران"},
-      { id: "stress", label: "استرس شغلی یا تحصیلی"},
-      { id: "growth", label: "فقط میخوام خودم رو بهتر بشناسم"},
-      { id: "other", label: "مورد دیگه"},
+      { id: "anxiety", label: "اضطراب و نگرانی بیش از حد" },
+      { id: "depression", label: "احساس غم و افسردگی" },
+      { id: "relationship", label: "مشکلات ارتباطی با دیگران" },
+      { id: "stress", label: "استرس شغلی یا تحصیلی" },
+      { id: "growth", label: "فقط میخوام خودم رو بهتر بشناسم" },
+      { id: "other", label: "مورد دیگه" },
     ],
   },
+  // {
+  //   id: 2,
+  //   title: "چقدر روی زندگی‌ات تأثیر گذاشته؟",
+  //   subtitle:
+  //     "از ۱ تا ۱۰، این مشکل چقدر کار، تحصیل یا روابطت رو تحت تأثیر قرار داده؟",
+  //   type: "slider",
+  //   min: 1,
+  //   max: 6,
+  //   emojis: ["😊", "🙂", "😐", "😟", "😢", "😭"],
+  // },
   {
     id: 2,
     title: "چقدر روی زندگی‌ات تأثیر گذاشته؟",
     subtitle:
-      "از ۱ تا ۱۰، این مشکل چقدر کار، تحصیل یا روابطت رو تحت تأثیر قرار داده؟",
+      "از ۱ تا 5، این مشکل چقدر کار، تحصیل یا روابطت رو تحت تأثیر قرار داده؟",
     type: "slider",
     min: 1,
-    max: 6,
-    emojis: ["😊", "🙂", "😐", "😟", "😢", "😭"],
+    max: 5,
+    images: [
+      { src: face_emoji_1, label: "خیلی کم" },
+      { src: face_emoji_2, label: "کم" },
+      { src: face_emoji_3, label: "متوسط" },
+      { src: face_emoji_4, label: "زیاد" },
+      { src: face_emoji_5, label: "خیلی زیاد" },
+    ],
   },
   {
     id: 3,
@@ -34,10 +55,10 @@ const QUESTIONS = [
     subtitle: "آیا قبلاً تجربه مشاوره یا درمان روانشناسی داشتی؟",
     type: "single",
     options: [
-      { id: "never", label: "نه، اولین بارمه"},
-      { id: "short", label: "بله، یک بار کوتاه مدت"},
-      { id: "medium", label: "بله، چند جلسه"},
-      { id: "long", label: "بله، درمان بلندمدت"},
+      { id: "never", label: "نه، اولین بارمه" },
+      { id: "short", label: "بله، یک بار کوتاه مدت" },
+      { id: "medium", label: "بله، چند جلسه" },
+      { id: "long", label: "بله، درمان بلندمدت" },
     ],
   },
   {
@@ -46,10 +67,10 @@ const QUESTIONS = [
     subtitle: "چند نفر رو میشناسی که میتونی راحت باهاشون درد و دل کنی؟",
     type: "single",
     options: [
-      { id: "none", label: "هیچکس"},
-      { id: "one", label: "یک نفر"},
-      { id: "two_three", label: "دو یا سه نفر"},
-      { id: "many", label: "گروه حمایتی بزرگ"},
+      { id: "none", label: "هیچکس" },
+      { id: "one", label: "یک نفر" },
+      { id: "two_three", label: "دو یا سه نفر" },
+      { id: "many", label: "گروه حمایتی بزرگ" },
     ],
   },
   {
@@ -58,10 +79,10 @@ const QUESTIONS = [
     subtitle: "انتظار داری دکتر در اولین جلسه بیشتر روی چه چیزی تمرکز کنه؟",
     type: "multi",
     options: [
-      { id: "listening", label: "گوش دادن و درک عمیق"},
-      { id: "solution", label: "ارائه راهکار و تکنیک"},
-      { id: "diagnosis", label: "تشخیص دقیق مشکل"},
-      { id: "safety", label: "ایجاد احساس امنیت و اعتماد"},
+      { id: "listening", label: "گوش دادن و درک عمیق" },
+      { id: "solution", label: "ارائه راهکار و تکنیک" },
+      { id: "diagnosis", label: "تشخیص دقیق مشکل" },
+      { id: "safety", label: "ایجاد احساس امنیت و اعتماد" },
     ],
   },
 ];
@@ -151,10 +172,6 @@ function Signup() {
       {/* Question Card */}
       <div className={styles.questionCard}>
         <div className={styles.questionHeader}>
-          {/* <div className={styles.stepIndicator}>
-            <span className={styles.stepNumber}>{currentStep + 1}</span>
-            <span className={styles.stepLine}></span>
-          </div> */}
           <h2 className={styles.questionTitle}>{currentQuestion.title}</h2>
           <p className={styles.questionSubtitle}>{currentQuestion.subtitle}</p>
         </div>
@@ -214,37 +231,107 @@ function Signup() {
           )}
 
           {/* Slider */}
-          {currentQuestion.type === "slider" && (
+          {/* {currentQuestion.type === "slider" && (
             <div className={styles.sliderContainer}>
               <div className={styles.sliderEmojis}>
-                {currentQuestion.emojis.map((emoji, i) => (
-                  <span
-                    key={i}
-                    className={`${styles.sliderEmoji} ${
-                      sliderValue >= i + 1 ? styles.active : ""
-                    }`}
-                  >
-                    {emoji}
-                  </span>
-                ))}
+                {currentQuestion.emojis.map((emoji, i) => {
+                  const value = i + 1;
+                  return (
+                    <div
+                      key={i}
+                      className={`${styles.sliderEmojiWrapper} ${
+                        sliderValue >= value ? styles.active : ""
+                      }`}
+                      onClick={() => setSliderValue(value)}
+                    >
+                      <span className={styles.sliderEmoji}>{emoji}</span>
+                      <span className={styles.sliderEmojiLabel}>{value}</span>
+                    </div>
+                  );
+                })}
               </div>
-              <input
-                type="range"
-                min={currentQuestion.min}
-                max={currentQuestion.max}
-                value={sliderValue}
-                onChange={(e) => setSliderValue(parseInt(e.target.value))}
-                className={styles.sliderInput}
-                dir="ltr" 
-                style={{
-                  background: `linear-gradient(to right, #2d7d6e ${
-                    (sliderValue / currentQuestion.max) * 100
-                  }%, #e8e0d8 ${(sliderValue / currentQuestion.max) * 100}%)`,
-                }}
-              />
+
+              <div className={styles.sliderTrackWrapper}>
+                <input
+                  type="range"
+                  min={currentQuestion.min}
+                  max={currentQuestion.max}
+                  value={sliderValue}
+                  onChange={(e) => setSliderValue(parseInt(e.target.value))}
+                  className={styles.sliderInput}
+                  style={{
+                    background: `linear-gradient(to right, #e8e0d8 0%, #e8e0d8 ${
+                      100 -
+                      ((sliderValue - 1) / (currentQuestion.max - 1)) * 100
+                    }%, #2d7d6e ${
+                      100 -
+                      ((sliderValue - 1) / (currentQuestion.max - 1)) * 100
+                    }%, #2d7d6e 100%)`,
+                  }}
+                />
+              </div>
+
               <div className={styles.sliderLabels}>
                 <span>کمترین تأثیر</span>
                 <span className={styles.sliderValue}>{sliderValue}</span>
+                <span>بیشترین تأثیر</span>
+              </div>
+            </div>
+          )} */}
+
+          {/* Slider با تصاویر */}
+          {currentQuestion.type === "slider" && (
+            <div className={styles.sliderContainer}>
+              {/* تصاویر */}
+              <div className={styles.sliderEmojis}>
+                {currentQuestion.images.map((img, i) => {
+                  const value = i + 1;
+                  return (
+                    <div
+                      key={i}
+                      className={`${styles.sliderEmojiWrapper} ${
+                        sliderValue >= value ? styles.active : ""
+                      }`}
+                      onClick={() => setSliderValue(value)}
+                    >
+                      <img
+                        src={img.src}
+                        alt={img.label}
+                        className={styles.sliderImage}
+                      />
+                      <span className={styles.sliderEmojiLabel}>
+                        {img.label}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* اسلایدر */}
+              <div className={styles.sliderTrackWrapper}>
+                <input
+                  type="range"
+                  min={currentQuestion.min}
+                  max={currentQuestion.max}
+                  value={sliderValue}
+                  onChange={(e) => setSliderValue(parseInt(e.target.value))}
+                  className={styles.sliderInput}
+                  style={{
+                    background: `linear-gradient(to right, #e8e0d8 0%, #e8e0d8 ${
+                      100 -
+                      ((sliderValue - 1) / (currentQuestion.max - 1)) * 100
+                    }%, #2d7d6e ${
+                      100 -
+                      ((sliderValue - 1) / (currentQuestion.max - 1)) * 100
+                    }%, #2d7d6e 100%)`,
+                  }}
+                />
+              </div>
+
+              {/* لیبل‌ها */}
+              <div className={styles.sliderLabels}>
+                <span>کمترین تأثیر</span>
+                {/* <span className={styles.sliderValue}>{sliderValue}</span> */}
                 <span>بیشترین تأثیر</span>
               </div>
             </div>

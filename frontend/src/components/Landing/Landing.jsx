@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./Landing.module.css";
 import seedData from "../../../../backend/seed";
-import logo from "../../../public/images/logo1.png";
+// import logo from "../../../public/images/logo1.png";
+import logo from "../../../public/images/logo2.png";
 
 import individual_therapy from "../../../public/images/Individual_Therapy.png";
 import couple_therapy from "../../../public/images/Couple_Therapy.png";
@@ -44,7 +45,9 @@ function Landing() {
       <header className={styles.header}>
         <div className={styles.container}>
           <div className={styles.logo}>
+            {/* کلینیک آنلاین */}
             <img src={logo} alt="لوگو" className={styles.logoImage} />
+            {/* کلینیک آنلاین روان کوک */}
           </div>
           <nav className={styles.nav}>
             <a href="#">خانه</a>
@@ -69,7 +72,9 @@ function Landing() {
       <section className={styles.hero}>
         <div className={styles.container}>
           <div className={styles.heroContent}>
-            <h1 className={styles.heroTitle}>{doctor.name}</h1>
+            {/* <h1 className={styles.heroTitle}>{doctor.name}</h1> */}
+            
+            <h1 className={styles.heroTitle}>کلینیک آنلاین روان کوک</h1>
             <span className={styles.heroSubtitle}>{doctor.specialty}</span>
 
             <p className={styles.heroDescription}>{doctor.bio}</p>

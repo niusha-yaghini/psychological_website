@@ -285,15 +285,14 @@
 }
 
 /* ========== SLIDER ========== */
-.sliderContainer {
-  /* padding: 8px 0; */
+/* .sliderContainer {
+  padding: 8px 0;
 }
 
 .sliderEmojis {
   display: flex;
   justify-content: space-between;
   margin-bottom: 12px;
-  /* padding: 0 4px; */
 }
 
 .sliderEmoji {
@@ -304,7 +303,6 @@
 
 .sliderEmoji.active {
   opacity: 1;
-  /* transform: scale(1.1); */
 }
 
 .sliderInput {
@@ -328,7 +326,6 @@
   cursor: pointer;
   box-shadow: 0 4px 16px rgba(45, 125, 110, 0.3);
   transition: var(--transition);
-  /* direction: ltr; */
 }
 
 .sliderInput::-webkit-slider-thumb:hover {
@@ -351,13 +348,227 @@
   margin-top: 12px;
   font-size: 13px;
   color: var(--text-muted);
-  /* direction: rtl; */
 }
 
 .sliderValue {
   font-size: 20px;
   font-weight: 700;
   color: #2d7d6e;
+} */
+
+/* ========== SLIDER ========== */
+.sliderContainer {
+  padding: 8px 0;
+  width: 100%;
+}
+
+/* ===== ایموجی‌ها ===== */
+.sliderEmojis {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  /* padding: 0 4px; */
+  gap: 4px;
+}
+
+/* .sliderEmojiWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: var(--transition);
+  border-radius: 12px;
+  min-width: 40px;
+}
+
+.sliderEmojiWrapper:hover {
+  transform: translateY(-2px);
+}
+
+.sliderEmoji {
+  font-size: 28px;
+  opacity: 0.25;
+  transition: var(--transition);
+  filter: grayscale(1);
+}
+
+.sliderEmojiWrapper.active .sliderEmoji {
+  opacity: 1;
+  filter: grayscale(0);
+  transform: scale(1.15);
+}
+
+.sliderEmojiLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  opacity: 0.3;
+  transition: var(--transition);
+}
+
+.sliderEmojiWrapper.active .sliderEmojiLabel {
+  opacity: 1;
+  color: #2d7d6e;
+} */
+
+/* ===== تصاویر اسلایدر ===== */
+.sliderEmojiWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: var(--transition);
+  /* padding: 4px 8px; */
+  border-radius: 12px;
+  min-width: 50px;
+}
+
+.sliderEmojiWrapper:hover {
+  transform: translateY(-2px);
+}
+
+.sliderImage {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  opacity: 0.3;
+  transition: var(--transition);
+  filter: grayscale(1) brightness(0.8);
+  border-radius: 50%;
+  padding: 4px;
+}
+
+.sliderEmojiWrapper.active .sliderImage {
+  opacity: 1;
+  filter: grayscale(0) brightness(1);
+  transform: scale(1.15);
+  box-shadow: 0 4px 20px rgba(45, 125, 110, 0.15);
+}
+
+.sliderEmojiLabel {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-muted);
+  opacity: 0.4;
+  transition: var(--transition);
+  text-align: center;
+}
+
+.sliderEmojiWrapper.active .sliderEmojiLabel {
+  opacity: 1;
+  color: #2d7d6e;
+  font-weight: 600;
+}
+
+/* ===== ترک اسلایدر ===== */
+.sliderTrackWrapper {
+  /* padding: 4px; */
+  padding-top: 12px;
+  padding-bottom: 4px;
+  padding-right: 10px;
+  padding-left: 12px;
+  position: relative;
+}
+
+.sliderInput {
+  width: 100%;
+  height: 8px;
+  border-radius: 10px;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  transition: background 0.2s ease;
+  cursor: pointer;
+
+  /* مهم: برای RTL */
+  direction: rtl;
+}
+
+/* ===== Webkit (Chrome, Safari, Edge) ===== */
+.sliderInput::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 8px;
+  border-radius: 10px;
+  background: transparent;
+}
+
+.sliderInput::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2d7d6e, #4caf84);
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(45, 125, 110, 0.35);
+  transition: var(--transition);
+  margin-top: -9px;
+  border: 3px solid white;
+  position: relative;
+  z-index: 2;
+}
+
+.sliderInput::-webkit-slider-thumb:hover {
+  transform: scale(1.12);
+  box-shadow: 0 6px 24px rgba(45, 125, 110, 0.45);
+}
+
+.sliderInput::-webkit-slider-thumb:active {
+  transform: scale(0.95);
+}
+
+/* ===== Firefox ===== */
+.sliderInput::-moz-range-track {
+  width: 100%;
+  height: 8px;
+  border-radius: 10px;
+  background: transparent;
+  border: none;
+}
+
+.sliderInput::-moz-range-thumb {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2d7d6e, #4caf84);
+  cursor: pointer;
+  border: 3px solid white;
+  box-shadow: 0 4px 16px rgba(45, 125, 110, 0.35);
+  transition: var(--transition);
+}
+
+.sliderInput::-moz-range-thumb:hover {
+  transform: scale(1.12);
+  box-shadow: 0 6px 24px rgba(45, 125, 110, 0.45);
+}
+
+/* ===== لیبل‌ها ===== */
+.sliderLabels {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 14px;
+  font-size: 13px;
+  color: var(--text-muted);
+  padding: 0 4px;
+}
+
+.sliderValue {
+  font-size: 24px;
+  font-weight: 800;
+  color: #2d7d6e;
+  background: rgba(45, 125, 110, 0.06);
+  padding: 4px 20px;
+  border-radius: 30px;
+  min-width: 48px;
+  text-align: center;
+  transition: var(--transition);
+}
+
+.sliderValue:hover {
+  background: rgba(45, 125, 110, 0.1);
 }
 
 /* ========== NAVIGATION ========== */
