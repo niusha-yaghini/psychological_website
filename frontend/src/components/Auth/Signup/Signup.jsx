@@ -8,6 +8,9 @@ import face_emoji_3 from "../../../../public/images/face_emojies/face_emoji_3.pn
 import face_emoji_4 from "../../../../public/images/face_emojies/face_emoji_4.png";
 import face_emoji_5 from "../../../../public/images/face_emojies/face_emoji_5.png";
 
+import logo from "../../../../public/images/logo2.png";
+import loginback from "../../../../public/images/loginback.png";
+
 const QUESTIONS = [
   {
     id: 1,
@@ -405,50 +408,176 @@ function Signup() {
 // ============================================
 // COMPONENT: Phone Verification
 // ============================================
+// function PhoneVerification({ answers, navigate }) {
+//   const [phone, setPhone] = useState("");
+//   const [code, setCode] = useState("");
+//   const [step, setStep] = useState("phone"); // "phone" | "code"
+//   const [isLoading, setIsLoading] = useState(false);
+//   const [timer, setTimer] = useState(0);
+
+//   const handleSendCode = () => {
+//     if (phone.length < 10) {
+//       alert("لطفاً شماره موبایل معتبر وارد کن");
+//       return;
+//     }
+//     setIsLoading(true);
+//     // شبیه‌سازی ارسال کد
+//     setTimeout(() => {
+//       setIsLoading(false);
+//       setStep("code");
+//       setTimer(30);
+//       console.log("📱 کد ارسال شد: 123456 (برای تست)");
+//     }, 1500);
+//   };
+
+//   const handleVerifyCode = () => {
+//     if (code.length < 6) {
+//       alert("لطفاً کد ۶ رقمی رو وارد کن");
+//       return;
+//     }
+//     setIsLoading(true);
+//     // شبیه‌سازی تأیید کد
+//     setTimeout(() => {
+//       setIsLoading(false);
+//       // ذخیره اطلاعات کاربر
+//       const userData = {
+//         phone,
+//         answers,
+//         onboardingDate: new Date().toISOString(),
+//       };
+//       localStorage.setItem("userOnboardingData", JSON.stringify(userData));
+//       // هدایت به پنل شخصی
+//       navigate("/dashboard");
+//     }, 1500);
+//   };
+
+//   // تایمر برای ارسال مجدد
+//   useEffect(() => {
+//     if (timer > 0) {
+//       const interval = setInterval(() => setTimer(timer - 1), 1000);
+//       return () => clearInterval(interval);
+//     }
+//   }, [timer]);
+
+//   return (
+//     <div className={styles.verificationContainer}>
+//       <div className={styles.verificationCard}>
+//         {step === "phone" ? (
+//           <>
+//             <div className={styles.verificationIcon}>📱</div>
+//             <h2 className={styles.verificationTitle}>آخرین قدم</h2>
+//             <p className={styles.verificationSubtitle}>
+//               شماره موبایل خودت رو وارد کن تا کد تأیید برات ارسال بشه
+//             </p>
+//             <div className={styles.inputGroup}>
+//               <label className={styles.inputLabel}>شماره موبایل</label>
+//               <div className={styles.phoneInputWrapper}>
+//                 <span className={styles.phonePrefix}>+۹۸</span>
+//                 <input
+//                   type="tel"
+//                   className={styles.phoneInput}
+//                   placeholder="۹۱۲۳۴۵۶۷۸۹"
+//                   value={phone}
+//                   onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
+//                   maxLength="10"
+//                 />
+//               </div>
+//             </div>
+//             <button
+//               onClick={handleSendCode}
+//               className={styles.btnVerification}
+//               disabled={isLoading}
+//             >
+//               {isLoading ? "در حال ارسال..." : "ارسال کد تأیید"}
+//             </button>
+//           </>
+//         ) : (
+//           <>
+//             <div className={styles.verificationIcon}>🔐</div>
+//             <h2 className={styles.verificationTitle}>کد تأیید</h2>
+//             <p className={styles.verificationSubtitle}>
+//               کد ۶ رقمی ارسال شده به {phone} رو وارد کن
+//             </p>
+//             <div className={styles.inputGroup}>
+//               <label className={styles.inputLabel}>کد تأیید</label>
+//               <input
+//                 type="text"
+//                 className={styles.codeInput}
+//                 placeholder="کد ۶ رقمی"
+//                 value={code}
+//                 onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
+//                 maxLength="6"
+//               />
+//             </div>
+//             <button
+//               onClick={handleVerifyCode}
+//               className={styles.btnVerification}
+//               disabled={isLoading}
+//             >
+//               {isLoading ? "در حال تأیید..." : "تأیید و ورود به پنل"}
+//             </button>
+//             {timer > 0 ? (
+//               <p className={styles.timerText}>ارسال مجدد تا {timer} ثانیه</p>
+//             ) : (
+//               <button onClick={handleSendCode} className={styles.btnResend}>
+//                 ارسال مجدد کد
+//               </button>
+//             )}
+//           </>
+//         )}
+//       </div>
+//     </div>
+//   );
+// }
+
+// ============================================
+// COMPONENT: Phone Verification (نسخه جدید)
+// ============================================
+// import logo from "../../../public/images/logo1.png";
+// import verificationImage from "../../../public/images/verification-hero.png"; // تصویر سمت چپ
+
 function PhoneVerification({ answers, navigate }) {
   const [phone, setPhone] = useState("");
   const [code, setCode] = useState("");
-  const [step, setStep] = useState("phone"); // "phone" | "code"
+  const [step, setStep] = useState("phone");
   const [isLoading, setIsLoading] = useState(false);
   const [timer, setTimer] = useState(0);
+  const [error, setError] = useState("");
 
   const handleSendCode = () => {
+    setError("");
     if (phone.length < 10) {
-      alert("لطفاً شماره موبایل معتبر وارد کن");
+      setError("لطفاً شماره موبایل معتبر وارد کن");
       return;
     }
     setIsLoading(true);
-    // شبیه‌سازی ارسال کد
     setTimeout(() => {
       setIsLoading(false);
       setStep("code");
       setTimer(30);
-      console.log("📱 کد ارسال شد: 123456 (برای تست)");
+      console.log("📱 کد ارسال شد: 123456");
     }, 1500);
   };
 
   const handleVerifyCode = () => {
+    setError("");
     if (code.length < 6) {
-      alert("لطفاً کد ۶ رقمی رو وارد کن");
+      setError("لطفاً کد ۶ رقمی رو وارد کن");
       return;
     }
     setIsLoading(true);
-    // شبیه‌سازی تأیید کد
     setTimeout(() => {
       setIsLoading(false);
-      // ذخیره اطلاعات کاربر
       const userData = {
         phone,
         answers,
         onboardingDate: new Date().toISOString(),
       };
       localStorage.setItem("userOnboardingData", JSON.stringify(userData));
-      // هدایت به پنل شخصی
       navigate("/dashboard");
     }, 1500);
   };
 
-  // تایمر برای ارسال مجدد
   useEffect(() => {
     if (timer > 0) {
       const interval = setInterval(() => setTimer(timer - 1), 1000);
@@ -456,72 +585,264 @@ function PhoneVerification({ answers, navigate }) {
     }
   }, [timer]);
 
+  const formatPhoneNumber = (value) => {
+    const cleaned = value.replace(/\D/g, "");
+    if (cleaned.length <= 3) return cleaned;
+    if (cleaned.length <= 6)
+      return `${cleaned.slice(0, 3)} ${cleaned.slice(3)}`;
+    return `${cleaned.slice(0, 3)} ${cleaned.slice(3, 6)} ${cleaned.slice(
+      6,
+      10
+    )}`;
+  };
+
   return (
     <div className={styles.verificationContainer}>
-      <div className={styles.verificationCard}>
-        {step === "phone" ? (
-          <>
-            <div className={styles.verificationIcon}>📱</div>
-            <h2 className={styles.verificationTitle}>آخرین قدم</h2>
-            <p className={styles.verificationSubtitle}>
-              شماره موبایل خودت رو وارد کن تا کد تأیید برات ارسال بشه
-            </p>
-            <div className={styles.inputGroup}>
-              <label className={styles.inputLabel}>شماره موبایل</label>
-              <div className={styles.phoneInputWrapper}>
-                <span className={styles.phonePrefix}>+۹۸</span>
-                <input
-                  type="tel"
-                  className={styles.phoneInput}
-                  placeholder="۹۱۲۳۴۵۶۷۸۹"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
-                  maxLength="10"
-                />
-              </div>
+      {/* Decorative Elements */}
+      {/* <div className={styles.decorativeCircle1} />
+      <div className={styles.decorativeCircle2} />
+      <div className={styles.decorativeCircle3} /> */}
+
+      <div className={styles.verificationWrapper}>
+        {/* Logo */}
+
+        {/* Main Card */}
+        <div className={styles.verificationCard}>
+          {/* Right Side - Form */}
+          <div className={styles.verificationFormSide}>
+            <div className={styles.verificationLogo}>
+              <img src={logo} alt="لوگو" className={styles.logoImage} />
+              {/* <span className={styles.logoText}>
+              کلینیک <span>روانشناسی</span>
+              </span> */}
             </div>
-            <button
-              onClick={handleSendCode}
-              className={styles.btnVerification}
-              disabled={isLoading}
-            >
-              {isLoading ? "در حال ارسال..." : "ارسال کد تأیید"}
-            </button>
-          </>
-        ) : (
-          <>
-            <div className={styles.verificationIcon}>🔐</div>
-            <h2 className={styles.verificationTitle}>کد تأیید</h2>
-            <p className={styles.verificationSubtitle}>
-              کد ۶ رقمی ارسال شده به {phone} رو وارد کن
-            </p>
-            <div className={styles.inputGroup}>
-              <label className={styles.inputLabel}>کد تأیید</label>
-              <input
-                type="text"
-                className={styles.codeInput}
-                placeholder="کد ۶ رقمی"
-                value={code}
-                onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
-                maxLength="6"
-              />
-            </div>
-            <button
-              onClick={handleVerifyCode}
-              className={styles.btnVerification}
-              disabled={isLoading}
-            >
-              {isLoading ? "در حال تأیید..." : "تأیید و ورود به پنل"}
-            </button>
-            {timer > 0 ? (
-              <p className={styles.timerText}>ارسال مجدد تا {timer} ثانیه</p>
+
+            {step === "phone" ? (
+              <>
+                <div className={styles.formHeader}>
+                  <h2 className={styles.formTitle}>آخرین قدم</h2>
+                  <p className={styles.formSubtitle}>
+                    برای ورود شماره تماس خود را وارد کنید تا کد تأیید برایتان
+                    ارسال شود.
+                  </p>
+                </div>
+
+                <div className={styles.inputGroup}>
+                  <label className={styles.inputLabel}>شماره موبایل</label>
+                  <div
+                    className={`${styles.phoneInputWrapper} ${
+                      error ? styles.error : ""
+                    }`}
+                  >
+                    <span className={styles.phonePrefix}>+۹۸</span>
+                    <input
+                      type="tel"
+                      className={styles.phoneInput}
+                      placeholder="۹۱۲ ۳۴۵ ۶۷۸۹"
+                      value={formatPhoneNumber(phone)}
+                      onChange={(e) =>
+                        setPhone(e.target.value.replace(/\D/g, ""))
+                      }
+                      maxLength="14"
+                      autoFocus
+                    />
+                    {phone.length > 0 && (
+                      <button
+                        type="button"
+                        className={styles.clearButton}
+                        onClick={() => setPhone("")}
+                      >
+                        ✕
+                      </button>
+                    )}
+                  </div>
+                  {error && (
+                    <div className={styles.errorMessage}>
+                      <span>⚠️</span> {error}
+                    </div>
+                  )}
+                </div>
+
+                <button
+                  onClick={handleSendCode}
+                  className={styles.btnVerification}
+                  disabled={isLoading}
+                >
+                  {isLoading ? (
+                    <>
+                      <span className={styles.spinner}></span>
+                      در حال ارسال...
+                    </>
+                  ) : (
+                    <>
+                      <span>ارسال کد تأیید</span>
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                      >
+                        <path
+                          d="M5 12H19M19 12L12 5M19 12L12 19"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </>
+                  )}
+                </button>
+                
+                <div className={styles.termsText}>
+                  اطلاعات شما به صورت امن و محرمانه نگهداری میشود.
+                </div>
+
+                {/* <div className={styles.divider}>
+                  <span className={styles.dividerLine}></span>
+                  <span className={styles.dividerText}>یا</span>
+                  <span className={styles.dividerLine}></span>
+                </div>
+
+                <button className={styles.btnWhatsApp}>
+                  <span>💬</span>
+                  دریافت کد از واتس‌اپ
+                </button> */}
+              </>
             ) : (
-              <button onClick={handleSendCode} className={styles.btnResend}>
-                ارسال مجدد کد
-              </button>
+              <>
+                <div className={styles.formHeader}>
+                  <div className={styles.codeIcon}>🔐</div>
+                  <h2 className={styles.formTitle}>کد تأیید</h2>
+                  <p className={styles.formSubtitle}>
+                    کد ۶ رقمی ارسال شده به
+                    <strong className={styles.phoneHighlight}>
+                      {formatPhoneNumber(phone)}
+                    </strong>
+                    رو وارد کن
+                  </p>
+                </div>
+
+                <div className={styles.inputGroup}>
+                  <label className={styles.inputLabel}>کد تأیید</label>
+                  <div
+                    className={`${styles.codeInputWrapper} ${
+                      error ? styles.error : ""
+                    }`}
+                  >
+                    <input
+                      type="text"
+                      className={styles.codeInput}
+                      placeholder="_ _ _ _ _ _"
+                      value={code}
+                      onChange={(e) => {
+                        const val = e.target.value.replace(/\D/g, "");
+                        if (val.length <= 6) setCode(val);
+                      }}
+                      maxLength="6"
+                      autoFocus
+                    />
+                    <div className={styles.codeDots}>
+                      {[0, 1, 2, 3, 4, 5].map((i) => (
+                        <span
+                          key={i}
+                          className={`${styles.codeDot} ${
+                            code.length > i ? styles.filled : ""
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                  {error && (
+                    <div className={styles.errorMessage}>
+                      <span>⚠️</span> {error}
+                    </div>
+                  )}
+                </div>
+
+                <button
+                  onClick={handleVerifyCode}
+                  className={styles.btnVerification}
+                  disabled={isLoading || code.length < 6}
+                >
+                  {isLoading ? (
+                    <>
+                      <span className={styles.spinner}></span>
+                      در حال تأیید...
+                    </>
+                  ) : (
+                    <>
+                      <span>تأیید و ورود به پنل</span>
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                      >
+                        <path
+                          d="M5 12H19M19 12L12 5M19 12L12 19"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </>
+                  )}
+                </button>
+
+                <div className={styles.codeActions}>
+                  {timer > 0 ? (
+                    <p className={styles.timerText}>
+                      ارسال مجدد تا <strong>{timer}</strong> ثانیه
+                    </p>
+                  ) : (
+                    <button
+                      onClick={handleSendCode}
+                      className={styles.btnResend}
+                    >
+                      <span>🔄</span> ارسال مجدد کد
+                    </button>
+                  )}
+                  <button
+                    className={styles.btnBack}
+                    onClick={() => setStep("phone")}
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <path
+                        d="M19 12H5M5 12L12 19M5 12L12 5"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                    تغییر شماره
+                  </button>
+                </div>
+              </>
             )}
-          </>
-        )}
+          </div>
+
+          {/* Left Side - Image */}
+          <div className={styles.verificationImageSide}>
+            <div className={styles.imageWrapper}>
+              <img
+                src={loginback}
+                alt="تأیید شماره"
+                className={styles.heroImage}
+              />
+              {/* <div className={styles.floatingBadge}>
+                <span className={styles.badgeIcon}>💚</span>
+                <span>قدم آخر تا شروع</span>
+              </div> */}
+              {/* <div className={styles.floatingBadge2}>
+                <span className={styles.badgeIcon}>✨</span>
+                <span>رایگان و بدون تعهد</span>
+              </div> */}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

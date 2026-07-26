@@ -236,7 +236,7 @@
   gap: 12px;
   padding: 16px 18px;
   background: #f8f6f3;
-  border: 2px solid transparent;
+  border: 1px solid transparent;
   border-radius: var(--radius);
   cursor: pointer;
   transition: var(--transition);
@@ -250,12 +250,12 @@
 
 .optionCard:hover {
   background: #f0ede8;
-  transform: translateY(-2px);
+  /* transform: translateY(-2px); */
 }
 
 .optionCard.selected {
   background: rgba(45, 125, 110, 0.06);
-  border-color: #2d7d6e;
+  border-color: #2d7d6e80;
   color: #2d7d6e;
   box-shadow: 0 4px 20px rgba(45, 125, 110, 0.08);
 }
@@ -626,7 +626,7 @@
   transform: scale(0.96);
 }
 
-/* ========== VERIFICATION ========== */
+/* ========== VERIFICATION ==========
 .verificationContainer {
   min-height: 100vh;
   display: flex;
@@ -771,6 +771,728 @@
   margin-top: 16px;
   font-size: 14px;
   color: var(--text-muted);
+} */
+
+/* ========== VERIFICATION CONTAINER ========== */
+.verificationContainer {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* padding: 40px 24px; */
+  /* background: linear-gradient(180deg, #f8f6f3 0%, #ffffff 100%); */
+  background: #f8f6f3e8;
+  direction: rtl;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ========== DECORATIVE ELEMENTS ========== */
+/* .decorativeCircle1 {
+  position: absolute;
+  top: -200px;
+  right: -200px;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(46, 90, 136, 0.04), transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+} */
+
+/* .decorativeCircle2 {
+  position: absolute;
+  bottom: -150px;
+  left: -150px;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(
+    circle,
+    rgba(58, 139, 156, 0.04),
+    transparent 70%
+  );
+  border-radius: 50%;
+  pointer-events: none;
+} */
+
+/* .decorativeCircle3 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(
+    circle,
+    rgba(245, 240, 235, 0.3),
+    transparent 70%
+  );
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+} */
+
+/* ========== WRAPPER ========== */
+.verificationWrapper {
+  /* width: 100%; */
+  width: 80%;
+  /* max-width: 1100px; */
+  /* height: 100%; */
+  position: relative;
+  z-index: 1;
+      /* justify-content: center; */
+  /* justify-content: center; */
+  /* justify-items: center; */
+}
+
+/* ========== LOGO ========== */
+.verificationLogo {
+  display: flex;
+  /* align-items: center; */
+  justify-content: center;
+  /* gap: 14px; */
+  margin-bottom: 8%;
+  margin-top: 10%;
+}
+
+.logoImage {
+  width: 200px;
+  /* height: 48px; */
+  transition: var(--transition);
+}
+
+.logoImage:hover {
+  transform: scale(1.05) rotate(-3deg);
+}
+
+.logoText {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.logoText span {
+  background: linear-gradient(135deg, #2d7d6e, #4caf84);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ========== MAIN CARD ========== */
+.verificationCard {
+  display: flex;
+  background: var(--white);
+  border-radius: 8px;
+  overflow: hidden;
+  /* box-shadow: var(--shadow-lg); */
+  /* border: 1px solid rgba(255, 255, 255, 0.1); */
+  animation: fadeInUp 0.6s ease;
+  /* min-height: 500px; */
+      /* justify-content: center; */
+  /* justify-content: center; */
+  /* justify-items: center; */
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========== LEFT SIDE - IMAGE ========== */
+.verificationImageSide {
+  /* flex: 1; */
+  /* background: linear-gradient(135deg, #2d7d6e, #1b5a4e); */
+  /* padding: 40px 32px; */
+  display: flex;
+  /* align-items: center; */
+  /* justify-content: center; */
+  position: relative;
+  overflow: hidden;
+  /* min-height: 400px; */
+}
+
+/* .verificationImageSide::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.05),
+    transparent 70%
+  );
+  animation: rotate 30s linear infinite;
+} */
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.imageWrapper {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.heroImage {
+  /* width: 100%; */
+  max-width: 500px;
+
+  /* height: auto; */
+  /* filter: drop-shadow(0 20px 60px rgba(0, 0, 0, 0.2)); */
+  /* animation: float 4s ease-in-out infinite; */
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+/* ===== Floating Badges ===== */
+/* .floatingBadge,
+.floatingBadge2 {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 12px 20px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  animation: float 3s ease-in-out infinite;
+  white-space: nowrap;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text-dark);
+} */
+
+/* .floatingBadge {
+  top: 20px;
+  right: 10px;
+  animation-delay: 0.5s;
+}
+
+.floatingBadge2 {
+  bottom: 40px;
+  left: 10px;
+  animation-delay: 1.2s;
+}
+
+.badgeIcon {
+  font-size: 20px;
+} */
+
+/* ========== RIGHT SIDE - FORM ========== */
+.verificationFormSide {
+  flex: 1;
+  padding: 0 40px;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  /* justify-content: center; */
+  /* justify-items: center; */
+  background: var(--white);
+      /* justify-content: center; */
+  /* justify-content: center; */
+  /* justify-items: center; */
+  align-items: center;
+}
+
+/* ===== Form Header ===== */
+.formHeader {
+  /* margin-bottom: 32px; */
+  margin-bottom: 10%;
+  /* align-items: center;
+  align-content: center;
+  justify-content: center; */
+  /* justify-content: center; */
+  /* justify-content: center; */
+  justify-items: center;
+}
+
+.codeIcon {
+  font-size: 40px;
+  margin-bottom: 8px;
+}
+
+.formTitle {
+  font-size: 24px;
+  font-weight: 500;
+  color: #1b5a4e;
+  margin-bottom: 6px;
+  /* font-family: shabnam; */
+}
+
+.formSubtitle {
+  font-size: 15px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.phoneHighlight {
+  color: #2d7d6e;
+  font-weight: 700;
+  margin: 0 4px;
+}
+
+/* ===== Input Group ===== */
+.inputGroup {
+  margin-bottom: 20px;
+  width: 80%;
+}
+
+.inputLabel {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  /* margin-bottom: 8px; */
+  margin-bottom: 3%;
+}
+
+.phoneInputWrapper,
+.codeInputWrapper {
+  display: flex;
+  align-items: center;
+  border: 2px solid #e8e0d8;
+  border-radius: var(--radius);
+  transition: var(--transition);
+  background: #f8f6f3;
+  position: relative;
+}
+
+.phoneInputWrapper:focus-within,
+.codeInputWrapper:focus-within {
+  border-color: #2d7d6e;
+  box-shadow: 0 0 0 4px rgba(45, 125, 110, 0.08);
+}
+
+.phoneInputWrapper.error,
+.codeInputWrapper.error {
+  border-color: #e74c3c;
+  box-shadow: 0 0 0 4px rgba(231, 76, 60, 0.08);
+}
+
+.phonePrefix {
+  padding: 14px 16px;
+  background: #f0ede8;
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 15px;
+  border-left: 2px solid #e8e0d8;
+  flex-shrink: 0;
+}
+
+.phoneInput,
+.codeInput {
+  flex: 1;
+  padding: 14px 16px;
+  border: none;
+  background: transparent;
+  font-size: 16px;
+  font-family: inherit;
+  color: var(--text-dark);
+  outline: none;
+  direction: ltr;
+  text-align: right;
+  letter-spacing: 1px;
+}
+
+.phoneInput::placeholder,
+.codeInput::placeholder {
+  color: #b5b0aa;
+  letter-spacing: 0;
+}
+
+.clearButton {
+  position: absolute;
+  left: 12px;
+  background: none;
+  border: none;
+  color: #b5b0aa;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px 8px;
+  transition: var(--transition);
+}
+
+.clearButton:hover {
+  color: var(--text-dark);
+}
+
+/* ===== Code Dots ===== */
+.codeDots {
+  display: flex;
+  gap: 8px;
+  padding: 0 16px;
+  direction: ltr;
+}
+
+.codeDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #e8e0d8;
+  transition: var(--transition);
+}
+
+.codeDot.filled {
+  background: #2d7d6e;
+  transform: scale(1.2);
+}
+
+/* ===== Error ===== */
+.errorMessage {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  font-size: 13px;
+  color: #e74c3c;
+  font-weight: 500;
+}
+
+/* ===== Terms ===== */
+.termsText {
+  font-size: 13px;
+  color: var(--text-muted);
+  /* margin-bottom: 24px; */
+  margin-top: 2%;
+  text-align: center;
+}
+
+/* .termsText a {
+  color: #2d7d6e;
+  text-decoration: none;
+  font-weight: 500;
+  margin: 0 4px;
+}
+
+.termsText a:hover {
+  text-decoration: underline;
+} */
+
+/* ===== Button ===== */
+.btnVerification {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  /* width: 100%; */
+  width: 50%;
+  padding: 16px 32px;
+  background: linear-gradient(135deg, #2d7d6e, #4caf84);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+  box-shadow: 0 4px 20px rgba(45, 125, 110, 0.2);
+  position: relative;
+  overflow: hidden;
+
+  margin-top: 8%;
+
+    /* justify-content: center; */
+  /* justify-content: center; */
+  /* justify-items: center; */
+}
+
+.btnVerification::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 300%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.15) 30%,
+    rgba(255, 255, 255, 0.05) 60%,
+    transparent 100%
+  );
+  transform: skewX(-20deg);
+  transition: left 0.6s ease;
+}
+
+.btnVerification:hover:not(:disabled)::before {
+  left: 100%;
+}
+
+.btnVerification:hover:not(:disabled) {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 8px 32px rgba(45, 125, 110, 0.35);
+}
+
+.btnVerification:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.btnVerification:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btnVerification svg {
+  transition: transform 0.3s ease;
+}
+
+.btnVerification:hover:not(:disabled) svg {
+  transform: translateX(4px);
+}
+
+/* ===== Spinner ===== */
+.spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  border-top: 3px solid white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===== Divider ===== */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.dividerLine {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #e8e0d8, transparent);
+}
+
+.dividerText {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 500;
+  padding: 0 4px;
+}
+
+/* ===== WhatsApp Button ===== */
+.btnWhatsApp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 14px;
+  background: #25d366;
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btnWhatsApp:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(37, 211, 102, 0.3);
+}
+
+/* ===== Code Actions ===== */
+.codeActions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.timerText {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.timerText strong {
+  color: #2d7d6e;
+  font-size: 16px;
+}
+
+.btnResend {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: #2d7d6e;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btnResend:hover {
+  color: #1b5a4e;
+  transform: scale(1.05);
+}
+
+.btnBack {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 13px;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btnBack:hover {
+  color: var(--text-dark);
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 992px) {
+  .verificationCard {
+    flex-direction: column;
+    min-height: auto;
+  }
+
+  .verificationImageSide {
+    min-height: 200px;
+    padding: 32px;
+  }
+
+  .heroImage {
+    max-width: 200px;
+  }
+
+  .floatingBadge,
+  .floatingBadge2 {
+    font-size: 12px;
+    padding: 8px 16px;
+  }
+
+  .verificationFormSide {
+    padding: 32px 28px;
+  }
+}
+
+@media (max-width: 768px) {
+  .verificationContainer {
+    padding: 24px 16px;
+  }
+
+  .verificationLogo {
+    margin-bottom: 24px;
+  }
+
+  .logoText {
+    font-size: 20px;
+  }
+
+  .verificationFormSide {
+    padding: 24px 20px;
+  }
+
+  .formTitle {
+    font-size: 24px;
+  }
+
+  .formSubtitle {
+    font-size: 14px;
+  }
+
+  .phoneInput,
+  .codeInput {
+    font-size: 15px;
+    padding: 12px 14px;
+  }
+
+  .phonePrefix {
+    padding: 12px 14px;
+    font-size: 14px;
+  }
+
+  .btnVerification {
+    padding: 14px 24px;
+    font-size: 15px;
+  }
+
+  .codeActions {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .floatingBadge,
+  .floatingBadge2 {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .verificationImageSide {
+    min-height: 160px;
+    padding: 20px;
+  }
+
+  .heroImage {
+    max-width: 150px;
+  }
+
+  .verificationFormSide {
+    padding: 20px 16px;
+  }
+
+  .formTitle {
+    font-size: 20px;
+  }
+
+  .codeDot {
+    width: 8px;
+    height: 8px;
+  }
+
+  .btnWhatsApp {
+    font-size: 14px;
+    padding: 12px;
+  }
 }
 
 /* ========== RESPONSIVE ========== */
