@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
+// import { useNavigate, Link } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import styles from "./Signup.module.css";
 
 import face_emoji_1 from "../../../../public/images/face_emojies/face_emoji_1.png";
@@ -26,16 +28,6 @@ const QUESTIONS = [
       { id: "other", label: "مورد دیگه" },
     ],
   },
-  // {
-  //   id: 2,
-  //   title: "چقدر روی زندگی‌ات تأثیر گذاشته؟",
-  //   subtitle:
-  //     "از ۱ تا ۱۰، این مشکل چقدر کار، تحصیل یا روابطت رو تحت تأثیر قرار داده؟",
-  //   type: "slider",
-  //   min: 1,
-  //   max: 6,
-  //   emojis: ["😊", "🙂", "😐", "😟", "😢", "😭"],
-  // },
   {
     id: 2,
     title: "چقدر روی زندگی‌ات تأثیر گذاشته؟",
@@ -91,7 +83,7 @@ const QUESTIONS = [
 ];
 
 function Signup() {
-  const [currentStep, setCurrentStep] = useState(0);
+  const [currentStep, setCurrentStep] = useState(-1);
   const [answers, setAnswers] = useState({});
   const [selectedOption, setSelectedOption] = useState(null);
   const [selectedMulti, setSelectedMulti] = useState([]);
@@ -101,6 +93,82 @@ function Signup() {
 
   const currentQuestion = QUESTIONS[currentStep];
   const isLast = currentStep === QUESTIONS.length - 1;
+
+  // ===== صفحه خوش‌آمدگویی =====
+  if (currentStep === -1) {
+    return (
+      <div className={styles.onboardingContainer}>
+        <div className={styles.welcomeCard}>
+          {/* دکمه بازگشت */}
+          <Link to="/" className={styles.welcomeBackButton}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M3 12H21M3 12L10 5M3 12L10 19"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            بازگشت
+          </Link>
+
+          {/* آیکون یا تصویر */}
+          <div className={styles.welcomeIcon}>🌱</div>
+
+          <h1 className={styles.welcomeTitle}>خوش آمدی!</h1>
+
+          <p className={styles.welcomeSubtitle}>
+            قراره یه مسیر قشنگ رو با هم طی کنیم
+          </p>
+
+          <div className={styles.welcomeContent}>
+            <p>
+              برای اینکه بتونیم بهترین کمک رو بهت بکنیم، نیاز داریم کمی بیشتر با
+              تو و شرایطت آشنا بشیم.
+            </p>
+            <p>
+              ازت <strong>۵ سوال کوتاه</strong> می‌پرسیم که بهمون کمک میکنه مسیر
+              درمان رو دقیق‌تر و شخصی‌تر برات طراحی کنیم.
+            </p>
+            <p className={styles.welcomeNote}>
+              ✨ جواب‌هات کاملاً محرمانه میمونه و فقط در اختیار دکترت قرار
+              می‌گیره.
+            </p>
+          </div>
+
+          <button
+            onClick={() => setCurrentStep(0)}
+            className={styles.btnWelcome}
+          >
+            شروع کنیم
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M5 12H19M19 12L12 5M19 12L12 19"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
+
+          <div className={styles.welcomeFooter}>
+            <span>⏱️ حدود ۳ دقیقه</span>
+            <span className={styles.welcomeDot}>•</span>
+            <span>📝 ۵ سوال</span>
+            <span className={styles.welcomeDot}>•</span>
+            <span>🔒 محرمانه</span>
+          </div>
+        </div>
+
+        {/* Decorative Elements */}
+        <div className={styles.decorativeCircle1} />
+        <div className={styles.decorativeCircle2} />
+        <div className={styles.decorativeCircle3} />
+      </div>
+    );
+  }
 
   const handleNext = () => {
     // ذخیره پاسخ فعلی
@@ -116,7 +184,6 @@ function Signup() {
     }
 
     if (answer === null || (Array.isArray(answer) && answer.length === 0)) {
-      // می‌تونی یک toast یا alert بزاری
       alert("لطفاً یک گزینه رو انتخاب کن");
       return;
     }
@@ -127,7 +194,6 @@ function Signup() {
       setIsComplete(true);
     } else {
       setCurrentStep(currentStep + 1);
-      // ریست کردن انتخاب‌ها برای سوال بعدی
       setSelectedOption(null);
       setSelectedMulti([]);
       setSliderValue(5);
@@ -137,7 +203,6 @@ function Signup() {
   const handlePrev = () => {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
-      // بارگذاری پاسخ قبلی
       const prevAnswer = answers[QUESTIONS[currentStep - 1].id];
       const prevQuestion = QUESTIONS[currentStep - 1];
       if (prevQuestion.type === "single") {
@@ -150,7 +215,6 @@ function Signup() {
     }
   };
 
-  // اگر سوالات تموم شده، صفحه دریافت شماره و کد رو نشون بده
   if (isComplete) {
     return <PhoneVerification answers={answers} navigate={navigate} />;
   }
@@ -234,58 +298,8 @@ function Signup() {
           )}
 
           {/* Slider */}
-          {/* {currentQuestion.type === "slider" && (
-            <div className={styles.sliderContainer}>
-              <div className={styles.sliderEmojis}>
-                {currentQuestion.emojis.map((emoji, i) => {
-                  const value = i + 1;
-                  return (
-                    <div
-                      key={i}
-                      className={`${styles.sliderEmojiWrapper} ${
-                        sliderValue >= value ? styles.active : ""
-                      }`}
-                      onClick={() => setSliderValue(value)}
-                    >
-                      <span className={styles.sliderEmoji}>{emoji}</span>
-                      <span className={styles.sliderEmojiLabel}>{value}</span>
-                    </div>
-                  );
-                })}
-              </div>
-
-              <div className={styles.sliderTrackWrapper}>
-                <input
-                  type="range"
-                  min={currentQuestion.min}
-                  max={currentQuestion.max}
-                  value={sliderValue}
-                  onChange={(e) => setSliderValue(parseInt(e.target.value))}
-                  className={styles.sliderInput}
-                  style={{
-                    background: `linear-gradient(to right, #e8e0d8 0%, #e8e0d8 ${
-                      100 -
-                      ((sliderValue - 1) / (currentQuestion.max - 1)) * 100
-                    }%, #2d7d6e ${
-                      100 -
-                      ((sliderValue - 1) / (currentQuestion.max - 1)) * 100
-                    }%, #2d7d6e 100%)`,
-                  }}
-                />
-              </div>
-
-              <div className={styles.sliderLabels}>
-                <span>کمترین تأثیر</span>
-                <span className={styles.sliderValue}>{sliderValue}</span>
-                <span>بیشترین تأثیر</span>
-              </div>
-            </div>
-          )} */}
-
-          {/* Slider با تصاویر */}
           {currentQuestion.type === "slider" && (
             <div className={styles.sliderContainer}>
-              {/* تصاویر */}
               <div className={styles.sliderEmojis}>
                 {currentQuestion.images.map((img, i) => {
                   const value = i + 1;
@@ -310,7 +324,6 @@ function Signup() {
                 })}
               </div>
 
-              {/* اسلایدر */}
               <div className={styles.sliderTrackWrapper}>
                 <input
                   type="range"
@@ -331,10 +344,8 @@ function Signup() {
                 />
               </div>
 
-              {/* لیبل‌ها */}
               <div className={styles.sliderLabels}>
                 <span>کمترین تأثیر</span>
-                {/* <span className={styles.sliderValue}>{sliderValue}</span> */}
                 <span>بیشترین تأثیر</span>
               </div>
             </div>
@@ -348,15 +359,6 @@ function Signup() {
             className={`${styles.btnNav} ${styles.btnPrev}`}
             disabled={currentStep === 0}
           >
-            {/* <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M15 19L8 12L15 5"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg> */}
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
               <path
                 d="M9 5L16 12L9 19"
@@ -374,15 +376,6 @@ function Signup() {
           >
             {isLast ? "مشاهده نتیجه" : "بعدی"}
             {!isLast && (
-              // <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              //   <path
-              //     d="M9 5L16 12L9 19"
-              //     stroke="currentColor"
-              //     strokeWidth="2"
-              //     strokeLinecap="round"
-              //     strokeLinejoin="round"
-              //   />
-              // </svg>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                 <path
                   d="M15 19L8 12L15 5"
@@ -408,163 +401,125 @@ function Signup() {
 // ============================================
 // COMPONENT: Phone Verification
 // ============================================
-// function PhoneVerification({ answers, navigate }) {
-//   const [phone, setPhone] = useState("");
-//   const [code, setCode] = useState("");
-//   const [step, setStep] = useState("phone"); // "phone" | "code"
-//   const [isLoading, setIsLoading] = useState(false);
-//   const [timer, setTimer] = useState(0);
-
-//   const handleSendCode = () => {
-//     if (phone.length < 10) {
-//       alert("لطفاً شماره موبایل معتبر وارد کن");
-//       return;
-//     }
-//     setIsLoading(true);
-//     // شبیه‌سازی ارسال کد
-//     setTimeout(() => {
-//       setIsLoading(false);
-//       setStep("code");
-//       setTimer(30);
-//       console.log("📱 کد ارسال شد: 123456 (برای تست)");
-//     }, 1500);
-//   };
-
-//   const handleVerifyCode = () => {
-//     if (code.length < 6) {
-//       alert("لطفاً کد ۶ رقمی رو وارد کن");
-//       return;
-//     }
-//     setIsLoading(true);
-//     // شبیه‌سازی تأیید کد
-//     setTimeout(() => {
-//       setIsLoading(false);
-//       // ذخیره اطلاعات کاربر
-//       const userData = {
-//         phone,
-//         answers,
-//         onboardingDate: new Date().toISOString(),
-//       };
-//       localStorage.setItem("userOnboardingData", JSON.stringify(userData));
-//       // هدایت به پنل شخصی
-//       navigate("/dashboard");
-//     }, 1500);
-//   };
-
-//   // تایمر برای ارسال مجدد
-//   useEffect(() => {
-//     if (timer > 0) {
-//       const interval = setInterval(() => setTimer(timer - 1), 1000);
-//       return () => clearInterval(interval);
-//     }
-//   }, [timer]);
-
-//   return (
-//     <div className={styles.verificationContainer}>
-//       <div className={styles.verificationCard}>
-//         {step === "phone" ? (
-//           <>
-//             <div className={styles.verificationIcon}>📱</div>
-//             <h2 className={styles.verificationTitle}>آخرین قدم</h2>
-//             <p className={styles.verificationSubtitle}>
-//               شماره موبایل خودت رو وارد کن تا کد تأیید برات ارسال بشه
-//             </p>
-//             <div className={styles.inputGroup}>
-//               <label className={styles.inputLabel}>شماره موبایل</label>
-//               <div className={styles.phoneInputWrapper}>
-//                 <span className={styles.phonePrefix}>+۹۸</span>
-//                 <input
-//                   type="tel"
-//                   className={styles.phoneInput}
-//                   placeholder="۹۱۲۳۴۵۶۷۸۹"
-//                   value={phone}
-//                   onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
-//                   maxLength="10"
-//                 />
-//               </div>
-//             </div>
-//             <button
-//               onClick={handleSendCode}
-//               className={styles.btnVerification}
-//               disabled={isLoading}
-//             >
-//               {isLoading ? "در حال ارسال..." : "ارسال کد تأیید"}
-//             </button>
-//           </>
-//         ) : (
-//           <>
-//             <div className={styles.verificationIcon}>🔐</div>
-//             <h2 className={styles.verificationTitle}>کد تأیید</h2>
-//             <p className={styles.verificationSubtitle}>
-//               کد ۶ رقمی ارسال شده به {phone} رو وارد کن
-//             </p>
-//             <div className={styles.inputGroup}>
-//               <label className={styles.inputLabel}>کد تأیید</label>
-//               <input
-//                 type="text"
-//                 className={styles.codeInput}
-//                 placeholder="کد ۶ رقمی"
-//                 value={code}
-//                 onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
-//                 maxLength="6"
-//               />
-//             </div>
-//             <button
-//               onClick={handleVerifyCode}
-//               className={styles.btnVerification}
-//               disabled={isLoading}
-//             >
-//               {isLoading ? "در حال تأیید..." : "تأیید و ورود به پنل"}
-//             </button>
-//             {timer > 0 ? (
-//               <p className={styles.timerText}>ارسال مجدد تا {timer} ثانیه</p>
-//             ) : (
-//               <button onClick={handleSendCode} className={styles.btnResend}>
-//                 ارسال مجدد کد
-//               </button>
-//             )}
-//           </>
-//         )}
-//       </div>
-//     </div>
-//   );
-// }
-
-// ============================================
-// COMPONENT: Phone Verification (نسخه جدید)
-// ============================================
-// import logo from "../../../public/images/logo1.png";
-// import verificationImage from "../../../public/images/verification-hero.png"; // تصویر سمت چپ
-
 function PhoneVerification({ answers, navigate }) {
   const [phone, setPhone] = useState("");
-  const [code, setCode] = useState("");
   const [step, setStep] = useState("phone");
   const [isLoading, setIsLoading] = useState(false);
   const [timer, setTimer] = useState(0);
+  const [code, setCode] = useState(["", "", "", ""]); // ← تغییر به آرایه
   const [error, setError] = useState("");
+  const inputRefs = useRef([]);
 
   const handleSendCode = () => {
     setError("");
-    if (phone.length < 10) {
-      setError("لطفاً شماره موبایل معتبر وارد کن");
+
+    const cleanPhone = phone.replace(/\D/g, "");
+
+    // بررسی خالی بودن
+    if (!cleanPhone) {
+      setError("لطفاً شماره تماس را وارد کنید.");
       return;
     }
+
+    if (phone.length < 10) {
+      setError("لطفاً شماره تماس معتبر وارد کنید.");
+      return;
+    }
+
+    // بررسی شروع با ۹
+    if (cleanPhone[0] !== "9") {
+      setError("شماره تماس باید با ۹ شروع شود. (مثال: ۹۱۲۳۴۵۶۷۸۹)");
+      return;
+    }
+
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
       setStep("code");
-      setTimer(30);
-      console.log("📱 کد ارسال شد: 123456");
+      setTimer(90);
+      console.log("📱 کد ارسال شد: 1234");
     }, 1500);
   };
 
+  // ===== مدیریت تغییر هر جایگاه به صورت مستقل =====
+  const handleCodeChange = (index, value) => {
+    // فقط عدد یا خالی قبول کن
+    if (value !== "" && !/^[0-9]$/.test(value)) return;
+
+    // ایجاد کپی از آرایه
+    const newCode = [...code];
+    newCode[index] = value;
+    setCode(newCode);
+
+    // اگر عدد وارد شد و باکس بعدی وجود داشت، برو به باکس بعدی
+    if (value && index < 3) {
+      inputRefs.current[index + 1]?.focus();
+    }
+  };
+
+  // ===== مدیریت کلیدها =====
+  const handleKeyDown = (index, e) => {
+    if (e.key === "Backspace") {
+      e.preventDefault();
+
+      if (code[index]) {
+        // اگر باکس عدد داشت، فقط همون باکس رو پاک کن
+        const newCode = [...code];
+        newCode[index] = "";
+        setCode(newCode);
+      } else if (index > 0) {
+        // اگر باکس خالی بود، برو به قبلی و اون رو پاک کن
+        const prevIndex = index - 1;
+        const newCode = [...code];
+        newCode[prevIndex] = "";
+        setCode(newCode);
+        inputRefs.current[prevIndex]?.focus();
+      }
+    }
+
+    // حرکت با فلش چپ و راست
+    if (e.key === "ArrowRight" && index < 3) {
+      e.preventDefault();
+      inputRefs.current[index + 1]?.focus();
+    }
+    if (e.key === "ArrowLeft" && index > 0) {
+      e.preventDefault();
+      inputRefs.current[index - 1]?.focus();
+    }
+  };
+
+  // ===== چسباندن کد از کلیپ‌بورد =====
+  const handlePaste = (e) => {
+    e.preventDefault();
+    const pastedData = e.clipboardData.getData("text").replace(/\D/g, "");
+    if (pastedData.length >= 4) {
+      const newCode = pastedData.slice(0, 4).split("");
+      setCode(newCode);
+      inputRefs.current[3]?.focus();
+    }
+  };
+
+  // ===== بررسی کامل بودن کد =====
+  const isCodeComplete = code.every((digit) => digit !== "");
+  const codeString = code.join("");
+
   const handleVerifyCode = () => {
     setError("");
-    if (code.length < 6) {
-      setError("لطفاً کد ۶ رقمی رو وارد کن");
+
+    if (!isCodeComplete) {
+      setError("لطفاً کد ۴ رقمی رو کامل وارد کن");
       return;
     }
+
+    if (codeString !== "1234") {
+      setError("کد وارد شده اشتباه است. دوباره تلاش کن");
+      setCode(["", "", "", ""]);
+      setTimeout(() => {
+        inputRefs.current[0]?.focus();
+      }, 100);
+      return;
+    }
+
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
@@ -598,25 +553,25 @@ function PhoneVerification({ answers, navigate }) {
 
   return (
     <div className={styles.verificationContainer}>
-      {/* Decorative Elements */}
-      {/* <div className={styles.decorativeCircle1} />
-      <div className={styles.decorativeCircle2} />
-      <div className={styles.decorativeCircle3} /> */}
-
       <div className={styles.verificationWrapper}>
-        {/* Logo */}
-
-        {/* Main Card */}
         <div className={styles.verificationCard}>
-          {/* Right Side - Form */}
           <div className={styles.verificationFormSide}>
             <div className={styles.verificationLogo}>
-              <img src={logo} alt="لوگو" className={styles.logoImage} />
-              {/* <span className={styles.logoText}>
-              کلینیک <span>روانشناسی</span>
-              </span> */}
-            </div>
+              <Link to="/" className={styles.backToHome}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M3 12H21M3 12L10 5M3 12L10 19"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                <span>بازگشت به صفحه اصلی</span>
+              </Link>
 
+              <img src={logo} alt="لوگو" className={styles.logoImage} />
+            </div>
             {step === "phone" ? (
               <>
                 <div className={styles.formHeader}>
@@ -626,7 +581,6 @@ function PhoneVerification({ answers, navigate }) {
                     ارسال شود.
                   </p>
                 </div>
-
                 <div className={styles.inputGroup}>
                   <label className={styles.inputLabel}>شماره موبایل</label>
                   <div
@@ -646,23 +600,9 @@ function PhoneVerification({ answers, navigate }) {
                       maxLength="14"
                       autoFocus
                     />
-                    {phone.length > 0 && (
-                      <button
-                        type="button"
-                        className={styles.clearButton}
-                        onClick={() => setPhone("")}
-                      >
-                        ✕
-                      </button>
-                    )}
                   </div>
-                  {error && (
-                    <div className={styles.errorMessage}>
-                      <span>⚠️</span> {error}
-                    </div>
-                  )}
+                  {error && <div className={styles.errorMessage}>{error}</div>}
                 </div>
-
                 <button
                   onClick={handleSendCode}
                   className={styles.btnVerification}
@@ -693,77 +633,58 @@ function PhoneVerification({ answers, navigate }) {
                     </>
                   )}
                 </button>
-                
+
                 <div className={styles.termsText}>
                   اطلاعات شما به صورت امن و محرمانه نگهداری میشود.
                 </div>
-
-                {/* <div className={styles.divider}>
-                  <span className={styles.dividerLine}></span>
-                  <span className={styles.dividerText}>یا</span>
-                  <span className={styles.dividerLine}></span>
-                </div>
-
-                <button className={styles.btnWhatsApp}>
-                  <span>💬</span>
-                  دریافت کد از واتس‌اپ
-                </button> */}
               </>
             ) : (
               <>
                 <div className={styles.formHeader}>
-                  <div className={styles.codeIcon}>🔐</div>
                   <h2 className={styles.formTitle}>کد تأیید</h2>
                   <p className={styles.formSubtitle}>
-                    کد ۶ رقمی ارسال شده به
-                    <strong className={styles.phoneHighlight}>
-                      {formatPhoneNumber(phone)}
-                    </strong>
-                    رو وارد کن
+                    کد ۴ رقمی ارسال شده به
+                    <strong className={styles.phoneHighlight}>0{phone}</strong>
+                    را وارد کنید.
                   </p>
                 </div>
 
                 <div className={styles.inputGroup}>
                   <label className={styles.inputLabel}>کد تأیید</label>
-                  <div
-                    className={`${styles.codeInputWrapper} ${
-                      error ? styles.error : ""
-                    }`}
-                  >
-                    <input
-                      type="text"
-                      className={styles.codeInput}
-                      placeholder="_ _ _ _ _ _"
-                      value={code}
-                      onChange={(e) => {
-                        const val = e.target.value.replace(/\D/g, "");
-                        if (val.length <= 6) setCode(val);
-                      }}
-                      maxLength="6"
-                      autoFocus
-                    />
-                    <div className={styles.codeDots}>
-                      {[0, 1, 2, 3, 4, 5].map((i) => (
-                        <span
-                          key={i}
-                          className={`${styles.codeDot} ${
-                            code.length > i ? styles.filled : ""
-                          }`}
+                  <div className={styles.codeContainer}>
+                    <div className={styles.codeInputs}>
+                      {[0, 1, 2, 3].map((index) => (
+                        <input
+                          key={index}
+                          ref={(el) => (inputRefs.current[index] = el)}
+                          type="text"
+                          className={styles.codeBox}
+                          maxLength="1"
+                          value={code[index] || ""}
+                          onChange={(e) =>
+                            handleCodeChange(index, e.target.value)
+                          }
+                          onKeyDown={(e) => handleKeyDown(index, e)}
+                          onPaste={handlePaste}
+                          onFocus={(e) => e.target.select()}
+                          autoFocus={index === 0}
                         />
                       ))}
                     </div>
+
+                    {error && (
+                      <div className={styles.errorMessage}>
+                        <span className={styles.errorIcon}>⚠️</span>
+                        {error}
+                      </div>
+                    )}
                   </div>
-                  {error && (
-                    <div className={styles.errorMessage}>
-                      <span>⚠️</span> {error}
-                    </div>
-                  )}
                 </div>
 
                 <button
                   onClick={handleVerifyCode}
                   className={styles.btnVerification}
-                  disabled={isLoading || code.length < 6}
+                  disabled={isLoading || !isCodeComplete}
                 >
                   {isLoading ? (
                     <>
@@ -801,7 +722,7 @@ function PhoneVerification({ answers, navigate }) {
                       onClick={handleSendCode}
                       className={styles.btnResend}
                     >
-                      <span>🔄</span> ارسال مجدد کد
+                      ارسال مجدد کد
                     </button>
                   )}
                   <button
@@ -832,14 +753,6 @@ function PhoneVerification({ answers, navigate }) {
                 alt="تأیید شماره"
                 className={styles.heroImage}
               />
-              {/* <div className={styles.floatingBadge}>
-                <span className={styles.badgeIcon}>💚</span>
-                <span>قدم آخر تا شروع</span>
-              </div> */}
-              {/* <div className={styles.floatingBadge2}>
-                <span className={styles.badgeIcon}>✨</span>
-                <span>رایگان و بدون تعهد</span>
-              </div> */}
             </div>
           </div>
         </div>

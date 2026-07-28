@@ -490,6 +490,7 @@ html {
 .logoImage {
   transition: all 0.3s ease;
   width: 100px;
+  padding: 5px;
 }
 
 .logoImage:hover {

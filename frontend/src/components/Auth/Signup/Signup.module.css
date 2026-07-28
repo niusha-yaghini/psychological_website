@@ -45,7 +45,7 @@
 }
 
 /* ========== DECORATIVE ELEMENTS ========== */
-.decorativeCircle1 {
+/* .decorativeCircle1 {
   position: absolute;
   top: -200px;
   right: -200px;
@@ -54,9 +54,9 @@
   background: radial-gradient(circle, rgba(46, 90, 136, 0.04), transparent 70%);
   border-radius: 50%;
   pointer-events: none;
-}
+} */
 
-.decorativeCircle2 {
+/* .decorativeCircle2 {
   position: absolute;
   bottom: -150px;
   left: -150px;
@@ -69,9 +69,9 @@
   );
   border-radius: 50%;
   pointer-events: none;
-}
+} */
 
-.decorativeCircle3 {
+/* .decorativeCircle3 {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -85,7 +85,7 @@
   border-radius: 50%;
   transform: translate(-50%, -50%);
   pointer-events: none;
-}
+} */
 
 /* ========== PROGRESS ========== */
 .progressWrapper {
@@ -145,6 +145,273 @@
   color: var(--text-muted);
   margin-top: 12px;
   font-weight: 500;
+}
+
+/* ============================================
+   WELCOME / INTRO PAGE
+============================================ */
+.welcomeCard {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 56px 48px 40px;
+  max-width: 560px;
+  width: 100%;
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+  animation: fadeInUp 0.6s ease;
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== دکمه بازگشت ===== */
+.welcomeBackButton {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: var(--transition);
+  padding: 6px 14px;
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(200, 200, 200, 0.15);
+}
+
+.welcomeBackButton:hover {
+  color: #2d7d6e;
+  transform: translateX(-4px);
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(45, 125, 110, 0.2);
+}
+
+.welcomeBackButton svg {
+  transition: transform 0.3s ease;
+}
+
+.welcomeBackButton:hover svg {
+  transform: translateX(-4px);
+}
+
+/* ===== آیکون ===== */
+.welcomeIcon {
+  font-size: 72px;
+  margin-bottom: 16px;
+  display: inline-block;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+/* ===== عنوان ===== */
+.welcomeTitle {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--text-dark);
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, #2d7d6e, #4caf84);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.welcomeSubtitle {
+  font-size: 18px;
+  color: var(--text-secondary);
+  margin-bottom: 28px;
+  font-weight: 500;
+}
+
+/* ===== محتوای متن ===== */
+.welcomeContent {
+  text-align: right;
+  margin-bottom: 32px;
+  padding: 0 8px;
+}
+
+.welcomeContent p {
+  font-size: 16px;
+  color: var(--text-secondary);
+  line-height: 1.9;
+  margin-bottom: 14px;
+}
+
+.welcomeContent p:last-child {
+  margin-bottom: 0;
+}
+
+.welcomeContent strong {
+  color: #2d7d6e;
+  font-weight: 700;
+}
+
+.welcomeNote {
+  background: rgba(45, 125, 110, 0.06);
+  padding: 14px 20px;
+  border-radius: var(--radius);
+  border-right: 4px solid #2d7d6e;
+  font-weight: 500;
+  color: #2d7d6e !important;
+  margin-top: 8px;
+}
+
+/* ===== دکمه شروع ===== */
+.btnWelcome {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  padding: 18px 32px;
+  background: linear-gradient(135deg, #2d7d6e, #4caf84);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+  box-shadow: 0 4px 24px rgba(45, 125, 110, 0.25);
+  position: relative;
+  overflow: hidden;
+}
+
+.btnWelcome::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 300%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.15) 30%,
+    rgba(255, 255, 255, 0.05) 60%,
+    transparent 100%
+  );
+  transform: skewX(-20deg);
+  transition: left 0.6s ease;
+}
+
+.btnWelcome:hover::before {
+  left: 100%;
+}
+
+.btnWelcome:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 8px 36px rgba(45, 125, 110, 0.35);
+}
+
+.btnWelcome:active {
+  transform: scale(0.96);
+}
+
+.btnWelcome svg {
+  transition: transform 0.3s ease;
+}
+
+.btnWelcome:hover svg {
+  transform: translateX(4px);
+}
+
+/* ===== فوتر ===== */
+.welcomeFooter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.welcomeDot {
+  color: #d5d0ca;
+}
+
+/* ============================================
+   RESPONSIVE
+============================================ */
+@media (max-width: 768px) {
+  .welcomeCard {
+    padding: 40px 24px 32px;
+    margin: 0 16px;
+  }
+
+  .welcomeTitle {
+    font-size: 28px;
+  }
+
+  .welcomeSubtitle {
+    font-size: 16px;
+  }
+
+  .welcomeContent p {
+    font-size: 15px;
+  }
+
+  .welcomeIcon {
+    font-size: 56px;
+  }
+
+  .btnWelcome {
+    font-size: 16px;
+    padding: 16px 24px;
+  }
+
+  .welcomeBackButton {
+    top: 12px;
+    right: 12px;
+    font-size: 12px;
+    padding: 4px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .welcomeCard {
+    padding: 32px 16px 24px;
+  }
+
+  .welcomeTitle {
+    font-size: 24px;
+  }
+
+  .welcomeIcon {
+    font-size: 48px;
+  }
+
+  .welcomeFooter {
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 13px;
+  }
+
+  .welcomeDot {
+    display: none;
+  }
+
+  .welcomeBackButton span {
+    display: none;
+  }
+
+  .welcomeBackButton {
+    padding: 8px;
+    border-radius: 50%;
+  }
 }
 
 /* ========== QUESTION CARD ========== */
@@ -285,78 +552,6 @@
 }
 
 /* ========== SLIDER ========== */
-/* .sliderContainer {
-  padding: 8px 0;
-}
-
-.sliderEmojis {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 12px;
-}
-
-.sliderEmoji {
-  font-size: 28px;
-  opacity: 0.2;
-  transition: var(--transition);
-}
-
-.sliderEmoji.active {
-  opacity: 1;
-}
-
-.sliderInput {
-  width: 100%;
-  height: 8px;
-  border-radius: 10px;
-  background: #e8e0d8;
-  outline: none;
-  -webkit-appearance: none;
-  appearance: none;
-  transition: background 0.3s ease;
-}
-
-.sliderInput::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #2d7d6e, #4caf84);
-  cursor: pointer;
-  box-shadow: 0 4px 16px rgba(45, 125, 110, 0.3);
-  transition: var(--transition);
-}
-
-.sliderInput::-webkit-slider-thumb:hover {
-  transform: scale(1.1);
-}
-
-.sliderInput::-moz-range-thumb {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #2d7d6e, #4caf84);
-  cursor: pointer;
-  border: none;
-  box-shadow: 0 4px 16px rgba(45, 125, 110, 0.3);
-}
-
-.sliderLabels {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 12px;
-  font-size: 13px;
-  color: var(--text-muted);
-}
-
-.sliderValue {
-  font-size: 20px;
-  font-weight: 700;
-  color: #2d7d6e;
-} */
-
-/* ========== SLIDER ========== */
 .sliderContainer {
   padding: 8px 0;
   width: 100%;
@@ -367,50 +562,8 @@
   display: flex;
   justify-content: space-between;
   margin-bottom: 16px;
-  /* padding: 0 4px; */
   gap: 4px;
 }
-
-/* .sliderEmojiWrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  cursor: pointer;
-  transition: var(--transition);
-  border-radius: 12px;
-  min-width: 40px;
-}
-
-.sliderEmojiWrapper:hover {
-  transform: translateY(-2px);
-}
-
-.sliderEmoji {
-  font-size: 28px;
-  opacity: 0.25;
-  transition: var(--transition);
-  filter: grayscale(1);
-}
-
-.sliderEmojiWrapper.active .sliderEmoji {
-  opacity: 1;
-  filter: grayscale(0);
-  transform: scale(1.15);
-}
-
-.sliderEmojiLabel {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-muted);
-  opacity: 0.3;
-  transition: var(--transition);
-}
-
-.sliderEmojiWrapper.active .sliderEmojiLabel {
-  opacity: 1;
-  color: #2d7d6e;
-} */
 
 /* ===== تصاویر اسلایدر ===== */
 .sliderEmojiWrapper {
@@ -420,7 +573,6 @@
   gap: 6px;
   cursor: pointer;
   transition: var(--transition);
-  /* padding: 4px 8px; */
   border-radius: 12px;
   min-width: 50px;
 }
@@ -464,7 +616,6 @@
 
 /* ===== ترک اسلایدر ===== */
 .sliderTrackWrapper {
-  /* padding: 4px; */
   padding-top: 12px;
   padding-bottom: 4px;
   padding-right: 10px;
@@ -481,8 +632,6 @@
   appearance: none;
   transition: background 0.2s ease;
   cursor: pointer;
-
-  /* مهم: برای RTL */
   direction: rtl;
 }
 
@@ -626,236 +775,38 @@
   transform: scale(0.96);
 }
 
-/* ========== VERIFICATION ==========
+/* ============================================
+              Verification
+============================================ */
+
 .verificationContainer {
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 40px 24px;
-  background: linear-gradient(180deg, #f8f6f3 0%, #ffffff 100%);
-  direction: rtl;
-}
-
-.verificationCard {
-  background: var(--white);
-  border-radius: var(--radius-lg);
-  padding: 48px 40px 40px;
-  max-width: 440px;
-  width: 100%;
-  box-shadow: var(--shadow-lg);
-  text-align: center;
-  animation: fadeInUp 0.6s ease;
-}
-
-.verificationIcon {
-  font-size: 56px;
-  margin-bottom: 16px;
-  display: block;
-}
-
-.verificationTitle {
-  font-size: 26px;
-  font-weight: 700;
-  color: var(--text-dark);
-  margin-bottom: 8px;
-}
-
-.verificationSubtitle {
-  font-size: 16px;
-  color: var(--text-muted);
-  margin-bottom: 28px;
-  line-height: 1.6;
-}
-
-.inputGroup {
-  text-align: right;
-  margin-bottom: 24px;
-}
-
-.inputLabel {
-  display: block;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text-secondary);
-  margin-bottom: 8px;
-}
-
-.phoneInputWrapper {
-  display: flex;
-  align-items: center;
-  border: 2px solid #e8e0d8;
-  border-radius: var(--radius);
-  overflow: hidden;
-  transition: var(--transition);
-  background: #f8f6f3;
-}
-
-.phoneInputWrapper:focus-within {
-  border-color: #2d7d6e;
-  box-shadow: 0 0 0 4px rgba(45, 125, 110, 0.08);
-}
-
-.phonePrefix {
-  padding: 14px 16px;
-  background: #f0ede8;
-  color: var(--text-secondary);
-  font-weight: 600;
-  font-size: 15px;
-  border-left: 2px solid #e8e0d8;
-  flex-shrink: 0;
-}
-
-.phoneInput,
-.codeInput {
-  flex: 1;
-  padding: 14px 16px;
-  border: none;
-  background: transparent;
-  font-size: 16px;
-  font-family: inherit;
-  color: var(--text-dark);
-  outline: none;
-  direction: ltr;
-  text-align: right;
-}
-
-.phoneInput::placeholder,
-.codeInput::placeholder {
-  color: #b5b0aa;
-}
-
-.btnVerification {
-  width: 100%;
-  padding: 16px;
-  background: linear-gradient(135deg, #2d7d6e, #4caf84);
-  color: white;
-  border: none;
-  border-radius: var(--radius);
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: var(--transition);
-  font-family: inherit;
-  box-shadow: 0 4px 20px rgba(45, 125, 110, 0.2);
-}
-
-.btnVerification:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(45, 125, 110, 0.3);
-}
-
-.btnVerification:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.btnResend {
-  margin-top: 16px;
-  background: transparent;
-  border: none;
-  color: #2d7d6e;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: var(--transition);
-  font-family: inherit;
-  text-decoration: underline;
-}
-
-.btnResend:hover {
-  color: #1b5a4e;
-}
-
-.timerText {
-  margin-top: 16px;
-  font-size: 14px;
-  color: var(--text-muted);
-} */
-
-/* ========== VERIFICATION CONTAINER ========== */
-.verificationContainer {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  /* padding: 40px 24px; */
-  /* background: linear-gradient(180deg, #f8f6f3 0%, #ffffff 100%); */
   background: #f8f6f3e8;
   direction: rtl;
   position: relative;
   overflow: hidden;
 }
 
-/* ========== DECORATIVE ELEMENTS ========== */
-/* .decorativeCircle1 {
-  position: absolute;
-  top: -200px;
-  right: -200px;
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, rgba(46, 90, 136, 0.04), transparent 70%);
-  border-radius: 50%;
-  pointer-events: none;
-} */
-
-/* .decorativeCircle2 {
-  position: absolute;
-  bottom: -150px;
-  left: -150px;
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(
-    circle,
-    rgba(58, 139, 156, 0.04),
-    transparent 70%
-  );
-  border-radius: 50%;
-  pointer-events: none;
-} */
-
-/* .decorativeCircle3 {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 800px;
-  height: 800px;
-  background: radial-gradient(
-    circle,
-    rgba(245, 240, 235, 0.3),
-    transparent 70%
-  );
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-} */
-
 /* ========== WRAPPER ========== */
 .verificationWrapper {
-  /* width: 100%; */
   width: 80%;
-  /* max-width: 1100px; */
-  /* height: 100%; */
   position: relative;
   z-index: 1;
-      /* justify-content: center; */
-  /* justify-content: center; */
-  /* justify-items: center; */
 }
 
 /* ========== LOGO ========== */
 .verificationLogo {
   display: flex;
-  /* align-items: center; */
   justify-content: center;
-  /* gap: 14px; */
   margin-bottom: 8%;
   margin-top: 10%;
 }
 
 .logoImage {
   width: 200px;
-  /* height: 48px; */
   transition: var(--transition);
 }
 
@@ -875,19 +826,70 @@
   -webkit-text-fill-color: transparent;
 }
 
+/* ===== دکمه بازگشت به صفحه اصلی ===== */
+.backToHome {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: var(--transition);
+  padding: 8px 16px;
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(200, 200, 200, 0.2);
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 10;
+}
+
+.backToHome:hover {
+  color: #2d7d6e;
+  transform: translateX(-4px);
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(45, 125, 110, 0.2);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.backToHome svg {
+  transition: transform 0.3s ease;
+}
+
+.backToHome:hover svg {
+  transform: translateX(-4px);
+}
+
+/* ===== لوگو با دکمه ===== */
+/* .verificationLogo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin-bottom: 8%;
+  margin-top: 10%;
+  width: 100%;
+}
+
+.logoImage {
+  width: 200px;
+  transition: var(--transition);
+}
+
+.logoImage:hover {
+  transform: scale(1.05) rotate(-3deg);
+} */
+
 /* ========== MAIN CARD ========== */
 .verificationCard {
   display: flex;
   background: var(--white);
   border-radius: 8px;
   overflow: hidden;
-  /* box-shadow: var(--shadow-lg); */
-  /* border: 1px solid rgba(255, 255, 255, 0.1); */
   animation: fadeInUp 0.6s ease;
-  /* min-height: 500px; */
-      /* justify-content: center; */
-  /* justify-content: center; */
-  /* justify-items: center; */
 }
 
 @keyframes fadeInUp {
@@ -903,31 +905,10 @@
 
 /* ========== LEFT SIDE - IMAGE ========== */
 .verificationImageSide {
-  /* flex: 1; */
-  /* background: linear-gradient(135deg, #2d7d6e, #1b5a4e); */
-  /* padding: 40px 32px; */
   display: flex;
-  /* align-items: center; */
-  /* justify-content: center; */
   position: relative;
   overflow: hidden;
-  /* min-height: 400px; */
 }
-
-/* .verificationImageSide::before {
-  content: "";
-  position: absolute;
-  top: -50%;
-  right: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(
-    circle,
-    rgba(255, 255, 255, 0.05),
-    transparent 70%
-  );
-  animation: rotate 30s linear infinite;
-} */
 
 @keyframes rotate {
   0% {
@@ -948,12 +929,7 @@
 }
 
 .heroImage {
-  /* width: 100%; */
   max-width: 500px;
-
-  /* height: auto; */
-  /* filter: drop-shadow(0 20px 60px rgba(0, 0, 0, 0.2)); */
-  /* animation: float 4s ease-in-out infinite; */
 }
 
 @keyframes float {
@@ -966,66 +942,19 @@
   }
 }
 
-/* ===== Floating Badges ===== */
-/* .floatingBadge,
-.floatingBadge2 {
-  position: absolute;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  padding: 12px 20px;
-  border-radius: 50px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-  animation: float 3s ease-in-out infinite;
-  white-space: nowrap;
-  font-weight: 600;
-  font-size: 14px;
-  color: var(--text-dark);
-} */
-
-/* .floatingBadge {
-  top: 20px;
-  right: 10px;
-  animation-delay: 0.5s;
-}
-
-.floatingBadge2 {
-  bottom: 40px;
-  left: 10px;
-  animation-delay: 1.2s;
-}
-
-.badgeIcon {
-  font-size: 20px;
-} */
-
 /* ========== RIGHT SIDE - FORM ========== */
 .verificationFormSide {
   flex: 1;
   padding: 0 40px;
   display: flex;
   flex-direction: column;
-  /* justify-content: center; */
-  /* justify-content: center; */
-  /* justify-items: center; */
   background: var(--white);
-      /* justify-content: center; */
-  /* justify-content: center; */
-  /* justify-items: center; */
   align-items: center;
 }
 
 /* ===== Form Header ===== */
 .formHeader {
-  /* margin-bottom: 32px; */
   margin-bottom: 10%;
-  /* align-items: center;
-  align-content: center;
-  justify-content: center; */
-  /* justify-content: center; */
-  /* justify-content: center; */
   justify-items: center;
 }
 
@@ -1039,7 +968,6 @@
   font-weight: 500;
   color: #1b5a4e;
   margin-bottom: 6px;
-  /* font-family: shabnam; */
 }
 
 .formSubtitle {
@@ -1066,7 +994,6 @@
   font-size: 14px;
   font-weight: 600;
   color: var(--text-secondary);
-  /* margin-bottom: 8px; */
   margin-bottom: 3%;
 }
 
@@ -1079,6 +1006,7 @@
   transition: var(--transition);
   background: #f8f6f3;
   position: relative;
+  direction: ltr;
 }
 
 .phoneInputWrapper:focus-within,
@@ -1094,13 +1022,14 @@
 }
 
 .phonePrefix {
-  padding: 14px 16px;
+  padding: 15px;
   background: #f0ede8;
   color: var(--text-secondary);
   font-weight: 600;
   font-size: 15px;
-  border-left: 2px solid #e8e0d8;
   flex-shrink: 0;
+  border-top-left-radius: 14px;
+  border-bottom-left-radius: 14px;
 }
 
 .phoneInput,
@@ -1114,7 +1043,6 @@
   color: var(--text-dark);
   outline: none;
   direction: ltr;
-  text-align: right;
   letter-spacing: 1px;
 }
 
@@ -1166,7 +1094,8 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-top: 8px;
+  padding-right: 10px;
+  padding-top: 10px;
   font-size: 13px;
   color: #e74c3c;
   font-weight: 500;
@@ -1176,21 +1105,9 @@
 .termsText {
   font-size: 13px;
   color: var(--text-muted);
-  /* margin-bottom: 24px; */
   margin-top: 2%;
   text-align: center;
 }
-
-/* .termsText a {
-  color: #2d7d6e;
-  text-decoration: none;
-  font-weight: 500;
-  margin: 0 4px;
-}
-
-.termsText a:hover {
-  text-decoration: underline;
-} */
 
 /* ===== Button ===== */
 .btnVerification {
@@ -1198,7 +1115,6 @@
   align-items: center;
   justify-content: center;
   gap: 12px;
-  /* width: 100%; */
   width: 50%;
   padding: 16px 32px;
   background: linear-gradient(135deg, #2d7d6e, #4caf84);
@@ -1213,12 +1129,7 @@
   box-shadow: 0 4px 20px rgba(45, 125, 110, 0.2);
   position: relative;
   overflow: hidden;
-
   margin-top: 8%;
-
-    /* justify-content: center; */
-  /* justify-content: center; */
-  /* justify-items: center; */
 }
 
 .btnVerification::before {
@@ -1285,51 +1196,6 @@
   }
 }
 
-/* ===== Divider ===== */
-.divider {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin: 24px 0;
-}
-
-.dividerLine {
-  flex: 1;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, #e8e0d8, transparent);
-}
-
-.dividerText {
-  font-size: 13px;
-  color: var(--text-muted);
-  font-weight: 500;
-  padding: 0 4px;
-}
-
-/* ===== WhatsApp Button ===== */
-.btnWhatsApp {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  width: 100%;
-  padding: 14px;
-  background: #25d366;
-  color: white;
-  border: none;
-  border-radius: var(--radius);
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: var(--transition);
-  font-family: inherit;
-}
-
-.btnWhatsApp:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(37, 211, 102, 0.3);
-}
-
 /* ===== Code Actions ===== */
 .codeActions {
   display: flex;
@@ -1385,6 +1251,131 @@
 
 .btnBack:hover {
   color: var(--text-dark);
+}
+
+/* ===== Code Container ===== */
+.inputGroup {
+  margin-bottom: 24px;
+}
+
+.inputLabel {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.codeContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.codeInputs {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  direction: ltr;
+}
+
+/* ===== هر باکس ===== */
+.codeBox {
+  width: 56px;
+  height: 70px;
+  border: none;
+  border-bottom: 3px solid #d5d0ca;
+  background: transparent;
+  text-align: center;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text-dark);
+  outline: none;
+  transition: var(--transition);
+  font-family: inherit;
+  padding: 0;
+  caret-color: #2d7d6e;
+}
+
+.codeBox:focus {
+  border-bottom-color: #2d7d6e;
+  transform: translateY(-2px);
+}
+
+.codeBox:not(:placeholder-shown) {
+  border-bottom-color: #2d7d6e;
+  border-bottom-width: 4px;
+}
+
+.codeBox::placeholder {
+  color: #d5d0ca;
+  font-size: 20px;
+  font-weight: 300;
+}
+
+/* ===== حالت ارور ===== */
+.codeInputs.error .codeBox {
+  border-bottom-color: #e74c3c;
+  animation: shake 0.4s ease;
+}
+
+.codeInputs.error .codeBox:focus {
+  border-bottom-color: #e74c3c;
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-6px);
+  }
+  75% {
+    transform: translateX(6px);
+  }
+}
+
+/* ===== Error Message ===== */
+.errorMessage {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #e74c3c;
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+.errorIcon {
+  font-size: 16px;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 480px) {
+  .codeBox {
+    width: 48px;
+    height: 60px;
+    font-size: 28px;
+  }
+
+  .codeInputs {
+    gap: 8px;
+  }
+}
+
+@media (max-width: 360px) {
+  .codeBox {
+    width: 40px;
+    height: 52px;
+    font-size: 24px;
+  }
+
+  .codeInputs {
+    gap: 6px;
+  }
 }
 
 /* ========== RESPONSIVE ========== */
