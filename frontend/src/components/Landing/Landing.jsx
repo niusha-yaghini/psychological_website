@@ -2,12 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./Landing.module.css";
 import seedData from "../../../../backend/seed";
-// import logo from "../../../public/images/logo1.png";
-import logo from "../../../public/images/logo2.png";
+import logo from "../../../public/images/logo/logo2.png";
 
-import individual_therapy from "../../../public/images/Individual_Therapy.png";
-import couple_therapy from "../../../public/images/Couple_Therapy.png";
-import teenage_therapy from "../../../public/images/Teenage_Therapy.png";
+import individual_therapy from "../../../public/images/avatar/Individual_Therapy.png";
+import couple_therapy from "../../../public/images/avatar/Couple_Therapy.png";
+import teenage_therapy from "../../../public/images/avatar/Teenage_Therapy.png";
 
 const formatPersianDate = (dateStr) => {
   if (!dateStr) return "";
@@ -45,9 +44,7 @@ function Landing() {
       <header className={styles.header}>
         <div className={styles.container}>
           <div className={styles.logo}>
-            {/* کلینیک آنلاین */}
             <img src={logo} alt="لوگو" className={styles.logoImage} />
-            {/* کلینیک آنلاین روان کوک */}
           </div>
           <nav className={styles.nav}>
             <a href="#">خانه</a>
@@ -60,9 +57,9 @@ function Landing() {
             <Link to="/login" className={styles.btnlogin}>
               ورود
             </Link>
-            <Link to="/signup" className={styles.btnsignup}>
+            {/* <Link to="/signup" className={styles.btnsignup}>
               ثبت‌نام
-            </Link>
+            </Link> */}
           </div>
           <button className={styles.menuToggle}>☰</button>
         </div>

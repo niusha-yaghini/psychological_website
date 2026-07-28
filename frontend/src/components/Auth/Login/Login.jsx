@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./Login.module.css";
-import logo from "../../../../public/images/logo1.png";
+import logo from "../../../../public/images/logo/logo2.png";
 
 function Login() {
   const [phone, setPhone] = useState("");

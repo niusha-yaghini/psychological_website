@@ -85,7 +85,7 @@ const seedData = {
       isUpcoming: false,
       description:
         "کارگاه خودشناسی اولین قدم در راه درمان و پذیرش خود است.",
-      image: "/images/kargah_khodshenasi.png",
+      image: "/images/avatar/kargah_khodshenasi.png",
       tags: ["خودآگاهی", "پذیرش", "رواندرمانی"],
       syllabus: [
         "مبانی نظری ACT",
@@ -103,7 +103,7 @@ const seedData = {
       isUpcoming: false,
       description:
         "کارگاه یادگیری مهارت های زندگی اعم از مهارت ارتباط ماثر، مهارت های ارتباط اجتماعی، کنترل خشم، ...",
-      image: '/images/kargah_maharathayezendegi.png',
+      image: '/images/avatar/kargah_maharathayezendegi.png',
       tags: ["فرسودگی شغلی", "خودمراقبتی", "تعادل زندگی"],
       syllabus: [
         "شناخت فرسودگی شغلی",

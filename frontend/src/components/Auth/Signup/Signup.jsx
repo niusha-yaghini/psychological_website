@@ -10,8 +10,8 @@ import face_emoji_3 from "../../../../public/images/face_emojies/face_emoji_3.pn
 import face_emoji_4 from "../../../../public/images/face_emojies/face_emoji_4.png";
 import face_emoji_5 from "../../../../public/images/face_emojies/face_emoji_5.png";
 
-import logo from "../../../../public/images/logo2.png";
-import loginback from "../../../../public/images/loginback.png";
+import logo from "../../../../public/images/logo/logo2.png";
+import loginback from "../../../../public/images/login/loginback.png";
 
 const QUESTIONS = [
   {
