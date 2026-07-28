@@ -70,7 +70,7 @@ function Landing() {
         <div className={styles.container}>
           <div className={styles.heroContent}>
             {/* <h1 className={styles.heroTitle}>{doctor.name}</h1> */}
-            
+
             <h1 className={styles.heroTitle}>کلینیک آنلاین روان کوک</h1>
             <span className={styles.heroSubtitle}>{doctor.specialty}</span>
 
@@ -101,6 +101,100 @@ function Landing() {
                 مسیر <span>درمان</span>
               </h2>
               <p className={styles.sectionDescription}>
+                روان کوک چگونه به شما کمک می کند؟
+              </p>
+            </div>
+          </div>
+
+          <div className={styles.stepsContainer}>
+            {/* ===== گام اول ===== */}
+            <div className={styles.stepWrapper}>
+              <div className={styles.stepCard}>
+                <div className={styles.stepNumber}>۱</div>
+                <h3>ارزیابی اولیه</h3>
+                <p>
+                  تکمیل فرم‌ ارزیابی و ارائه اطلاعات اولیه درباره وضعیت خود به
+                  دکتر.
+                </p>
+                {/* <div className={styles.stepDetail}>
+                  <span>⏱️ ۳۰ دقیقه</span>
+                  <span>📍 آنلاین / حضوری</span>
+                </div> */}
+              </div>
+            </div>
+
+            {/* ===== گام دوم ===== */}
+            <div className={styles.stepWrapper}>
+              <div className={styles.stepCard}>
+                <div className={styles.stepNumber}>۲</div>
+                <h3>جلسات مشاوره</h3>
+                <p>
+                  {/* جلسات درمانی با توجه به نیاز شما و بر اساس طرح درمان تخصصی پیش
+                  می‌رود. در صورت نیاز پرسشنامه های مخصوص شما داده شده و تحلیل می گردند. */}
+                  {/* جلسات درمانی متناسب با نیاز شما و بر اساس طرح درمان تخصصی پیش
+                  می‌رود. */}
+                  طرح درمان تخصصی برای جلسات متناسب با نیاز شما
+                </p>
+                {/* <div className={styles.stepDetail}>
+                  <span>⏱️ ۶۰-۹۰ دقیقه</span>
+                  <span>📅 هفتگی / دو هفته‌ای</span>
+                </div> */}
+              </div>
+            </div>
+
+            {/* ===== گام سوم ===== */}
+            <div className={styles.stepWrapper}>
+              <div className={styles.stepCard}>
+                <div className={styles.stepNumber}>۳</div>
+                <h3>پرسشنامه</h3>
+                <p>
+                  {/* جلسات درمانی با توجه به نیاز شما و بر اساس طرح درمان تخصصی پیش
+                  می‌رود. در صورت نیاز پرسشنامه های مخصوص شما داده شده و تحلیل می گردند. */}
+             {/* در طول مسیر، با توجه به نیاز شما پرسشنامه‌های تخصصی برای بررسی دقیق‌تر شرایط داده شده و  تحلیل می گردند.   */}
+                در صورت نیاز، دادن پرسشنامه‌های تخصصی و تحلیل آنها
+                </p>
+                {/* <div className={styles.stepDetail}>
+                  <span>⏱️ ۶۰-۹۰ دقیقه</span>
+                  <span>📅 هفتگی / دو هفته‌ای</span>
+                </div> */}
+              </div>
+            </div>
+
+            {/* ===== گام چهارم ===== */}
+            <div className={styles.stepWrapper}>
+              <div className={styles.stepCard}>
+                <div className={styles.stepNumber}>۴</div>
+                <h3>پیگیری و تداوم</h3>
+                <p>
+                  برنامه‌های پیگیری و تمرینات عملی برای تثبیت تغییرات 
+                </p>
+                {/* <div className={styles.stepDetail}>
+                  <span>📊 ارزیابی پیشرفت</span>
+                  <span>💪 تمرینات عملی</span>
+                </div> */}
+              </div>
+            </div>
+          </div>
+
+          {/* ===== CTA ===== */}
+          <div className={styles.stepsCTA}>
+            <p>آماده شروع مسیر بهبودی هستید؟</p>
+            <Link to="/signup" className={styles.btnPrimary}>
+              شروع کنید
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ======== HOW IT WORKS - مراحل درمان ======== */}
+      {/* <section id="howItWorks" className={styles.howItWorks}>
+        <div className={styles.container}>
+          <div className={styles.sectionHeader}>
+            <div>
+              <h2 className={styles.sectionTitle}>
+                مسیر <span>درمان</span>
+              </h2>
+              <p className={styles.sectionDescription}>
                 با ما همراه باشید تا گام‌به‌گام در مسیر بهبودی و آرامش قدم
                 بردارید.
               </p>
@@ -108,7 +202,6 @@ function Landing() {
           </div>
 
           <div className={styles.stepsContainer}>
-            {/* ===== گام اول ===== */}
             <div className={styles.stepWrapper}>
               <div className={styles.stepCard}>
                 <div className={styles.stepNumber}>۱</div>
@@ -124,7 +217,6 @@ function Landing() {
               </div>
             </div>
 
-            {/* ===== گام دوم ===== */}
             <div className={styles.stepWrapper}>
               <div className={styles.stepCard}>
                 <div className={styles.stepNumber}>۲</div>
@@ -140,7 +232,6 @@ function Landing() {
               </div>
             </div>
 
-            {/* ===== گام سوم ===== */}
             <div className={styles.stepWrapper}>
               <div className={styles.stepCard}>
                 <div className={styles.stepNumber}>۳</div>
@@ -157,7 +248,6 @@ function Landing() {
             </div>
           </div>
 
-          {/* ===== CTA ===== */}
           <div className={styles.stepsCTA}>
             <p>آماده شروع مسیر بهبودی هستید؟</p>
             <Link to="/signup" className={styles.btnPrimary}>
@@ -165,7 +255,7 @@ function Landing() {
             </Link>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* ======== THERAPY AREAS - حوزه‌های تخصصی ======== */}
       <section id="theapyArea" className={styles.therapyAreas}>

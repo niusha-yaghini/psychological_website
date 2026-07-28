@@ -13,6 +13,8 @@ import face_emoji_5 from "../../../../public/images/face_emojies/face_emoji_5.pn
 import logo from "../../../../public/images/logo/logo2.png";
 import loginback from "../../../../public/images/login/loginback.png";
 
+import welcome_background from "../../../../public/images/background/welcome_background3.png";
+
 const QUESTIONS = [
   {
     id: 1,
@@ -97,77 +99,104 @@ function Signup() {
   // ===== صفحه خوش‌آمدگویی =====
   if (currentStep === -1) {
     return (
-      <div className={styles.onboardingContainer}>
-        <div className={styles.welcomeCard}>
-          {/* دکمه بازگشت */}
-          <Link to="/" className={styles.welcomeBackButton}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M3 12H21M3 12L10 5M3 12L10 19"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            بازگشت
-          </Link>
+      <div className={styles.page}>
+        <img
+          src={welcome_background}
+          className={styles.leftImage}
+          alt=""
+        />
 
-          {/* آیکون یا تصویر */}
-          <div className={styles.welcomeIcon}>🌱</div>
+        <header className={styles.header}>
+          <div className={styles.logo}>روان کوک</div>
+        </header>
 
-          <h1 className={styles.welcomeTitle}>خوش آمدی!</h1>
-
-          <p className={styles.welcomeSubtitle}>
-            قراره یه مسیر قشنگ رو با هم طی کنیم
+        <main className={styles.container}>
+          {/* <span className={styles.step}>مرحله ۱ از ۳</span> */}
+          <h1>قبل از شروع، کمی بیشتر با شما آشنا می‌شویم</h1>
+          <p>
+            برای اینکه بتوانیم تجربه‌ای دقیق‌تر و شخصی‌سازی‌شده‌تر برای شما
+            ایجاد کنیم، چند سوال کوتاه از شما می‌پرسیم. پاسخ‌های شما کمک می‌کند
+            مسیر مناسب‌تری برای شما پیشنهاد دهیم.
           </p>
+          {/* <div className={styles.cards}>
+            <div className={styles.card}>
+              <span>⏱</span>
+              <div>
+                <b>۳ تا ۵ دقیقه</b>
+                <small>زمان مورد نیاز</small>
+              </div>
+            </div>
+            <div className={styles.card}>
+              <span>🔒</span>
+              <div>
+                <b>کاملاً محرمانه</b>
+                <small>اطلاعات شما محفوظ است</small>
+              </div>
+            </div>
+            <div className={styles.card}>
+              <span>🌱</span>
+              <div>
+                <b>چند سوال ساده</b>
+                <small>برای شناخت بهتر شما</small>
+              </div>
+            </div>
+          </div> */}
 
-          <div className={styles.welcomeContent}>
-            <p>
-              برای اینکه بتونیم بهترین کمک رو بهت بکنیم، نیاز داریم کمی بیشتر با
-              تو و شرایطت آشنا بشیم.
-            </p>
-            <p>
-              ازت <strong>۵ سوال کوتاه</strong> می‌پرسیم که بهمون کمک میکنه مسیر
-              درمان رو دقیق‌تر و شخصی‌تر برات طراحی کنیم.
-            </p>
-            <p className={styles.welcomeNote}>
-              ✨ جواب‌هات کاملاً محرمانه میمونه و فقط در اختیار دکترت قرار
-              می‌گیره.
-            </p>
-          </div>
-
-          <button
-            onClick={() => setCurrentStep(0)}
-            className={styles.btnWelcome}
-          >
-            شروع کنیم
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M5 12H19M19 12L12 5M19 12L12 19"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
-
-          <div className={styles.welcomeFooter}>
-            <span>⏱️ حدود ۳ دقیقه</span>
-            <span className={styles.welcomeDot}>•</span>
-            <span>📝 ۵ سوال</span>
-            <span className={styles.welcomeDot}>•</span>
-            <span>🔒 محرمانه</span>
-          </div>
-        </div>
-
-        {/* Decorative Elements */}
-        <div className={styles.decorativeCircle1} />
-        <div className={styles.decorativeCircle2} />
-        <div className={styles.decorativeCircle3} />
+          <button className={styles.button}>شروع پاسخ به سوالات</button>
+        </main>
       </div>
     );
+    // return (
+    //   <div className={styles.onboardingContainer}>
+    //     <div className={styles.welcomeCard}>
+    //       <Link to="/" className={styles.welcomeBackButton}>
+    //         <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+    //           <path
+    //             d="M3 12H21M3 12L10 5M3 12L10 19"
+    //             stroke="currentColor"
+    //             strokeWidth="2"
+    //             strokeLinecap="round"
+    //             strokeLinejoin="round"
+    //           />
+    //         </svg>
+    //         بازگشت
+    //       </Link>
+    //       <h1 className={styles.welcomeTitle}>خوش آمدی!</h1>
+    //       <p className={styles.welcomeSubtitle}>
+    //         قراره یه مسیر قشنگ رو با هم طی کنیم
+    //       </p>
+    //       <div className={styles.welcomeContent}>
+    //         <p>
+    //           برای اینکه بتونیم بهترین کمک رو بهت بکنیم، نیاز داریم کمی بیشتر با
+    //           تو و شرایطت آشنا بشیم.
+    //         </p>
+    //         <p>
+    //           ازت <strong>۵ سوال کوتاه</strong> می‌پرسیم که بهمون کمک میکنه مسیر
+    //           درمان رو دقیق‌تر و شخصی‌تر برات طراحی کنیم.
+    //         </p>
+    //         <p className={styles.welcomeNote}>
+    //           ✨ جواب‌هات کاملاً محرمانه میمونه و فقط در اختیار دکترت قرار
+    //           می‌گیره.
+    //         </p>
+    //       </div>
+    //       <button
+    //         onClick={() => setCurrentStep(0)}
+    //         className={styles.btnWelcome}
+    //       >
+    //         شروع کنیم
+    //         <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+    //           <path
+    //             d="M5 12H19M19 12L12 5M19 12L12 19"
+    //             stroke="currentColor"
+    //             strokeWidth="2"
+    //             strokeLinecap="round"
+    //             strokeLinejoin="round"
+    //           />
+    //         </svg>
+    //       </button>
+    //     </div>
+    //   </div>
+    // );
   }
 
   const handleNext = () => {
