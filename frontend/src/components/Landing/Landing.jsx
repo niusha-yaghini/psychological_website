@@ -69,11 +69,10 @@ function Landing() {
       <section className={styles.hero}>
         <div className={styles.container}>
           <div className={styles.heroContent}>
-            {/* <h1 className={styles.heroTitle}>{doctor.name}</h1> */}
-
             <h1 className={styles.heroTitle}>کلینیک آنلاین روان کوک</h1>
-            <span className={styles.heroSubtitle}>{doctor.specialty}</span>
-
+            {/* <span className={styles.heroSubtitle}>{doctor.specialty}</span> */}
+            <h2 className={styles.herosubTitle}>روان کوک همراه شما در مسیر خودشناسی و رشد فردی</h2>
+            
             <p className={styles.heroDescription}>{doctor.bio}</p>
             <div className={styles.heroButtons}>
               <Link to="/signup" className={styles.herobtnPrimary}>
@@ -369,7 +368,7 @@ function Landing() {
                   <span>⭐ اعتماد به نفس</span>
                   <span>📚 مشکلات تحصیلی</span>
                   <span>🔍 هویت‌یابی</span> */}
-                  <span>مدیریت خشم</span>
+                  {/* <span>مدیریت خشم</span> */}
                   <span>اعتماد به نفس</span>
                   <span>مشکلات تحصیلی</span>
                   <span>هویت‌یابی</span>

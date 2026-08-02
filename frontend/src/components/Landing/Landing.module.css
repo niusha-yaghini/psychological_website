@@ -426,26 +426,10 @@ html {
 }
 
 /* ========== HERO ========== */
-/* .hero {
-  background-image: url("/images/background/background.png");
-
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  padding: 5% 0 0;
-  top: 0px;
-  width: 100%;
-  position: relative;
-  overflow: hidden;
-  min-height: 600px;
-} */
-
 .hero {
   background-image: url("/images/background/background5.png");
   background-size: contain;
   background-size: cover;
-
-  /* background-position: center; */
   background-repeat: no-repeat;
   padding: 5% 0 0;
   position: relative;
@@ -458,7 +442,6 @@ html {
   gap: 60px;
   padding-right: 5%;
   padding-bottom: 3%;
-  /* padding-top: 500px; */
   z-index: 1;
 }
 
@@ -470,9 +453,16 @@ html {
 .heroTitle {
   font-size: 48px;
   font-weight: 500;
-  color: rgb(0, 0, 0);
+  color: rgb(10, 55, 0);
   line-height: 1.1;
   margin-bottom: 8px;
+}
+
+.herosubTitle {
+  font-size: 30px;
+  font-weight: 500;
+  margin-top: 2%;
+  color: rgba(13, 69, 0, 0.702);
 }
 
 .heroTitle span {
@@ -697,35 +687,13 @@ html {
 .howItWorks {
   padding: 110px 0;
   background: linear-gradient(180deg, #ffffff 0%, #f8f6f3d5 100%);
-  /* background-image: url("/images/background/background_sub4.png"); */
-
-  /* background-size: contain;
-  background-size: cover;
-  background-repeat: no-repeat; */
-
-  /* background-size: 800px 600px; سایز دقیق */
   background-size: 100% auto;
-/* width: 60%; */
   background-position: center;
   background-repeat: no-repeat;
-
-
   padding: 5% 0 0;
   position: relative;
   overflow: hidden;
 }
-
-
-/* .hero {
-  background-image: url("/images/background/background5.png");
-  background-size: contain;
-  background-size: cover;
-  background-repeat: no-repeat;
-  padding: 5% 0 0;
-  position: relative;
-  overflow: hidden;
-} */
-
 
 .sectionDescription {
   font-size: 18px;
@@ -1282,6 +1250,7 @@ html {
   max-width: 700px;
   margin: 0 auto 36px;
   line-height: 1.9;
+  color: rgba(255, 255, 255, 0.884);
 }
 
 .whyStats {
