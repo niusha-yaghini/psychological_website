@@ -527,6 +527,188 @@
   border-bottom-color: #e74c3c;
 }
 
+/* ============================================
+   MODAL OVERLAY
+============================================ */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: modalFadeIn 0.3s ease;
+  padding: 20px;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ===== MODAL CONTENT ===== */
+.modalContent {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 48px 40px 36px;
+  max-width: 440px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.2);
+  animation: modalSlideUp 0.4s ease;
+}
+
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ===== دکمه بستن ===== */
+.modalClose {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: #f5f2ee;
+  color: #8a9aaa;
+  font-size: 18px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+}
+
+.modalClose:hover {
+  background: #e74c3c;
+  color: white;
+  transform: rotate(90deg);
+}
+
+/* ===== آیکون ===== */
+.modalIcon {
+  font-size: 56px;
+  margin-bottom: 12px;
+  display: block;
+}
+
+/* ===== عنوان ===== */
+.modalTitle {
+  font-size: 22px;
+  font-weight: 700;
+  color: #c0392b;
+  margin-bottom: 8px;
+}
+
+/* ===== متن ===== */
+.modalText {
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  margin-bottom: 24px;
+}
+
+/* ===== دکمه‌ها ===== */
+.modalActions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modalBtnPrimary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px 24px;
+  background: linear-gradient(135deg, #2d7d6e, #4caf84);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+  width: 100%;
+}
+
+.modalBtnPrimary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(45, 125, 110, 0.3);
+}
+
+.modalBtnPrimary svg {
+  transition: transform 0.3s ease;
+}
+
+.modalBtnPrimary:hover svg {
+  transform: translateX(4px);
+}
+
+.modalBtnSecondary {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+  padding: 8px;
+}
+
+.modalBtnSecondary:hover {
+  color: var(--text-dark);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 480px) {
+  .modalContent {
+    padding: 32px 24px 28px;
+    margin: 0 12px;
+  }
+
+  .modalTitle {
+    font-size: 19px;
+  }
+
+  .modalIcon {
+    font-size: 44px;
+  }
+
+  .modalClose {
+    top: 12px;
+    left: 12px;
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+  }
+}
+
 @keyframes shake {
   0%,
   100% {
