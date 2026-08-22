@@ -44,49 +44,6 @@
   overflow: hidden;
 }
 
-/* ========== DECORATIVE ELEMENTS ========== */
-/* .decorativeCircle1 {
-  position: absolute;
-  top: -200px;
-  right: -200px;
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, rgba(46, 90, 136, 0.04), transparent 70%);
-  border-radius: 50%;
-  pointer-events: none;
-} */
-
-/* .decorativeCircle2 {
-  position: absolute;
-  bottom: -150px;
-  left: -150px;
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(
-    circle,
-    rgba(58, 139, 156, 0.04),
-    transparent 70%
-  );
-  border-radius: 50%;
-  pointer-events: none;
-} */
-
-/* .decorativeCircle3 {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 800px;
-  height: 800px;
-  background: radial-gradient(
-    circle,
-    rgba(245, 240, 235, 0.5),
-    transparent 70%
-  );
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-} */
-
 /* ========== PROGRESS ========== */
 .progressWrapper {
   width: 100%;
@@ -150,7 +107,6 @@
 /* ============================================
    WELCOME / INTRO PAGE
 ============================================ */
-
 .page {
   min-height: 100vh;
   position: relative;
@@ -297,14 +253,13 @@ p {
   border-radius: 18px;
   font-size: 18px;
   cursor: pointer;
-  
+
   transition: var(--transition);
 }
 
 .button:hover {
   transform: translateY(-4px);
 }
-
 
 @media (max-width: 900px) {
   .leftImage {

@@ -17,51 +17,6 @@ function Login() {
   const inputRefs = useRef([]);
   const navigate = useNavigate();
 
-  // ===== بررسی آیا از صفحه ثبت‌نام اومده =====
-  // useEffect(() => {
-  //   const fromSignup = localStorage.getItem("fromSignup") === "true";
-  //   if (fromSignup) {
-  //     setIsFromSignup(true);
-  //     // پاک کردن فلگ بعد از خوندن
-  //     localStorage.removeItem("fromSignup");
-
-  //     // ===== پاک کردن شماره قبلی =====
-  //     setPhone(""); // ← این خط رو اضافه کن
-
-  //     // اگر شماره قبلاً در ثبت‌نام ذخیره شده، بیارش
-  //     const savedPhone = localStorage.getItem("signupPhone");
-  //     if (savedPhone) {
-  //       setPhone(savedPhone);
-  //       localStorage.removeItem("signupPhone");
-  //     }
-  //   }
-  // }, []);
-
-  // ===== بررسی آیا از صفحه ثبت‌نام اومده =====
-  // useEffect(() => {
-  //   const fromSignup = localStorage.getItem("fromSignup") === "true";
-  //   if (fromSignup) {
-  //     setIsFromSignup(true);
-
-  //     // ===== پاک کردن فلگ =====
-  //     localStorage.removeItem("fromSignup");
-
-  //     // ===== پاک کردن شماره قبلی از localStorage =====
-  //     localStorage.removeItem("signupPhone"); // ← این رو اضافه کن
-
-  //     // ===== پاک کردن شماره از state =====
-  //     setPhone("");
-
-  //     // ===== فقط شماره جدید رو از جای دیگه نخون =====
-  //     // const savedPhone = localStorage.getItem("signupPhone"); // ← این رو کامنت کن
-  //     // if (savedPhone) {
-  //     //   setPhone(savedPhone);
-  //     //   localStorage.removeItem("signupPhone");
-  //     // }
-  //   }
-  // }, []);
-
-  // ===== بررسی آیا از صفحه ثبت‌نام اومده =====
   useEffect(() => {
     const fromSignup = localStorage.getItem("fromSignup") === "true";
 
@@ -88,19 +43,11 @@ function Login() {
   }, []);
 
   // ===== شبیه‌سازی دیتابیس =====
-  // در واقعیت این اطلاعات از backend میاد
-  // const registeredUsers = ["9123456789", "9134567890", "9145678901"];
   const [registeredUsers, setRegisteredUsers] = useState([
     "9123456789",
     "9134567890",
     "9145678901",
   ]);
-
-  // ===== بررسی وجود شماره در سیستم =====
-  // const checkUserExists = (phoneNumber) => {
-  //   const cleanPhone = phoneNumber.replace(/\D/g, "");
-  //   return registeredUsers.includes(cleanPhone);
-  // };
 
   // ===== بررسی وجود شماره در سیستم =====
   const checkUserExists = (phoneNumber) => {
@@ -137,8 +84,6 @@ function Login() {
       setIsLoading(false);
 
       // ===== اگر از ساین‌آپ اومده =====
-      // هدف: ساخت حساب کاربری جدید
-      // پس نیازی به چک کردن وجود شماره نیست
       if (isFromSignup) {
         setStep("code");
         setTimer(90);
@@ -147,8 +92,6 @@ function Login() {
       }
 
       // ===== حالت عادی لاگین =====
-      // هدف: ورود به حساب موجود
-      // پس باید چک کنیم شماره در سیستم هست یا نه
       if (checkUserExists(cleanPhone)) {
         setStep("code");
         setTimer(90);
@@ -158,102 +101,6 @@ function Login() {
       }
     }, 1000);
   };
-
-  // ===== مرحله اول: بررسی شماره =====
-  // const handleCheckPhone = () => {
-  //   setError("");
-  //   setShowSignupPrompt(false);
-
-  //   const cleanPhone = phone.replace(/\D/g, "");
-
-  //   // اعتبارسنجی شماره
-  //   if (!cleanPhone) {
-  //     setError("لطفاً شماره تماس را وارد کنید.");
-  //     return;
-  //   }
-
-  //   if (cleanPhone.length < 10) {
-  //     setError("لطفاً شماره تماس معتبر وارد کنید.");
-  //     return;
-  //   }
-
-  //   if (cleanPhone[0] !== "9") {
-  //     setError("شماره تماس باید با ۹ شروع شود. (مثال: ۹۱۲۳۴۵۶۷۸۹)");
-  //     return;
-  //   }
-
-  //   setIsLoading(true);
-
-  //   setTimeout(() => {
-  //     setIsLoading(false);
-
-  //     // ==========================================
-  //     // 🔴 مهم: اگر از ساین‌آپ اومده، مستقیم برو به کد تأیید
-  //     // ==========================================
-  //     if (isFromSignup) {
-  //       // ✅ بدون چک کردن وجود شماره، مستقیم کد ارسال کن
-  //       setStep("code");
-  //       setTimer(90);
-  //       console.log("📱 کد ارسال شد: 1234 (ساخت حساب جدید)");
-  //       return;
-  //     }
-
-  //     // ==========================================
-  //     // 🟢 حالت عادی: چک کردن وجود شماره
-  //     // ==========================================
-  //     if (checkUserExists(cleanPhone)) {
-  //       // شماره ثبت شده - ارسال کد
-  //       setStep("code");
-  //       setTimer(90);
-  //       console.log("📱 کد ارسال شد: 1234 (ورود)");
-  //     } else {
-  //       // شماره ثبت نشده - نمایش پیام
-  //       setShowSignupPrompt(true);
-  //     }
-  //   }, 1000);
-  // };
-
-  // ===== مرحله اول: بررسی شماره =====
-  // const handleCheckPhone = () => {
-  //   setError("");
-  //   setShowSignupPrompt(false);
-
-  //   const cleanPhone = phone.replace(/\D/g, "");
-
-  //   // اعتبارسنجی شماره
-  //   if (!cleanPhone) {
-  //     setError("لطفاً شماره تماس را وارد کنید.");
-  //     return;
-  //   }
-
-  //   if (cleanPhone.length < 10) {
-  //     setError("لطفاً شماره تماس معتبر وارد کنید.");
-  //     return;
-  //   }
-
-  //   if (cleanPhone[0] !== "9") {
-  //     setError("شماره تماس باید با ۹ شروع شود. (مثال: ۹۱۲۳۴۵۶۷۸۹)");
-  //     return;
-  //   }
-
-  //   // بررسی وجود شماره در سیستم
-  //   setIsLoading(true);
-
-  //   // شبیه‌سازی درخواست به سرور
-  //   setTimeout(() => {
-  //     setIsLoading(false);
-
-  //     if (checkUserExists(cleanPhone)) {
-  //       // شماره ثبت شده - ارسال کد
-  //       setStep("code");
-  //       setTimer(90);
-  //       console.log("کد ارسال شد: 1234");
-  //     } else {
-  //       // شماره ثبت نشده - نمایش پیام
-  //       setShowSignupPrompt(true);
-  //     }
-  //   }, 1000);
-  // };
 
   // ===== مدیریت کد تأیید =====
   const handleCodeChange = (index, value) => {
@@ -369,75 +216,6 @@ function Login() {
     }, 1500);
   };
 
-  // const handleVerifyCode = () => {
-  //   setError("");
-
-  //   if (!isCodeComplete) {
-  //     setError("لطفاً کد ۴ رقمی رو کامل وارد کن");
-  //     return;
-  //   }
-
-  //   if (codeString !== "1234") {
-  //     setError("کد وارد شده اشتباه است. دوباره تلاش کن");
-  //     setCode(["", "", "", ""]);
-  //     setTimeout(() => {
-  //       inputRefs.current[0]?.focus();
-  //     }, 100);
-  //     return;
-  //   }
-
-  //   // تأیید موفق - ورود به پنل
-  //   setIsLoading(true);
-
-  //   setTimeout(() => {
-  //     setIsLoading(false);
-
-  //     // ===== اگر از ثبت‌نام اومده =====
-  //     if (isFromSignup) {
-  //       // ذخیره کاربر جدید
-  //       const newUserData = {
-  //         phone: phone.replace(/\D/g, ""),
-  //         answers: JSON.parse(
-  //           localStorage.getItem("userOnboardingAnswers") || "{}"
-  //         ),
-  //         registerDate: new Date().toISOString(),
-  //       };
-  //       // ذخیره در دیتابیس محلی (در واقعیت باید به backend بفرستی)
-  //       const allUsers = JSON.parse(localStorage.getItem("allUsers") || "[]");
-  //       allUsers.push(newUserData);
-  //       localStorage.setItem("allUsers", JSON.stringify(allUsers));
-
-  //       // اضافه کردن به لیست کاربران ثبت‌شده
-  //       registeredUsers.push(phone.replace(/\D/g, ""));
-  //     }
-
-  //     const userData = {
-  //       phone: phone.replace(/\D/g, ""),
-  //       loginDate: new Date().toISOString(),
-  //     };
-  //     localStorage.setItem("userLoggedIn", JSON.stringify(userData));
-  //     navigate("/dashboard");
-  //   }, 1500);
-
-  //   // setTimeout(() => {
-  //   //   setIsLoading(false);
-  //   //   const userData = {
-  //   //     phone: phone.replace(/\D/g, ""),
-  //   //     loginDate: new Date().toISOString(),
-  //   //   };
-  //   //   localStorage.setItem("userLoggedIn", JSON.stringify(userData));
-  //   //   navigate("/dashboard");
-  //   // }, 1500);
-  // };
-
-  // // ===== رفتن به صفحه ثبت‌نام =====
-  // const handleGoToSignup = () => {
-  //   // ذخیره شماره برای استفاده در ثبت‌نام
-  //   localStorage.setItem("signupPhone", phone.replace(/\D/g, ""));
-  //   navigate("/signup");
-  // };
-
-  // ===== رفتن به صفحه ثبت‌نام =====
   const handleGoToSignup = () => {
     localStorage.setItem("signupPhone", phone.replace(/\D/g, ""));
     // فلگ برای اینکه بدونیم از ثبت‌نام برمیگردیم
