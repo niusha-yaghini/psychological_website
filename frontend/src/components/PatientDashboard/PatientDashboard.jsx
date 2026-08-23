@@ -58,12 +58,6 @@ function PatientDashboard() {
       path: "/dashboard",
     },
     {
-      id: "dashboard2",
-      label: "داشبورد",
-      icon: <FaHome />,
-      path: "/dashboard2",
-    },
-    {
       id: "appointments",
       label: "نوبت‌های من",
       icon: <FaCalendarAlt />,
@@ -122,7 +116,7 @@ function PatientDashboard() {
   const renderContent = () => {
     switch (activeTab) {
       // case "dashboard2":
-        // return <DashboardContent2 userData={userData} />;
+      // return <DashboardContent2 userData={userData} />;
       case "dashboard":
         return <DashboardContent userData={userData} />;
       case "appointments":
@@ -156,11 +150,11 @@ function PatientDashboard() {
         <div className={styles.sidebarHeader}>
           <div className={styles.logoWrapper}>
             <img src={logo} alt="روان کوک" className={styles.logoImage} />
-            {!isCollapsed && (
+            {/* {!isCollapsed && (
               <span className={styles.logoText}>
                 روان<span>کوک</span>
               </span>
-            )}
+            )} */}
           </div>
           <button
             className={styles.collapseBtn}
@@ -242,14 +236,14 @@ function PatientDashboard() {
 
           <div className={styles.headerRight}>
             {/* جستجو */}
-            <div className={styles.searchWrapper}>
+            {/* <div className={styles.searchWrapper}>
               <FaSearch className={styles.searchIcon} />
               <input
                 type="text"
                 className={styles.searchInput}
                 placeholder="جستجو..."
               />
-            </div>
+            </div> */}
 
             {/* نوتیفیکیشن */}
             <button className={styles.notificationBtn}>
@@ -264,14 +258,14 @@ function PatientDashboard() {
                 alt="پروفایل"
                 className={styles.userAvatar}
               />
-              {!isCollapsed && (
+              {/* {!isCollapsed && (
                 <div className={styles.userInfo}>
                   <span className={styles.userName}>
                     {userData?.phone || "کاربر"}
                   </span>
                   <span className={styles.userRole}>مشتری</span>
                 </div>
-              )}
+              )} */}
             </div>
           </div>
         </header>
@@ -380,10 +374,10 @@ function DashboardContent({ userData }) {
   // ];
 
   const stats = [
-    { label: "جلسات برگزار شده", value: 8},
-    { label: "جلسات پیش‌رو", value: 3},
-    { label: "پیشرفت کلی", value: "۶۵٪"},
-    { label: "یادداشت‌ها", value: 12},
+    { label: "جلسات برگزار شده", value: 8 },
+    { label: "جلسات پیش‌رو", value: 3 },
+    { label: "پیشرفت کلی", value: "۶۵٪" },
+    { label: "یادداشت‌ها", value: 12 },
   ];
 
   return (
@@ -393,8 +387,8 @@ function DashboardContent({ userData }) {
         {/* خوش‌آمدگویی */}
         <div className={styles.welcomeBanner}>
           <div className={styles.welcomeText}>
-            {/* <h2>سلام 👋</h2> */}
-            <p>خوش برگشتی! امروز چطور می‌تونی بهت کمک کنیم؟</p>
+            <h2>سلام</h2>
+            <p>خوش برگشتی! امروز چطور می‌تونیم بهت کمک کنیم؟</p>
           </div>
           {/* <div className={styles.welcomeImage}>🌱</div> */}
         </div>
@@ -403,12 +397,12 @@ function DashboardContent({ userData }) {
         <div className={styles.statsGrid}>
           {stats.map((stat, index) => (
             <div key={index} className={styles.statCard}>
-              <div
+              {/* <div
                 className={styles.statIcon}
                 style={{ background: stat.color }}
               >
                 {stat.icon}
-              </div>
+              </div> */}
               <div className={styles.statInfo}>
                 <span className={styles.statValue}>{stat.value}</span>
                 <span className={styles.statLabel}>{stat.label}</span>
@@ -594,26 +588,246 @@ function DashboardContent({ userData }) {
 // ============================================
 // COMPONENT: Appointments Content
 // ============================================
+// function AppointmentsContent() {
+//   return (
+//     <div className={styles.pageContent}>
+//       <h2>نوبت‌های من</h2>
+//       <p>لیست نوبت‌های رزرو شده و درخواست‌های جدید</p>
+//       <div className={styles.appointmentsList}>
+//         <div className={styles.appointmentCard}>
+//           <div className={styles.appointmentStatus}>تأیید شده</div>
+//           <h4>جلسه مشاوره فردی</h4>
+//           <p>📅 ۲۵ آذر ۱۴۰۳ - ۱۶:۰۰</p>
+//           <p>👤 دکتر محمد رضایی</p>
+//         </div>
+//         <div className={styles.appointmentCard}>
+//           <div className={styles.appointmentStatus}>در انتظار</div>
+//           <h4>جلسه زوج درمانی</h4>
+//           <p>📅 ۲۸ آذر ۱۴۰۳ - ۱۸:۰۰</p>
+//           <p>👤 دکتر سارا احمدی</p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+// ============================================
+// COMPONENT: Appointments Content
+// ============================================
 function AppointmentsContent() {
+  const [activeFilter, setActiveFilter] = useState("all");
+
+  const allAppointments = [
+    {
+      id: 1,
+      type: "جلسه مشاوره فردی",
+      doctor: "دکتر محمد رضایی",
+      date: "۲۵ آذر ۱۴۰۳",
+      time: "۱۶:۰۰ - ۱۷:۰۰",
+      status: "confirmed", // confirmed | pending | completed | cancelled
+      isOnline: true,
+    },
+    {
+      id: 2,
+      type: "جلسه زوج درمانی",
+      doctor: "دکتر سارا احمدی",
+      date: "۲۸ آذر ۱۴۰۳",
+      time: "۱۸:۰۰ - ۱۹:۰۰",
+      status: "pending",
+      isOnline: false,
+    },
+    {
+      id: 3,
+      type: "جلسه مشاوره فردی",
+      doctor: "دکتر محمد رضایی",
+      date: "۲۰ آذر ۱۴۰۳",
+      time: "۱۵:۰۰ - ۱۶:۰۰",
+      status: "completed",
+      isOnline: true,
+    },
+  ];
+
+  // ===== فیلتر کردن =====
+  const getFilteredAppointments = () => {
+    if (activeFilter === "all") return allAppointments;
+    return allAppointments.filter((item) => item.status === activeFilter);
+  };
+
+  const filteredAppointments = getFilteredAppointments();
+
+  // ===== وضعیت‌ها =====
+  const filters = [
+    { id: "all", label: "همه" },
+    { id: "confirmed", label: "تأیید شده" },
+    { id: "pending", label: "در انتظار" },
+    { id: "completed", label: "انجام شده" },
+  ];
+
+  const getStatusInfo = (status) => {
+    const statusMap = {
+      confirmed: {
+        label: "تأیید شده",
+        className: styles.statusConfirmed,
+        // icon: "✅",
+      },
+      pending: {
+        label: "در انتظار تأیید",
+        className: styles.statusPending,
+        // icon: "⏳",
+      },
+      completed: {
+        label: "انجام شده",
+        className: styles.statusCompleted,
+        // icon: "✔️",
+      },
+      cancelled: {
+        label: "لغو شده",
+        className: styles.statusCancelled,
+        // icon: "❌",
+      },
+    };
+    return statusMap[status] || statusMap.pending;
+  };
+
   return (
     <div className={styles.pageContent}>
-      <h2>نوبت‌های من</h2>
-      <p>لیست نوبت‌های رزرو شده و درخواست‌های جدید</p>
-      {/* محتوای نوبت‌ها */}
-      <div className={styles.appointmentsList}>
-        <div className={styles.appointmentCard}>
-          <div className={styles.appointmentStatus}>تأیید شده</div>
-          <h4>جلسه مشاوره فردی</h4>
-          <p>📅 ۲۵ آذر ۱۴۰۳ - ۱۶:۰۰</p>
-          <p>👤 دکتر محمد رضایی</p>
+      {/* هدر بخش */}
+      <div className={styles.pageHeader}>
+        <div className={styles.headerInfo}>
+          <h2>نوبت‌های من</h2>
+          <p>لیست نوبت‌های رزرو شده و درخواست‌های جدید</p>
         </div>
-        <div className={styles.appointmentCard}>
-          <div className={styles.appointmentStatus}>در انتظار</div>
-          <h4>جلسه زوج درمانی</h4>
-          <p>📅 ۲۸ آذر ۱۴۰۳ - ۱۸:۰۰</p>
-          <p>👤 دکتر سارا احمدی</p>
-        </div>
+        <button className={styles.newAppointmentBtn}>
+          <span>+</span>
+          درخواست نوبت جدید
+        </button>
       </div>
+
+      {/* فیلترها */}
+      {/* <div className={styles.filterTabs}>
+        <button className={`${styles.filterTab} ${styles.active}`}>همه</button>
+        <button className={styles.filterTab}>تأیید شده</button>
+        <button className={styles.filterTab}>در انتظار</button>
+        <button className={styles.filterTab}>انجام شده</button>
+      </div> */}
+
+      {/* فیلترها */}
+      <div className={styles.filterTabs}>
+        {filters.map((filter) => (
+          <button
+            key={filter.id}
+            className={`${styles.filterTab} ${
+              activeFilter === filter.id ? styles.active : ""
+            }`}
+            onClick={() => setActiveFilter(filter.id)}
+          >
+            {filter.label}
+            {filter.id !== "all" && (
+              <span className={styles.filterCount}>
+                {
+                  allAppointments.filter((item) => item.status === filter.id)
+                    .length
+                }
+              </span>
+            )}
+          </button>
+        ))}
+      </div>
+
+      {/* لیست نوبت‌ها */}
+      <div className={styles.appointmentsList}>
+        {filteredAppointments.length > 0 ? (
+          filteredAppointments.map((appointment) => {
+            // {filteredAppointments.map((appointment) => {
+            const statusInfo = getStatusInfo(appointment.status);
+            return (
+              <div key={appointment.id} className={styles.appointmentCard}>
+                {/* وضعیت */}
+                <div className={styles.appointmentStatusBar}>
+                  <span
+                    className={`${styles.statusBadge} ${statusInfo.className}`}
+                  >
+                    <span className={styles.statusIcon}>{statusInfo.icon}</span>
+                    {statusInfo.label}
+                  </span>
+                  {appointment.isOnline && (
+                    <span className={styles.onlineBadge}>🖥️ آنلاین</span>
+                  )}
+                </div>
+
+                {/* محتوای اصلی */}
+                <div className={styles.appointmentBody}>
+                  <div className={styles.appointmentInfo}>
+                    <h4>{appointment.type}</h4>
+                    <div className={styles.appointmentMeta}>
+                      <span className={styles.metaItem}>
+                        <span className={styles.metaIcon}>👤</span>
+                        {appointment.doctor}
+                      </span>
+                      <span className={styles.metaDivider}>•</span>
+                      <span className={styles.metaItem}>
+                        <span className={styles.metaIcon}>📅</span>
+                        {appointment.date}
+                      </span>
+                      <span className={styles.metaDivider}>•</span>
+                      <span className={styles.metaItem}>
+                        <span className={styles.metaIcon}>⏰</span>
+                        {appointment.time}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* دکمه‌های اکشن */}
+                  <div className={styles.appointmentActions}>
+                    {appointment.status === "confirmed" && (
+                      <button className={styles.btnJoin}>
+                        <span>▶</span>
+                        ورود به جلسه
+                      </button>
+                    )}
+                    {appointment.status === "pending" && (
+                      <button className={styles.btnCancel}>لغو درخواست</button>
+                    )}
+                    {appointment.status === "completed" && (
+                      <button className={styles.btnReview}>
+                        📝 ثبت بازخورد
+                      </button>
+                    )}
+                    <button className={styles.btnMore}>
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                      >
+                        <circle cx="12" cy="6" r="2" fill="currentColor" />
+                        <circle cx="12" cy="12" r="2" fill="currentColor" />
+                        <circle cx="12" cy="18" r="2" fill="currentColor" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            );
+          })
+        ) : (
+          <div className={styles.emptyState}>
+            <span className={styles.emptyIcon}>📭</span>
+            <h3>هیچ نوبتی در این دسته وجود ندارد</h3>
+            <p>برای شروع، اولین نوبت خود را رزرو کنید.</p>
+          </div>
+        )}
+      </div>
+
+      {/* کارت خالی (در صورت نبود نوبت) */}
+      {allAppointments.length === 0 && (
+        <div className={styles.emptyState}>
+          <span className={styles.emptyIcon}>📭</span>
+          <h3>هیچ نوبتی ثبت نشده</h3>
+          <p>برای شروع، اولین نوبت خود را رزرو کنید.</p>
+          <button className={styles.emptyBtn}>درخواست نوبت جدید</button>
+        </div>
+      )}
     </div>
   );
 }
