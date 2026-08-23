@@ -1254,7 +1254,15 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess }) {
   ];
 
   // ساعت‌های قابل انتخاب
-  const timeSlots = ["۱۰:۰۰", "۱۱:۰۰", "۱۲:۰۰", "۱۴:۰۰", "۱۵:۰۰", "۱۶:۰۰", "۱۷:۰۰"];
+  const timeSlots = [
+    "۱۰:۰۰",
+    "۱۱:۰۰",
+    "۱۲:۰۰",
+    "۱۴:۰۰",
+    "۱۵:۰۰",
+    "۱۶:۰۰",
+    "۱۷:۰۰",
+  ];
 
   if (!isOpen) return null;
 
@@ -1271,17 +1279,23 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess }) {
 
         {/* Progress Steps */}
         <div className={styles.modalSteps}>
-          <div className={`${styles.stepItem} ${step >= 1 ? styles.active : ""}`}>
+          <div
+            className={`${styles.stepItem} ${step >= 1 ? styles.active : ""}`}
+          >
             <span className={styles.stepNumber}>۱</span>
             <span className={styles.stepLabel}>انتخاب روانشناس</span>
           </div>
           <div className={styles.stepLine} />
-          <div className={`${styles.stepItem} ${step >= 2 ? styles.active : ""}`}>
+          <div
+            className={`${styles.stepItem} ${step >= 2 ? styles.active : ""}`}
+          >
             <span className={styles.stepNumber}>۲</span>
             <span className={styles.stepLabel}>انتخاب زمان</span>
           </div>
           <div className={styles.stepLine} />
-          <div className={`${styles.stepItem} ${step >= 3 ? styles.active : ""}`}>
+          <div
+            className={`${styles.stepItem} ${step >= 3 ? styles.active : ""}`}
+          >
             <span className={styles.stepNumber}>۳</span>
             <span className={styles.stepLabel}>تأیید نهایی</span>
           </div>
@@ -1307,14 +1321,18 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess }) {
                   </div>
                   <div className={styles.doctorInfo}>
                     <h4>{doctor.name}</h4>
-                    <span className={styles.doctorSpecialty}>{doctor.specialty}</span>
+                    <span className={styles.doctorSpecialty}>
+                      {doctor.specialty}
+                    </span>
                     <div className={styles.doctorMeta}>
                       <span>📅 {doctor.experience}</span>
                       <span>⭐ {doctor.rating}</span>
                     </div>
                     <div className={styles.doctorDays}>
                       {doctor.availableDays.map((day) => (
-                        <span key={day} className={styles.dayTag}>{day}</span>
+                        <span key={day} className={styles.dayTag}>
+                          {day}
+                        </span>
                       ))}
                     </div>
                   </div>
@@ -1335,20 +1353,25 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess }) {
             </p>
             <div className={styles.dateTimeSection}>
               <div className={styles.dateGrid}>
-                {["شنبه", "یکشنبه", "دوشنبه", "سه‌شنبه", "چهارشنبه", "پنجشنبه"].map(
-                  (day) => (
-                    <button
-                      key={day}
-                      className={`${styles.dateBtn} ${
-                        selectedDate === day ? styles.selected : ""
-                      }`}
-                      onClick={() => setSelectedDate(day)}
-                    >
-                      <span className={styles.dateDay}>{day}</span>
-                      <span className={styles.dateNum}>۲۵</span>
-                    </button>
-                  )
-                )}
+                {[
+                  "شنبه",
+                  "یکشنبه",
+                  "دوشنبه",
+                  "سه‌شنبه",
+                  "چهارشنبه",
+                  "پنجشنبه",
+                ].map((day) => (
+                  <button
+                    key={day}
+                    className={`${styles.dateBtn} ${
+                      selectedDate === day ? styles.selected : ""
+                    }`}
+                    onClick={() => setSelectedDate(day)}
+                  >
+                    <span className={styles.dateDay}>{day}</span>
+                    <span className={styles.dateNum}>۲۵</span>
+                  </button>
+                ))}
               </div>
 
               <div className={styles.timeGrid}>
@@ -1377,11 +1400,15 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess }) {
               <div className={styles.confirmDetails}>
                 <div className={styles.confirmItem}>
                   <span className={styles.confirmLabel}>روانشناس:</span>
-                  <span className={styles.confirmValue}>{selectedDoctor?.name}</span>
+                  <span className={styles.confirmValue}>
+                    {selectedDoctor?.name}
+                  </span>
                 </div>
                 <div className={styles.confirmItem}>
                   <span className={styles.confirmLabel}>تخصص:</span>
-                  <span className={styles.confirmValue}>{selectedDoctor?.specialty}</span>
+                  <span className={styles.confirmValue}>
+                    {selectedDoctor?.specialty}
+                  </span>
                 </div>
                 <div className={styles.confirmItem}>
                   <span className={styles.confirmLabel}>تاریخ:</span>
@@ -1440,7 +1467,7 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess }) {
                   status: "pending",
                 };
                 // اضافه کردن به لیست نوبت‌ها
-                // ... 
+                // ...
                 onSuccess?.(newAppointment);
                 onClose();
               }}
@@ -1457,19 +1484,360 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess }) {
 // ============================================
 // COMPONENT: Sessions Content
 // ============================================
+// function SessionsContent() {
+//   return (
+//     <div className={styles.pageContent}>
+//       <h2>جلسات آنلاین</h2>
+//       <p>جلسات آینده و برگزار شده</p>
+//       <div className={styles.sessionsGrid}>
+//         <div className={styles.sessionCard}>
+//           <div className={styles.sessionTime}>۱۶:۰۰</div>
+//           <h4>جلسه فردی</h4>
+//           <p>با دکتر رضایی</p>
+//           <button className={styles.joinBtn}>اتصال</button>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+// ============================================
+// COMPONENT: Sessions Content
+// ============================================
 function SessionsContent() {
+  const [activeTab, setActiveTab] = useState("upcoming"); // upcoming | past
+  const [selectedSession, setSelectedSession] = useState(null);
+
+  // داده‌های نمونه
+  const sessions = [
+    {
+      id: 1,
+      title: "جلسه مشاوره فردی",
+      doctor: "دکتر محمد رضایی",
+      doctorImage: "/images/doctors/doctor1.png",
+      date: "۱۴۰۳/۰۹/۲۵",
+      time: "۱۶:۰۰",
+      duration: "۶۰ دقیقه",
+      status: "upcoming", // upcoming | ongoing | completed | cancelled
+      isOnline: true,
+      meetingLink: "https://meet.google.com/abc-defg-hij",
+      type: "individual",
+    },
+    {
+      id: 2,
+      title: "جلسه زوج درمانی",
+      doctor: "دکتر سارا احمدی",
+      doctorImage: "/images/doctors/doctor2.png",
+      date: "۱۴۰۳/۰۹/۲۸",
+      time: "۱۸:۰۰",
+      duration: "۹۰ دقیقه",
+      status: "upcoming",
+      isOnline: true,
+      meetingLink: "https://meet.google.com/klm-nopq-rst",
+      type: "couple",
+    },
+    {
+      id: 3,
+      title: "جلسه مشاوره فردی",
+      doctor: "دکتر محمد رضایی",
+      doctorImage: "/images/doctors/doctor1.png",
+      date: "۱۴۰۳/۰۹/۲۰",
+      time: "۱۵:۰۰",
+      duration: "۶۰ دقیقه",
+      status: "completed",
+      isOnline: true,
+      meetingLink: "https://meet.google.com/xyz-uvwx-yza",
+      type: "individual",
+    },
+    {
+      id: 4,
+      title: "جلسه مشاوره نوجوان",
+      doctor: "دکتر علی کریمی",
+      doctorImage: "/images/doctors/doctor3.png",
+      date: "۱۴۰۳/۰۹/۱۰",
+      time: "۱۰:۰۰",
+      duration: "۶۰ دقیقه",
+      status: "cancelled",
+      isOnline: true,
+      meetingLink: null,
+      type: "teen",
+    },
+  ];
+
+  // ===== فیلتر کردن جلسات =====
+  const getFilteredSessions = () => {
+    if (activeTab === "upcoming") {
+      return sessions.filter(
+        (s) => s.status === "upcoming" || s.status === "ongoing"
+      );
+    }
+    return sessions.filter(
+      (s) => s.status === "completed" || s.status === "cancelled"
+    );
+  };
+
+  const filteredSessions = getFilteredSessions();
+
+  // ===== وضعیت‌ها =====
+  const getStatusInfo = (status) => {
+    const statusMap = {
+      upcoming: {
+        label: "در انتظار",
+        className: styles.sessionUpcoming,
+        icon: "⏳",
+      },
+      ongoing: {
+        label: "در حال برگزاری",
+        className: styles.sessionOngoing,
+        icon: "🔴",
+      },
+      completed: {
+        label: "انجام شده",
+        className: styles.sessionCompleted,
+        icon: "✅",
+      },
+      cancelled: {
+        label: "لغو شده",
+        className: styles.sessionCancelled,
+        icon: "❌",
+      },
+    };
+    return statusMap[status] || statusMap.upcoming;
+  };
+
+  // ===== دریافت آیکون نوع جلسه =====
+  const getTypeIcon = (type) => {
+    const typeMap = {
+      individual: "🧑‍⚕️",
+      couple: "💑",
+      teen: "🧒",
+      family: "👨‍👩‍👧‍👦",
+    };
+    return typeMap[type] || "🧑‍⚕️";
+  };
+
+  // ===== تایمر شمارش معکوس (برای جلسات آینده) =====
+  const [timeLeft, setTimeLeft] = useState({});
+
+  useEffect(() => {
+    const intervals = {};
+    sessions.forEach((session) => {
+      if (session.status === "upcoming") {
+        const targetDate = new Date(session.date + " " + session.time);
+        intervals[session.id] = setInterval(() => {
+          const now = new Date();
+          const diff = targetDate - now;
+          if (diff <= 0) {
+            clearInterval(intervals[session.id]);
+            // به‌روزرسانی وضعیت به ongoing
+          } else {
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            setTimeLeft((prev) => ({
+              ...prev,
+              [session.id]: { hours, minutes },
+            }));
+          }
+        }, 1000);
+      }
+    });
+    return () => {
+      Object.values(intervals).forEach((interval) => clearInterval(interval));
+    };
+  }, []);
+
   return (
     <div className={styles.pageContent}>
-      <h2>جلسات آنلاین</h2>
-      <p>جلسات آینده و برگزار شده</p>
-      <div className={styles.sessionsGrid}>
-        <div className={styles.sessionCard}>
-          <div className={styles.sessionTime}>۱۶:۰۰</div>
-          <h4>جلسه فردی</h4>
-          <p>با دکتر رضایی</p>
-          <button className={styles.joinBtn}>اتصال</button>
+      {/* هدر بخش */}
+      <div className={styles.pageHeader}>
+        <div className={styles.headerInfo}>
+          <h2>🎥 جلسات آنلاین</h2>
+          <p>مدیریت و شرکت در جلسات مجازی</p>
+        </div>
+        <div className={styles.sessionStats}>
+          <span className={styles.statItem}>
+            <span className={styles.statNumber}>۳</span>
+            <span className={styles.statLabel}>جلسه پیش‌رو</span>
+          </span>
+          <span className={styles.statDivider}>|</span>
+          <span className={styles.statItem}>
+            <span className={styles.statNumber}>۱۲</span>
+            <span className={styles.statLabel}>جلسه برگزار شده</span>
+          </span>
         </div>
       </div>
+
+      {/* تب‌ها */}
+      <div className={styles.filterTabs}>
+        <button
+          className={`${styles.filterTab} ${
+            activeTab === "upcoming" ? styles.active : ""
+          }`}
+          onClick={() => setActiveTab("upcoming")}
+        >
+          📅 جلسات پیش‌رو
+        </button>
+        <button
+          className={`${styles.filterTab} ${
+            activeTab === "past" ? styles.active : ""
+          }`}
+          onClick={() => setActiveTab("past")}
+        >
+          📋 تاریخچه جلسات
+        </button>
+      </div>
+
+      {/* لیست جلسات */}
+      <div className={styles.sessionsList}>
+        {filteredSessions.length > 0 ? (
+          filteredSessions.map((session) => {
+            const statusInfo = getStatusInfo(session.status);
+            const isUpcoming =
+              session.status === "upcoming" || session.status === "ongoing";
+            const timeLeftData = timeLeft[session.id];
+
+            return (
+              <div key={session.id} className={styles.sessionCard}>
+                {/* هدر کارت */}
+                <div className={styles.sessionCardHeader}>
+                  <div className={styles.sessionDoctor}>
+                    <img
+                      src={session.doctorImage}
+                      alt={session.doctor}
+                      className={styles.sessionDoctorAvatar}
+                    />
+                    <div>
+                      <h4>{session.doctor}</h4>
+                      <span className={styles.sessionType}>
+                        {getTypeIcon(session.type)} {session.title}
+                      </span>
+                    </div>
+                  </div>
+                  <span
+                    className={`${styles.sessionStatus} ${statusInfo.className}`}
+                  >
+                    <span className={styles.statusDot}></span>
+                    {statusInfo.label}
+                  </span>
+                </div>
+
+                {/* جزئیات جلسه */}
+                <div className={styles.sessionDetails}>
+                  <div className={styles.sessionMeta}>
+                    <div className={styles.metaGroup}>
+                      <span className={styles.metaIcon}>📅</span>
+                      <span>{session.date}</span>
+                    </div>
+                    <div className={styles.metaGroup}>
+                      <span className={styles.metaIcon}>⏰</span>
+                      <span>
+                        {session.time} - {session.duration}
+                      </span>
+                    </div>
+                    <div className={styles.metaGroup}>
+                      <span className={styles.metaIcon}>🔗</span>
+                      <span>جلسه آنلاین</span>
+                    </div>
+                  </div>
+
+                  {/* تایمر شمارش معکوس */}
+                  {isUpcoming && timeLeftData && (
+                    <div className={styles.sessionTimer}>
+                      <span className={styles.timerLabel}>زمان تا شروع:</span>
+                      <div className={styles.timerDigits}>
+                        <span className={styles.timerDigit}>
+                          {String(timeLeftData.hours).padStart(2, "0")}
+                          <span className={styles.timerUnit}>ساعت</span>
+                        </span>
+                        <span className={styles.timerSeparator}>:</span>
+                        <span className={styles.timerDigit}>
+                          {String(timeLeftData.minutes).padStart(2, "0")}
+                          <span className={styles.timerUnit}>دقیقه</span>
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* دکمه‌های اکشن */}
+                <div className={styles.sessionActions}>
+                  {session.status === "upcoming" && (
+                    <>
+                      <button className={styles.btnJoinSession}>
+                        <span>▶</span>
+                        ورود به جلسه
+                      </button>
+                      <button className={styles.btnRemind}>🔔 یادآوری</button>
+                    </>
+                  )}
+                  {session.status === "ongoing" && (
+                    <button className={styles.btnJoinNow}>
+                      <span className={styles.pulseDot}></span>
+                      ورود به جلسه (در حال برگزاری)
+                    </button>
+                  )}
+                  {session.status === "completed" && (
+                    <>
+                      <button className={styles.btnViewRecord}>
+                        📹 مشاهده ضبط جلسه
+                      </button>
+                      <button className={styles.btnFeedback}>
+                        📝 ثبت بازخورد
+                      </button>
+                    </>
+                  )}
+                  {session.status === "cancelled" && (
+                    <button className={styles.btnRescheduleSession}>
+                      🔄 رزرو مجدد
+                    </button>
+                  )}
+                  <button className={styles.btnMore}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                      <circle cx="12" cy="6" r="2" fill="currentColor" />
+                      <circle cx="12" cy="12" r="2" fill="currentColor" />
+                      <circle cx="12" cy="18" r="2" fill="currentColor" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            );
+          })
+        ) : (
+          <div className={styles.emptyState}>
+            <span className={styles.emptyIcon}>🎥</span>
+            <h3>هیچ جلسه‌ای در این دسته وجود ندارد</h3>
+            <p>
+              {activeTab === "upcoming"
+                ? "شما هیچ جلسه پیش‌رویی ندارید."
+                : "هنوز جلسه برگزار شده‌ای وجود ندارد."}
+            </p>
+          </div>
+        )}
+      </div>
+
+      {/* جلسه بعدی - کارت ویژه */}
+      {activeTab === "upcoming" &&
+        sessions.some((s) => s.status === "upcoming") && (
+          <div className={styles.nextSessionBanner}>
+            <div className={styles.nextSessionContent}>
+              <span className={styles.nextSessionLabel}>⏰ جلسه بعدی شما</span>
+              <h3>{sessions.find((s) => s.status === "upcoming")?.title}</h3>
+              <p>با {sessions.find((s) => s.status === "upcoming")?.doctor}</p>
+              <div className={styles.nextSessionTime}>
+                <span>
+                  📅 {sessions.find((s) => s.status === "upcoming")?.date}
+                </span>
+                <span>
+                  ⏰ {sessions.find((s) => s.status === "upcoming")?.time}
+                </span>
+              </div>
+            </div>
+            <button className={styles.btnNextSession}>
+              ورود به جلسه
+              <span>→</span>
+            </button>
+          </div>
+        )}
     </div>
   );
 }
