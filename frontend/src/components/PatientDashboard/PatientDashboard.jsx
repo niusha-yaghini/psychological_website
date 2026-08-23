@@ -614,43 +614,355 @@ function DashboardContent({ userData }) {
 // ============================================
 // COMPONENT: Appointments Content
 // ============================================
+// function AppointmentsContent() {
+//   const [activeFilter, setActiveFilter] = useState("all");
+
+//   const allAppointments = [
+//     {
+//       id: 1,
+//       type: "جلسه مشاوره فردی",
+//       doctor: "دکتر محمد رضایی",
+//       date: "۲۵ آذر ۱۴۰۳",
+//       time: "۱۶:۰۰ - ۱۷:۰۰",
+//       status: "confirmed", // confirmed | pending | completed | cancelled
+//       isOnline: true,
+//     },
+//     {
+//       id: 2,
+//       type: "جلسه زوج درمانی",
+//       doctor: "دکتر سارا احمدی",
+//       date: "۲۸ آذر ۱۴۰۳",
+//       time: "۱۸:۰۰ - ۱۹:۰۰",
+//       status: "pending",
+//       isOnline: false,
+//     },
+//     {
+//       id: 3,
+//       type: "جلسه مشاوره فردی",
+//       doctor: "دکتر محمد رضایی",
+//       date: "۲۰ آذر ۱۴۰۳",
+//       time: "۱۵:۰۰ - ۱۶:۰۰",
+//       status: "completed",
+//       isOnline: true,
+//     },
+//   ];
+
+//   // ===== فیلتر کردن =====
+//   const getFilteredAppointments = () => {
+//     if (activeFilter === "all") return allAppointments;
+//     return allAppointments.filter((item) => item.status === activeFilter);
+//   };
+
+//   const filteredAppointments = getFilteredAppointments();
+
+//   // ===== وضعیت‌ها =====
+//   const filters = [
+//     { id: "all", label: "همه" },
+//     { id: "confirmed", label: "تأیید شده" },
+//     { id: "pending", label: "در انتظار" },
+//     { id: "completed", label: "انجام شده" },
+//   ];
+
+//   const getStatusInfo = (status) => {
+//     const statusMap = {
+//       confirmed: {
+//         label: "تأیید شده",
+//         className: styles.statusConfirmed,
+//         // icon: "✅",
+//       },
+//       pending: {
+//         label: "در انتظار تأیید",
+//         className: styles.statusPending,
+//         // icon: "⏳",
+//       },
+//       completed: {
+//         label: "انجام شده",
+//         className: styles.statusCompleted,
+//         // icon: "✔️",
+//       },
+//       cancelled: {
+//         label: "لغو شده",
+//         className: styles.statusCancelled,
+//         // icon: "❌",
+//       },
+//     };
+//     return statusMap[status] || statusMap.pending;
+//   };
+
+//   return (
+//     <div className={styles.pageContent}>
+//       {/* هدر بخش */}
+//       <div className={styles.pageHeader}>
+//         <div className={styles.headerInfo}>
+//           <h2>نوبت‌های من</h2>
+//           <p>لیست نوبت‌های رزرو شده و درخواست‌های جدید</p>
+//         </div>
+//         <button className={styles.newAppointmentBtn}>
+//           <span>+</span>
+//           درخواست نوبت جدید
+//         </button>
+//       </div>
+
+//       {/* فیلترها */}
+//       {/* <div className={styles.filterTabs}>
+//         <button className={`${styles.filterTab} ${styles.active}`}>همه</button>
+//         <button className={styles.filterTab}>تأیید شده</button>
+//         <button className={styles.filterTab}>در انتظار</button>
+//         <button className={styles.filterTab}>انجام شده</button>
+//       </div> */}
+
+//       {/* فیلترها */}
+//       <div className={styles.filterTabs}>
+//         {filters.map((filter) => (
+//           <button
+//             key={filter.id}
+//             className={`${styles.filterTab} ${
+//               activeFilter === filter.id ? styles.active : ""
+//             }`}
+//             onClick={() => setActiveFilter(filter.id)}
+//           >
+//             {filter.label}
+//             {filter.id !== "all" && (
+//               <span className={styles.filterCount}>
+//                 {
+//                   allAppointments.filter((item) => item.status === filter.id)
+//                     .length
+//                 }
+//               </span>
+//             )}
+//           </button>
+//         ))}
+//       </div>
+
+//       {/* لیست نوبت‌ها */}
+//       <div className={styles.appointmentsList}>
+//         {filteredAppointments.length > 0 ? (
+//           filteredAppointments.map((appointment) => {
+//             // {filteredAppointments.map((appointment) => {
+//             const statusInfo = getStatusInfo(appointment.status);
+//             return (
+//               <div key={appointment.id} className={styles.appointmentCard}>
+//                 {/* وضعیت */}
+//                 <div className={styles.appointmentStatusBar}>
+//                   <span
+//                     className={`${styles.statusBadge} ${statusInfo.className}`}
+//                   >
+//                     <span className={styles.statusIcon}>{statusInfo.icon}</span>
+//                     {statusInfo.label}
+//                   </span>
+//                   {appointment.isOnline && (
+//                     <span className={styles.onlineBadge}>🖥️ آنلاین</span>
+//                   )}
+//                 </div>
+
+//                 {/* محتوای اصلی */}
+//                 <div className={styles.appointmentBody}>
+//                   <div className={styles.appointmentInfo}>
+//                     <h4>{appointment.type}</h4>
+//                     <div className={styles.appointmentMeta}>
+//                       <span className={styles.metaItem}>
+//                         <span className={styles.metaIcon}>👤</span>
+//                         {appointment.doctor}
+//                       </span>
+//                       <span className={styles.metaDivider}>•</span>
+//                       <span className={styles.metaItem}>
+//                         <span className={styles.metaIcon}>📅</span>
+//                         {appointment.date}
+//                       </span>
+//                       <span className={styles.metaDivider}>•</span>
+//                       <span className={styles.metaItem}>
+//                         <span className={styles.metaIcon}>⏰</span>
+//                         {appointment.time}
+//                       </span>
+//                     </div>
+//                   </div>
+
+//                   {/* دکمه‌های اکشن */}
+//                   <div className={styles.appointmentActions}>
+//                     {appointment.status === "confirmed" && (
+//                       <button className={styles.btnJoin}>
+//                         <span>▶</span>
+//                         ورود به جلسه
+//                       </button>
+//                     )}
+//                     {appointment.status === "pending" && (
+//                       <button className={styles.btnCancel}>لغو درخواست</button>
+//                     )}
+//                     {appointment.status === "completed" && (
+//                       <button className={styles.btnReview}>
+//                         📝 ثبت بازخورد
+//                       </button>
+//                     )}
+//                     <button className={styles.btnMore}>
+//                       <svg
+//                         width="20"
+//                         height="20"
+//                         viewBox="0 0 24 24"
+//                         fill="none"
+//                       >
+//                         <circle cx="12" cy="6" r="2" fill="currentColor" />
+//                         <circle cx="12" cy="12" r="2" fill="currentColor" />
+//                         <circle cx="12" cy="18" r="2" fill="currentColor" />
+//                       </svg>
+//                     </button>
+//                   </div>
+//                 </div>
+//               </div>
+//             );
+//           })
+//         ) : (
+//           <div className={styles.emptyState}>
+//             <span className={styles.emptyIcon}>📭</span>
+//             <h3>هیچ نوبتی در این دسته وجود ندارد</h3>
+//             <p>برای شروع، اولین نوبت خود را رزرو کنید.</p>
+//           </div>
+//         )}
+//       </div>
+
+//       {/* کارت خالی (در صورت نبود نوبت) */}
+//       {allAppointments.length === 0 && (
+//         <div className={styles.emptyState}>
+//           <span className={styles.emptyIcon}>📭</span>
+//           <h3>هیچ نوبتی ثبت نشده</h3>
+//           <p>برای شروع، اولین نوبت خود را رزرو کنید.</p>
+//           <button className={styles.emptyBtn}>درخواست نوبت جدید</button>
+//         </div>
+//       )}
+//     </div>
+//   );
+// }
+
+// ============================================
+// COMPONENT: Appointments Content
+// ============================================
 function AppointmentsContent() {
   const [activeFilter, setActiveFilter] = useState("all");
-
-  const allAppointments = [
+  const [showModal, setShowModal] = useState(false);
+  const [appointments, setAppointments] = useState([
     {
       id: 1,
       type: "جلسه مشاوره فردی",
       doctor: "دکتر محمد رضایی",
-      date: "۲۵ آذر ۱۴۰۳",
+      doctorId: 1,
+      date: "۱۴۰۳/۰۹/۲۵",
       time: "۱۶:۰۰ - ۱۷:۰۰",
       status: "confirmed", // confirmed | pending | completed | cancelled
       isOnline: true,
+      cancelledBy: null, // 'user' | 'doctor' | null
+      cancelReason: null,
+      createdAt: "۱۴۰۳/۰۹/۲۰",
     },
     {
       id: 2,
       type: "جلسه زوج درمانی",
       doctor: "دکتر سارا احمدی",
-      date: "۲۸ آذر ۱۴۰۳",
+      doctorId: 2,
+      date: "۱۴۰۳/۰۹/۲۸",
       time: "۱۸:۰۰ - ۱۹:۰۰",
       status: "pending",
       isOnline: false,
+      cancelledBy: null,
+      cancelReason: null,
+      createdAt: "۱۴۰۳/۰۹/۲۱",
     },
     {
       id: 3,
       type: "جلسه مشاوره فردی",
       doctor: "دکتر محمد رضایی",
-      date: "۲۰ آذر ۱۴۰۳",
+      doctorId: 1,
+      date: "۱۴۰۳/۰۹/۲۰",
       time: "۱۵:۰۰ - ۱۶:۰۰",
       status: "completed",
       isOnline: true,
+      cancelledBy: null,
+      cancelReason: null,
+      createdAt: "۱۴۰۳/۰۹/۱۵",
     },
-  ];
+    {
+      id: 4,
+      type: "جلسه مشاوره فردی",
+      doctor: "دکتر علی کریمی",
+      doctorId: 3,
+      date: "۱۴۰۳/۰۹/۱۸",
+      time: "۱۰:۰۰ - ۱۱:۰۰",
+      status: "cancelled",
+      isOnline: true,
+      cancelledBy: "user",
+      cancelReason: "مشکل شخصی",
+      createdAt: "۱۴۰۳/۰۹/۱۰",
+    },
+    {
+      id: 5,
+      type: "جلسه زوج درمانی",
+      doctor: "دکتر سارا احمدی",
+      doctorId: 2,
+      date: "۱۴۰۳/۰۹/۱۵",
+      time: "۱۷:۰۰ - ۱۸:۰۰",
+      status: "cancelled",
+      isOnline: false,
+      cancelledBy: "doctor",
+      cancelReason: "هماهنگی با پزشک",
+      createdAt: "۱۴۰۳/۰۹/۰۵",
+    },
+  ]);
+
+  // ===== تابع لغو نوبت =====
+  const handleCancelAppointment = (appointmentId) => {
+    const appointment = appointments.find((a) => a.id === appointmentId);
+    if (!appointment) return;
+
+    // ===== بررسی قانون ۲۴ ساعت =====
+    const now = new Date();
+    const appointmentDate = new Date(appointment.date);
+    const diffHours = (appointmentDate - now) / (1000 * 60 * 60);
+
+    if (diffHours < 24) {
+      alert("❌ امکان لغو نوبت کمتر از ۲۴ ساعت قبل وجود ندارد.");
+      return;
+    }
+
+    // ===== نمایش دلیل لغو =====
+    const reason = prompt("لطفاً دلیل لغو نوبت را وارد کنید:");
+    if (reason === null) return; // کاربر لغو کرد
+
+    // ===== به‌روزرسانی وضعیت =====
+    setAppointments((prev) =>
+      prev.map((item) =>
+        item.id === appointmentId
+          ? {
+              ...item,
+              status: "cancelled",
+              cancelledBy: "user",
+              cancelReason: reason,
+            }
+          : item
+      )
+    );
+
+    alert("✅ نوبت با موفقیت لغو شد.");
+  };
+
+  // ===== تابع رزرو نوبت جدید =====
+  const handleNewAppointment = (newAppointment) => {
+    setAppointments((prev) => [
+      {
+        ...newAppointment,
+        id: Date.now(),
+        status: "pending",
+        cancelledBy: null,
+        cancelReason: null,
+        createdAt: new Date().toISOString().split("T")[0],
+      },
+      ...prev,
+    ]);
+    setShowModal(false);
+    alert("✅ درخواست نوبت با موفقیت ثبت شد.");
+  };
 
   // ===== فیلتر کردن =====
   const getFilteredAppointments = () => {
-    if (activeFilter === "all") return allAppointments;
-    return allAppointments.filter((item) => item.status === activeFilter);
+    if (activeFilter === "all") return appointments;
+    return appointments.filter((item) => item.status === activeFilter);
   };
 
   const filteredAppointments = getFilteredAppointments();
@@ -661,32 +973,45 @@ function AppointmentsContent() {
     { id: "confirmed", label: "تأیید شده" },
     { id: "pending", label: "در انتظار" },
     { id: "completed", label: "انجام شده" },
+    { id: "cancelled", label: "لغو شده" },
   ];
 
+  // ===== دریافت اطلاعات وضعیت =====
   const getStatusInfo = (status) => {
     const statusMap = {
       confirmed: {
         label: "تأیید شده",
         className: styles.statusConfirmed,
-        // icon: "✅",
+        icon: "✅",
       },
       pending: {
         label: "در انتظار تأیید",
         className: styles.statusPending,
-        // icon: "⏳",
+        icon: "⏳",
       },
       completed: {
         label: "انجام شده",
         className: styles.statusCompleted,
-        // icon: "✔️",
+        icon: "✔️",
       },
       cancelled: {
         label: "لغو شده",
         className: styles.statusCancelled,
-        // icon: "❌",
+        icon: "❌",
       },
     };
     return statusMap[status] || statusMap.pending;
+  };
+
+  // ===== بررسی امکان لغو =====
+  const canCancel = (appointment) => {
+    if (appointment.status !== "confirmed" && appointment.status !== "pending")
+      return false;
+
+    const now = new Date();
+    const appointmentDate = new Date(appointment.date);
+    const diffHours = (appointmentDate - now) / (1000 * 60 * 60);
+    return diffHours >= 24;
   };
 
   return (
@@ -694,22 +1019,17 @@ function AppointmentsContent() {
       {/* هدر بخش */}
       <div className={styles.pageHeader}>
         <div className={styles.headerInfo}>
-          <h2>نوبت‌های من</h2>
+          <h2>📅 نوبت‌های من</h2>
           <p>لیست نوبت‌های رزرو شده و درخواست‌های جدید</p>
         </div>
-        <button className={styles.newAppointmentBtn}>
+        <button
+          className={styles.newAppointmentBtn}
+          onClick={() => setShowModal(true)}
+        >
           <span>+</span>
           درخواست نوبت جدید
         </button>
       </div>
-
-      {/* فیلترها */}
-      {/* <div className={styles.filterTabs}>
-        <button className={`${styles.filterTab} ${styles.active}`}>همه</button>
-        <button className={styles.filterTab}>تأیید شده</button>
-        <button className={styles.filterTab}>در انتظار</button>
-        <button className={styles.filterTab}>انجام شده</button>
-      </div> */}
 
       {/* فیلترها */}
       <div className={styles.filterTabs}>
@@ -722,14 +1042,13 @@ function AppointmentsContent() {
             onClick={() => setActiveFilter(filter.id)}
           >
             {filter.label}
-            {filter.id !== "all" && (
-              <span className={styles.filterCount}>
-                {
-                  allAppointments.filter((item) => item.status === filter.id)
-                    .length
-                }
-              </span>
-            )}
+            <span className={styles.filterCount}>
+              {
+                appointments.filter((item) =>
+                  filter.id === "all" ? true : item.status === filter.id
+                ).length
+              }
+            </span>
           </button>
         ))}
       </div>
@@ -738,7 +1057,6 @@ function AppointmentsContent() {
       <div className={styles.appointmentsList}>
         {filteredAppointments.length > 0 ? (
           filteredAppointments.map((appointment) => {
-            // {filteredAppointments.map((appointment) => {
             const statusInfo = getStatusInfo(appointment.status);
             return (
               <div key={appointment.id} className={styles.appointmentCard}>
@@ -750,8 +1068,17 @@ function AppointmentsContent() {
                     <span className={styles.statusIcon}>{statusInfo.icon}</span>
                     {statusInfo.label}
                   </span>
+
                   {appointment.isOnline && (
                     <span className={styles.onlineBadge}>🖥️ آنلاین</span>
+                  )}
+
+                  {appointment.status === "cancelled" && (
+                    <span className={styles.cancelBadge}>
+                      {appointment.cancelledBy === "user"
+                        ? "لغو توسط شما"
+                        : "لغو توسط روانشناس"}
+                    </span>
                   )}
                 </div>
 
@@ -775,24 +1102,74 @@ function AppointmentsContent() {
                         {appointment.time}
                       </span>
                     </div>
+
+                    {/* نمایش دلیل لغو */}
+                    {appointment.status === "cancelled" &&
+                      appointment.cancelReason && (
+                        <div className={styles.cancelReason}>
+                          <span>📌 دلیل لغو:</span>
+                          <span>{appointment.cancelReason}</span>
+                        </div>
+                      )}
                   </div>
 
                   {/* دکمه‌های اکشن */}
                   <div className={styles.appointmentActions}>
                     {appointment.status === "confirmed" && (
-                      <button className={styles.btnJoin}>
-                        <span>▶</span>
-                        ورود به جلسه
-                      </button>
+                      <>
+                        <button className={styles.btnJoin}>
+                          <span>▶</span>
+                          ورود به جلسه
+                        </button>
+                        {canCancel(appointment) && (
+                          <button
+                            className={styles.btnCancel}
+                            onClick={() =>
+                              handleCancelAppointment(appointment.id)
+                            }
+                          >
+                            لغو نوبت
+                          </button>
+                        )}
+                      </>
                     )}
+
                     {appointment.status === "pending" && (
-                      <button className={styles.btnCancel}>لغو درخواست</button>
+                      <>
+                        <button className={styles.btnPending}>
+                          ⏳ در انتظار تأیید
+                        </button>
+                        {canCancel(appointment) && (
+                          <button
+                            className={styles.btnCancel}
+                            onClick={() =>
+                              handleCancelAppointment(appointment.id)
+                            }
+                          >
+                            لغو درخواست
+                          </button>
+                        )}
+                      </>
                     )}
+
                     {appointment.status === "completed" && (
                       <button className={styles.btnReview}>
                         📝 ثبت بازخورد
                       </button>
                     )}
+
+                    {appointment.status === "cancelled" && (
+                      <button
+                        className={styles.btnReschedule}
+                        onClick={() => {
+                          // باز کردن مودال برای رزرو مجدد با همان دکتر
+                          setShowModal(true);
+                        }}
+                      >
+                        🔄 رزرو مجدد
+                      </button>
+                    )}
+
                     <button className={styles.btnMore}>
                       <svg
                         width="20"
@@ -815,19 +1192,264 @@ function AppointmentsContent() {
             <span className={styles.emptyIcon}>📭</span>
             <h3>هیچ نوبتی در این دسته وجود ندارد</h3>
             <p>برای شروع، اولین نوبت خود را رزرو کنید.</p>
+            <button
+              className={styles.emptyBtn}
+              onClick={() => setShowModal(true)}
+            >
+              درخواست نوبت جدید
+            </button>
           </div>
         )}
       </div>
 
-      {/* کارت خالی (در صورت نبود نوبت) */}
-      {allAppointments.length === 0 && (
-        <div className={styles.emptyState}>
-          <span className={styles.emptyIcon}>📭</span>
-          <h3>هیچ نوبتی ثبت نشده</h3>
-          <p>برای شروع، اولین نوبت خود را رزرو کنید.</p>
-          <button className={styles.emptyBtn}>درخواست نوبت جدید</button>
+      {/* مودال رزرو نوبت */}
+      <NewAppointmentModal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        onSuccess={handleNewAppointment}
+      />
+    </div>
+  );
+}
+
+// ============================================
+// COMPONENT: New Appointment Modal
+// ============================================
+function NewAppointmentModal({ isOpen, onClose, onSuccess }) {
+  const [step, setStep] = useState(1); // 1: انتخاب روانشناس | 2: انتخاب زمان | 3: تأیید
+  const [selectedDoctor, setSelectedDoctor] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedTime, setSelectedTime] = useState(null);
+  const [appointmentType, setAppointmentType] = useState("individual"); // individual | couple | teen
+
+  // لیست روانشناسان نمونه
+  const doctors = [
+    {
+      id: 1,
+      name: "دکتر محمد رضایی",
+      specialty: "روانشناس بالینی",
+      experience: "۱۲ سال",
+      rating: 4.8,
+      image: "/images/doctors/doctor1.png",
+      availableDays: ["شنبه", "یکشنبه", "سه‌شنبه"],
+    },
+    {
+      id: 2,
+      name: "دکتر سارا احمدی",
+      specialty: "روانشناس خانواده و زوج",
+      experience: "۸ سال",
+      rating: 4.9,
+      image: "/images/doctors/doctor2.png",
+      availableDays: ["شنبه", "دوشنبه", "چهارشنبه"],
+    },
+    {
+      id: 3,
+      name: "دکتر علی کریمی",
+      specialty: "روانشناس کودک و نوجوان",
+      experience: "۱۰ سال",
+      rating: 4.7,
+      image: "/images/doctors/doctor3.png",
+      availableDays: ["یکشنبه", "سه‌شنبه", "پنجشنبه"],
+    },
+  ];
+
+  // ساعت‌های قابل انتخاب
+  const timeSlots = ["۱۰:۰۰", "۱۱:۰۰", "۱۲:۰۰", "۱۴:۰۰", "۱۵:۰۰", "۱۶:۰۰", "۱۷:۰۰"];
+
+  if (!isOpen) return null;
+
+  return (
+    <div className={styles.modalOverlay}>
+      <div className={styles.modalContainer}>
+        {/* هدر مودال */}
+        <div className={styles.modalHeader}>
+          <h2>درخواست نوبت جدید</h2>
+          <button className={styles.modalClose} onClick={onClose}>
+            ✕
+          </button>
         </div>
-      )}
+
+        {/* Progress Steps */}
+        <div className={styles.modalSteps}>
+          <div className={`${styles.stepItem} ${step >= 1 ? styles.active : ""}`}>
+            <span className={styles.stepNumber}>۱</span>
+            <span className={styles.stepLabel}>انتخاب روانشناس</span>
+          </div>
+          <div className={styles.stepLine} />
+          <div className={`${styles.stepItem} ${step >= 2 ? styles.active : ""}`}>
+            <span className={styles.stepNumber}>۲</span>
+            <span className={styles.stepLabel}>انتخاب زمان</span>
+          </div>
+          <div className={styles.stepLine} />
+          <div className={`${styles.stepItem} ${step >= 3 ? styles.active : ""}`}>
+            <span className={styles.stepNumber}>۳</span>
+            <span className={styles.stepLabel}>تأیید نهایی</span>
+          </div>
+        </div>
+
+        {/* ===== مرحله ۱: انتخاب روانشناس ===== */}
+        {step === 1 && (
+          <div className={styles.modalStep}>
+            <p className={styles.stepDescription}>
+              لطفاً روانشناس مورد نظر خود را انتخاب کنید:
+            </p>
+            <div className={styles.doctorsGrid}>
+              {doctors.map((doctor) => (
+                <div
+                  key={doctor.id}
+                  className={`${styles.doctorCard} ${
+                    selectedDoctor?.id === doctor.id ? styles.selected : ""
+                  }`}
+                  onClick={() => setSelectedDoctor(doctor)}
+                >
+                  <div className={styles.doctorImage}>
+                    <img src={doctor.image} alt={doctor.name} />
+                  </div>
+                  <div className={styles.doctorInfo}>
+                    <h4>{doctor.name}</h4>
+                    <span className={styles.doctorSpecialty}>{doctor.specialty}</span>
+                    <div className={styles.doctorMeta}>
+                      <span>📅 {doctor.experience}</span>
+                      <span>⭐ {doctor.rating}</span>
+                    </div>
+                    <div className={styles.doctorDays}>
+                      {doctor.availableDays.map((day) => (
+                        <span key={day} className={styles.dayTag}>{day}</span>
+                      ))}
+                    </div>
+                  </div>
+                  {selectedDoctor?.id === doctor.id && (
+                    <span className={styles.selectedCheck}>✓</span>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* ===== مرحله ۲: انتخاب زمان ===== */}
+        {step === 2 && (
+          <div className={styles.modalStep}>
+            <p className={styles.stepDescription}>
+              {selectedDoctor?.name} - روز و ساعت مورد نظر را انتخاب کنید:
+            </p>
+            <div className={styles.dateTimeSection}>
+              <div className={styles.dateGrid}>
+                {["شنبه", "یکشنبه", "دوشنبه", "سه‌شنبه", "چهارشنبه", "پنجشنبه"].map(
+                  (day) => (
+                    <button
+                      key={day}
+                      className={`${styles.dateBtn} ${
+                        selectedDate === day ? styles.selected : ""
+                      }`}
+                      onClick={() => setSelectedDate(day)}
+                    >
+                      <span className={styles.dateDay}>{day}</span>
+                      <span className={styles.dateNum}>۲۵</span>
+                    </button>
+                  )
+                )}
+              </div>
+
+              <div className={styles.timeGrid}>
+                {timeSlots.map((time) => (
+                  <button
+                    key={time}
+                    className={`${styles.timeBtn} ${
+                      selectedTime === time ? styles.selected : ""
+                    }`}
+                    onClick={() => setSelectedTime(time)}
+                  >
+                    {time}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ===== مرحله ۳: تأیید نهایی ===== */}
+        {step === 3 && (
+          <div className={styles.modalStep}>
+            <div className={styles.confirmBox}>
+              <div className={styles.confirmIcon}>✅</div>
+              <h3>اطلاعات نوبت شما</h3>
+              <div className={styles.confirmDetails}>
+                <div className={styles.confirmItem}>
+                  <span className={styles.confirmLabel}>روانشناس:</span>
+                  <span className={styles.confirmValue}>{selectedDoctor?.name}</span>
+                </div>
+                <div className={styles.confirmItem}>
+                  <span className={styles.confirmLabel}>تخصص:</span>
+                  <span className={styles.confirmValue}>{selectedDoctor?.specialty}</span>
+                </div>
+                <div className={styles.confirmItem}>
+                  <span className={styles.confirmLabel}>تاریخ:</span>
+                  <span className={styles.confirmValue}>{selectedDate}</span>
+                </div>
+                <div className={styles.confirmItem}>
+                  <span className={styles.confirmLabel}>ساعت:</span>
+                  <span className={styles.confirmValue}>{selectedTime}</span>
+                </div>
+              </div>
+              <p className={styles.confirmNote}>
+                پس از تأیید، پیامک تأیید نوبت برای شما ارسال خواهد شد.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* دکمه‌های ناوبری */}
+        <div className={styles.modalFooter}>
+          {step > 1 && (
+            <button
+              className={styles.btnPrev}
+              onClick={() => setStep(step - 1)}
+            >
+              قبلی
+            </button>
+          )}
+          {step < 3 ? (
+            <button
+              className={styles.btnNext}
+              onClick={() => {
+                if (step === 1 && !selectedDoctor) {
+                  alert("لطفاً یک روانشناس انتخاب کنید");
+                  return;
+                }
+                if (step === 2 && (!selectedDate || !selectedTime)) {
+                  alert("لطفاً تاریخ و ساعت را انتخاب کنید");
+                  return;
+                }
+                setStep(step + 1);
+              }}
+            >
+              {step === 1 ? "انتخاب زمان" : "مرحله بعد"}
+            </button>
+          ) : (
+            <button
+              className={styles.btnConfirm}
+              onClick={() => {
+                // ذخیره نوبت
+                const newAppointment = {
+                  id: Date.now(),
+                  doctor: selectedDoctor?.name,
+                  doctorId: selectedDoctor?.id,
+                  date: selectedDate,
+                  time: selectedTime,
+                  status: "pending",
+                };
+                // اضافه کردن به لیست نوبت‌ها
+                // ... 
+                onSuccess?.(newAppointment);
+                onClose();
+              }}
+            >
+              تأیید و ثبت نوبت
+            </button>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
