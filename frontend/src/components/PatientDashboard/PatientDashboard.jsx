@@ -1,23 +1,39 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./PatientDashboard.module.css";
+
+// import {
+//   FaHome,
+//   FaCalendarAlt,
+//   FaCommentDots,
+//   FaFileAlt,
+//   FaChartLine,
+//   FaUserCircle,
+//   FaCog,
+//   FaSignOutAlt,
+//   FaBell,
+//   FaSearch,
+//   FaVideo,
+//   FaBookOpen,
+//   FaHeart,
+//   FaChevronLeft,
+//   FaChevronRight,
+// } from "react-icons/fa";
 
 import {
   FaHome,
   FaCalendarAlt,
+  FaVideo,
   FaCommentDots,
-  FaFileAlt,
   FaChartLine,
+  FaBookOpen,
+  FaFileAlt,
   FaUserCircle,
   FaCog,
   FaSignOutAlt,
-  FaBell,
-  FaSearch,
-  FaVideo,
-  FaBookOpen,
-  FaHeart,
   FaChevronLeft,
   FaChevronRight,
+  FaBell,
 } from "react-icons/fa";
 
 // import logo from "../../../../public/images/logo/logo2.png";
@@ -31,6 +47,51 @@ function PatientDashboard() {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [userData, setUserData] = useState(null);
   const navigate = useNavigate();
+
+  // ===== داده‌های نوتیفیکیشن =====
+  const [notifications, setNotifications] = useState([
+    {
+      id: 1,
+      type: "reminder",
+      icon: "⏰",
+      title: "یادآوری جلسه فردا",
+      message:
+        "جلسه مشاوره فردی شما با دکتر محمد رضایی فردا ساعت ۱۶:۰۰ برگزار میشود.",
+      time: "۵ دقیقه پیش",
+      isRead: false,
+      date: "۱۴۰۳/۰۹/۲۴",
+      link: "/sessions",
+      action: "مشاهده جلسه",
+    },
+    {
+      id: 2,
+      type: "confirmed",
+      icon: "✅",
+      title: "تأیید جلسه",
+      message: "دکتر سارا احمدی درخواست جلسه زوج درمانی شما را تأیید کرد.",
+      time: "۱ ساعت پیش",
+      isRead: false,
+      date: "۱۴۰۳/۰۹/۲۴",
+      link: "/appointments",
+      action: "مشاهده نوبت",
+    },
+    // ... بقیه اعلان‌ها
+  ]);
+
+  // ===== توابع =====
+  const markAsRead = (id) => {
+    setNotifications((prev) =>
+      prev.map((notif) =>
+        notif.id === id ? { ...notif, isRead: true } : notif
+      )
+    );
+  };
+
+  const markAllAsRead = () => {
+    setNotifications((prev) =>
+      prev.map((notif) => ({ ...notif, isRead: true }))
+    );
+  };
 
   // ===== دریافت اطلاعات کاربر =====
   useEffect(() => {
@@ -246,10 +307,16 @@ function PatientDashboard() {
             </div> */}
 
             {/* نوتیفیکیشن */}
-            <button className={styles.notificationBtn}>
+            {/* <button className={styles.notificationBtn}>
               <FaBell />
               <span className={styles.notificationDot}></span>
-            </button>
+            </button> */}
+
+            <NotificationDropdown
+              notifications={notifications}
+              onMarkAsRead={markAsRead}
+              onMarkAllAsRead={markAllAsRead}
+            />
 
             {/* کاربر */}
             <div className={styles.userProfile}>
@@ -1845,24 +1912,565 @@ function SessionsContent() {
 // ============================================
 // COMPONENT: Messages Content
 // ============================================
+// function MessagesContent() {
+//   return (
+//     <div className={styles.pageContent}>
+//       <h2>پیام‌ها</h2>
+//       <p>پیام‌های شما با دکترها</p>
+//       <div className={styles.messagesList}>
+//         <div className={styles.messageCard}>
+//           <img src={userAvatar} alt="" className={styles.messageAvatar} />
+//           <div className={styles.messageInfo}>
+//             <h4>دکتر محمد رضایی</h4>
+//             <p>سلام! جلسه فردا ساعت ۱۶ هست...</p>
+//             <span>۱۰ دقیقه پیش</span>
+//           </div>
+//           <span className={styles.messageBadge}>۲</span>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+// ============================================
+// COMPONENT: Messages Content (Notification Center)
+// ============================================
 function MessagesContent() {
+  const [filter, setFilter] = useState("all"); // all | unread | read
+  const [notifications, setNotifications] = useState([
+    {
+      id: 1,
+      type: "reminder",
+      icon: "⏰",
+      title: "یادآوری جلسه فردا",
+      message:
+        "جلسه مشاوره فردی شما با دکتر محمد رضایی فردا ساعت ۱۶:۰۰ برگزار میشود.",
+      time: "۵ دقیقه پیش",
+      isRead: false,
+      date: "۱۴۰۳/۰۹/۲۴",
+      link: "/sessions",
+      action: "مشاهده جلسه",
+    },
+    {
+      id: 2,
+      type: "confirmed",
+      icon: "✅",
+      title: "تأیید جلسه",
+      message: "دکتر سارا احمدی درخواست جلسه زوج درمانی شما را تأیید کرد.",
+      time: "۱ ساعت پیش",
+      isRead: false,
+      date: "۱۴۰۳/۰۹/۲۴",
+      link: "/appointments",
+      action: "مشاهده نوبت",
+    },
+    {
+      id: 3,
+      type: "cancelled",
+      icon: "❌",
+      title: "لغو جلسه توسط روانشناس",
+      message: "دکتر علی کریمی جلسه مشاوره نوجوان را به دلیل هماهنگی لغو کرد.",
+      time: "۳ ساعت پیش",
+      isRead: false,
+      date: "۱۴۰۳/۰۹/۲۴",
+      link: "/appointments",
+      action: "مشاهده جلسات",
+    },
+    {
+      id: 4,
+      type: "note",
+      icon: "📝",
+      title: "یادداشت جدید از روانشناس",
+      message: "دکتر محمد رضایی برای جلسه قبلی شما یادداشتی ثبت کرده است.",
+      time: "۵ ساعت پیش",
+      isRead: true,
+      date: "۱۴۰۳/۰۹/۲۳",
+      link: "/sessions",
+      action: "مشاهده یادداشت",
+    },
+    {
+      id: 5,
+      type: "booking",
+      icon: "📅",
+      title: "رزرو جلسه جدید",
+      message:
+        "شما جلسه مشاوره فردی را برای تاریخ ۱۴۰۳/۰۹/۲۸ ساعت ۱۷:۰۰ رزرو کردید.",
+      time: "۱ روز پیش",
+      isRead: true,
+      date: "۱۴۰۳/۰۹/۲۳",
+      link: "/appointments",
+      action: "مشاهده نوبت",
+    },
+    {
+      id: 6,
+      type: "weekly",
+      icon: "🔄",
+      title: "زمان جلسات هفتگی",
+      message:
+        "زمان جلسات هفتگی شما فرا رسیده است. آیا مایل به رزرو جلسه جدید هستید؟",
+      time: "۲ روز پیش",
+      isRead: true,
+      date: "۱۴۰۳/۰۹/۲۲",
+      link: "/appointments",
+      action: "رزرو جلسه",
+    },
+    {
+      id: 7,
+      type: "reminder",
+      icon: "⏰",
+      title: "یادآوری جلسه امروز",
+      message:
+        "جلسه مشاوره فردی شما با دکتر سارا احمدی امروز ساعت ۱۸:۰۰ برگزار میشود.",
+      time: "۳ روز پیش",
+      isRead: true,
+      date: "۱۴۰۳/۰۹/۲۲",
+      link: "/sessions",
+      action: "ورود به جلسه",
+    },
+  ]);
+
+  // ===== علامت‌گذاری به عنوان خوانده شده =====
+  const markAsRead = (id) => {
+    setNotifications((prev) =>
+      prev.map((notif) =>
+        notif.id === id ? { ...notif, isRead: true } : notif
+      )
+    );
+  };
+
+  // ===== علامت‌گذاری همه به عنوان خوانده شده =====
+  const markAllAsRead = () => {
+    setNotifications((prev) =>
+      prev.map((notif) => ({ ...notif, isRead: true }))
+    );
+  };
+
+  // ===== حذف اعلان =====
+  const deleteNotification = (id) => {
+    setNotifications((prev) => prev.filter((notif) => notif.id !== id));
+  };
+
+  // ===== فیلتر کردن =====
+  const getFilteredNotifications = () => {
+    if (filter === "unread") {
+      return notifications.filter((n) => !n.isRead);
+    }
+    if (filter === "read") {
+      return notifications.filter((n) => n.isRead);
+    }
+    return notifications;
+  };
+
+  const filteredNotifications = getFilteredNotifications();
+  const unreadCount = notifications.filter((n) => !n.isRead).length;
+
+  // ===== دریافت استایل بر اساس نوع =====
+  const getTypeStyle = (type) => {
+    const styles = {
+      reminder: { bg: "#e3f2fd", border: "#0d47a1", icon: "⏰" },
+      confirmed: { bg: "#e8f5e9", border: "#2e7d32", icon: "✅" },
+      cancelled: { bg: "#fbe9e7", border: "#c62828", icon: "❌" },
+      note: { bg: "#fff3e0", border: "#e65100", icon: "📝" },
+      booking: { bg: "#e8eaf6", border: "#283593", icon: "📅" },
+      weekly: { bg: "#f3e5f5", border: "#6a1b9a", icon: "🔄" },
+    };
+    return styles[type] || styles.reminder;
+  };
+
+  // ===== دریافت متن زمان =====
+  const getTimeAgo = (time) => {
+    return time;
+  };
+
   return (
     <div className={styles.pageContent}>
-      <h2>پیام‌ها</h2>
-      <p>پیام‌های شما با دکترها</p>
-      <div className={styles.messagesList}>
-        <div className={styles.messageCard}>
-          <img src={userAvatar} alt="" className={styles.messageAvatar} />
-          <div className={styles.messageInfo}>
-            <h4>دکتر محمد رضایی</h4>
-            <p>سلام! جلسه فردا ساعت ۱۶ هست...</p>
-            <span>۱۰ دقیقه پیش</span>
-          </div>
-          <span className={styles.messageBadge}>۲</span>
+      {/* هدر بخش */}
+      <div className={styles.pageHeader}>
+        <div className={styles.headerInfo}>
+          <h2>🔔 اعلانات</h2>
+          <p>رویدادها و یادآوری‌های مهم شما</p>
         </div>
+        <div className={styles.notificationActions}>
+          {unreadCount > 0 && (
+            <span className={styles.unreadBadge}>{unreadCount} جدید</span>
+          )}
+          <button className={styles.markAllBtn} onClick={markAllAsRead}>
+            ✓ همه را خوانده شد
+          </button>
+        </div>
+      </div>
+
+      {/* فیلترها */}
+      <div className={styles.filterTabs}>
+        <button
+          className={`${styles.filterTab} ${
+            filter === "all" ? styles.active : ""
+          }`}
+          onClick={() => setFilter("all")}
+        >
+          همه
+          <span className={styles.filterCount}>{notifications.length}</span>
+        </button>
+        <button
+          className={`${styles.filterTab} ${
+            filter === "unread" ? styles.active : ""
+          }`}
+          onClick={() => setFilter("unread")}
+        >
+          خوانده نشده
+          {unreadCount > 0 && (
+            <span className={styles.filterCount}>{unreadCount}</span>
+          )}
+        </button>
+        <button
+          className={`${styles.filterTab} ${
+            filter === "read" ? styles.active : ""
+          }`}
+          onClick={() => setFilter("read")}
+        >
+          خوانده شده
+          <span className={styles.filterCount}>
+            {notifications.filter((n) => n.isRead).length}
+          </span>
+        </button>
+      </div>
+
+      {/* لیست اعلانات */}
+      <div className={styles.notificationsList}>
+        {filteredNotifications.length > 0 ? (
+          filteredNotifications.map((notification) => {
+            const typeStyle = getTypeStyle(notification.type);
+            return (
+              <div
+                key={notification.id}
+                className={`${styles.notificationCard} ${
+                  !notification.isRead ? styles.unread : ""
+                }`}
+                onClick={() => markAsRead(notification.id)}
+              >
+                {/* آیکون */}
+                <div
+                  className={styles.notificationIcon}
+                  style={{ background: typeStyle.bg }}
+                >
+                  <span>{typeStyle.icon}</span>
+                </div>
+
+                {/* محتوای اصلی */}
+                <div className={styles.notificationContent}>
+                  <div className={styles.notificationHeader}>
+                    <h4 className={styles.notificationTitle}>
+                      {notification.title}
+                      {!notification.isRead && (
+                        <span className={styles.unreadDot}></span>
+                      )}
+                    </h4>
+                    <span className={styles.notificationTime}>
+                      {notification.time}
+                    </span>
+                  </div>
+                  <p className={styles.notificationMessage}>
+                    {notification.message}
+                  </p>
+                  <div className={styles.notificationFooter}>
+                    <button
+                      className={styles.notificationAction}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        // هدایت به صفحه مربوطه
+                        // navigate(notification.link);
+                      }}
+                    >
+                      {notification.action}
+                      <span>→</span>
+                    </button>
+                    <button
+                      className={styles.notificationDelete}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        deleteNotification(notification.id);
+                      }}
+                    >
+                      ✕
+                    </button>
+                  </div>
+                </div>
+
+                {/* وضعیت خوانده/نخوانده */}
+                {!notification.isRead && (
+                  <div className={styles.unreadIndicator}></div>
+                )}
+              </div>
+            );
+          })
+        ) : (
+          <div className={styles.emptyState}>
+            <span className={styles.emptyIcon}>🔔</span>
+            <h3>هیچ اعلانی وجود ندارد</h3>
+            <p>
+              {filter === "unread"
+                ? "همه اعلان‌ها را خوانده‌اید. "
+                : filter === "read"
+                ? "هنوز اعلان خوانده شده‌ای وجود ندارد."
+                : "هنوز اعلانی دریافت نکرده‌اید."}
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
+}
+
+// ============================================
+// COMPONENT: Notification Dropdown
+// ============================================
+function NotificationDropdown({
+  notifications,
+  onMarkAsRead,
+  onMarkAllAsRead,
+}) {
+  // const [isOpen, setIsOpen] = useState(false);
+  // const dropdownRef = useRef(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+  const navigate = useNavigate(); // اگر نیاز به هدایت داری
+
+  // ===== بستن دراپ‌داون با کلیک خارج =====
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // ===== گرفتن آخرین ۵ اعلان نخوانده =====
+  const unreadNotifications = notifications
+    .filter((n) => !n.isRead)
+    .slice(0, 5);
+
+  const unreadCount = notifications.filter((n) => !n.isRead).length;
+
+  // ===== دریافت آیکون بر اساس نوع =====
+  const getIcon = (type) => {
+    const icons = {
+      reminder: "⏰",
+      confirmed: "✅",
+      cancelled: "❌",
+      note: "📝",
+      booking: "📅",
+      weekly: "🔄",
+    };
+    return icons[type] || "🔔";
+  };
+
+  // ===== دریافت استایل بر اساس نوع =====
+  const getTypeStyle = (type) => {
+    const styles = {
+      reminder: "#e3f2fd",
+      confirmed: "#e8f5e9",
+      cancelled: "#fbe9e7",
+      note: "#fff3e0",
+      booking: "#e8eaf6",
+      weekly: "#f3e5f5",
+    };
+    return styles[type] || "#f5f5f5";
+  };
+
+  return (
+    <div className={styles.dropdownWrapper} ref={dropdownRef}>
+      {/* ===== دکمه زنگوله ===== */}
+      <button
+        className={styles.notificationBtn}
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <FaBell />
+        {unreadCount > 0 && (
+          <span className={styles.notificationDot}>{unreadCount}</span>
+        )}
+      </button>
+
+      {/* ===== دراپ‌داون ===== */}
+      {isOpen && (
+        <div className={styles.dropdownMenu}>
+          <div className={styles.dropdownHeader}>
+            <span className={styles.dropdownTitle}>🔔 اعلان‌ها</span>
+            {unreadCount > 0 && (
+              <button
+                className={styles.dropdownMarkAll}
+                onClick={() => {
+                  onMarkAllAsRead();
+                  setIsOpen(false);
+                }}
+              >
+                همه را خوانده شد
+              </button>
+            )}
+          </div>
+
+          <div className={styles.dropdownList}>
+            {unreadNotifications.length > 0 ? (
+              unreadNotifications.map((notification) => (
+                <div
+                  key={notification.id}
+                  className={styles.dropdownItem}
+                  onClick={() => {
+                    onMarkAsRead(notification.id);
+                    setIsOpen(false);
+                    // هدایت به صفحه مربوطه
+                    if (notification.link) {
+                      navigate(notification.link);
+                    }
+                  }}
+                >
+                  <div
+                    className={styles.dropdownIcon}
+                    style={{ background: getTypeStyle(notification.type) }}
+                  >
+                    <span>{getIcon(notification.type)}</span>
+                  </div>
+                  <div className={styles.dropdownContent}>
+                    <div className={styles.dropdownText}>
+                      <span className={styles.dropdownTitleText}>
+                        {notification.title}
+                      </span>
+                      <span className={styles.dropdownTime}>
+                        {notification.time}
+                      </span>
+                    </div>
+                    <p className={styles.dropdownMessage}>
+                      {notification.message.length > 50
+                        ? notification.message.slice(0, 50) + "..."
+                        : notification.message}
+                    </p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className={styles.dropdownEmpty}>
+                <span className={styles.dropdownEmptyIcon}>🎉</span>
+                <p>همه اعلان‌ها را خوانده‌اید!</p>
+                <span className={styles.dropdownEmptySub}>
+                  هیچ اعلان جدیدی وجود ندارد
+                </span>
+              </div>
+            )}
+          </div>
+
+          {unreadCount > 5 && (
+            <div className={styles.dropdownFooter}>
+              <button
+                className={styles.dropdownViewAll}
+                onClick={() => {
+                  setIsOpen(false);
+                  setActiveTab("messages"); // هدایت به بخش پیام‌ها
+                }}
+              >
+                مشاهده همه اعلان‌ها ({unreadCount})
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+
+  // return (
+  //   <div className={styles.dropdownWrapper} ref={dropdownRef}>
+  //     {/* دکمه زنگوله */}
+  //     <button
+  //       className={styles.notificationBtn}
+  //       onClick={() => setIsOpen(!isOpen)}
+  //     >
+  //       <FaBell />
+  //       {unreadCount > 0 && (
+  //         <span className={styles.notificationDot}>{unreadCount}</span>
+  //       )}
+  //     </button>
+
+  //     {/* دراپ‌داون */}
+  //     {isOpen && (
+  //       <div className={styles.dropdownMenu}>
+  //         <div className={styles.dropdownHeader}>
+  //           <span className={styles.dropdownTitle}>🔔 اعلان‌ها</span>
+  //           {unreadCount > 0 && (
+  //             <button
+  //               className={styles.dropdownMarkAll}
+  //               onClick={() => {
+  //                 onMarkAllAsRead();
+  //                 setIsOpen(false);
+  //               }}
+  //             >
+  //               همه را خوانده شد
+  //             </button>
+  //           )}
+  //         </div>
+
+  //         <div className={styles.dropdownList}>
+  //           {unreadNotifications.length > 0 ? (
+  //             unreadNotifications.map((notification) => (
+  //               <div
+  //                 key={notification.id}
+  //                 className={styles.dropdownItem}
+  //                 onClick={() => {
+  //                   onMarkAsRead(notification.id);
+  //                   setIsOpen(false);
+  //                   // هدایت به صفحه مربوطه
+  //                   // navigate(notification.link);
+  //                 }}
+  //               >
+  //                 <div
+  //                   className={styles.dropdownIcon}
+  //                   style={{ background: getTypeStyle(notification.type) }}
+  //                 >
+  //                   <span>{getIcon(notification.type)}</span>
+  //                 </div>
+  //                 <div className={styles.dropdownContent}>
+  //                   <div className={styles.dropdownText}>
+  //                     <span className={styles.dropdownTitleText}>
+  //                       {notification.title}
+  //                     </span>
+  //                     <span className={styles.dropdownTime}>
+  //                       {notification.time}
+  //                     </span>
+  //                   </div>
+  //                   <p className={styles.dropdownMessage}>
+  //                     {notification.message.length > 50
+  //                       ? notification.message.slice(0, 50) + "..."
+  //                       : notification.message}
+  //                   </p>
+  //                 </div>
+  //               </div>
+  //             ))
+  //           ) : (
+  //             <div className={styles.dropdownEmpty}>
+  //               <span className={styles.dropdownEmptyIcon}>🎉</span>
+  //               <p>همه اعلان‌ها را خوانده‌اید!</p>
+  //               <span className={styles.dropdownEmptySub}>
+  //                 هیچ اعلان جدیدی وجود ندارد
+  //               </span>
+  //             </div>
+  //           )}
+  //         </div>
+
+  //         {unreadCount > 5 && (
+  //           <div className={styles.dropdownFooter}>
+  //             <button
+  //               className={styles.dropdownViewAll}
+  //               onClick={() => {
+  //                 setIsOpen(false);
+  //                 // navigate("/notifications");
+  //               }}
+  //             >
+  //               مشاهده همه اعلان‌ها ({unreadCount})
+  //             </button>
+  //           </div>
+  //         )}
+  //       </div>
+  //     )}
+  //   </div>
+  // );
 }
 
 // ============================================
