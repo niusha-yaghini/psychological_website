@@ -22,7 +22,8 @@ import {
 
 // import logo from "../../../../public/images/logo/logo2.png";
 import logo from "../../../public/images/logo/logo2.png";
-import userAvatar from "../../../public/images/avatar/usericon.png";
+// import userAvatar from "../../../public/images/PatientDashboard/usericon.png";
+import userAvatar from "../../../public/images/Patient_Panel/usericon.png";
 // import userAvatar from "../../../public/images/avatar/"
 
 function PatientDashboard() {
@@ -55,6 +56,12 @@ function PatientDashboard() {
       label: "داشبورد",
       icon: <FaHome />,
       path: "/dashboard",
+    },
+    {
+      id: "dashboard2",
+      label: "داشبورد",
+      icon: <FaHome />,
+      path: "/dashboard2",
     },
     {
       id: "appointments",
@@ -114,6 +121,8 @@ function PatientDashboard() {
   // ===== رندر محتوای هر بخش =====
   const renderContent = () => {
     switch (activeTab) {
+      // case "dashboard2":
+        // return <DashboardContent2 userData={userData} />;
       case "dashboard":
         return <DashboardContent userData={userData} />;
       case "appointments":
@@ -277,63 +286,139 @@ function PatientDashboard() {
 // ============================================
 // COMPONENT: Dashboard Content
 // ============================================
+// function DashboardContent({ userData }) {
+//   const stats = [
+//     { label: "جلسات برگزار شده", value: 8, icon: "📅", color: "#4CAF84" },
+//     { label: "جلسات پیش‌رو", value: 3, icon: "⏰", color: "#FF9800" },
+//     { label: "پیشرفت کلی", value: "۶۵٪", icon: "📈", color: "#2196F3" },
+//     { label: "یادداشت‌ها", value: 12, icon: "📝", color: "#9C27B0" },
+//   ];
+
+//   return (
+//     <div className={styles.dashboardContent}>
+//       <div className={styles.welcomeBanner}>
+//         <div className={styles.welcomeText}>
+//           <h2>سلام 👋</h2>
+//           <p>خوش برگشتی! امروز چطور می‌تونی بهت کمک کنیم؟</p>
+//         </div>
+//         <div className={styles.welcomeImage}>🌱</div>
+//       </div>
+
+//       <div className={styles.statsGrid}>
+//         {stats.map((stat, index) => (
+//           <div key={index} className={styles.statCard}>
+//             <div className={styles.statIcon} style={{ background: stat.color }}>
+//               {stat.icon}
+//             </div>
+//             <div className={styles.statInfo}>
+//               <span className={styles.statValue}>{stat.value}</span>
+//               <span className={styles.statLabel}>{stat.label}</span>
+//             </div>
+//           </div>
+//         ))}
+//       </div>
+
+//       <div className={styles.dashboardSections}>
+//         <div className={styles.sectionCard}>
+//           <h3>جلسه بعدی شما</h3>
+//           <div className={styles.nextSession}>
+//             <div className={styles.sessionDate}>
+//               <span className={styles.dateDay}>جمعه</span>
+//               <span className={styles.dateNumber}>۲۵</span>
+//               <span className={styles.dateMonth}>آذر</span>
+//             </div>
+//             <div className={styles.sessionInfo}>
+//               <h4>جلسه مشاوره فردی</h4>
+//               <p>⏰ ۱۶:۰۰ - ۱۷:۰۰</p>
+//               <p>👤 دکتر محمد رضایی</p>
+//             </div>
+//             <button className={styles.sessionBtn}>ورود به جلسه</button>
+//           </div>
+//         </div>
+
+//         <div className={styles.sectionCard}>
+//           <h3>فعالیت‌های اخیر</h3>
+//           <div className={styles.activityList}>
+//             <div className={styles.activityItem}>
+//               <span className={styles.activityIcon}>📝</span>
+//               <div className={styles.activityInfo}>
+//                 <p>یادداشت جدید ثبت شد</p>
+//                 <span>۲ ساعت پیش</span>
+//               </div>
+//             </div>
+//             <div className={styles.activityItem}>
+//               <span className={styles.activityIcon}>📅</span>
+//               <div className={styles.activityInfo}>
+//                 <p>جلسه با دکتر رضایی</p>
+//                 <span>۳ روز پیش</span>
+//               </div>
+//             </div>
+//             <div className={styles.activityItem}>
+//               <span className={styles.activityIcon}>📚</span>
+//               <div className={styles.activityInfo}>
+//                 <p>مطالعه مقاله "مدیریت استرس"</p>
+//                 <span>۵ روز پیش</span>
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+// ============================================
+// COMPONENT: Dashboard Content
+// ============================================
 function DashboardContent({ userData }) {
   // آمارهای نمایشی
+  // const stats = [
+  //   { label: "جلسات برگزار شده", value: 8, icon: "📅", color: "#4CAF84" },
+  //   { label: "جلسات پیش‌رو", value: 3, icon: "⏰", color: "#FF9800" },
+  //   { label: "پیشرفت کلی", value: "۶۵٪", icon: "📈", color: "#2196F3" },
+  //   { label: "یادداشت‌ها", value: 12, icon: "📝", color: "#9C27B0" },
+  // ];
+
   const stats = [
-    { label: "جلسات برگزار شده", value: 8, icon: "📅", color: "#4CAF84" },
-    { label: "جلسات پیش‌رو", value: 3, icon: "⏰", color: "#FF9800" },
-    { label: "پیشرفت کلی", value: "۶۵٪", icon: "📈", color: "#2196F3" },
-    { label: "یادداشت‌ها", value: 12, icon: "📝", color: "#9C27B0" },
+    { label: "جلسات برگزار شده", value: 8},
+    { label: "جلسات پیش‌رو", value: 3},
+    { label: "پیشرفت کلی", value: "۶۵٪"},
+    { label: "یادداشت‌ها", value: 12},
   ];
 
   return (
     <div className={styles.dashboardContent}>
-      {/* خوش‌آمدگویی */}
-      <div className={styles.welcomeBanner}>
-        <div className={styles.welcomeText}>
-          <h2>سلام 👋</h2>
-          <p>خوش برگشتی! امروز چطور می‌تونی بهت کمک کنیم؟</p>
+      {/* ===== ستون راست ===== */}
+      <div className={styles.mainColumn}>
+        {/* خوش‌آمدگویی */}
+        <div className={styles.welcomeBanner}>
+          <div className={styles.welcomeText}>
+            {/* <h2>سلام 👋</h2> */}
+            <p>خوش برگشتی! امروز چطور می‌تونی بهت کمک کنیم؟</p>
+          </div>
+          {/* <div className={styles.welcomeImage}>🌱</div> */}
         </div>
-        <div className={styles.welcomeImage}>🌱</div>
-      </div>
 
-      {/* آمار */}
-      <div className={styles.statsGrid}>
-        {stats.map((stat, index) => (
-          <div key={index} className={styles.statCard}>
-            <div className={styles.statIcon} style={{ background: stat.color }}>
-              {stat.icon}
+        {/* آمار */}
+        <div className={styles.statsGrid}>
+          {stats.map((stat, index) => (
+            <div key={index} className={styles.statCard}>
+              <div
+                className={styles.statIcon}
+                style={{ background: stat.color }}
+              >
+                {stat.icon}
+              </div>
+              <div className={styles.statInfo}>
+                <span className={styles.statValue}>{stat.value}</span>
+                <span className={styles.statLabel}>{stat.label}</span>
+              </div>
             </div>
-            <div className={styles.statInfo}>
-              <span className={styles.statValue}>{stat.value}</span>
-              <span className={styles.statLabel}>{stat.label}</span>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* بخش‌های دیگر */}
-      <div className={styles.dashboardSections}>
-        {/* جلسه بعدی */}
-        <div className={styles.sectionCard}>
-          <h3>جلسه بعدی شما</h3>
-          <div className={styles.nextSession}>
-            <div className={styles.sessionDate}>
-              <span className={styles.dateDay}>جمعه</span>
-              <span className={styles.dateNumber}>۲۵</span>
-              <span className={styles.dateMonth}>آذر</span>
-            </div>
-            <div className={styles.sessionInfo}>
-              <h4>جلسه مشاوره فردی</h4>
-              <p>⏰ ۱۶:۰۰ - ۱۷:۰۰</p>
-              <p>👤 دکتر محمد رضایی</p>
-            </div>
-            <button className={styles.sessionBtn}>ورود به جلسه</button>
-          </div>
+          ))}
         </div>
 
         {/* فعالیت‌های اخیر */}
-        <div className={styles.sectionCard}>
+        {/* <div className={styles.sectionCard}>
           <h3>فعالیت‌های اخیر</h3>
           <div className={styles.activityList}>
             <div className={styles.activityItem}>
@@ -358,10 +443,152 @@ function DashboardContent({ userData }) {
               </div>
             </div>
           </div>
+        </div> */}
+
+        <div className={styles.sideColumn}>
+          <div className={styles.sectionCard}>
+            <h3>جلسه بعدی شما</h3>
+            <div className={styles.nextSession}>
+              <div className={styles.sessionDate}>
+                <span className={styles.dateDay}>جمعه</span>
+                <span className={styles.dateNumber}>۲۵</span>
+                <span className={styles.dateMonth}>آذر</span>
+              </div>
+              <div className={styles.sessionInfo}>
+                <h4>جلسه مشاوره فردی</h4>
+                <p>⏰ ۱۶:۰۰ - ۱۷:۰۰</p>
+                <p>👤 دکتر محمد رضایی</p>
+              </div>
+              <button className={styles.sessionBtn}>ورود به جلسه</button>
+            </div>
+          </div>
         </div>
       </div>
+
+      {/* ===== ستون چپ ===== */}
+      <div className={styles.sectionCard}>
+        <h3>فعالیت‌های اخیر</h3>
+        <div className={styles.activityList}>
+          <div className={styles.activityItem}>
+            <span className={styles.activityIcon}>📝</span>
+            <div className={styles.activityInfo}>
+              <p>یادداشت جدید ثبت شد</p>
+              <span>۲ ساعت پیش</span>
+            </div>
+          </div>
+          <div className={styles.activityItem}>
+            <span className={styles.activityIcon}>📅</span>
+            <div className={styles.activityInfo}>
+              <p>جلسه با دکتر رضایی</p>
+              <span>۳ روز پیش</span>
+            </div>
+          </div>
+          <div className={styles.activityItem}>
+            <span className={styles.activityIcon}>📚</span>
+            <div className={styles.activityInfo}>
+              <p>مطالعه مقاله "مدیریت استرس"</p>
+              <span>۵ روز پیش</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* <div className={styles.sideColumn}>
+        <div className={styles.sectionCard}>
+          <h3>جلسه بعدی شما</h3>
+          <div className={styles.nextSession}>
+            <div className={styles.sessionDate}>
+              <span className={styles.dateDay}>جمعه</span>
+              <span className={styles.dateNumber}>۲۵</span>
+              <span className={styles.dateMonth}>آذر</span>
+            </div>
+            <div className={styles.sessionInfo}>
+              <h4>جلسه مشاوره فردی</h4>
+              <p>⏰ ۱۶:۰۰ - ۱۷:۰۰</p>
+              <p>👤 دکتر محمد رضایی</p>
+            </div>
+            <button className={styles.sessionBtn}>ورود به جلسه</button>
+          </div>
+        </div>
+      </div> */}
     </div>
   );
+
+  // return (
+  //   <div className={styles.dashboardContent}>
+  //     {/* خوش‌آمدگویی */}
+  //     <div className={styles.welcomeBanner}>
+  //       <div className={styles.welcomeText}>
+  //         <h2>سلام 👋</h2>
+  //         <p>خوش برگشتی! امروز چطور می‌تونی بهت کمک کنیم؟</p>
+  //       </div>
+  //       <div className={styles.welcomeImage}>🌱</div>
+  //     </div>
+
+  //     {/* آمار */}
+  //     <div className={styles.statsGrid}>
+  //       {stats.map((stat, index) => (
+  //         <div key={index} className={styles.statCard}>
+  //           <div className={styles.statIcon} style={{ background: stat.color }}>
+  //             {stat.icon}
+  //           </div>
+  //           <div className={styles.statInfo}>
+  //             <span className={styles.statValue}>{stat.value}</span>
+  //             <span className={styles.statLabel}>{stat.label}</span>
+  //           </div>
+  //         </div>
+  //       ))}
+  //     </div>
+
+  //     {/* بخش‌های دیگر */}
+  //     <div className={styles.dashboardSections}>
+  //       {/* جلسه بعدی */}
+  //       <div className={styles.sectionCard}>
+  //         <h3>جلسه بعدی شما</h3>
+  //         <div className={styles.nextSession}>
+  //           <div className={styles.sessionDate}>
+  //             <span className={styles.dateDay}>جمعه</span>
+  //             <span className={styles.dateNumber}>۲۵</span>
+  //             <span className={styles.dateMonth}>آذر</span>
+  //           </div>
+  //           <div className={styles.sessionInfo}>
+  //             <h4>جلسه مشاوره فردی</h4>
+  //             <p>⏰ ۱۶:۰۰ - ۱۷:۰۰</p>
+  //             <p>👤 دکتر محمد رضایی</p>
+  //           </div>
+  //           <button className={styles.sessionBtn}>ورود به جلسه</button>
+  //         </div>
+  //       </div>
+
+  //       {/* فعالیت‌های اخیر */}
+  //       <div className={styles.sectionCard}>
+  //         <h3>فعالیت‌های اخیر</h3>
+  //         <div className={styles.activityList}>
+  //           <div className={styles.activityItem}>
+  //             <span className={styles.activityIcon}>📝</span>
+  //             <div className={styles.activityInfo}>
+  //               <p>یادداشت جدید ثبت شد</p>
+  //               <span>۲ ساعت پیش</span>
+  //             </div>
+  //           </div>
+  //           <div className={styles.activityItem}>
+  //             <span className={styles.activityIcon}>📅</span>
+  //             <div className={styles.activityInfo}>
+  //               <p>جلسه با دکتر رضایی</p>
+  //               <span>۳ روز پیش</span>
+  //             </div>
+  //           </div>
+  //           <div className={styles.activityItem}>
+  //             <span className={styles.activityIcon}>📚</span>
+  //             <div className={styles.activityInfo}>
+  //               <p>مطالعه مقاله "مدیریت استرس"</p>
+  //               <span>۵ روز پیش</span>
+  //             </div>
+  //           </div>
+  //         </div>
+  //       </div>
+  //     </div>
+  //   </div>
+  // );
 }
 
 // ============================================

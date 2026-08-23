@@ -2,18 +2,18 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./Signup.module.css";
 
-import face_emoji_1 from "../../../../public/images/face_emojies/face_emoji_1.png";
-import face_emoji_2 from "../../../../public/images/face_emojies/face_emoji_2.png";
-import face_emoji_3 from "../../../../public/images/face_emojies/face_emoji_3.png";
-import face_emoji_4 from "../../../../public/images/face_emojies/face_emoji_4.png";
-import face_emoji_5 from "../../../../public/images/face_emojies/face_emoji_5.png";
+import face_emoji_1 from "../../../../public/images/SignUp_Login/face_emojies/face_emoji_1.png";
+import face_emoji_2 from "../../../../public/images/SignUp_Login/face_emojies/face_emoji_2.png";
+import face_emoji_3 from "../../../../public/images/SignUp_Login/face_emojies/face_emoji_3.png";
+import face_emoji_4 from "../../../../public/images/SignUp_Login/face_emojies/face_emoji_4.png";
+import face_emoji_5 from "../../../../public/images/SignUp_Login/face_emojies/face_emoji_5.png";
 
-import welcome_background from "../../../../public/images/background/welcome_background3.png";
-import before_questions from "../../../../public/images/login/before_questions2.png";
+import welcome_background from "../../../../public/images/SignUp_Login/welcome_background3.png";
+import before_questions from "../../../../public/images/SignUp_Login/before_questions2.png";
 
-import clock from "../../../../public/images/login/clock.png";
-import lock from "../../../../public/images/login/lock.png";
-import purpose from "../../../../public/images/login/purpose.png";
+import clock from "../../../../public/images/SignUp_Login/clock.png";
+import lock from "../../../../public/images/SignUp_Login/lock.png";
+import purpose from "../../../../public/images/SignUp_Login/purpose.png";
 
 const QUESTIONS = [
   {

@@ -417,7 +417,7 @@
 /* ============================================
    DASHBOARD CONTENT
 ============================================ */
-.dashboardContent {
+/* .dashboardContent {
   animation: fadeIn 0.4s ease;
 }
 
@@ -432,7 +432,6 @@
   }
 }
 
-/* ===== Welcome Banner ===== */
 .welcomeBanner {
   background: linear-gradient(135deg, #1b3a5c, #2d7d6e);
   border-radius: var(--radius-lg);
@@ -471,7 +470,6 @@
   }
 }
 
-/* ===== Stats Grid ===== */
 .statsGrid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -522,7 +520,6 @@
   color: var(--text-muted);
 }
 
-/* ===== Dashboard Sections ===== */
 .dashboardSections {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -543,7 +540,6 @@
   margin: 0 0 16px;
 }
 
-/* ===== Next Session ===== */
 .nextSession {
   display: flex;
   align-items: center;
@@ -614,7 +610,6 @@
   box-shadow: 0 4px 16px rgba(45, 125, 110, 0.3);
 }
 
-/* ===== Activity List ===== */
 .activityList {
   display: flex;
   flex-direction: column;
@@ -647,6 +642,346 @@
 .activityInfo span {
   font-size: 12px;
   color: var(--text-muted);
+} */
+
+/* ============================================
+   DASHBOARD CONTENT
+============================================ */
+.dashboardContent {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+  animation: fadeIn 0.4s ease;
+}
+
+/* ===== ستون راست (اصلی) ===== */
+.mainColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ===== ستون چپ (ساید) ===== */
+.sideColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ===== Welcome Banner ===== */
+/* .welcomeBanner {
+  background: linear-gradient(135deg, #1b3a5c, #2d7d6e);
+  border-radius: var(--radius-lg);
+  padding: 32px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+} */
+
+.welcomeBanner {
+  height: 200px;
+  background: 
+  linear-gradient(
+      135deg,
+      rgba(27, 58, 92, 0.11),
+      rgba(45, 125, 110, 0.134)
+    ),
+    url("/images/Patient_Panel/welcome_box_background3.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: var(--radius-lg);
+  padding: 32px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  /* min-height: 130px; */
+  box-shadow: var(--shadow-sm);
+}
+
+.welcomeText h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 4px;
+}
+
+.welcomeText p {
+  font-size: 16px;
+  opacity: 0.8;
+  margin: 0;
+}
+
+.welcomeImage {
+  font-size: 64px;
+  animation: float 3s ease-in-out infinite;
+}
+
+/* ===== Stats Grid ===== */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.statCard {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+.statCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.statIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.statInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.statValue {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.statLabel {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* ===== Section Card ===== */
+.sectionCard {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.sectionCard h3 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0 0 16px;
+}
+
+/* ===== Next Session ===== */
+.nextSession {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: var(--gray-light);
+  border-radius: var(--radius);
+  text-align: center;
+}
+
+.sessionDate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--white);
+  padding: 8px 24px;
+  border-radius: var(--radius);
+  min-width: 70px;
+}
+
+.dateDay {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.dateNumber {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.dateMonth {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.sessionInfo h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0 0 4px;
+}
+
+.sessionInfo p {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin: 4px 0;
+}
+
+.sessionBtn {
+  padding: 10px 32px;
+  background: linear-gradient(135deg, #2d7d6e, #4caf84);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+  width: 100%;
+}
+
+.sessionBtn:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 20px rgba(45, 125, 110, 0.3);
+}
+
+/* ===== Activity List ===== */
+.activityList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.activityItem {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  transition: var(--transition);
+}
+
+.activityItem:hover {
+  background: var(--gray-light);
+}
+
+.activityIcon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.activityInfo {
+  flex: 1;
+}
+
+.activityInfo p {
+  font-size: 14px;
+  color: var(--text-dark);
+  margin: 0;
+}
+
+.activityInfo span {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ============================================
+   RESPONSIVE
+============================================ */
+@media (max-width: 1200px) {
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 992px) {
+  .dashboardContent {
+    grid-template-columns: 1fr;
+  }
+
+  .sideColumn {
+    order: -1; /* جلسه بعدی بره بالا */
+  }
+
+  .nextSession {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: right;
+  }
+
+  .sessionBtn {
+    width: auto;
+    min-width: 150px;
+  }
+}
+
+@media (max-width: 768px) {
+  .welcomeBanner {
+    padding: 24px;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .welcomeImage {
+    font-size: 48px;
+    margin-top: 8px;
+  }
+
+  .statsGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .statCard {
+    padding: 16px;
+  }
+
+  .statValue {
+    font-size: 18px;
+  }
+
+  .statIcon {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+
+  .nextSession {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .sessionBtn {
+    width: 100%;
+  }
+
+  .sectionCard {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .welcomeBanner {
+    padding: 20px;
+  }
+
+  .welcomeText h2 {
+    font-size: 22px;
+  }
 }
 
 /* ============================================
