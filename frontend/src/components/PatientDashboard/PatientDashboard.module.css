@@ -456,7 +456,6 @@
   justify-content: space-between;
   align-items: center;
   color: white;
-  /* min-height: 130px; */
   box-shadow: var(--shadow-sm);
 }
 
@@ -468,8 +467,6 @@
   font-size: 30px;
   font-weight: 600;
   margin-bottom: 15px;
-  /* margin: 0 0 4px; */
-  /* font-family: "Shabnam"; */
 }
 
 .welcomeText p {
@@ -3507,7 +3504,6 @@
 /* ============================================
    EXERCISE CONTENT
 ============================================ */
-
 /* ===== Exercise Stats ===== */
 .exerciseStats {
   display: flex;
@@ -3581,31 +3577,6 @@
 }
 
 /* ===== Exercise Card ===== */
-/* .exerciseCard {
-  background: var(--white);
-  border-radius: var(--radius);
-  padding: 20px 24px;
-  box-shadow: var(--shadow-sm);
-  border: 1px solid rgba(0, 0, 0, 0.04);
-  transition: var(--transition);
-  position: relative;
-  cursor: pointer;
-}
-
-.exerciseCard:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
-
-.exerciseCard.completed {
-  opacity: 0.7;
-  border-color: #4caf84;
-}
-
-.exerciseCard.completed .exerciseTitle {
-  text-decoration: line-through;
-} */
-
 .exerciseCard {
   display: flex;
   align-items: flex-start;
@@ -3854,14 +3825,6 @@
 }
 
 /* ===== Exercise Description ===== */
-/* .exerciseDescription {
-  font-size: 14px;
-  color: var(--text-secondary);
-  line-height: 1.6;
-  margin: 12px 0 0;
-  padding-right: 64px;
-} */
-
 .exerciseDescription {
   font-size: 14px;
   color: var(--text-secondary);
@@ -3869,43 +3832,6 @@
   margin: 0;
   padding-left: 0;
 }
-
-/* ===== Exercise Details ===== */
-/* .exerciseDetails {
-  margin-top: 16px;
-  padding-top: 16px;
-  border-top: 1px solid var(--gray-light);
-  padding-right: 64px;
-}
-
-.instructionsSection h5 {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text-dark);
-  margin: 0 0 8px;
-}
-
-.instructionsSection ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.instructionsSection li {
-  padding: 6px 0;
-  padding-right: 24px;
-  font-size: 14px;
-  color: var(--text-secondary);
-  position: relative;
-}
-
-.instructionsSection li::before {
-  content: "•";
-  position: absolute;
-  right: 0;
-  color: #2d7d6e;
-  font-weight: 700;
-} */
 
 /* ===== Exercise Details ===== */
 .exerciseDetails {
@@ -3943,23 +3869,6 @@
   color: #2d7d6e;
   font-weight: 700;
 }
-
-/* ===== Exercise Footer ===== */
-/* .exerciseFooter {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 12px;
-}
-
-.exerciseAssignInfo {
-  display: flex;
-  gap: 16px;
-  font-size: 13px;
-  color: var(--text-muted);
-} */
 
 /* ===== Exercise Footer ===== */
 .exerciseFooter {
@@ -4016,29 +3925,6 @@
 }
 
 /* ===== Expand Button ===== */
-/* .expandBtn {
-  position: absolute;
-  bottom: 16px;
-  left: 20px;
-  width: 32px;
-  height: 32px;
-  border: none;
-  border-radius: 50%;
-  background: var(--gray-light);
-  color: var(--text-muted);
-  font-size: 14px;
-  cursor: pointer;
-  transition: var(--transition);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.expandBtn:hover {
-  background: #2d7d6e;
-  color: white;
-} */
-
 .expandBtn {
   display: inline-flex;
   align-items: center;
@@ -4157,138 +4043,6 @@
   border-color: #2d7d6e;
   color: #2d7d6e;
 }
-
-/* ============================================
-   RESPONSIVE
-============================================ */
-/* @media (max-width: 992px) {
-  .filterSection {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .filterTabs {
-    width: 100%;
-    overflow-x: auto;
-  }
-
-  .showCompletedToggle {
-    justify-content: center;
-  }
-}
-
-@media (max-width: 768px) {
-  .exerciseHeader {
-    flex-wrap: wrap;
-  }
-
-  .exerciseMainInfo h4 {
-    font-size: 15px;
-  }
-
-  .exerciseMeta {
-    gap: 4px;
-  }
-
-  .exerciseStatus {
-    width: 100%;
-    margin-top: 8px;
-  }
-
-  .exerciseDescription {
-    padding-right: 0;
-  }
-
-  .exerciseDetails {
-    padding-right: 0;
-  }
-
-  .exerciseFooter {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .exerciseAssignInfo {
-    justify-content: center;
-  }
-
-  .exerciseActions {
-    justify-content: center;
-  }
-
-  .btnDoExercise,
-  .btnUndo {
-    flex: 1;
-    justify-content: center;
-  }
-
-  .expandBtn {
-    bottom: 12px;
-    left: 12px;
-    width: 28px;
-    height: 28px;
-    font-size: 12px;
-  }
-
-  .exerciseStats {
-    padding: 6px 16px;
-    gap: 12px;
-  }
-
-  .statNumber {
-    font-size: 16px;
-  }
-
-  .statLabel {
-    font-size: 12px;
-  }
-
-  .exerciseActions {
-    flex-direction: column;
-  }
-
-  .btnReportProgress,
-  .btnShareProgress {
-    width: 100%;
-    justify-content: center;
-  }
-}
-
-@media (max-width: 480px) {
-  .exerciseCard {
-    padding: 16px;
-  }
-
-  .exerciseIcon {
-    width: 40px;
-    height: 40px;
-    font-size: 20px;
-  }
-
-  .typeBadge,
-  .priorityBadge {
-    font-size: 10px;
-    padding: 1px 10px;
-  }
-
-  .dueDate {
-    font-size: 12px;
-  }
-
-  .exerciseActions {
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .btnDoExercise,
-  .btnUndo {
-    width: 100%;
-  }
-
-  .expandBtn {
-    display: none;
-  }
-} */
 
 /* ============================================
    RESPONSIVE
