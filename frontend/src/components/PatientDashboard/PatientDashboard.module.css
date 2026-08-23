@@ -4377,3 +4377,690 @@
     margin-top: 6px;
   }
 }
+
+/* ============================================
+   PROFILE CONTENT
+============================================ */
+
+/* ===== Edit Profile Button ===== */
+.editProfileBtn {
+  padding: 10px 24px;
+  background: linear-gradient(135deg, #2d7d6e, #4caf84);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.editProfileBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(45, 125, 110, 0.3);
+}
+
+/* ===== Profile Main Card ===== */
+.profileMainCard {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+/* ===== Profile Header ===== */
+.profileHeader {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  padding: 32px 40px;
+  background: linear-gradient(135deg, #f8f6f3, #e8f4f8);
+  border-bottom: 1px solid var(--gray-light);
+}
+
+/* ===== Avatar Section ===== */
+.profileAvatarSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+
+.profileAvatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 4px solid var(--white);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  position: relative;
+}
+
+.profileAvatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.changeAvatarBtn {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #2d7d6e;
+  color: white;
+  border: 2px solid var(--white);
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.changeAvatarBtn:hover {
+  transform: scale(1.1);
+}
+
+.profileBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 14px;
+  background: #e8f5e9;
+  color: #2e7d32;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.badgeDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #4caf84;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* ===== Profile Main Info ===== */
+.profileMainInfo {
+  flex: 1;
+}
+
+.profileMainInfo h2 {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0 0 8px;
+}
+
+.profileMeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.metaDivider {
+  color: #d5d0ca;
+}
+
+/* ===== Quick Stats ===== */
+.profileQuickStats {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: 12px;
+}
+
+.quickStat {
+  display: flex;
+  flex-direction: column;
+}
+
+.quickStatNumber {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.quickStatLabel {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.quickStatDivider {
+  width: 1px;
+  height: 30px;
+  background: #d5d0ca;
+}
+
+/* ===== Profile Tabs ===== */
+.profileTabs {
+  display: flex;
+  gap: 4px;
+  padding: 16px 24px 0;
+  background: var(--gray-light);
+  border-bottom: 1px solid var(--gray-light);
+}
+
+.profileTab {
+  padding: 10px 20px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  border-radius: var(--radius) var(--radius) 0 0;
+  font-family: inherit;
+}
+
+.profileTab:hover {
+  color: var(--text-dark);
+}
+
+.profileTab.active {
+  background: var(--white);
+  color: #2d7d6e;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.04);
+}
+
+/* ===== Tab Content ===== */
+.profileTabContent {
+  padding: 24px;
+}
+
+/* ===== Info Tab ===== */
+.infoGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.infoItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.infoItemFull {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  grid-column: 1 / -1;
+}
+
+.infoItem label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.infoItem p {
+  font-size: 15px;
+  color: var(--text-dark);
+  margin: 0;
+  padding: 8px 12px;
+  background: var(--gray-light);
+  border-radius: var(--radius);
+}
+
+/* ===== Edit Inputs ===== */
+.editInput,
+.editSelect,
+.editTextarea {
+  padding: 10px 14px;
+  border: 2px solid var(--gray-light);
+  border-radius: var(--radius);
+  font-size: 15px;
+  font-family: inherit;
+  color: var(--text-dark);
+  transition: var(--transition);
+  background: var(--white);
+  width: 100%;
+}
+
+.editInput:focus,
+.editSelect:focus,
+.editTextarea:focus {
+  border-color: #2d7d6e;
+  box-shadow: 0 0 0 4px rgba(45, 125, 110, 0.08);
+  outline: none;
+}
+
+.editTextarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.editNameRow {
+  display: flex;
+  gap: 12px;
+}
+
+.editNameRow .editInput {
+  flex: 1;
+}
+
+/* ===== Emergency Section ===== */
+.emergencySection {
+  margin-top: 24px;
+  padding: 20px;
+  background: var(--gray-light);
+  border-radius: var(--radius);
+}
+
+.emergencySection h4 {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0 0 16px;
+}
+
+.emergencyGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* ===== Edit Actions ===== */
+.editActions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--gray-light);
+}
+
+.saveBtn {
+  padding: 12px 32px;
+  background: linear-gradient(135deg, #2d7d6e, #4caf84);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.saveBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(45, 125, 110, 0.3);
+}
+
+.cancelBtn {
+  padding: 12px 32px;
+  background: transparent;
+  color: var(--text-muted);
+  border: 1.5px solid var(--gray-light);
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.cancelBtn:hover {
+  border-color: #e74c3c;
+  color: #e74c3c;
+}
+
+/* ===== Medical Tab ===== */
+.medicalCard {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.medicalItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px;
+  background: var(--gray-light);
+  border-radius: var(--radius);
+}
+
+.medicalItem:last-child {
+  grid-column: 1 / -1;
+}
+
+.medicalLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.medicalValue {
+  font-size: 15px;
+  color: var(--text-dark);
+  font-weight: 500;
+}
+
+.medicalActions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.btnMedical {
+  padding: 12px 28px;
+  background: linear-gradient(135deg, #2d7d6e, #4caf84);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btnMedical:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(45, 125, 110, 0.3);
+}
+
+.btnMedicalSecondary {
+  padding: 12px 28px;
+  background: transparent;
+  color: var(--text-dark);
+  border: 1.5px solid var(--gray-light);
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btnMedicalSecondary:hover {
+  border-color: #2d7d6e;
+  color: #2d7d6e;
+}
+
+/* ===== Settings Tab ===== */
+.settingsGroup {
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--gray-light);
+}
+
+.settingsGroup:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.settingsGroup h4 {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0 0 12px;
+}
+
+.settingItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  gap: 12px;
+}
+
+.settingItem span {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+/* ===== Switch ===== */
+.switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.switchSlider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #d5d0ca;
+  border-radius: 30px;
+  transition: var(--transition);
+}
+
+.switchSlider::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: 50%;
+  transition: var(--transition);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.switch input:checked + .switchSlider {
+  background: #2d7d6e;
+}
+
+.switch input:checked + .switchSlider::after {
+  transform: translateX(20px);
+}
+
+/* ===== Change Password ===== */
+.changePasswordBtn {
+  padding: 4px 16px;
+  background: transparent;
+  color: #2d7d6e;
+  border: 1.5px solid #2d7d6e;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.changePasswordBtn:hover {
+  background: #2d7d6e;
+  color: white;
+}
+
+/* ===== Danger Section ===== */
+.settingsDanger {
+  margin-top: 20px;
+  padding: 20px;
+  background: #fbe9e7;
+  border-radius: var(--radius);
+  border: 1px solid #f5c6c6;
+}
+
+.settingsDanger h4 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #c62828;
+  margin: 0 0 12px;
+}
+
+.deleteAccountBtn {
+  padding: 10px 24px;
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.deleteAccountBtn:hover {
+  background: #c0392b;
+  transform: translateY(-2px);
+}
+
+/* ============================================
+   RESPONSIVE
+============================================ */
+@media (max-width: 992px) {
+  .profileHeader {
+    flex-direction: column;
+    text-align: center;
+    padding: 24px;
+  }
+
+  .profileQuickStats {
+    justify-content: center;
+  }
+
+  .profileMeta {
+    justify-content: center;
+  }
+
+  .infoGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .emergencyGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .medicalCard {
+    grid-template-columns: 1fr;
+  }
+
+  .medicalItem:last-child {
+    grid-column: 1;
+  }
+
+  .editNameRow {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 768px) {
+  .pageHeader {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .editProfileBtn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .profileTabs {
+    overflow-x: auto;
+    padding: 12px 16px 0;
+    gap: 2px;
+  }
+
+  .profileTab {
+    padding: 8px 14px;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  .profileTabContent {
+    padding: 16px;
+  }
+
+  .profileAvatar {
+    width: 100px;
+    height: 100px;
+  }
+
+  .profileMainInfo h2 {
+    font-size: 22px;
+  }
+
+  .editActions {
+    flex-direction: column;
+  }
+
+  .saveBtn,
+  .cancelBtn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .medicalActions {
+    flex-direction: column;
+  }
+
+  .btnMedical,
+  .btnMedicalSecondary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .changePasswordBtn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .deleteAccountBtn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .profileHeader {
+    padding: 16px;
+  }
+
+  .profileAvatar {
+    width: 80px;
+    height: 80px;
+  }
+
+  .profileMainInfo h2 {
+    font-size: 20px;
+  }
+
+  .quickStatNumber {
+    font-size: 16px;
+  }
+
+  .profileQuickStats {
+    gap: 12px;
+  }
+
+  .settingItem {
+    flex-wrap: wrap;
+  }
+
+  .switch {
+    margin-right: auto;
+  }
+
+  .changePasswordBtn {
+    width: auto;
+  }
+}
