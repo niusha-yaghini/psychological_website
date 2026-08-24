@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./PatientDashboard.module.css";
 import {
@@ -25,6 +25,66 @@ function PatientDashboard() {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [userData, setUserData] = useState(null);
   const navigate = useNavigate();
+
+  // ==========================================
+  // 📌 STATE های اصلی اینجا تعریف میشن
+  // ==========================================
+
+  // ===== داده‌های نوبت‌ها =====
+  const [appointments, setAppointments] = useState([
+    {
+      id: 1,
+      type: "جلسه مشاوره فردی",
+      doctor: "دکتر محمد رضایی",
+      doctorId: 1,
+      date: "۱۴۰۳/۰۹/۲۵",
+      time: "۱۶:۰۰ - ۱۷:۰۰",
+      status: "confirmed",
+      isOnline: true,
+      cancelledBy: null,
+      cancelReason: null,
+      createdAt: "۱۴۰۳/۰۹/۲۰",
+    },
+    {
+      id: 2,
+      type: "جلسه زوج درمانی",
+      doctor: "دکتر سارا احمدی",
+      doctorId: 2,
+      date: "۱۴۰۳/۰۹/۲۸",
+      time: "۱۸:۰۰ - ۱۹:۰۰",
+      status: "pending",
+      isOnline: false,
+      cancelledBy: null,
+      cancelReason: null,
+      createdAt: "۱۴۰۳/۰۹/۲۱",
+    },
+    {
+      id: 3,
+      type: "جلسه مشاوره فردی",
+      doctor: "دکتر محمد رضایی",
+      doctorId: 1,
+      date: "۱۴۰۳/۰۹/۲۰",
+      time: "۱۵:۰۰ - ۱۶:۰۰",
+      status: "completed",
+      isOnline: true,
+      cancelledBy: null,
+      cancelReason: null,
+      createdAt: "۱۴۰۳/۰۹/۱۵",
+    },
+    {
+      id: 4,
+      type: "جلسه مشاوره فردی",
+      doctor: "دکتر علی کریمی",
+      doctorId: 3,
+      date: "۱۴۰۳/۰۹/۱۸",
+      time: "۱۰:۰۰ - ۱۱:۰۰",
+      status: "cancelled",
+      isOnline: true,
+      cancelledBy: "user",
+      cancelReason: "مشکل شخصی",
+      createdAt: "۱۴۰۳/۰۹/۱۰",
+    },
+  ]);
 
   // ===== داده‌های نوتیفیکیشن =====
   const [notifications, setNotifications] = useState([
@@ -56,18 +116,30 @@ function PatientDashboard() {
     // ... بقیه اعلان‌ها
   ]);
 
+  // ===== محاسبه تعداد جلسات پیش‌رو =====
+  const upcomingAppointmentsCount = useMemo(() => {
+    return appointments.filter(
+      (app) => app.status === "confirmed" || app.status === "pending",
+    ).length;
+  }, [appointments]);
+
+  // ===== محاسبه تعداد پیام‌های خوانده نشده =====
+  const unreadMessagesCount = useMemo(() => {
+    return notifications.filter((n) => !n.isRead).length;
+  }, [notifications]);
+
   // ===== توابع =====
   const markAsRead = (id) => {
     setNotifications((prev) =>
       prev.map((notif) =>
-        notif.id === id ? { ...notif, isRead: true } : notif
-      )
+        notif.id === id ? { ...notif, isRead: true } : notif,
+      ),
     );
   };
 
   const markAllAsRead = () => {
     setNotifications((prev) =>
-      prev.map((notif) => ({ ...notif, isRead: true }))
+      prev.map((notif) => ({ ...notif, isRead: true })),
     );
   };
 
@@ -92,6 +164,7 @@ function PatientDashboard() {
   const menuItems = [
     {
       id: "dashboard",
+
       label: "داشبورد",
       icon: <FaHome />,
       path: "/dashboard",
@@ -101,7 +174,9 @@ function PatientDashboard() {
       label: "نوبت‌های من",
       icon: <FaCalendarAlt />,
       path: "/appointments",
-      badge: 3,
+      // badge: 3,
+      badge:
+        upcomingAppointmentsCount > 0 ? upcomingAppointmentsCount : undefined,
     },
     {
       id: "sessions",
@@ -114,7 +189,8 @@ function PatientDashboard() {
       label: "پیام‌ها",
       icon: <FaCommentDots />,
       path: "/messages",
-      badge: 5,
+      // badge: 5,
+      badge: unreadMessagesCount > 0 ? unreadMessagesCount : undefined,
     },
     {
       id: "progress",
@@ -328,8 +404,8 @@ function DashboardContent({ userData }) {
               </div>
               <div className={styles.sessionInfo}>
                 <h4>جلسه مشاوره فردی</h4>
-                <p>⏰ ۱۶:۰۰ - ۱۷:۰۰</p>
-                <p>👤 دکتر محمد رضایی</p>
+                <p>۱۶:۰۰ - ۱۷:۰۰</p>
+                <p>دکتر محمد رضایی</p>
               </div>
               <button className={styles.sessionBtn}>ورود به جلسه</button>
             </div>
@@ -471,8 +547,8 @@ function AppointmentsContent() {
               cancelledBy: "user",
               cancelReason: reason,
             }
-          : item
-      )
+          : item,
+      ),
     );
 
     alert("نوبت با موفقیت لغو شد.");
@@ -574,10 +650,11 @@ function AppointmentsContent() {
             onClick={() => setActiveFilter(filter.id)}
           >
             {filter.label}
+            &nbsp;
             <span className={styles.filterCount}>
               {
                 appointments.filter((item) =>
-                  filter.id === "all" ? true : item.status === filter.id
+                  filter.id === "all" ? true : item.status === filter.id,
                 ).length
               }
             </span>
@@ -597,12 +674,12 @@ function AppointmentsContent() {
                   <span
                     className={`${styles.statusBadge} ${statusInfo.className}`}
                   >
-                    <span className={styles.statusIcon}>{statusInfo.icon}</span>
+                    {/* <span className={styles.statusIcon}>{statusInfo.icon}</span> */}
                     {statusInfo.label}
                   </span>
 
                   {appointment.isOnline && (
-                    <span className={styles.onlineBadge}>🖥️ آنلاین</span>
+                    <span className={styles.onlineBadge}>آنلاین</span>
                   )}
 
                   {appointment.status === "cancelled" && (
@@ -649,10 +726,10 @@ function AppointmentsContent() {
                   <div className={styles.appointmentActions}>
                     {appointment.status === "confirmed" && (
                       <>
-                        <button className={styles.btnJoin}>
+                        {/* <button className={styles.btnJoin}>
                           <span>▶</span>
                           ورود به جلسه
-                        </button>
+                        </button> */}
                         {canCancel(appointment) && (
                           <button
                             className={styles.btnCancel}
@@ -666,7 +743,7 @@ function AppointmentsContent() {
                       </>
                     )}
 
-                    {appointment.status === "pending" && (
+                    {/* {appointment.status === "pending" && (
                       <>
                         <button className={styles.btnPending}>
                           در انتظار تأیید
@@ -682,13 +759,13 @@ function AppointmentsContent() {
                           </button>
                         )}
                       </>
-                    )}
+                    )} */}
 
-                    {appointment.status === "completed" && (
+                    {/* {appointment.status === "completed" && (
                       <button className={styles.btnReview}>ثبت بازخورد</button>
-                    )}
+                    )} */}
 
-                    {appointment.status === "cancelled" && (
+                    {/* {appointment.status === "cancelled" && (
                       <button
                         className={styles.btnReschedule}
                         onClick={() => {
@@ -698,9 +775,9 @@ function AppointmentsContent() {
                       >
                         رزرو مجدد
                       </button>
-                    )}
+                    )} */}
 
-                    <button className={styles.btnMore}>
+                    {/* <button className={styles.btnMore}>
                       <svg
                         width="20"
                         height="20"
@@ -711,7 +788,7 @@ function AppointmentsContent() {
                         <circle cx="12" cy="12" r="2" fill="currentColor" />
                         <circle cx="12" cy="18" r="2" fill="currentColor" />
                       </svg>
-                    </button>
+                    </button> */}
                   </div>
                 </div>
               </div>
@@ -1059,30 +1136,32 @@ function SessionsContent() {
       meetingLink: "https://meet.google.com/xyz-uvwx-yza",
       type: "individual",
     },
-    {
-      id: 4,
-      title: "جلسه مشاوره نوجوان",
-      doctor: "دکتر علی کریمی",
-      doctorImage: "/images/doctors/doctor3.png",
-      date: "۱۴۰۳/۰۹/۱۰",
-      time: "۱۰:۰۰",
-      duration: "۶۰ دقیقه",
-      status: "cancelled",
-      isOnline: true,
-      meetingLink: null,
-      type: "teen",
-    },
+    // {
+    //   id: 4,
+    //   title: "جلسه مشاوره نوجوان",
+    //   doctor: "دکتر علی کریمی",
+    //   doctorImage: "/images/doctors/doctor3.png",
+    //   date: "۱۴۰۳/۰۹/۱۰",
+    //   time: "۱۰:۰۰",
+    //   duration: "۶۰ دقیقه",
+    //   status: "cancelled",
+    //   isOnline: true,
+    //   meetingLink: null,
+    //   type: "teen",
+    // },
   ];
 
   // ===== فیلتر کردن جلسات =====
   const getFilteredSessions = () => {
     if (activeTab === "upcoming") {
       return sessions.filter(
-        (s) => s.status === "upcoming" || s.status === "ongoing"
+        (s) => s.status === "upcoming" || s.status === "ongoing",
       );
     }
     return sessions.filter(
-      (s) => s.status === "completed" || s.status === "cancelled"
+      // (s) => s.status === "completed" || s.status === "cancelled",
+      
+      (s) => s.status === "completed" || s.status === "cancelled",
     );
   };
 
@@ -1103,42 +1182,134 @@ function SessionsContent() {
         label: "انجام شده",
         className: styles.sessionCompleted,
       },
-      cancelled: {
-        label: "لغو شده",
-        className: styles.sessionCancelled,
-      },
+      // cancelled: {
+      //   label: "لغو شده",
+      //   className: styles.sessionCancelled,
+      // },
     };
     return statusMap[status] || statusMap.upcoming;
   };
 
-  // ===== تایمر شمارش معکوس (برای جلسات آینده) =====
-  const [timeLeft, setTimeLeft] = useState({});
+  // ===== پیدا کردن جلسه بعدی (نزدیک‌ترین جلسه) =====
+  const getNextSession = () => {
+    const upcomingSessions = sessions.filter(
+      (s) => s.status === "upcoming" || s.status === "ongoing",
+    );
+
+    if (upcomingSessions.length === 0) return null;
+
+    // مرتب‌سازی بر اساس تاریخ و زمان
+    return upcomingSessions.sort((a, b) => {
+      const dateA = new Date(a.date + " " + a.time);
+      const dateB = new Date(b.date + " " + b.time);
+      return dateA - dateB;
+    })[0];
+  };
+
+  const nextSession = getNextSession();
+
+  // ===== تایمر شمارش معکوس (فقط برای جلسه بعدی) =====
+  const [timeLeft, setTimeLeft] = useState(null);
 
   useEffect(() => {
-    const intervals = {};
-    sessions.forEach((session) => {
-      if (session.status === "upcoming") {
-        const targetDate = new Date(session.date + " " + session.time);
-        intervals[session.id] = setInterval(() => {
-          const now = new Date();
-          const diff = targetDate - now;
-          if (diff <= 0) {
-            clearInterval(intervals[session.id]);
-          } else {
-            const hours = Math.floor(diff / (1000 * 60 * 60));
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            setTimeLeft((prev) => ({
-              ...prev,
-              [session.id]: { hours, minutes },
-            }));
-          }
-        }, 1000);
+    if (!nextSession) return;
+
+    const targetDate = new Date(nextSession.date + " " + nextSession.time);
+
+    const interval = setInterval(() => {
+      const now = new Date();
+      const diff = targetDate - now;
+
+      if (diff <= 0) {
+        clearInterval(interval);
+        setTimeLeft(null);
+        // می‌تونی وضعیت جلسه رو به "ongoing" تغییر بدی
+      } else {
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        setTimeLeft({ hours, minutes });
       }
-    });
-    return () => {
-      Object.values(intervals).forEach((interval) => clearInterval(interval));
-    };
-  }, []);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [nextSession]);
+
+  // useEffect(() => {
+  //   const intervals = {};
+  //   sessions.forEach((session) => {
+  //     if (session.status === "upcoming") {
+  //       const targetDate = new Date(session.date + " " + session.time);
+  //       intervals[session.id] = setInterval(() => {
+  //         const now = new Date();
+  //         const diff = targetDate - now;
+  //         if (diff <= 0) {
+  //           clearInterval(intervals[session.id]);
+  //         } else {
+  //           const hours = Math.floor(diff / (1000 * 60 * 60));
+  //           const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+  //           setTimeLeft((prev) => ({
+  //             ...prev,
+  //             [session.id]: { hours, minutes },
+  //           }));
+  //         }
+  //       }, 1000);
+  //     }
+  //   });
+  //   return () => {
+  //     Object.values(intervals).forEach((interval) => clearInterval(interval));
+  //   };
+  // }, []);
+
+  // ===== تابع لغو جلسه =====
+  const handleCancelSession = (sessionId) => {
+    const session = sessions.find((s) => s.id === sessionId);
+    if (!session) return;
+
+    // ===== اگر قبلاً لغو شده =====
+    if (session.status === "cancelled") {
+      alert("❌ این جلسه قبلاً لغو شده است.");
+      return;
+    }
+
+    // ===== بررسی قانون ۲۴ ساعت =====
+    const now = new Date();
+    const sessionDate = new Date(session.date + " " + session.time);
+    const diffHours = (sessionDate - now) / (1000 * 60 * 60);
+
+    if (diffHours < 24) {
+      alert("❌ امکان لغو جلسه کمتر از ۲۴ ساعت قبل وجود ندارد.");
+      return;
+    }
+
+    const reason = prompt("لطفاً دلیل لغو جلسه را وارد کنید:");
+    if (reason === null) return;
+
+    // ===== به‌روزرسانی وضعیت =====
+    setSessions((prev) =>
+      prev.map((item) =>
+        item.id === sessionId
+          ? {
+              ...item,
+              status: "cancelled",
+              cancelledBy: "user",
+              cancelReason: reason,
+            }
+          : item,
+      ),
+    );
+
+    alert("✅ جلسه با موفقیت لغو شد.");
+  };
+
+  // ===== بررسی امکان لغو =====
+  const canCancelSession = (session) => {
+    if (session.status !== "upcoming") return false;
+
+    const now = new Date();
+    const sessionDate = new Date(session.date + " " + session.time);
+    const diffHours = (sessionDate - now) / (1000 * 60 * 60);
+    return diffHours >= 24;
+  };
 
   return (
     <div className={styles.pageContent}>
@@ -1150,12 +1321,22 @@ function SessionsContent() {
         </div>
         <div className={styles.sessionStats}>
           <span className={styles.statItem}>
-            <span className={styles.statNumber}>۳</span>
+            {/* <span className={styles.statNumber}>۳</span> */}
+            <span className={styles.statNumber}>
+              {
+                sessions.filter(
+                  (s) => s.status === "upcoming" || s.status === "ongoing",
+                ).length
+              }
+            </span>
             <span className={styles.statLabel}>جلسه پیش‌رو</span>
           </span>
           <span className={styles.statDivider}>|</span>
           <span className={styles.statItem}>
-            <span className={styles.statNumber}>۱۲</span>
+            {/* <span className={styles.statNumber}>۱۲</span> */}
+            <span className={styles.statNumber}>
+              {sessions.filter((s) => s.status === "completed").length}
+            </span>
             <span className={styles.statLabel}>جلسه برگزار شده</span>
           </span>
         </div>
@@ -1169,7 +1350,7 @@ function SessionsContent() {
           }`}
           onClick={() => setActiveTab("upcoming")}
         >
-          📅 جلسات پیش‌رو
+          جلسات پیش‌رو
         </button>
         <button
           className={`${styles.filterTab} ${
@@ -1177,13 +1358,98 @@ function SessionsContent() {
           }`}
           onClick={() => setActiveTab("past")}
         >
-          📋 تاریخچه جلسات
+          تاریخچه جلسات
         </button>
       </div>
 
       {/* لیست جلسات */}
       <div className={styles.sessionsList}>
-        {filteredSessions.length > 0 ? (
+        {/* جلسه بعدی - کارت ویژه */}
+        {/* {activeTab === "upcoming" &&
+          sessions.some((s) => s.status === "upcoming") && (
+            <div className={styles.nextSessionBanner}>
+              <div className={styles.nextSessionContent}>
+                <span className={styles.nextSessionLabel}>جلسه بعدی شما</span>
+                <h3>{sessions.find((s) => s.status === "upcoming")?.title}</h3>
+                <p>
+                  با {sessions.find((s) => s.status === "upcoming")?.doctor}
+                </p>
+                <div className={styles.nextSessionTime}>
+                  <span>
+                    {sessions.find((s) => s.status === "upcoming")?.date}
+                  </span>
+                  <span>
+                    {sessions.find((s) => s.status === "upcoming")?.time}
+                  </span>
+                </div>
+              </div>
+              <button className={styles.btnNextSession}>
+                ورود به جلسه
+                <span>→</span>
+              </button>
+              
+            </div>
+          )} */}
+
+        {activeTab === "upcoming" && nextSession && (
+          <div className={styles.nextSessionBanner}>
+            <div className={styles.nextSessionContent}>
+              <span className={styles.nextSessionLabel}>جلسه بعدی شما</span>
+              <h3>{nextSession.title}</h3>
+              <p>با {nextSession.doctor}</p>
+              <div className={styles.nextSessionTime}>
+                <span>{nextSession.date}</span>
+                <span>-</span>
+                <span>{nextSession.time}</span>
+              </div>
+
+              {/* ===== تایمر فقط اینجا ===== */}
+              {/* {timeLeft && (
+                <div className={styles.nextSessionTimer}>
+                  <span className={styles.timerLabel}>زمان تا شروع:</span>
+                  <div className={styles.timerDigits}>
+                    <span className={styles.timerDigit}>
+                      {String(timeLeft.hours).padStart(2, "0")}
+                      <span className={styles.timerUnit}>ساعت</span>
+                    </span>
+                    <span className={styles.timerSeparator}>:</span>
+                    <span className={styles.timerDigit}>
+                      {String(timeLeft.minutes).padStart(2, "0")}
+                      <span className={styles.timerUnit}>دقیقه</span>
+                    </span>
+                  </div>
+                </div>
+              )} */}
+            </div>
+
+            <div className={styles.nextSessionTimerEnterContainer}>
+              <button className={styles.btnNextSession}>
+                ورود به جلسه
+                <span>→</span>
+              </button>
+
+              {/* ===== تایمر فقط اینجا ===== */}
+              {timeLeft && (
+                <div className={styles.nextSessionTimer}>
+                  <span className={styles.timerLabel}>زمان تا شروع:</span>
+                  <div className={styles.timerDigits}>
+                    <span className={styles.timerDigit}>
+                      {String(timeLeft.hours).padStart(2, "0")}
+                      <span className={styles.timerUnit}>ساعت</span>
+                    </span>
+                    <span className={styles.timerSeparator}>:</span>
+                    <span className={styles.timerDigit}>
+                      {String(timeLeft.minutes).padStart(2, "0")}
+                      <span className={styles.timerUnit}>دقیقه</span>
+                    </span>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* {filteredSessions.length > 0 ? (
           filteredSessions.map((session) => {
             const statusInfo = getStatusInfo(session.status);
             const isUpcoming =
@@ -1192,7 +1458,6 @@ function SessionsContent() {
 
             return (
               <div key={session.id} className={styles.sessionCard}>
-                {/* هدر کارت */}
                 <div className={styles.sessionCardHeader}>
                   <div className={styles.sessionDoctor}>
                     <img
@@ -1202,6 +1467,9 @@ function SessionsContent() {
                     />
                     <div>
                       <h4>{session.doctor}</h4>
+                      <span className={styles.sessionType}>
+                        {session.title}
+                      </span>
                     </div>
                   </div>
                   <span
@@ -1212,26 +1480,21 @@ function SessionsContent() {
                   </span>
                 </div>
 
-                {/* جزئیات جلسه */}
                 <div className={styles.sessionDetails}>
                   <div className={styles.sessionMeta}>
                     <div className={styles.metaGroup}>
-                      {/* <span className={styles.metaIcon}>📅</span> */}
                       <span>{session.date}</span>
                     </div>
                     <div className={styles.metaGroup}>
-                      {/* <span className={styles.metaIcon}>⏰</span> */}
                       <span>
                         {session.time} - {session.duration}
                       </span>
                     </div>
                     <div className={styles.metaGroup}>
-                      {/* <span className={styles.metaIcon}>🔗</span> */}
                       <span>جلسه آنلاین</span>
                     </div>
                   </div>
 
-                  {/* تایمر شمارش معکوس */}
                   {isUpcoming && timeLeftData && (
                     <div className={styles.sessionTimer}>
                       <span className={styles.timerLabel}>زمان تا شروع:</span>
@@ -1250,7 +1513,6 @@ function SessionsContent() {
                   )}
                 </div>
 
-                {/* دکمه‌های اکشن */}
                 <div className={styles.sessionActions}>
                   {session.status === "upcoming" && (
                     <>
@@ -1303,32 +1565,184 @@ function SessionsContent() {
                 : "هنوز جلسه برگزار شده‌ای وجود ندارد."}
             </p>
           </div>
-        )}
-      </div>
+        )} */}
 
-      {/* جلسه بعدی - کارت ویژه */}
-      {activeTab === "upcoming" &&
-        sessions.some((s) => s.status === "upcoming") && (
-          <div className={styles.nextSessionBanner}>
-            <div className={styles.nextSessionContent}>
-              <span className={styles.nextSessionLabel}>جلسه بعدی شما</span>
-              <h3>{sessions.find((s) => s.status === "upcoming")?.title}</h3>
-              <p>با {sessions.find((s) => s.status === "upcoming")?.doctor}</p>
-              <div className={styles.nextSessionTime}>
-                <span>
-                  {sessions.find((s) => s.status === "upcoming")?.date}
-                </span>
-                <span>
-                  {sessions.find((s) => s.status === "upcoming")?.time}
-                </span>
+        {/* ===== لیست بقیه جلسات (بدون تایمر) ===== */}
+        {filteredSessions.length > 0 ? (
+          filteredSessions.map((session) => {
+            // اگر این جلسه، جلسه بعدی هست، از رندر کردنش صرف‌نظر کن
+            if (nextSession && session.id === nextSession.id) return null;
+
+            const statusInfo = getStatusInfo(session.status);
+            const isUpcoming =
+              session.status === "upcoming" || session.status === "ongoing";
+
+            return (
+              <div key={session.id} className={styles.sessionCard}>
+                {/* هدر کارت */}
+                <div className={styles.sessionCardHeader}>
+                  <div className={styles.sessionDoctor}>
+                    <img
+                      src={session.doctorImage}
+                      alt={session.doctor}
+                      className={styles.sessionDoctorAvatar}
+                    />
+                    <div>
+                      <h4>{session.doctor}</h4>
+                      <span className={styles.sessionType}>
+                        {session.title}
+                      </span>
+                    </div>
+                  </div>
+                  <span
+                    className={`${styles.sessionStatus} ${statusInfo.className}`}
+                  >
+                    <span className={styles.statusDot}></span>
+                    {statusInfo.label}
+                  </span>
+                </div>
+
+                {/* جزئیات جلسه (بدون تایمر) */}
+                <div className={styles.sessionDetails}>
+                  <div className={styles.sessionMeta}>
+                    <div className={styles.metaGroup}>
+                      <span>{session.date}</span>
+                    </div>
+                    <div className={styles.metaGroup}>
+                      <span>
+                        {session.time} - {session.duration}
+                      </span>
+                    </div>
+                    <div className={styles.metaGroup}>
+                      <span>جلسه آنلاین</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* دکمه‌های اکشن */}
+                {/* <div className={styles.sessionActions}>
+                  {session.status === "upcoming" && (
+                    <>
+                      <button className={styles.btnJoinSession}>
+                        <span>▶</span>
+                        ورود به جلسه
+                      </button>
+                      <button className={styles.btnRemind}>🔔 یادآوری</button>
+                    </>
+                  )}
+                  {session.status === "ongoing" && (
+                    <button className={styles.btnJoinNow}>
+                      <span className={styles.pulseDot}></span>
+                      ورود به جلسه (در حال برگزاری)
+                    </button>
+                  )}
+                  {session.status === "completed" && (
+                    <>
+                      <button className={styles.btnViewRecord}>
+                        مشاهده ضبط جلسه
+                      </button>
+                      <button className={styles.btnFeedback}>
+                        ثبت بازخورد
+                      </button>
+                    </>
+                  )}
+                  {session.status === "cancelled" && (
+                    <button className={styles.btnRescheduleSession}>
+                      رزرو مجدد
+                    </button>
+                  )}
+                  <button className={styles.btnMore}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                      <circle cx="12" cy="6" r="2" fill="currentColor" />
+                      <circle cx="12" cy="12" r="2" fill="currentColor" />
+                      <circle cx="12" cy="18" r="2" fill="currentColor" />
+                    </svg>
+                  </button>
+                </div> */}
+                
+                {/* دکمه‌های اکشن */}
+                <div className={styles.sessionActions}>
+                  {session.status === "upcoming" && (
+                    <>
+                      {/* ===== اگر جلسه بعدی است ===== */}
+                      {nextSession && session.id === nextSession.id ? (
+                        <button className={styles.btnJoinSession}>
+                          <span>▶</span>
+                          ورود به جلسه
+                        </button>
+                      ) : (
+                        /* ===== اگر جلسه آتی است ===== */
+                        <>
+                          {canCancelSession(session) ? (
+                            <button
+                              className={styles.btnCancelSession}
+                              onClick={() => handleCancelSession(session.id)}
+                            >
+                              لغو جلسه
+                            </button>
+                          ) : (
+                            <button
+                              className={styles.btnCancelDisabled}
+                              disabled
+                            >
+                              قابل لغو نیست (کمتر از ۲۴ ساعت)
+                            </button>
+                          )}
+                          <button className={styles.btnRemind}>
+                            🔔 یادآوری
+                          </button>
+                        </>
+                      )}
+                    </>
+                  )}
+
+                  {session.status === "ongoing" && (
+                    <button className={styles.btnJoinNow}>
+                      <span className={styles.pulseDot}></span>
+                      ورود به جلسه (در حال برگزاری)
+                    </button>
+                  )}
+
+                  {session.status === "completed" && (
+                    <>
+                      <button className={styles.btnViewRecord}>
+                        مشاهده ضبط جلسه
+                      </button>
+                      <button className={styles.btnFeedback}>
+                        ثبت بازخورد
+                      </button>
+                    </>
+                  )}
+
+                  {/* {session.status === "cancelled" && (
+                    <button className={styles.btnRescheduleSession}>
+                      رزرو مجدد
+                    </button>
+                  )} */}
+
+                  {/* <button className={styles.btnMore}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                      <circle cx="12" cy="6" r="2" fill="currentColor" />
+                      <circle cx="12" cy="12" r="2" fill="currentColor" />
+                      <circle cx="12" cy="18" r="2" fill="currentColor" />
+                    </svg>
+                  </button> */}
+                </div>
               </div>
-            </div>
-            <button className={styles.btnNextSession}>
-              ورود به جلسه
-              <span>→</span>
-            </button>
+            );
+          })
+        ) : (
+          <div className={styles.emptyState}>
+            <span className={styles.emptyIcon}>🎥</span>
+            <h3>هیچ جلسه‌ای در این دسته وجود ندارد</h3>
+            <p>
+              {activeTab === "upcoming"
+                ? "شما هیچ جلسه پیش‌رویی ندارید."
+                : "هنوز جلسه برگزار شده‌ای وجود ندارد."}
+            </p>
           </div>
         )}
+      </div>
     </div>
   );
 }
@@ -1342,7 +1756,7 @@ function MessagesContent() {
     {
       id: 1,
       type: "reminder",
-      icon: "⏰",
+      // icon: "⏰",
       title: "یادآوری جلسه فردا",
       message:
         "جلسه مشاوره فردی شما با دکتر محمد رضایی فردا ساعت ۱۶:۰۰ برگزار میشود.",
@@ -1355,7 +1769,7 @@ function MessagesContent() {
     {
       id: 2,
       type: "confirmed",
-      icon: "✅",
+      // icon: "✅",
       title: "تأیید جلسه",
       message: "دکتر سارا احمدی درخواست جلسه زوج درمانی شما را تأیید کرد.",
       time: "۱ ساعت پیش",
@@ -1367,7 +1781,7 @@ function MessagesContent() {
     {
       id: 3,
       type: "cancelled",
-      icon: "❌",
+      // icon: "❌",
       title: "لغو جلسه توسط روانشناس",
       message: "دکتر علی کریمی جلسه مشاوره نوجوان را به دلیل هماهنگی لغو کرد.",
       time: "۳ ساعت پیش",
@@ -1379,7 +1793,7 @@ function MessagesContent() {
     {
       id: 4,
       type: "note",
-      icon: "📝",
+      // icon: "📝",
       title: "یادداشت جدید از روانشناس",
       message: "دکتر محمد رضایی برای جلسه قبلی شما یادداشتی ثبت کرده است.",
       time: "۵ ساعت پیش",
@@ -1391,7 +1805,7 @@ function MessagesContent() {
     {
       id: 5,
       type: "booking",
-      icon: "📅",
+      // icon: "📅",
       title: "رزرو جلسه جدید",
       message:
         "شما جلسه مشاوره فردی را برای تاریخ ۱۴۰۳/۰۹/۲۸ ساعت ۱۷:۰۰ رزرو کردید.",
@@ -1404,7 +1818,7 @@ function MessagesContent() {
     {
       id: 6,
       type: "weekly",
-      icon: "🔄",
+      // icon: "🔄",
       title: "زمان جلسات هفتگی",
       message:
         "زمان جلسات هفتگی شما فرا رسیده است. آیا مایل به رزرو جلسه جدید هستید؟",
@@ -1433,15 +1847,15 @@ function MessagesContent() {
   const markAsRead = (id) => {
     setNotifications((prev) =>
       prev.map((notif) =>
-        notif.id === id ? { ...notif, isRead: true } : notif
-      )
+        notif.id === id ? { ...notif, isRead: true } : notif,
+      ),
     );
   };
 
   // ===== علامت‌گذاری همه به عنوان خوانده شده =====
   const markAllAsRead = () => {
     setNotifications((prev) =>
-      prev.map((notif) => ({ ...notif, isRead: true }))
+      prev.map((notif) => ({ ...notif, isRead: true })),
     );
   };
 
@@ -1549,12 +1963,12 @@ function MessagesContent() {
                 onClick={() => markAsRead(notification.id)}
               >
                 {/* آیکون */}
-                <div
+                {/* <div
                   className={styles.notificationIcon}
                   style={{ background: typeStyle.bg }}
                 >
                   <span>{typeStyle.icon}</span>
-                </div>
+                </div> */}
 
                 {/* محتوای اصلی */}
                 <div className={styles.notificationContent}>
@@ -1611,8 +2025,8 @@ function MessagesContent() {
               {filter === "unread"
                 ? "همه اعلان‌ها را خوانده‌اید. "
                 : filter === "read"
-                ? "هنوز اعلان خوانده شده‌ای وجود ندارد."
-                : "هنوز اعلانی دریافت نکرده‌اید."}
+                  ? "هنوز اعلان خوانده شده‌ای وجود ندارد."
+                  : "هنوز اعلانی دریافت نکرده‌اید."}
             </p>
           </div>
         )}
@@ -1652,17 +2066,17 @@ function NotificationDropdown({
   const unreadCount = notifications.filter((n) => !n.isRead).length;
 
   // ===== دریافت آیکون بر اساس نوع =====
-  const getIcon = (type) => {
-    const icons = {
-      reminder: "⏰",
-      confirmed: "✅",
-      cancelled: "❌",
-      note: "📝",
-      booking: "📅",
-      weekly: "🔄",
-    };
-    return icons[type] || "🔔";
-  };
+  // const getIcon = (type) => {
+  //   const icons = {
+  //     reminder: "⏰",
+  //     confirmed: "✅",
+  //     cancelled: "❌",
+  //     note: "📝",
+  //     booking: "📅",
+  //     weekly: "🔄",
+  //   };
+  //   return icons[type] || "🔔";
+  // };
 
   // ===== دریافت استایل بر اساس نوع =====
   const getTypeStyle = (type) => {
@@ -1723,12 +2137,12 @@ function NotificationDropdown({
                     }
                   }}
                 >
-                  <div
+                  {/* <div
                     className={styles.dropdownIcon}
                     style={{ background: getTypeStyle(notification.type) }}
                   >
                     <span>{getIcon(notification.type)}</span>
-                  </div>
+                  </div> */}
                   <div className={styles.dropdownContent}>
                     <div className={styles.dropdownText}>
                       <span className={styles.dropdownTitleText}>
@@ -1748,7 +2162,7 @@ function NotificationDropdown({
               ))
             ) : (
               <div className={styles.dropdownEmpty}>
-                <span className={styles.dropdownEmptyIcon}>🎉</span>
+                {/* <span className={styles.dropdownEmptyIcon}>🎉</span> */}
                 <p>همه اعلان‌ها را خوانده‌اید!</p>
                 <span className={styles.dropdownEmptySub}>
                   هیچ اعلان جدیدی وجود ندارد
@@ -1845,7 +2259,7 @@ function ProgressContent() {
 
   // ===== محاسبه درصد =====
   const percentage = Math.round(
-    (progressData.completedSessions / progressData.totalSessions) * 100
+    (progressData.completedSessions / progressData.totalSessions) * 100,
   );
 
   // ===== محاسبه محیط دایره =====
@@ -1858,7 +2272,7 @@ function ProgressContent() {
       {/* هدر بخش */}
       <div className={styles.pageHeader}>
         <div className={styles.headerInfo}>
-          <h2>📈 پیشرفت من</h2>
+          <h2>پیشرفت من</h2>
           <p>مسیر درمانی و پیشرفت شما</p>
         </div>
         <div className={styles.progressPeriod}>
@@ -2220,8 +2634,8 @@ function ExerciseContent() {
               completed: !ex.completed,
               progress: ex.completed ? 0 : 100,
             }
-          : ex
-      )
+          : ex,
+      ),
     );
   };
 
@@ -2231,8 +2645,8 @@ function ExerciseContent() {
       prev.map((ex) =>
         ex.id === id
           ? { ...ex, progress: Math.min(100, Math.max(0, value)) }
-          : ex
-      )
+          : ex,
+      ),
     );
   };
 
@@ -2443,7 +2857,7 @@ function ExerciseContent() {
                     onClick={(e) => {
                       e.stopPropagation();
                       setSelectedExercise(
-                        selectedExercise === exercise.id ? null : exercise.id
+                        selectedExercise === exercise.id ? null : exercise.id,
                       );
                     }}
                   >

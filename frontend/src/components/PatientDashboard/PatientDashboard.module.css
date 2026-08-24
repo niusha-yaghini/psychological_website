@@ -198,6 +198,8 @@
   flex: 1;
   white-space: nowrap;
   overflow: hidden;
+  /* align-items: right; */
+  text-align: right;
 }
 
 .navBadge {
@@ -440,11 +442,8 @@
 /* ===== Welcome Banner ===== */
 .welcomeBanner {
   height: 200px;
-  background: linear-gradient(
-      135deg,
-      rgba(27, 58, 92, 0.08),
-      rgba(45, 125, 110, 0.09)
-    ),
+  background:
+    linear-gradient(135deg, rgba(27, 58, 92, 0.253), rgba(45, 125, 110, 0.332)),
     url("/images/Patient_Panel/welcome_box_background3.png");
 
   background-size: cover;
@@ -883,10 +882,10 @@
   align-items: center;
   gap: 8px;
   padding: 12px 24px;
-  background: linear-gradient(135deg, #2d7d6e, #4caf84);
+  background: linear-gradient(135deg, #2d7d6ed6, #4caf84d6);
   color: white;
   border: none;
-  border-radius: 30px;
+  border-radius: 10px;
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
@@ -898,6 +897,7 @@
 .newAppointmentBtn:hover {
   transform: translateY(-2px) scale(1.02);
   box-shadow: 0 8px 24px rgba(45, 125, 110, 0.3);
+  background: linear-gradient(135deg, #2d7d6eec, #4caf84ee);
 }
 
 .newAppointmentBtn span {
@@ -993,7 +993,7 @@
   align-items: center;
   gap: 6px;
   padding: 4px 14px;
-  border-radius: 30px;
+  border-radius: 20px;
   font-size: 13px;
   font-weight: 600;
 }
@@ -1807,7 +1807,6 @@
 /* ============================================
    SESSIONS CONTENT
 ============================================ */
-
 /* ===== Session Stats ===== */
 .sessionStats {
   display: flex;
@@ -1969,7 +1968,7 @@
   align-items: center;
   padding: 12px 0;
   border-top: 1px solid var(--gray-light);
-  border-bottom: 1px solid var(--gray-light);
+  /* border-bottom: 1px solid var(--gray-light); */
   margin-bottom: 16px;
   flex-wrap: wrap;
   gap: 12px;
@@ -2049,7 +2048,9 @@
   align-items: center;
   gap: 6px;
   padding: 8px 24px;
-  background: linear-gradient(135deg, #2d7d6e, #4caf84);
+  background: linear-gradient(135deg, #2d7d6ee7, #4caf84df);
+  /* background: linear-gradient(135deg, #1b3a5ccf, #2d7d6ed4); */
+
   color: white;
   border: none;
   border-radius: 30px;
@@ -2204,12 +2205,55 @@
   color: var(--text-dark);
 }
 
+/* ===== Cancel Session Button ===== */
+.btnCancelSession {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 20px;
+  background: #fbe9e7;
+  color: #c62828;
+  border: 1.5px solid #c62828;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btnCancelSession:hover {
+  background: #c62828;
+  color: white;
+  transform: scale(1.05);
+  box-shadow: 0 4px 16px rgba(198, 40, 40, 0.2);
+}
+
+/* ===== Cancel Disabled Button ===== */
+.btnCancelDisabled {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 20px;
+  background: var(--gray-light);
+  color: var(--text-muted);
+  border: none;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: not-allowed;
+  font-family: inherit;
+  opacity: 0.6;
+}
+
 /* ===== Next Session Banner ===== */
 .nextSessionBanner {
-  background: linear-gradient(135deg, #1b3a5c, #2d7d6e);
+  background: linear-gradient(135deg, #1b3a5ccf, #2d7d6ed4);
+  /* background: linear-gradient(135deg, rgba(103, 110, 97, 1), rgba(152, 161, 143, 1)); */
+
   border-radius: var(--radius-lg);
   padding: 28px 32px;
-  margin-top: 24px;
+  /* margin-top: 24px; */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -2238,6 +2282,7 @@
   font-size: 15px;
   opacity: 0.8;
   margin: 0;
+  color: rgba(255, 255, 255, 0.887);
 }
 
 .nextSessionTime {
@@ -2246,6 +2291,11 @@
   font-size: 14px;
   opacity: 0.7;
   margin-top: 4px;
+}
+
+.nextSessionTimerEnterContainer {
+  text-align: left;
+  /* text-align: center; */
 }
 
 .btnNextSession {
@@ -2276,6 +2326,54 @@
 
 .btnNextSession:hover span {
   transform: translateX(4px);
+}
+
+/* ===== Next Session Timer ===== */
+.nextSessionTimer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius);
+  backdrop-filter: blur(10px);
+}
+
+.nextSessionTimer .timerLabel {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.nextSessionTimer .timerDigits {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.nextSessionTimer .timerDigit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4px 10px;
+  background: rgba(0, 0, 0, 0.3);
+  color: white;
+  border-radius: 8px;
+  font-size: 20px;
+  font-weight: 700;
+  min-width: 40px;
+}
+
+.nextSessionTimer .timerUnit {
+  font-size: 9px;
+  font-weight: 400;
+  opacity: 0.7;
+}
+
+.nextSessionTimer .timerSeparator {
+  font-size: 20px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.5);
 }
 
 /* ============================================
@@ -2966,7 +3064,6 @@
 /* ============================================
    PROGRESS CONTENT
 ============================================ */
-
 /* ===== Progress Period ===== */
 .progressPeriod {
   display: flex;
@@ -3040,7 +3137,7 @@
   text-align: center;
 }
 
-.statusBadge {
+/* .statusBadge {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -3058,7 +3155,7 @@
   border-radius: 50%;
   background: #4caf84;
   animation: pulse 2s ease-in-out infinite;
-}
+} */
 
 @keyframes pulse {
   0%,
