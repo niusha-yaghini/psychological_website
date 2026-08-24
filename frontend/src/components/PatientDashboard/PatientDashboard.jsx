@@ -450,6 +450,10 @@ function DashboardContent({ userData }) {
 function AppointmentsContent() {
   const [activeFilter, setActiveFilter] = useState("all");
   const [showModal, setShowModal] = useState(false);
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [selectedAppointmentId, setSelectedAppointmentId] = useState(null);
+  const [cancelReason, setCancelReason] = useState("");
+
   const [appointments, setAppointments] = useState([
     {
       id: 1,
@@ -533,25 +537,45 @@ function AppointmentsContent() {
       return;
     }
 
-    // ===== نمایش دلیل لغو =====
-    const reason = prompt("لطفاً دلیل لغو نوبت را وارد کنید:");
-    if (reason === null) return; // کاربر لغو کرد
+    // ===== باز کردن مودال برای وارد کردن دلیل =====
+    setSelectedAppointmentId(appointmentId);
+    setCancelReason("");
+    setShowCancelModal(true);
+  };
 
-    // ===== به‌روزرسانی وضعیت =====
+  // ===== تأیید لغو نوبت =====
+  const confirmCancelAppointment = () => {
+    if (!selectedAppointmentId) return;
+
     setAppointments((prev) =>
       prev.map((item) =>
-        item.id === appointmentId
+        item.id === selectedAppointmentId
           ? {
               ...item,
               status: "cancelled",
               cancelledBy: "user",
-              cancelReason: reason,
+              cancelReason: cancelReason.trim() || "بدون دلیل",
             }
           : item,
       ),
     );
 
+    setShowCancelModal(false);
+    setSelectedAppointmentId(null);
+    setCancelReason("");
     alert("نوبت با موفقیت لغو شد.");
+  };
+
+  // ===== بررسی امکان لغو =====
+  const canCancel = (appointment) => {
+    // فقط وضعیت‌های confirmed و pending قابل لغو هستن
+    if (appointment.status !== "confirmed" && appointment.status !== "pending")
+      return false;
+
+    const now = new Date();
+    const appointmentDate = new Date(appointment.date);
+    const diffHours = (appointmentDate - now) / (1000 * 60 * 60);
+    return diffHours >= 24;
   };
 
   // ===== تابع رزرو نوبت جدید =====
@@ -611,17 +635,6 @@ function AppointmentsContent() {
     return statusMap[status] || statusMap.pending;
   };
 
-  // ===== بررسی امکان لغو =====
-  const canCancel = (appointment) => {
-    if (appointment.status !== "confirmed" && appointment.status !== "pending")
-      return false;
-
-    const now = new Date();
-    const appointmentDate = new Date(appointment.date);
-    const diffHours = (appointmentDate - now) / (1000 * 60 * 60);
-    return diffHours >= 24;
-  };
-
   return (
     <div className={styles.pageContent}>
       {/* هدر بخش */}
@@ -667,6 +680,8 @@ function AppointmentsContent() {
         {filteredAppointments.length > 0 ? (
           filteredAppointments.map((appointment) => {
             const statusInfo = getStatusInfo(appointment.status);
+            const isCancellable = canCancel(appointment);
+
             return (
               <div key={appointment.id} className={styles.appointmentCard}>
                 {/* وضعیت */}
@@ -674,7 +689,6 @@ function AppointmentsContent() {
                   <span
                     className={`${styles.statusBadge} ${statusInfo.className}`}
                   >
-                    {/* <span className={styles.statusIcon}>{statusInfo.icon}</span> */}
                     {statusInfo.label}
                   </span>
 
@@ -697,17 +711,14 @@ function AppointmentsContent() {
                     <h4>{appointment.type}</h4>
                     <div className={styles.appointmentMeta}>
                       <span className={styles.metaItem}>
-                        {/* <span className={styles.metaIcon}>👤</span> */}
                         {appointment.doctor}
                       </span>
                       <span className={styles.metaDivider}>•</span>
                       <span className={styles.metaItem}>
-                        {/* <span className={styles.metaIcon}>📅</span> */}
                         {appointment.date}
                       </span>
                       <span className={styles.metaDivider}>•</span>
                       <span className={styles.metaItem}>
-                        {/* <span className={styles.metaIcon}>⏰</span> */}
                         {appointment.time}
                       </span>
                     </div>
@@ -724,13 +735,10 @@ function AppointmentsContent() {
 
                   {/* دکمه‌های اکشن */}
                   <div className={styles.appointmentActions}>
+                    {/* ===== وضعیت تأیید شده ===== */}
                     {appointment.status === "confirmed" && (
                       <>
-                        {/* <button className={styles.btnJoin}>
-                          <span>▶</span>
-                          ورود به جلسه
-                        </button> */}
-                        {canCancel(appointment) && (
+                        {isCancellable ? (
                           <button
                             className={styles.btnCancel}
                             onClick={() =>
@@ -739,16 +747,21 @@ function AppointmentsContent() {
                           >
                             لغو نوبت
                           </button>
+                        ) : (
+                          <button className={styles.btnCancelDisabled} disabled>
+                            لغو غیرفعال (کمتر از ۲۴ ساعت)
+                          </button>
                         )}
                       </>
                     )}
 
-                    {/* {appointment.status === "pending" && (
+                    {/* ===== وضعیت در انتظار ===== */}
+                    {appointment.status === "pending" && (
                       <>
                         <button className={styles.btnPending}>
                           در انتظار تأیید
                         </button>
-                        {canCancel(appointment) && (
+                        {isCancellable ? (
                           <button
                             className={styles.btnCancel}
                             onClick={() =>
@@ -757,38 +770,13 @@ function AppointmentsContent() {
                           >
                             لغو درخواست
                           </button>
+                        ) : (
+                          <button className={styles.btnCancelDisabled} disabled>
+                            لغو غیرفعال (کمتر از ۲۴ ساعت)
+                          </button>
                         )}
                       </>
-                    )} */}
-
-                    {/* {appointment.status === "completed" && (
-                      <button className={styles.btnReview}>ثبت بازخورد</button>
-                    )} */}
-
-                    {/* {appointment.status === "cancelled" && (
-                      <button
-                        className={styles.btnReschedule}
-                        onClick={() => {
-                          // باز کردن مودال برای رزرو مجدد با همان دکتر
-                          setShowModal(true);
-                        }}
-                      >
-                        رزرو مجدد
-                      </button>
-                    )} */}
-
-                    {/* <button className={styles.btnMore}>
-                      <svg
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                      >
-                        <circle cx="12" cy="6" r="2" fill="currentColor" />
-                        <circle cx="12" cy="12" r="2" fill="currentColor" />
-                        <circle cx="12" cy="18" r="2" fill="currentColor" />
-                      </svg>
-                    </button> */}
+                    )}
                   </div>
                 </div>
               </div>
@@ -796,18 +784,65 @@ function AppointmentsContent() {
           })
         ) : (
           <div className={styles.emptyState}>
-            {/* <span className={styles.emptyIcon}>📭</span> */}
             <h3>هیچ نوبتی در این دسته وجود ندارد</h3>
             <p>برای شروع، اولین نوبت خود را رزرو کنید.</p>
             <button
               className={styles.emptyBtn}
               onClick={() => setShowModal(true)}
             >
-              درخواست نوبت جدید
+              + درخواست نوبت جدید
             </button>
           </div>
         )}
       </div>
+
+      {/* ===== مودال لغو نوبت ===== */}
+      {showCancelModal && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.cancelModal}>
+            <div className={styles.modalHeader}>
+              <h3>لغو نوبت</h3>
+              <button
+                className={styles.modalClose}
+                onClick={() => setShowCancelModal(false)}
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className={styles.cancelModalBody}>
+              <p className={styles.cancelWarning}>
+                ⚠️ آیا از لغو این نوبت اطمینان دارید؟
+              </p>
+              <p className={styles.cancelHint}>
+                (اختیاری) در صورت تمایل، دلیل لغو را وارد کنید:
+              </p>
+              <textarea
+                className={styles.cancelTextarea}
+                placeholder="دلیل لغو (اختیاری)..."
+                value={cancelReason}
+                onChange={(e) => setCancelReason(e.target.value)}
+                rows="3"
+              />
+            </div>
+
+            <div className={styles.modalFooter}>
+              <button
+                className={styles.btnCancelModalSecondary}
+                onClick={() => setShowCancelModal(false)}
+              >
+                انصراف
+              </button>
+              <button
+                className={styles.btnCancelModalPrimary}
+                onClick={confirmCancelAppointment}
+              >
+                تأیید لغو
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* مودال رزرو نوبت */}
       <NewAppointmentModal
@@ -1160,7 +1195,7 @@ function SessionsContent() {
     }
     return sessions.filter(
       // (s) => s.status === "completed" || s.status === "cancelled",
-      
+
       (s) => s.status === "completed" || s.status === "cancelled",
     );
   };
@@ -1659,7 +1694,7 @@ function SessionsContent() {
                     </svg>
                   </button>
                 </div> */}
-                
+
                 {/* دکمه‌های اکشن */}
                 <div className={styles.sessionActions}>
                   {session.status === "upcoming" && (
@@ -1685,7 +1720,7 @@ function SessionsContent() {
                               className={styles.btnCancelDisabled}
                               disabled
                             >
-                              قابل لغو نیست (کمتر از ۲۴ ساعت)
+                              لغو غیرفعال (کمتر از ۲۴ ساعت)
                             </button>
                           )}
                           <button className={styles.btnRemind}>
