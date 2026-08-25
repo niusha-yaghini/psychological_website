@@ -17,6 +17,8 @@ import {
   FaBell,
 } from "react-icons/fa";
 
+import moment from "moment-jalaali";
+
 import logo from "../../../public/images/logo/logo2.png";
 import userAvatar from "../../../public/images/Patient_Panel/usericon.png";
 
@@ -29,7 +31,6 @@ function PatientDashboard() {
   // ==========================================
   // 📌 STATE های اصلی اینجا تعریف میشن
   // ==========================================
-
   // ===== داده‌های نوبت‌ها =====
   const [appointments, setAppointments] = useState([
     {
@@ -37,52 +38,52 @@ function PatientDashboard() {
       type: "جلسه مشاوره فردی",
       doctor: "دکتر محمد رضایی",
       doctorId: 1,
-      date: "۱۴۰۳/۰۹/۲۵",
+      date: "۱۴۰۵/۰۶/۰۴",
       time: "۱۶:۰۰ - ۱۷:۰۰",
       status: "confirmed",
       isOnline: true,
       cancelledBy: null,
       cancelReason: null,
-      createdAt: "۱۴۰۳/۰۹/۲۰",
+      createdAt: "۱۴۰۵/۰۵/۳۰",
     },
     {
       id: 2,
       type: "جلسه زوج درمانی",
       doctor: "دکتر سارا احمدی",
       doctorId: 2,
-      date: "۱۴۰۳/۰۹/۲۸",
+      date: "۱۴۰۵/۰۶/۰۶",
       time: "۱۸:۰۰ - ۱۹:۰۰",
       status: "pending",
       isOnline: false,
       cancelledBy: null,
       cancelReason: null,
-      createdAt: "۱۴۰۳/۰۹/۲۱",
+      createdAt: "۱۴۰۵/۰۵/۳۰",
     },
     {
       id: 3,
       type: "جلسه مشاوره فردی",
       doctor: "دکتر محمد رضایی",
       doctorId: 1,
-      date: "۱۴۰۳/۰۹/۲۰",
+      date: "۱۴۰۵/۰۵/۲۰",
       time: "۱۵:۰۰ - ۱۶:۰۰",
       status: "completed",
       isOnline: true,
       cancelledBy: null,
       cancelReason: null,
-      createdAt: "۱۴۰۳/۰۹/۱۵",
+      createdAt: "۱۴۰۵/۰۵/۱۵",
     },
     {
       id: 4,
       type: "جلسه مشاوره فردی",
       doctor: "دکتر علی کریمی",
       doctorId: 3,
-      date: "۱۴۰۳/۰۹/۱۸",
+      date: "۱۴۰۵/۰۵/۱۸",
       time: "۱۰:۰۰ - ۱۱:۰۰",
       status: "cancelled",
       isOnline: true,
       cancelledBy: "user",
       cancelReason: "مشکل شخصی",
-      createdAt: "۱۴۰۳/۰۹/۱۰",
+      createdAt: "۱۴۰۵/۰۶/۱۰",
     },
   ]);
 
@@ -91,25 +92,25 @@ function PatientDashboard() {
     {
       id: 1,
       type: "reminder",
-      icon: "⏰",
+      // icon: "⏰",
       title: "یادآوری جلسه فردا",
       message:
         "جلسه مشاوره فردی شما با دکتر محمد رضایی فردا ساعت ۱۶:۰۰ برگزار میشود.",
       time: "۵ دقیقه پیش",
       isRead: false,
-      date: "۱۴۰۳/۰۹/۲۴",
+      date: "۱۴۰۵/۰۵/۲۴",
       link: "/sessions",
       action: "مشاهده جلسه",
     },
     {
       id: 2,
       type: "confirmed",
-      icon: "✅",
+      // icon: "✅",
       title: "تأیید جلسه",
       message: "دکتر سارا احمدی درخواست جلسه زوج درمانی شما را تأیید کرد.",
       time: "۱ ساعت پیش",
       isRead: false,
-      date: "۱۴۰۳/۰۹/۲۴",
+      date: "۱۴۰۵/۰۵/۲۴",
       link: "/appointments",
       action: "مشاهده نوبت",
     },
@@ -447,7 +448,15 @@ function DashboardContent({ userData }) {
 // ============================================
 // COMPONENT: Appointments Content
 // ============================================
+// moment.loadPersian();
+// import moment from "moment-jalaali";
+
+moment.loadPersian({ usePersianDigits: false });
+
 function AppointmentsContent() {
+  // =============================================
+  // ۱. STATE‌ها
+  // =============================================
   const [activeFilter, setActiveFilter] = useState("all");
   const [showModal, setShowModal] = useState(false);
   const [showCancelModal, setShowCancelModal] = useState(false);
@@ -460,76 +469,433 @@ function AppointmentsContent() {
       type: "جلسه مشاوره فردی",
       doctor: "دکتر محمد رضایی",
       doctorId: 1,
-      date: "۱۴۰۳/۰۹/۲۵",
-      time: "۱۶:۰۰ - ۱۷:۰۰",
+      date: "۱۴۰۵/۰۶/۰۴",
+      time: "۱۰:۰۰ - ۱۱:۰۰",
       status: "confirmed", // confirmed | pending | completed | cancelled
       isOnline: true,
       cancelledBy: null, // 'user' | 'doctor' | null
       cancelReason: null,
-      createdAt: "۱۴۰۳/۰۹/۲۰",
+      createdAt: "۱۴۰۵/۰۶/۳",
     },
     {
       id: 2,
       type: "جلسه زوج درمانی",
       doctor: "دکتر سارا احمدی",
       doctorId: 2,
-      date: "۱۴۰۳/۰۹/۲۸",
+      date: "۱۴۰۵/۰۶/۰۶",
       time: "۱۸:۰۰ - ۱۹:۰۰",
       status: "pending",
       isOnline: false,
       cancelledBy: null,
       cancelReason: null,
-      createdAt: "۱۴۰۳/۰۹/۲۱",
+      createdAt: "۱۴۰۵/۰۶/۵",
     },
     {
       id: 3,
       type: "جلسه مشاوره فردی",
       doctor: "دکتر محمد رضایی",
       doctorId: 1,
-      date: "۱۴۰۳/۰۹/۲۰",
+      date: "۱۴۰۵/۰۵/۲۰",
       time: "۱۵:۰۰ - ۱۶:۰۰",
       status: "completed",
       isOnline: true,
       cancelledBy: null,
       cancelReason: null,
-      createdAt: "۱۴۰۳/۰۹/۱۵",
+      createdAt: "۱۴۰۵/۰۵/۱۰",
     },
     {
       id: 4,
       type: "جلسه مشاوره فردی",
       doctor: "دکتر علی کریمی",
       doctorId: 3,
-      date: "۱۴۰۳/۰۹/۱۸",
+      date: "۱۴۰۵/۰۵/۱۸",
       time: "۱۰:۰۰ - ۱۱:۰۰",
       status: "cancelled",
       isOnline: true,
       cancelledBy: "user",
       cancelReason: "مشکل شخصی",
-      createdAt: "۱۴۰۳/۰۹/۱۰",
+      createdAt: "۱۴۰۵/۰۶/۰۱",
     },
     {
       id: 5,
       type: "جلسه زوج درمانی",
       doctor: "دکتر سارا احمدی",
       doctorId: 2,
-      date: "۱۴۰۳/۰۹/۱۵",
+      date: "۱۴۰۵/۰۵/۱۵",
       time: "۱۷:۰۰ - ۱۸:۰۰",
       status: "cancelled",
       isOnline: false,
       cancelledBy: "doctor",
       cancelReason: "هماهنگی با پزشک",
-      createdAt: "۱۴۰۳/۰۹/۰۵",
+      createdAt: "۱۴۰۵/۰۵/۳۰",
+    },
+    {
+      id: 6, // جدید - قابل لغو
+      type: "جلسه مشاوره فردی",
+      doctor: "دکتر محمد رضایی",
+      doctorId: 1,
+      date: "۱۴۰۵/۰۶/۱۰", // ۱۴ روز بعد - قابل لغو
+      time: "۱۴:۰۰ - ۱۵:۰۰",
+      status: "confirmed",
+      isOnline: true,
+      cancelledBy: null,
+      cancelReason: null,
+      createdAt: "۱۴۰۵/۰۶/۰۵",
     },
   ]);
+
+  // =============================================
+  // ۲. توابع تبدیل و کمکی
+  // =============================================
+
+  // ===== تبدیل تاریخ شمسی به میلادی =====
+  // const convertToGregorian = (persianDate) => {
+  //   const parts = persianDate.split('/');
+  //   const jalaaliDate = moment(`${parts[0]}/${parts[1]}/${parts[2]}`, 'jYYYY/jMM/jDD');
+  //   return jalaaliDate.toDate();
+  // };
+
+  // ===== تبدیل تاریخ شمسی به عدد برای مقایسه =====
+  // const convertPersianToNumber = (persianDate) => {
+  //   if (!persianDate) return 0;
+
+  //   // حذف کاراکترهای غیرعددی (مثل /)
+  //   const parts = persianDate.split("/");
+  //   if (parts.length !== 3) return 0;
+
+  //   const year = parseInt(parts[0]);
+  //   const month = parseInt(parts[1]);
+  //   const day = parseInt(parts[2]);
+
+  //   // تبدیل به عدد برای مقایسه (سال * 10000 + ماه * 100 + روز)
+  //   return year * 10000 + month * 100 + day;
+  // };
+
+  const convertPersianToNumber = (persianDate) => {
+    if (!persianDate) return 0;
+
+    const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
+    const englishDigits = "0123456789";
+
+    const normalized = persianDate.replace(
+      /[۰-۹]/g,
+      (d) => englishDigits[persianDigits.indexOf(d)],
+    );
+
+    const parts = normalized.split("/");
+
+    if (parts.length !== 3) return 0;
+
+    const year = Number(parts[0]);
+    const month = Number(parts[1]);
+    const day = Number(parts[2]);
+
+    return year * 10000 + month * 100 + day;
+  };
+
+  // ===== تابع تبدیل زمان به عدد برای مقایسه =====
+  const getTimeValue = (timeString) => {
+    try {
+      const [start] = timeString.split(" - ");
+      const [hours, minutes] = start.split(":");
+      return parseInt(hours) * 60 + parseInt(minutes);
+    } catch {
+      return 0;
+    }
+  };
+
+  // const convertJalaliToDate = (date, time) => {
+  //   const [y, m, d] = date.split("/");
+  //   const [hour, minute] = time.split(":");
+
+  //   return moment(
+  //     `${y}/${m}/${d} ${hour}:${minute}`,
+  //     "jYYYY/jMM/jDD HH:mm",
+  //   ).toDate();
+  // };
+
+  const convertJalaliToDate = (date, time) => {
+
+    const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
+    const englishDigits = "0123456789";
+
+    const normalize = (str) =>
+      str.replace(/[۰-۹]/g, (d) =>
+        englishDigits[persianDigits.indexOf(d)]
+      );
+
+    const normalizedDate = normalize(date);
+    const normalizedTime = normalize(time);
+
+    const [y, m, d] = normalizedDate.split("/");
+    const [hour, minute] = normalizedTime.split(":");
+
+
+    const result = moment(
+      `${y}/${m}/${d} ${hour}:${minute}`,
+      "jYYYY/jMM/jDD HH:mm"
+    );
+
+    console.log("converted:", result.format(), result.isValid());
+
+    return result.toDate();
+  };
+
+
+  // const convertToGregorian = (persianDate) => {
+  //   if (!persianDate) return new Date();
+
+  //   try {
+  //     // تبدیل تاریخ شمسی به میلادی با استفاده از moment-jalaali
+  //     const [year, month, day] = persianDate.split("/");
+  //     const gregorianDate = moment(`${year}/${month}/${day}`, "jYYYY/jMM/jDD");
+
+  //     if (!gregorianDate.isValid()) {
+  //       console.warn("تاریخ نامعتبر:", persianDate);
+  //       return new Date();
+  //     }
+
+  //     return gregorianDate.toDate();
+  //   } catch (error) {
+  //     console.error("خطا در تبدیل تاریخ:", error);
+  //     return new Date();
+  //   }
+  // };
+
+  // ===== تابع تبدیل زمان به عدد برای مقایسه =====
+  // const getTimeValue = (timeString) => {
+  //   try {
+  //     const [start] = timeString.split(" - ");
+  //     const [hours, minutes] = start.split(":");
+  //     return parseInt(hours) * 60 + parseInt(minutes);
+  //   } catch {
+  //     return 0;
+  //   }
+  // };
+
+  // =============================================
+  // ۳. متغیرهای مشتق شده (از stateها)
+  // =============================================
+
+  // ===== مرتب‌سازی نوبت‌ها بر اساس تاریخ (جدیدترین اول) =====
+  // const sortedAppointments = [...appointments].sort((a, b) => {
+  //   const dateA = convertToGregorian(a.date);
+  //   const dateB = convertToGregorian(b.date);
+
+  //   if (dateA.getTime() !== dateB.getTime()) {
+  //     return dateB - dateA; // جدیدترین اول
+  //   }
+
+  //   const timeA = a.time.split(' - ')[0];
+  //   const timeB = b.time.split(' - ')[0];
+  //   return timeA.localeCompare(timeB);
+  // });
+
+  // const sortedAppointments = [...appointments].sort((a, b) => {
+  //   const dateA = convertToGregorian(a.date);
+  //   const dateB = convertToGregorian(b.date);
+
+  //   // مقایسه تاریخ‌ها (جدیدترین اول)
+  //   if (dateA.getTime() !== dateB.getTime()) {
+  //     return dateB.getTime() - dateA.getTime(); // ← جدیدترین اول
+  //   }
+
+  //   // اگر تاریخ برابر بود، بر اساس زمان
+  //   const timeA = getTimeValue(a.time);
+  //   const timeB = getTimeValue(b.time);
+  //   return timeA - timeB;
+  // });
+
+  // ===== مرتب‌سازی نوبت‌ها بر اساس تاریخ (جدیدترین اول) =====
+  const sortedAppointments = [...appointments].sort((a, b) => {
+    const dateA = convertPersianToNumber(a.date);
+    const dateB = convertPersianToNumber(b.date);
+
+    // مقایسه تاریخ‌ها (جدیدترین اول)
+    if (dateA !== dateB) {
+      return dateB - dateA; // عدد بزرگتر = تاریخ جدیدتر
+    }
+
+    // اگر تاریخ برابر بود، بر اساس زمان
+    const timeA = getTimeValue(a.time);
+    const timeB = getTimeValue(b.time);
+    return timeA - timeB;
+  });
+
+  // =============================================
+  // ۴. توابعی که از متغیرهای مشتق شده استفاده میکنن
+  // =============================================
+  // const normalizeTime = (time) => {
+  //   let [hour, minute] = time.split(":").map(Number);
+
+  //   const extraDays = Math.floor(hour / 24);
+  //   hour = hour % 24;
+
+  //   return {
+  //     hour,
+  //     minute,
+  //     extraDays,
+  //   };
+  // };
+
+  const normalizeTime = (time) => {
+
+    const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
+    const englishDigits = "0123456789";
+
+    const normalized = time.replace(/[۰-۹]/g, (d) =>
+      englishDigits[persianDigits.indexOf(d)]
+    );
+
+    let [hour, minute] = normalized.split(":").map(Number);
+
+    const extraDays = Math.floor(hour / 24);
+
+    hour = hour % 24;
+
+    return {
+      hour,
+      minute,
+      extraDays
+    };
+  };
+
+  // ===== بررسی قانون ۲۴ ساعت =====
+  // const canCancel = (appointment) => {
+  //   if (appointment.status !== "confirmed" && appointment.status !== "pending")
+  //     return false;
+
+  //   const now = new Date();
+
+  //   const [rawStartTime] = appointment.time.split(" - ");
+
+  //   const normalizedTime = normalizeTime(rawStartTime);
+
+  //   const appointmentDate = convertJalaliToDate(
+  //     appointment.date,
+  //     `${normalizedTime.hour}:${normalizedTime.minute}`,
+  //   );
+
+  //   appointmentDate.setDate(
+  //     appointmentDate.getDate() + normalizedTime.extraDays,
+  //   );
+
+  //   const diffHours = (appointmentDate - now) / (1000 * 60 * 60);
+
+  //   console.log({
+  //     appointmentDate,
+  //     now,
+  //     diffHours,
+  //     date: appointment.date,
+  //     time: appointment.time,
+  //   });
+
+  //   return diffHours >= 24;
+  // };
+
+  const canCancel = (appointment) => {
+  if (
+    appointment.status !== "confirmed" &&
+    appointment.status !== "pending"
+  ) {
+    return false;
+  }
+
+  const [rawStartTime] = appointment.time.split(" - ");
+
+  const normalizedTime = normalizeTime(rawStartTime);
+
+  const appointmentDate = convertJalaliToDate(
+    appointment.date,
+    `${normalizedTime.hour}:${String(normalizedTime.minute).padStart(2, "0")}`
+  );
+
+  appointmentDate.setDate(
+    appointmentDate.getDate() + normalizedTime.extraDays
+  );
+
+  const now = new Date();
+
+  const diffMilliseconds = appointmentDate.getTime() - now.getTime();
+
+  const diffHours = diffMilliseconds / (1000 * 60 * 60);
+
+  console.log(
+    appointment.date,
+    appointment.time,
+    "remaining hours:",
+    diffHours
+  );
+
+  return diffHours >= 24;
+};
+
+  // ===== فیلتر کردن (با استفاده از sortedAppointments) =====
+  const getFilteredAppointments = () => {
+    if (activeFilter === "all") return sortedAppointments;
+    return sortedAppointments.filter((item) => item.status === activeFilter);
+  };
+
+  const filteredAppointments = getFilteredAppointments();
+
+  // ===== تابع لغو نوبت =====
+  // const handleCancelAppointment = (appointmentId) => {
+  //   const appointment = appointments.find((a) => a.id === appointmentId);
+  //   if (!appointment) return;
+
+  //   const now = new Date();
+  //   const appointmentDate = convertToGregorian(appointment.date);
+  //   const timeParts = appointment.time.split(" - ")[0].split(":");
+  //   appointmentDate.setHours(parseInt(timeParts[0]), parseInt(timeParts[1]), 0);
+
+  //   const diffHours = (appointmentDate - now) / (1000 * 60 * 60);
+
+  //   if (diffHours < 24) {
+  //     alert("امکان لغو نوبت کمتر از ۲۴ ساعت قبل وجود ندارد.");
+  //     return;
+  //   }
+
+  //   setSelectedAppointmentId(appointmentId);
+  //   setCancelReason("");
+  //   setShowCancelModal(true);
+  // };
 
   // ===== تابع لغو نوبت =====
   const handleCancelAppointment = (appointmentId) => {
     const appointment = appointments.find((a) => a.id === appointmentId);
     if (!appointment) return;
 
-    // ===== بررسی قانون ۲۴ ساعت =====
     const now = new Date();
-    const appointmentDate = new Date(appointment.date);
+
+    // const [year, month, day] = appointment.date.split("/");
+    // const gregorianYear = parseInt(year) - 621;
+    // const gregorianMonth = parseInt(month) - 1;
+    // const gregorianDay = parseInt(day);
+
+    // const appointmentDate = new Date(gregorianYear, gregorianMonth, gregorianDay);
+    // const [startTime] = appointment.time.split(" - ");
+
+    // const appointmentDate = convertJalaliToDate(appointment.date, startTime);
+
+    // appointmentDate.setDate(appointmentDate.getDate() + extraDays);
+
+    const [rawStartTime] = appointment.time.split(" - ");
+
+    const normalizedTime = normalizeTime(rawStartTime);
+
+    const appointmentDate = convertJalaliToDate(
+      appointment.date,
+      `${normalizedTime.hour}:${normalizedTime.minute}`,
+    );
+
+    appointmentDate.setDate(
+      appointmentDate.getDate() + normalizedTime.extraDays,
+    );
+
+    // const [startTime] = appointment.time.split(' - ');
+    // const [hours, minutes] = startTime.split(":");
+    // appointmentDate.setHours(parseInt(hours), parseInt(minutes), 0);
+
     const diffHours = (appointmentDate - now) / (1000 * 60 * 60);
 
     if (diffHours < 24) {
@@ -537,7 +903,6 @@ function AppointmentsContent() {
       return;
     }
 
-    // ===== باز کردن مودال برای وارد کردن دلیل =====
     setSelectedAppointmentId(appointmentId);
     setCancelReason("");
     setShowCancelModal(true);
@@ -566,18 +931,6 @@ function AppointmentsContent() {
     alert("نوبت با موفقیت لغو شد.");
   };
 
-  // ===== بررسی امکان لغو =====
-  const canCancel = (appointment) => {
-    // فقط وضعیت‌های confirmed و pending قابل لغو هستن
-    if (appointment.status !== "confirmed" && appointment.status !== "pending")
-      return false;
-
-    const now = new Date();
-    const appointmentDate = new Date(appointment.date);
-    const diffHours = (appointmentDate - now) / (1000 * 60 * 60);
-    return diffHours >= 24;
-  };
-
   // ===== تابع رزرو نوبت جدید =====
   const handleNewAppointment = (newAppointment) => {
     setAppointments((prev) => [
@@ -594,14 +947,6 @@ function AppointmentsContent() {
     setShowModal(false);
     alert("درخواست نوبت با موفقیت ثبت شد.");
   };
-
-  // ===== فیلتر کردن =====
-  const getFilteredAppointments = () => {
-    if (activeFilter === "all") return appointments;
-    return appointments.filter((item) => item.status === activeFilter);
-  };
-
-  const filteredAppointments = getFilteredAppointments();
 
   // ===== وضعیت‌ها =====
   const filters = [
@@ -635,6 +980,10 @@ function AppointmentsContent() {
     return statusMap[status] || statusMap.pending;
   };
 
+  // =============================================
+  // ۵. رندر
+  // =============================================
+
   return (
     <div className={styles.pageContent}>
       {/* هدر بخش */}
@@ -666,7 +1015,8 @@ function AppointmentsContent() {
             &nbsp;
             <span className={styles.filterCount}>
               {
-                appointments.filter((item) =>
+                // appointments.filter((item) =>
+                sortedAppointments.filter((item) =>
                   filter.id === "all" ? true : item.status === filter.id,
                 ).length
               }
@@ -1137,7 +1487,7 @@ function SessionsContent() {
       title: "جلسه مشاوره فردی",
       doctor: "دکتر محمد رضایی",
       doctorImage: "/images/doctors/doctor1.png",
-      date: "۱۴۰۳/۰۹/۲۵",
+      date: "۱۴۰۵/۰۶/۰۳",
       time: "۱۶:۰۰",
       duration: "۶۰ دقیقه",
       status: "upcoming", // upcoming | ongoing | completed | cancelled
@@ -1150,7 +1500,7 @@ function SessionsContent() {
       title: "جلسه زوج درمانی",
       doctor: "دکتر سارا احمدی",
       doctorImage: "/images/doctors/doctor2.png",
-      date: "۱۴۰۳/۰۹/۲۸",
+      date: "۱۴۰۵/۰۶/۰۶",
       time: "۱۸:۰۰",
       duration: "۹۰ دقیقه",
       status: "upcoming",
@@ -1163,7 +1513,7 @@ function SessionsContent() {
       title: "جلسه مشاوره فردی",
       doctor: "دکتر محمد رضایی",
       doctorImage: "/images/doctors/doctor1.png",
-      date: "۱۴۰۳/۰۹/۲۰",
+      date: "۱۴۰۵/۰۵/۲۰",
       time: "۱۵:۰۰",
       duration: "۶۰ دقیقه",
       status: "completed",
@@ -1797,7 +2147,7 @@ function MessagesContent() {
         "جلسه مشاوره فردی شما با دکتر محمد رضایی فردا ساعت ۱۶:۰۰ برگزار میشود.",
       time: "۵ دقیقه پیش",
       isRead: false,
-      date: "۱۴۰۳/۰۹/۲۴",
+      date: "۱۴۰۵/۰۵/۲۴",
       link: "/sessions",
       action: "مشاهده جلسه",
     },
@@ -1809,7 +2159,7 @@ function MessagesContent() {
       message: "دکتر سارا احمدی درخواست جلسه زوج درمانی شما را تأیید کرد.",
       time: "۱ ساعت پیش",
       isRead: false,
-      date: "۱۴۰۳/۰۹/۲۴",
+      date: "۱۴۰۵/۰۵/۲۴",
       link: "/appointments",
       action: "مشاهده نوبت",
     },
@@ -1821,7 +2171,7 @@ function MessagesContent() {
       message: "دکتر علی کریمی جلسه مشاوره نوجوان را به دلیل هماهنگی لغو کرد.",
       time: "۳ ساعت پیش",
       isRead: false,
-      date: "۱۴۰۳/۰۹/۲۴",
+      date: "۱۴۰۵/۰۵/۲۴",
       link: "/appointments",
       action: "مشاهده جلسات",
     },
@@ -1833,7 +2183,7 @@ function MessagesContent() {
       message: "دکتر محمد رضایی برای جلسه قبلی شما یادداشتی ثبت کرده است.",
       time: "۵ ساعت پیش",
       isRead: true,
-      date: "۱۴۰۳/۰۹/۲۳",
+      date: "۱۴۰۵/۰۵/۲۳",
       link: "/sessions",
       action: "مشاهده یادداشت",
     },
@@ -1843,10 +2193,10 @@ function MessagesContent() {
       // icon: "📅",
       title: "رزرو جلسه جدید",
       message:
-        "شما جلسه مشاوره فردی را برای تاریخ ۱۴۰۳/۰۹/۲۸ ساعت ۱۷:۰۰ رزرو کردید.",
+        "شما جلسه مشاوره فردی را برای تاریخ ۱۴۰۵/۰۵/۲۸ ساعت ۱۷:۰۰ رزرو کردید.",
       time: "۱ روز پیش",
       isRead: true,
-      date: "۱۴۰۳/۰۹/۲۳",
+      date: "۱۴۰۵/۰۵/۲۳",
       link: "/appointments",
       action: "مشاهده نوبت",
     },
@@ -1859,20 +2209,20 @@ function MessagesContent() {
         "زمان جلسات هفتگی شما فرا رسیده است. آیا مایل به رزرو جلسه جدید هستید؟",
       time: "۲ روز پیش",
       isRead: true,
-      date: "۱۴۰۳/۰۹/۲۲",
+      date: "۱۴۰۵/۰۵/۲۲",
       link: "/appointments",
       action: "رزرو جلسه",
     },
     {
       id: 7,
       type: "reminder",
-      icon: "⏰",
+      // icon: "⏰",
       title: "یادآوری جلسه امروز",
       message:
         "جلسه مشاوره فردی شما با دکتر سارا احمدی امروز ساعت ۱۸:۰۰ برگزار میشود.",
       time: "۳ روز پیش",
       isRead: true,
-      date: "۱۴۰۳/۰۹/۲۲",
+      date: "۱۴۰۵/۰۵/۲۲",
       link: "/sessions",
       action: "ورود به جلسه",
     },
