@@ -342,13 +342,13 @@ function PatientDashboard() {
             />
 
             {/* کاربر */}
-            <div className={styles.userProfile}>
+            {/* <div className={styles.userProfile}>
               <img
                 src={userAvatar}
                 alt="پروفایل"
                 className={styles.userAvatar}
               />
-            </div>
+            </div> */}
           </div>
         </header>
 
@@ -548,29 +548,6 @@ function AppointmentsContent() {
   // ۲. توابع تبدیل و کمکی
   // =============================================
 
-  // ===== تبدیل تاریخ شمسی به میلادی =====
-  // const convertToGregorian = (persianDate) => {
-  //   const parts = persianDate.split('/');
-  //   const jalaaliDate = moment(`${parts[0]}/${parts[1]}/${parts[2]}`, 'jYYYY/jMM/jDD');
-  //   return jalaaliDate.toDate();
-  // };
-
-  // ===== تبدیل تاریخ شمسی به عدد برای مقایسه =====
-  // const convertPersianToNumber = (persianDate) => {
-  //   if (!persianDate) return 0;
-
-  //   // حذف کاراکترهای غیرعددی (مثل /)
-  //   const parts = persianDate.split("/");
-  //   if (parts.length !== 3) return 0;
-
-  //   const year = parseInt(parts[0]);
-  //   const month = parseInt(parts[1]);
-  //   const day = parseInt(parts[2]);
-
-  //   // تبدیل به عدد برای مقایسه (سال * 10000 + ماه * 100 + روز)
-  //   return year * 10000 + month * 100 + day;
-  // };
-
   const convertPersianToNumber = (persianDate) => {
     if (!persianDate) return 0;
 
@@ -604,25 +581,12 @@ function AppointmentsContent() {
     }
   };
 
-  // const convertJalaliToDate = (date, time) => {
-  //   const [y, m, d] = date.split("/");
-  //   const [hour, minute] = time.split(":");
-
-  //   return moment(
-  //     `${y}/${m}/${d} ${hour}:${minute}`,
-  //     "jYYYY/jMM/jDD HH:mm",
-  //   ).toDate();
-  // };
-
   const convertJalaliToDate = (date, time) => {
-
     const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
     const englishDigits = "0123456789";
 
     const normalize = (str) =>
-      str.replace(/[۰-۹]/g, (d) =>
-        englishDigits[persianDigits.indexOf(d)]
-      );
+      str.replace(/[۰-۹]/g, (d) => englishDigits[persianDigits.indexOf(d)]);
 
     const normalizedDate = normalize(date);
     const normalizedTime = normalize(time);
@@ -630,10 +594,9 @@ function AppointmentsContent() {
     const [y, m, d] = normalizedDate.split("/");
     const [hour, minute] = normalizedTime.split(":");
 
-
     const result = moment(
       `${y}/${m}/${d} ${hour}:${minute}`,
-      "jYYYY/jMM/jDD HH:mm"
+      "jYYYY/jMM/jDD HH:mm",
     );
 
     console.log("converted:", result.format(), result.isValid());
@@ -641,70 +604,9 @@ function AppointmentsContent() {
     return result.toDate();
   };
 
-
-  // const convertToGregorian = (persianDate) => {
-  //   if (!persianDate) return new Date();
-
-  //   try {
-  //     // تبدیل تاریخ شمسی به میلادی با استفاده از moment-jalaali
-  //     const [year, month, day] = persianDate.split("/");
-  //     const gregorianDate = moment(`${year}/${month}/${day}`, "jYYYY/jMM/jDD");
-
-  //     if (!gregorianDate.isValid()) {
-  //       console.warn("تاریخ نامعتبر:", persianDate);
-  //       return new Date();
-  //     }
-
-  //     return gregorianDate.toDate();
-  //   } catch (error) {
-  //     console.error("خطا در تبدیل تاریخ:", error);
-  //     return new Date();
-  //   }
-  // };
-
-  // ===== تابع تبدیل زمان به عدد برای مقایسه =====
-  // const getTimeValue = (timeString) => {
-  //   try {
-  //     const [start] = timeString.split(" - ");
-  //     const [hours, minutes] = start.split(":");
-  //     return parseInt(hours) * 60 + parseInt(minutes);
-  //   } catch {
-  //     return 0;
-  //   }
-  // };
-
   // =============================================
   // ۳. متغیرهای مشتق شده (از stateها)
   // =============================================
-
-  // ===== مرتب‌سازی نوبت‌ها بر اساس تاریخ (جدیدترین اول) =====
-  // const sortedAppointments = [...appointments].sort((a, b) => {
-  //   const dateA = convertToGregorian(a.date);
-  //   const dateB = convertToGregorian(b.date);
-
-  //   if (dateA.getTime() !== dateB.getTime()) {
-  //     return dateB - dateA; // جدیدترین اول
-  //   }
-
-  //   const timeA = a.time.split(' - ')[0];
-  //   const timeB = b.time.split(' - ')[0];
-  //   return timeA.localeCompare(timeB);
-  // });
-
-  // const sortedAppointments = [...appointments].sort((a, b) => {
-  //   const dateA = convertToGregorian(a.date);
-  //   const dateB = convertToGregorian(b.date);
-
-  //   // مقایسه تاریخ‌ها (جدیدترین اول)
-  //   if (dateA.getTime() !== dateB.getTime()) {
-  //     return dateB.getTime() - dateA.getTime(); // ← جدیدترین اول
-  //   }
-
-  //   // اگر تاریخ برابر بود، بر اساس زمان
-  //   const timeA = getTimeValue(a.time);
-  //   const timeB = getTimeValue(b.time);
-  //   return timeA - timeB;
-  // });
 
   // ===== مرتب‌سازی نوبت‌ها بر اساس تاریخ (جدیدترین اول) =====
   const sortedAppointments = [...appointments].sort((a, b) => {
@@ -725,26 +627,13 @@ function AppointmentsContent() {
   // =============================================
   // ۴. توابعی که از متغیرهای مشتق شده استفاده میکنن
   // =============================================
-  // const normalizeTime = (time) => {
-  //   let [hour, minute] = time.split(":").map(Number);
-
-  //   const extraDays = Math.floor(hour / 24);
-  //   hour = hour % 24;
-
-  //   return {
-  //     hour,
-  //     minute,
-  //     extraDays,
-  //   };
-  // };
-
   const normalizeTime = (time) => {
-
     const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
     const englishDigits = "0123456789";
 
-    const normalized = time.replace(/[۰-۹]/g, (d) =>
-      englishDigits[persianDigits.indexOf(d)]
+    const normalized = time.replace(
+      /[۰-۹]/g,
+      (d) => englishDigits[persianDigits.indexOf(d)],
     );
 
     let [hour, minute] = normalized.split(":").map(Number);
@@ -756,79 +645,47 @@ function AppointmentsContent() {
     return {
       hour,
       minute,
-      extraDays
+      extraDays,
     };
   };
 
   // ===== بررسی قانون ۲۴ ساعت =====
-  // const canCancel = (appointment) => {
-  //   if (appointment.status !== "confirmed" && appointment.status !== "pending")
-  //     return false;
-
-  //   const now = new Date();
-
-  //   const [rawStartTime] = appointment.time.split(" - ");
-
-  //   const normalizedTime = normalizeTime(rawStartTime);
-
-  //   const appointmentDate = convertJalaliToDate(
-  //     appointment.date,
-  //     `${normalizedTime.hour}:${normalizedTime.minute}`,
-  //   );
-
-  //   appointmentDate.setDate(
-  //     appointmentDate.getDate() + normalizedTime.extraDays,
-  //   );
-
-  //   const diffHours = (appointmentDate - now) / (1000 * 60 * 60);
-
-  //   console.log({
-  //     appointmentDate,
-  //     now,
-  //     diffHours,
-  //     date: appointment.date,
-  //     time: appointment.time,
-  //   });
-
-  //   return diffHours >= 24;
-  // };
-
   const canCancel = (appointment) => {
-  if (
-    appointment.status !== "confirmed" &&
-    appointment.status !== "pending"
-  ) {
-    return false;
-  }
+    if (
+      appointment.status !== "confirmed" &&
+      appointment.status !== "pending"
+    ) {
+      return false;
+    }
 
-  const [rawStartTime] = appointment.time.split(" - ");
+    const [rawStartTime] = appointment.time.split(" - ");
 
-  const normalizedTime = normalizeTime(rawStartTime);
+    const normalizedTime = normalizeTime(rawStartTime);
 
-  const appointmentDate = convertJalaliToDate(
-    appointment.date,
-    `${normalizedTime.hour}:${String(normalizedTime.minute).padStart(2, "0")}`
-  );
+    const appointmentDate = convertJalaliToDate(
+      appointment.date,
+      `${normalizedTime.hour}:${String(normalizedTime.minute).padStart(2, "0")}`,
+    );
 
-  appointmentDate.setDate(
-    appointmentDate.getDate() + normalizedTime.extraDays
-  );
+    appointmentDate.setDate(
+      appointmentDate.getDate() + normalizedTime.extraDays,
+    );
 
-  const now = new Date();
+    const now = new Date();
 
-  const diffMilliseconds = appointmentDate.getTime() - now.getTime();
+    const diffMilliseconds = appointmentDate.getTime() - now.getTime();
 
-  const diffHours = diffMilliseconds / (1000 * 60 * 60);
+    const diffHours = diffMilliseconds / (1000 * 60 * 60);
 
-  console.log(
-    appointment.date,
-    appointment.time,
-    "remaining hours:",
-    diffHours
-  );
+    console.log(
+      appointment.date,
+      appointment.time,
+      "remaining hours:",
+      diffHours,
+    );
 
-  return diffHours >= 24;
-};
+    return diffHours >= 24;
+  };
 
   // ===== فیلتر کردن (با استفاده از sortedAppointments) =====
   const getFilteredAppointments = () => {
@@ -839,48 +696,12 @@ function AppointmentsContent() {
   const filteredAppointments = getFilteredAppointments();
 
   // ===== تابع لغو نوبت =====
-  // const handleCancelAppointment = (appointmentId) => {
-  //   const appointment = appointments.find((a) => a.id === appointmentId);
-  //   if (!appointment) return;
-
-  //   const now = new Date();
-  //   const appointmentDate = convertToGregorian(appointment.date);
-  //   const timeParts = appointment.time.split(" - ")[0].split(":");
-  //   appointmentDate.setHours(parseInt(timeParts[0]), parseInt(timeParts[1]), 0);
-
-  //   const diffHours = (appointmentDate - now) / (1000 * 60 * 60);
-
-  //   if (diffHours < 24) {
-  //     alert("امکان لغو نوبت کمتر از ۲۴ ساعت قبل وجود ندارد.");
-  //     return;
-  //   }
-
-  //   setSelectedAppointmentId(appointmentId);
-  //   setCancelReason("");
-  //   setShowCancelModal(true);
-  // };
-
-  // ===== تابع لغو نوبت =====
   const handleCancelAppointment = (appointmentId) => {
     const appointment = appointments.find((a) => a.id === appointmentId);
     if (!appointment) return;
 
     const now = new Date();
-
-    // const [year, month, day] = appointment.date.split("/");
-    // const gregorianYear = parseInt(year) - 621;
-    // const gregorianMonth = parseInt(month) - 1;
-    // const gregorianDay = parseInt(day);
-
-    // const appointmentDate = new Date(gregorianYear, gregorianMonth, gregorianDay);
-    // const [startTime] = appointment.time.split(" - ");
-
-    // const appointmentDate = convertJalaliToDate(appointment.date, startTime);
-
-    // appointmentDate.setDate(appointmentDate.getDate() + extraDays);
-
     const [rawStartTime] = appointment.time.split(" - ");
-
     const normalizedTime = normalizeTime(rawStartTime);
 
     const appointmentDate = convertJalaliToDate(
@@ -891,10 +712,6 @@ function AppointmentsContent() {
     appointmentDate.setDate(
       appointmentDate.getDate() + normalizedTime.extraDays,
     );
-
-    // const [startTime] = appointment.time.split(' - ');
-    // const [hours, minutes] = startTime.split(":");
-    // appointmentDate.setHours(parseInt(hours), parseInt(minutes), 0);
 
     const diffHours = (appointmentDate - now) / (1000 * 60 * 60);
 
@@ -1575,6 +1392,26 @@ function SessionsContent() {
     return statusMap[status] || statusMap.upcoming;
   };
 
+  const normalizePersian = (str) => {
+    const persian = "۰۱۲۳۴۵۶۷۸۹";
+    const english = "0123456789";
+
+    return str.replace(/[۰-۹]/g, (d) => english[persian.indexOf(d)]);
+  };
+
+  const convertJalaliToDate = (date, time) => {
+    const normalizedDate = normalizePersian(date);
+    const normalizedTime = normalizePersian(time);
+
+    const [y, m, d] = normalizedDate.split("/");
+    const [hour, minute] = normalizedTime.split(":");
+
+    return moment(
+      `${y}/${m}/${d} ${hour}:${minute}`,
+      "jYYYY/jMM/jDD HH:mm",
+    ).toDate();
+  };
+
   // ===== پیدا کردن جلسه بعدی (نزدیک‌ترین جلسه) =====
   const getNextSession = () => {
     const upcomingSessions = sessions.filter(
@@ -1583,12 +1420,19 @@ function SessionsContent() {
 
     if (upcomingSessions.length === 0) return null;
 
-    // مرتب‌سازی بر اساس تاریخ و زمان
     return upcomingSessions.sort((a, b) => {
-      const dateA = new Date(a.date + " " + a.time);
-      const dateB = new Date(b.date + " " + b.time);
+      const dateA = convertJalaliToDate(a.date, a.time);
+      const dateB = convertJalaliToDate(b.date, b.time);
+
       return dateA - dateB;
     })[0];
+
+    // مرتب‌سازی بر اساس تاریخ و زمان
+    // return upcomingSessions.sort((a, b) => {
+    //   const dateA = new Date(a.date + " " + a.time);
+    //   const dateB = new Date(b.date + " " + b.time);
+    //   return dateA - dateB;
+    // })[0];
   };
 
   const nextSession = getNextSession();
@@ -1599,7 +1443,8 @@ function SessionsContent() {
   useEffect(() => {
     if (!nextSession) return;
 
-    const targetDate = new Date(nextSession.date + " " + nextSession.time);
+    // const targetDate = new Date(nextSession.date + " " + nextSession.time);
+    const targetDate = convertJalaliToDate(nextSession.date, nextSession.time);
 
     const interval = setInterval(() => {
       const now = new Date();
@@ -1610,40 +1455,28 @@ function SessionsContent() {
         setTimeLeft(null);
         // می‌تونی وضعیت جلسه رو به "ongoing" تغییر بدی
       } else {
-        const hours = Math.floor(diff / (1000 * 60 * 60));
+        // const hours = Math.floor(diff / (1000 * 60 * 60));
+        // const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        // setTimeLeft({ hours, minutes });
+
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+        const hours = Math.floor(
+          (diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+        );
+
         const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        setTimeLeft({ hours, minutes });
+
+        setTimeLeft({
+          days,
+          hours,
+          minutes,
+        });
       }
     }, 1000);
 
     return () => clearInterval(interval);
   }, [nextSession]);
-
-  // useEffect(() => {
-  //   const intervals = {};
-  //   sessions.forEach((session) => {
-  //     if (session.status === "upcoming") {
-  //       const targetDate = new Date(session.date + " " + session.time);
-  //       intervals[session.id] = setInterval(() => {
-  //         const now = new Date();
-  //         const diff = targetDate - now;
-  //         if (diff <= 0) {
-  //           clearInterval(intervals[session.id]);
-  //         } else {
-  //           const hours = Math.floor(diff / (1000 * 60 * 60));
-  //           const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-  //           setTimeLeft((prev) => ({
-  //             ...prev,
-  //             [session.id]: { hours, minutes },
-  //           }));
-  //         }
-  //       }, 1000);
-  //     }
-  //   });
-  //   return () => {
-  //     Object.values(intervals).forEach((interval) => clearInterval(interval));
-  //   };
-  // }, []);
 
   // ===== تابع لغو جلسه =====
   const handleCancelSession = (sessionId) => {
@@ -1652,7 +1485,7 @@ function SessionsContent() {
 
     // ===== اگر قبلاً لغو شده =====
     if (session.status === "cancelled") {
-      alert("❌ این جلسه قبلاً لغو شده است.");
+      alert("این جلسه قبلاً لغو شده است.");
       return;
     }
 
@@ -1662,7 +1495,7 @@ function SessionsContent() {
     const diffHours = (sessionDate - now) / (1000 * 60 * 60);
 
     if (diffHours < 24) {
-      alert("❌ امکان لغو جلسه کمتر از ۲۴ ساعت قبل وجود ندارد.");
+      alert("امکان لغو جلسه کمتر از ۲۴ ساعت قبل وجود ندارد.");
       return;
     }
 
@@ -1683,7 +1516,7 @@ function SessionsContent() {
       ),
     );
 
-    alert("✅ جلسه با موفقیت لغو شد.");
+    alert("جلسه با موفقیت لغو شد.");
   };
 
   // ===== بررسی امکان لغو =====
@@ -1750,32 +1583,6 @@ function SessionsContent() {
       {/* لیست جلسات */}
       <div className={styles.sessionsList}>
         {/* جلسه بعدی - کارت ویژه */}
-        {/* {activeTab === "upcoming" &&
-          sessions.some((s) => s.status === "upcoming") && (
-            <div className={styles.nextSessionBanner}>
-              <div className={styles.nextSessionContent}>
-                <span className={styles.nextSessionLabel}>جلسه بعدی شما</span>
-                <h3>{sessions.find((s) => s.status === "upcoming")?.title}</h3>
-                <p>
-                  با {sessions.find((s) => s.status === "upcoming")?.doctor}
-                </p>
-                <div className={styles.nextSessionTime}>
-                  <span>
-                    {sessions.find((s) => s.status === "upcoming")?.date}
-                  </span>
-                  <span>
-                    {sessions.find((s) => s.status === "upcoming")?.time}
-                  </span>
-                </div>
-              </div>
-              <button className={styles.btnNextSession}>
-                ورود به جلسه
-                <span>→</span>
-              </button>
-              
-            </div>
-          )} */}
-
         {activeTab === "upcoming" && nextSession && (
           <div className={styles.nextSessionBanner}>
             <div className={styles.nextSessionContent}>
@@ -1787,24 +1594,6 @@ function SessionsContent() {
                 <span>-</span>
                 <span>{nextSession.time}</span>
               </div>
-
-              {/* ===== تایمر فقط اینجا ===== */}
-              {/* {timeLeft && (
-                <div className={styles.nextSessionTimer}>
-                  <span className={styles.timerLabel}>زمان تا شروع:</span>
-                  <div className={styles.timerDigits}>
-                    <span className={styles.timerDigit}>
-                      {String(timeLeft.hours).padStart(2, "0")}
-                      <span className={styles.timerUnit}>ساعت</span>
-                    </span>
-                    <span className={styles.timerSeparator}>:</span>
-                    <span className={styles.timerDigit}>
-                      {String(timeLeft.minutes).padStart(2, "0")}
-                      <span className={styles.timerUnit}>دقیقه</span>
-                    </span>
-                  </div>
-                </div>
-              )} */}
             </div>
 
             <div className={styles.nextSessionTimerEnterContainer}>
@@ -1819,13 +1608,18 @@ function SessionsContent() {
                   <span className={styles.timerLabel}>زمان تا شروع:</span>
                   <div className={styles.timerDigits}>
                     <span className={styles.timerDigit}>
+                      {String(timeLeft.minutes).padStart(2, "0")}
+                      <span className={styles.timerUnit}>دقیقه</span>
+                    </span>
+                    <span className={styles.timerSeparator}>:</span>
+                    <span className={styles.timerDigit}>
                       {String(timeLeft.hours).padStart(2, "0")}
                       <span className={styles.timerUnit}>ساعت</span>
                     </span>
                     <span className={styles.timerSeparator}>:</span>
                     <span className={styles.timerDigit}>
-                      {String(timeLeft.minutes).padStart(2, "0")}
-                      <span className={styles.timerUnit}>دقیقه</span>
+                      {String(timeLeft.days).padStart(2, "0")}
+                      <span className={styles.timerUnit}>روز</span>
                     </span>
                   </div>
                 </div>
@@ -1833,124 +1627,6 @@ function SessionsContent() {
             </div>
           </div>
         )}
-
-        {/* {filteredSessions.length > 0 ? (
-          filteredSessions.map((session) => {
-            const statusInfo = getStatusInfo(session.status);
-            const isUpcoming =
-              session.status === "upcoming" || session.status === "ongoing";
-            const timeLeftData = timeLeft[session.id];
-
-            return (
-              <div key={session.id} className={styles.sessionCard}>
-                <div className={styles.sessionCardHeader}>
-                  <div className={styles.sessionDoctor}>
-                    <img
-                      src={session.doctorImage}
-                      alt={session.doctor}
-                      className={styles.sessionDoctorAvatar}
-                    />
-                    <div>
-                      <h4>{session.doctor}</h4>
-                      <span className={styles.sessionType}>
-                        {session.title}
-                      </span>
-                    </div>
-                  </div>
-                  <span
-                    className={`${styles.sessionStatus} ${statusInfo.className}`}
-                  >
-                    <span className={styles.statusDot}></span>
-                    {statusInfo.label}
-                  </span>
-                </div>
-
-                <div className={styles.sessionDetails}>
-                  <div className={styles.sessionMeta}>
-                    <div className={styles.metaGroup}>
-                      <span>{session.date}</span>
-                    </div>
-                    <div className={styles.metaGroup}>
-                      <span>
-                        {session.time} - {session.duration}
-                      </span>
-                    </div>
-                    <div className={styles.metaGroup}>
-                      <span>جلسه آنلاین</span>
-                    </div>
-                  </div>
-
-                  {isUpcoming && timeLeftData && (
-                    <div className={styles.sessionTimer}>
-                      <span className={styles.timerLabel}>زمان تا شروع:</span>
-                      <div className={styles.timerDigits}>
-                        <span className={styles.timerDigit}>
-                          {String(timeLeftData.hours).padStart(2, "0")}
-                          <span className={styles.timerUnit}>ساعت</span>
-                        </span>
-                        <span className={styles.timerSeparator}>:</span>
-                        <span className={styles.timerDigit}>
-                          {String(timeLeftData.minutes).padStart(2, "0")}
-                          <span className={styles.timerUnit}>دقیقه</span>
-                        </span>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                <div className={styles.sessionActions}>
-                  {session.status === "upcoming" && (
-                    <>
-                      <button className={styles.btnJoinSession}>
-                        <span>▶</span>
-                        ورود به جلسه
-                      </button>
-                      <button className={styles.btnRemind}>🔔 یادآوری</button>
-                    </>
-                  )}
-                  {session.status === "ongoing" && (
-                    <button className={styles.btnJoinNow}>
-                      <span className={styles.pulseDot}></span>
-                      ورود به جلسه (در حال برگزاری)
-                    </button>
-                  )}
-                  {session.status === "completed" && (
-                    <>
-                      <button className={styles.btnViewRecord}>
-                        مشاهده ضبط جلسه
-                      </button>
-                      <button className={styles.btnFeedback}>
-                        ثبت بازخورد
-                      </button>
-                    </>
-                  )}
-                  {session.status === "cancelled" && (
-                    <button className={styles.btnRescheduleSession}>
-                      رزرو مجدد
-                    </button>
-                  )}
-                  <button className={styles.btnMore}>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                      <circle cx="12" cy="6" r="2" fill="currentColor" />
-                      <circle cx="12" cy="12" r="2" fill="currentColor" />
-                      <circle cx="12" cy="18" r="2" fill="currentColor" />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            );
-          })
-        ) : (
-          <div className={styles.emptyState}>
-            <span className={styles.emptyIcon}>🎥</span>
-            <h3>هیچ جلسه‌ای در این دسته وجود ندارد</h3>
-            <p>
-              {activeTab === "upcoming"
-                ? "شما هیچ جلسه پیش‌رویی ندارید."
-                : "هنوز جلسه برگزار شده‌ای وجود ندارد."}
-            </p>
-          </div>
-        )} */}
 
         {/* ===== لیست بقیه جلسات (بدون تایمر) ===== */}
         {filteredSessions.length > 0 ? (
@@ -2005,47 +1681,6 @@ function SessionsContent() {
                 </div>
 
                 {/* دکمه‌های اکشن */}
-                {/* <div className={styles.sessionActions}>
-                  {session.status === "upcoming" && (
-                    <>
-                      <button className={styles.btnJoinSession}>
-                        <span>▶</span>
-                        ورود به جلسه
-                      </button>
-                      <button className={styles.btnRemind}>🔔 یادآوری</button>
-                    </>
-                  )}
-                  {session.status === "ongoing" && (
-                    <button className={styles.btnJoinNow}>
-                      <span className={styles.pulseDot}></span>
-                      ورود به جلسه (در حال برگزاری)
-                    </button>
-                  )}
-                  {session.status === "completed" && (
-                    <>
-                      <button className={styles.btnViewRecord}>
-                        مشاهده ضبط جلسه
-                      </button>
-                      <button className={styles.btnFeedback}>
-                        ثبت بازخورد
-                      </button>
-                    </>
-                  )}
-                  {session.status === "cancelled" && (
-                    <button className={styles.btnRescheduleSession}>
-                      رزرو مجدد
-                    </button>
-                  )}
-                  <button className={styles.btnMore}>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                      <circle cx="12" cy="6" r="2" fill="currentColor" />
-                      <circle cx="12" cy="12" r="2" fill="currentColor" />
-                      <circle cx="12" cy="18" r="2" fill="currentColor" />
-                    </svg>
-                  </button>
-                </div> */}
-
-                {/* دکمه‌های اکشن */}
                 <div className={styles.sessionActions}>
                   {session.status === "upcoming" && (
                     <>
@@ -2073,9 +1708,9 @@ function SessionsContent() {
                               لغو غیرفعال (کمتر از ۲۴ ساعت)
                             </button>
                           )}
-                          <button className={styles.btnRemind}>
+                          {/* <button className={styles.btnRemind}>
                             🔔 یادآوری
-                          </button>
+                          </button> */}
                         </>
                       )}
                     </>
@@ -2093,25 +1728,11 @@ function SessionsContent() {
                       <button className={styles.btnViewRecord}>
                         مشاهده ضبط جلسه
                       </button>
-                      <button className={styles.btnFeedback}>
+                      {/* <button className={styles.btnFeedback}>
                         ثبت بازخورد
-                      </button>
+                      </button> */}
                     </>
                   )}
-
-                  {/* {session.status === "cancelled" && (
-                    <button className={styles.btnRescheduleSession}>
-                      رزرو مجدد
-                    </button>
-                  )} */}
-
-                  {/* <button className={styles.btnMore}>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                      <circle cx="12" cy="6" r="2" fill="currentColor" />
-                      <circle cx="12" cy="12" r="2" fill="currentColor" />
-                      <circle cx="12" cy="18" r="2" fill="currentColor" />
-                    </svg>
-                  </button> */}
                 </div>
               </div>
             );
@@ -2141,7 +1762,6 @@ function MessagesContent() {
     {
       id: 1,
       type: "reminder",
-      // icon: "⏰",
       title: "یادآوری جلسه فردا",
       message:
         "جلسه مشاوره فردی شما با دکتر محمد رضایی فردا ساعت ۱۶:۰۰ برگزار میشود.",
@@ -2154,7 +1774,6 @@ function MessagesContent() {
     {
       id: 2,
       type: "confirmed",
-      // icon: "✅",
       title: "تأیید جلسه",
       message: "دکتر سارا احمدی درخواست جلسه زوج درمانی شما را تأیید کرد.",
       time: "۱ ساعت پیش",
@@ -2166,7 +1785,6 @@ function MessagesContent() {
     {
       id: 3,
       type: "cancelled",
-      // icon: "❌",
       title: "لغو جلسه توسط روانشناس",
       message: "دکتر علی کریمی جلسه مشاوره نوجوان را به دلیل هماهنگی لغو کرد.",
       time: "۳ ساعت پیش",
@@ -2178,7 +1796,6 @@ function MessagesContent() {
     {
       id: 4,
       type: "note",
-      // icon: "📝",
       title: "یادداشت جدید از روانشناس",
       message: "دکتر محمد رضایی برای جلسه قبلی شما یادداشتی ثبت کرده است.",
       time: "۵ ساعت پیش",
@@ -2190,7 +1807,6 @@ function MessagesContent() {
     {
       id: 5,
       type: "booking",
-      // icon: "📅",
       title: "رزرو جلسه جدید",
       message:
         "شما جلسه مشاوره فردی را برای تاریخ ۱۴۰۵/۰۵/۲۸ ساعت ۱۷:۰۰ رزرو کردید.",
@@ -2203,7 +1819,6 @@ function MessagesContent() {
     {
       id: 6,
       type: "weekly",
-      // icon: "🔄",
       title: "زمان جلسات هفتگی",
       message:
         "زمان جلسات هفتگی شما فرا رسیده است. آیا مایل به رزرو جلسه جدید هستید؟",
@@ -2216,7 +1831,6 @@ function MessagesContent() {
     {
       id: 7,
       type: "reminder",
-      // icon: "⏰",
       title: "یادآوری جلسه امروز",
       message:
         "جلسه مشاوره فردی شما با دکتر سارا احمدی امروز ساعت ۱۸:۰۰ برگزار میشود.",
@@ -2286,7 +1900,7 @@ function MessagesContent() {
       {/* هدر بخش */}
       <div className={styles.pageHeader}>
         <div className={styles.headerInfo}>
-          <h2>🔔 اعلانات</h2>
+          <h2>اعلانات</h2>
           <p>رویدادها و یادآوری‌های مهم شما</p>
         </div>
         <div className={styles.notificationActions}>
@@ -2308,6 +1922,7 @@ function MessagesContent() {
           onClick={() => setFilter("all")}
         >
           همه
+           &nbsp;
           <span className={styles.filterCount}>{notifications.length}</span>
         </button>
         <button
@@ -2317,6 +1932,7 @@ function MessagesContent() {
           onClick={() => setFilter("unread")}
         >
           خوانده نشده
+           &nbsp;
           {unreadCount > 0 && (
             <span className={styles.filterCount}>{unreadCount}</span>
           )}
@@ -2328,6 +1944,7 @@ function MessagesContent() {
           onClick={() => setFilter("read")}
         >
           خوانده شده
+           &nbsp;
           <span className={styles.filterCount}>
             {notifications.filter((n) => n.isRead).length}
           </span>
@@ -2359,10 +1976,10 @@ function MessagesContent() {
                 <div className={styles.notificationContent}>
                   <div className={styles.notificationHeader}>
                     <h4 className={styles.notificationTitle}>
-                      {notification.title}
                       {!notification.isRead && (
                         <span className={styles.unreadDot}></span>
                       )}
+                      {notification.title}
                     </h4>
                     <span className={styles.notificationTime}>
                       {notification.time}
@@ -2371,8 +1988,8 @@ function MessagesContent() {
                   <p className={styles.notificationMessage}>
                     {notification.message}
                   </p>
-                  <div className={styles.notificationFooter}>
-                    <button
+                  {/* <div className={styles.notificationFooter}> */}
+                    {/* <button
                       className={styles.notificationAction}
                       onClick={(e) => {
                         e.stopPropagation();
@@ -2382,8 +1999,8 @@ function MessagesContent() {
                     >
                       {notification.action}
                       <span>→</span>
-                    </button>
-                    <button
+                    </button> */}
+                    {/* <button
                       className={styles.notificationDelete}
                       onClick={(e) => {
                         e.stopPropagation();
@@ -2391,8 +2008,8 @@ function MessagesContent() {
                       }}
                     >
                       ✕
-                    </button>
-                  </div>
+                    </button> */}
+                  {/* </div> */}
                 </div>
 
                 {/* وضعیت خوانده/نخوانده */}
@@ -2404,7 +2021,7 @@ function MessagesContent() {
           })
         ) : (
           <div className={styles.emptyState}>
-            <span className={styles.emptyIcon}>🔔</span>
+            {/* <span className={styles.emptyIcon}>🔔</span> */}
             <h3>هیچ اعلانی وجود ندارد</h3>
             <p>
               {filter === "unread"
@@ -2493,7 +2110,7 @@ function NotificationDropdown({
       {isOpen && (
         <div className={styles.dropdownMenu}>
           <div className={styles.dropdownHeader}>
-            <span className={styles.dropdownTitle}>🔔 اعلان‌ها</span>
+            <span className={styles.dropdownTitle}>اعلان‌ها</span>
             {unreadCount > 0 && (
               <button
                 className={styles.dropdownMarkAll}
@@ -2908,8 +2525,8 @@ function ProgressContent() {
 
       {/* دکمه‌های اقدام */}
       <div className={styles.progressActions}>
-        <button className={styles.btnReport}>📄 دریافت گزارش کامل</button>
-        <button className={styles.btnShare}>📤 اشتراک‌گذاری پیشرفت</button>
+        <button className={styles.btnReport}>دریافت گزارش کامل</button>
+        <button className={styles.btnShare}>اشتراک‌گذاری پیشرفت</button>
       </div>
     </div>
   );
@@ -3088,7 +2705,7 @@ function ExerciseContent() {
       {/* هدر بخش */}
       <div className={styles.pageHeader}>
         <div className={styles.headerInfo}>
-          <h2>🧠 تمارین من</h2>
+          <h2>تمارین من</h2>
           <p>تمارین تعیین شده توسط روانشناس برای شما</p>
         </div>
         <div className={styles.exerciseStats}>
@@ -3121,6 +2738,7 @@ function ExerciseContent() {
             onClick={() => setFilter("all")}
           >
             همه
+             &nbsp;
             <span className={styles.filterCount}>{exercises.length}</span>
           </button>
           <button
@@ -3130,6 +2748,7 @@ function ExerciseContent() {
             onClick={() => setFilter("daily")}
           >
             🌙 روزانه
+             &nbsp;
             <span className={styles.filterCount}>
               {exercises.filter((ex) => ex.type === "daily").length}
             </span>
@@ -3141,6 +2760,7 @@ function ExerciseContent() {
             onClick={() => setFilter("weekly")}
           >
             📅 هفتگی
+             &nbsp;
             <span className={styles.filterCount}>
               {exercises.filter((ex) => ex.type === "weekly").length}
             </span>
@@ -3152,6 +2772,7 @@ function ExerciseContent() {
             onClick={() => setFilter("one-time")}
           >
             ⭐ یک‌باره
+             &nbsp;
             <span className={styles.filterCount}>
               {exercises.filter((ex) => ex.type === "one-time").length}
             </span>
@@ -3383,7 +3004,7 @@ function ProfileContent({ userData }) {
     // ذخیره اطلاعات
     console.log("اطلاعات ذخیره شد:", formData);
     setIsEditing(false);
-    alert("✅ اطلاعات با موفقیت ذخیره شد.");
+    alert("اطلاعات با موفقیت ذخیره شد.");
   };
 
   return (
@@ -3391,14 +3012,14 @@ function ProfileContent({ userData }) {
       {/* هدر بخش */}
       <div className={styles.pageHeader}>
         <div className={styles.headerInfo}>
-          <h2>👤 پروفایل</h2>
+          <h2>پروفایل</h2>
           <p>اطلاعات شخصی و تنظیمات حساب کاربری</p>
         </div>
         <button
           className={styles.editProfileBtn}
           onClick={() => setIsEditing(!isEditing)}
         >
-          {isEditing ? "✕ لغو" : "✏️ ویرایش پروفایل"}
+          {isEditing ? "✕ لغو" : "ویرایش پروفایل"}
         </button>
       </div>
 
@@ -3411,7 +3032,7 @@ function ProfileContent({ userData }) {
               <img src={userAvatar} alt="پروفایل" />
               {isEditing && (
                 <button className={styles.changeAvatarBtn}>
-                  <span>📷</span>
+                  {/* <span>📷</span> */}
                 </button>
               )}
             </div>
@@ -3447,11 +3068,11 @@ function ProfileContent({ userData }) {
               )}
             </h2>
             <div className={styles.profileMeta}>
-              <span>📱 {formData.phone}</span>
+              <span>{formData.phone}</span>
               <span className={styles.metaDivider}>•</span>
-              <span>📧 {formData.email}</span>
+              <span>{formData.email}</span>
               <span className={styles.metaDivider}>•</span>
-              <span>📅 عضویت: {userStats.joinDate}</span>
+              <span>عضویت: {userStats.joinDate}</span>
             </div>
             <div className={styles.profileQuickStats}>
               <div className={styles.quickStat}>
@@ -3486,7 +3107,7 @@ function ProfileContent({ userData }) {
             }`}
             onClick={() => setActiveTab("info")}
           >
-            📋 اطلاعات شخصی
+            اطلاعات شخصی
           </button>
           <button
             className={`${styles.profileTab} ${
@@ -3494,16 +3115,16 @@ function ProfileContent({ userData }) {
             }`}
             onClick={() => setActiveTab("medical")}
           >
-            🏥 اطلاعات درمانی
+            اطلاعات درمانی
           </button>
-          <button
+          {/* <button
             className={`${styles.profileTab} ${
               activeTab === "settings" ? styles.active : ""
             }`}
             onClick={() => setActiveTab("settings")}
           >
-            ⚙️ تنظیمات
-          </button>
+            تنظیمات
+          </button> */}
         </div>
 
         {/* محتوای تب‌ها */}
@@ -3645,7 +3266,7 @@ function ProfileContent({ userData }) {
 
               {/* اطلاعات اضطراری */}
               <div className={styles.emergencySection}>
-                <h4>🆘 تماس اضطراری</h4>
+                <h4>تماس اضطراری</h4>
                 <div className={styles.emergencyGrid}>
                   <div className={styles.infoItem}>
                     <label>شماره تماس</label>
@@ -3681,7 +3302,7 @@ function ProfileContent({ userData }) {
               {isEditing && (
                 <div className={styles.editActions}>
                   <button className={styles.saveBtn} onClick={handleSave}>
-                    💾 ذخیره تغییرات
+                    ذخیره تغییرات
                   </button>
                   <button
                     className={styles.cancelBtn}
@@ -3738,20 +3359,20 @@ function ProfileContent({ userData }) {
 
               <div className={styles.medicalActions}>
                 <button className={styles.btnMedical}>
-                  📄 درخواست گزارش درمانی
+                  درخواست گزارش درمانی
                 </button>
                 <button className={styles.btnMedicalSecondary}>
-                  📤 اشتراک‌گذاری با پزشک
+                  اشتراک‌گذاری با پزشک
                 </button>
               </div>
             </div>
           )}
 
           {/* ===== تب تنظیمات ===== */}
-          {activeTab === "settings" && (
+          {/* {activeTab === "settings" && (
             <div className={styles.settingsTab}>
               <div className={styles.settingsGroup}>
-                <h4>🔔 اعلان‌ها</h4>
+                <h4>اعلان‌ها</h4>
                 <div className={styles.settingItem}>
                   <span>یادآوری جلسات</span>
                   <label className={styles.switch}>
@@ -3812,8 +3433,530 @@ function ProfileContent({ userData }) {
                 </button>
               </div>
             </div>
+          )} */}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ============================================
+// COMPONENT: Setting Content
+// ============================================
+
+function SettingsContent() {
+  // ===== تنظیمات اعلان‌ها =====
+  const [notificationSettings, setNotificationSettings] = useState({
+    // ===== یادآوری جلسات =====
+    sessionReminder: {
+      enabled: true,
+      method: "sms", // sms | email | both
+      timing: 2, // چند ساعت قبل
+    },
+    // ===== یادآوری تمارین =====
+    exerciseReminder: {
+      enabled: true,
+      method: "sms",
+    },
+    // ===== پیام‌های روانشناس =====
+    therapistMessages: {
+      enabled: true,
+      method: "sms",
+    },
+    // ===== گزارش هفتگی =====
+    weeklyReport: {
+      enabled: false,
+      method: "email",
+    },
+  });
+
+  // ===== تنظیمات نمایش =====
+  const [displaySettings, setDisplaySettings] = useState({
+    darkMode: false,
+    showReadNotifications: true,
+    language: "fa", // fa | en
+  });
+
+  // ===== تنظیمات حریم خصوصی =====
+  const [privacySettings, setPrivacySettings] = useState({
+    shareMedicalInfo: true,
+    shareProgress: true,
+  });
+
+  // ===== تابع تغییر تنظیمات =====
+  const toggleSetting = (category, key, subKey = null) => {
+    if (subKey) {
+      setNotificationSettings((prev) => ({
+        ...prev,
+        [category]: {
+          ...prev[category],
+          [subKey]: !prev[category][subKey],
+        },
+      }));
+    } else {
+      setNotificationSettings((prev) => ({
+        ...prev,
+        [category]: {
+          ...prev[category],
+          [key]: !prev[category][key],
+        },
+      }));
+    }
+  };
+
+  // ===== تابع تغییر روش =====
+  const changeMethod = (category, method) => {
+    setNotificationSettings((prev) => ({
+      ...prev,
+      [category]: {
+        ...prev[category],
+        method: method,
+      },
+    }));
+  };
+
+  // ===== تابع تغییر زمان یادآوری =====
+  const changeTiming = (category, hours) => {
+    setNotificationSettings((prev) => ({
+      ...prev,
+      [category]: {
+        ...prev[category],
+        timing: hours,
+      },
+    }));
+  };
+
+  return (
+    <div className={styles.pageContent}>
+      {/* هدر بخش */}
+      <div className={styles.pageHeader}>
+        <div className={styles.headerInfo}>
+          <h2>تنظیمات</h2>
+          <p>مدیریت تنظیمات حساب کاربری و اعلان‌ها</p>
+        </div>
+      </div>
+
+      {/* ===== بخش اعلان‌ها ===== */}
+      <div className={styles.settingsSection}>
+        <h3>اعلان‌ها و یادآوری‌ها</h3>
+        <p className={styles.sectionDescription}>
+          تنظیمات مربوط به یادآوری جلسات، تمارین و پیام‌ها
+        </p>
+
+        {/* یادآوری جلسات */}
+        <div className={styles.settingCard}>
+          <div className={styles.settingHeader}>
+            <div className={styles.settingInfo}>
+              {/* <span className={styles.settingIcon}>📅</span> */}
+              <div>
+                <h4>یادآوری جلسات</h4>
+                <p>ارسال پیامک یادآوری قبل از جلسات</p>
+              </div>
+            </div>
+            <label className={styles.switch}>
+              <input
+                type="checkbox"
+                checked={notificationSettings.sessionReminder.enabled}
+                onChange={() => toggleSetting("sessionReminder", "enabled")}
+              />
+              <span className={styles.switchSlider}></span>
+            </label>
+          </div>
+
+          {notificationSettings.sessionReminder.enabled && (
+            <div className={styles.settingOptions}>
+              <div className={styles.optionGroup}>
+                <span className={styles.optionLabel}>روش ارسال:</span>
+                <div className={styles.methodButtons}>
+                  <button
+                    className={`${styles.methodBtn} ${
+                      notificationSettings.sessionReminder.method === "sms"
+                        ? styles.active
+                        : ""
+                    }`}
+                    onClick={() => changeMethod("sessionReminder", "sms")}
+                  >
+                    پیامک
+                  </button>
+                  {/* <button
+                    className={`${styles.methodBtn} ${
+                      notificationSettings.sessionReminder.method === "email"
+                        ? styles.active
+                        : ""
+                    }`}
+                    onClick={() => changeMethod("sessionReminder", "email")}
+                  >
+                    ایمیل
+                  </button> */}
+                  {/* <button
+                    className={`${styles.methodBtn} ${
+                      notificationSettings.sessionReminder.method === "both"
+                        ? styles.active
+                        : ""
+                    }`}
+                    onClick={() => changeMethod("sessionReminder", "both")}
+                  >
+                    📱✉️ هر دو
+                  </button> */}
+                </div>
+              </div>
+
+              <div className={styles.optionGroup}>
+                <span className={styles.optionLabel}>زمان یادآوری:</span>
+                <div className={styles.timingButtons}>
+                  {[1, 2, 4, 12, 24].map((hours) => (
+                    <button
+                      key={hours}
+                      className={`${styles.timingBtn} ${
+                        notificationSettings.sessionReminder.timing === hours
+                          ? styles.active
+                          : ""
+                      }`}
+                      onClick={() => changeTiming("sessionReminder", hours)}
+                    >
+                      {hours} ساعت قبل
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
           )}
         </div>
+
+        {/* یادآوری تمارین */}
+        <div className={styles.settingCard}>
+          <div className={styles.settingHeader}>
+            <div className={styles.settingInfo}>
+              {/* <span className={styles.settingIcon}>🧠</span> */}
+              <div>
+                <h4>یادآوری تمارین</h4>
+                <p>یادآوری برای انجام تمارین روزانه</p>
+              </div>
+            </div>
+            <label className={styles.switch}>
+              <input
+                type="checkbox"
+                checked={notificationSettings.exerciseReminder.enabled}
+                onChange={() => toggleSetting("exerciseReminder", "enabled")}
+              />
+              <span className={styles.switchSlider}></span>
+            </label>
+          </div>
+
+          {notificationSettings.exerciseReminder.enabled && (
+            <div className={styles.settingOptions}>
+              <div className={styles.optionGroup}>
+                <span className={styles.optionLabel}>روش ارسال:</span>
+                <div className={styles.methodButtons}>
+                  <button
+                    className={`${styles.methodBtn} ${
+                      notificationSettings.exerciseReminder.method === "sms"
+                        ? styles.active
+                        : ""
+                    }`}
+                    onClick={() => changeMethod("exerciseReminder", "sms")}
+                  >
+                    پیامک
+                  </button>
+                  {/* <button
+                    className={`${styles.methodBtn} ${
+                      notificationSettings.exerciseReminder.method === "email"
+                        ? styles.active
+                        : ""
+                    }`}
+                    onClick={() => changeMethod("exerciseReminder", "email")}
+                  >
+                    ایمیل
+                  </button> */}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* پیام‌های روانشناس */}
+        <div className={styles.settingCard}>
+          <div className={styles.settingHeader}>
+            <div className={styles.settingInfo}>
+              {/* <span className={styles.settingIcon}>💬</span> */}
+              <div>
+                <h4>پیام‌های روانشناس</h4>
+                <p>دریافت پیام‌های جدید از روانشناس</p>
+              </div>
+            </div>
+            <label className={styles.switch}>
+              <input
+                type="checkbox"
+                checked={notificationSettings.therapistMessages.enabled}
+                onChange={() => toggleSetting("therapistMessages", "enabled")}
+              />
+              <span className={styles.switchSlider}></span>
+            </label>
+          </div>
+
+          {notificationSettings.therapistMessages.enabled && (
+            <div className={styles.settingOptions}>
+              <div className={styles.optionGroup}>
+                <span className={styles.optionLabel}>روش ارسال:</span>
+                <div className={styles.methodButtons}>
+                  <button
+                    className={`${styles.methodBtn} ${
+                      notificationSettings.therapistMessages.method === "sms"
+                        ? styles.active
+                        : ""
+                    }`}
+                    onClick={() => changeMethod("therapistMessages", "sms")}
+                  >
+                    پیامک
+                  </button>
+                  <button
+                    className={`${styles.methodBtn} ${
+                      notificationSettings.therapistMessages.method === "email"
+                        ? styles.active
+                        : ""
+                    }`}
+                    onClick={() => changeMethod("therapistMessages", "email")}
+                  >
+                    ایمیل
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* گزارش هفتگی */}
+        <div className={styles.settingCard}>
+          <div className={styles.settingHeader}>
+            <div className={styles.settingInfo}>
+              {/* <span className={styles.settingIcon}>📊</span> */}
+              <div>
+                <h4>گزارش هفتگی</h4>
+                <p>دریافت گزارش پیشرفت هفتگی</p>
+              </div>
+            </div>
+            <label className={styles.switch}>
+              <input
+                type="checkbox"
+                checked={notificationSettings.weeklyReport.enabled}
+                onChange={() => toggleSetting("weeklyReport", "enabled")}
+              />
+              <span className={styles.switchSlider}></span>
+            </label>
+          </div>
+
+          {notificationSettings.weeklyReport.enabled && (
+            <div className={styles.settingOptions}>
+              <div className={styles.optionGroup}>
+                <span className={styles.optionLabel}>روش ارسال:</span>
+                <div className={styles.methodButtons}>
+                  <button
+                    className={`${styles.methodBtn} ${
+                      notificationSettings.weeklyReport.method === "email"
+                        ? styles.active
+                        : ""
+                    }`}
+                    onClick={() => changeMethod("weeklyReport", "email")}
+                  >
+                    ایمیل
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* ===== بخش نمایش ===== */}
+      <div className={styles.settingsSection}>
+        <h3>نمایش</h3>
+        <p className={styles.sectionDescription}>
+          تنظیمات ظاهری و نمایشی برنامه
+        </p>
+
+        <div className={styles.settingCard}>
+          <div className={styles.settingHeader}>
+            <div className={styles.settingInfo}>
+              <span className={styles.settingIcon}>🌓</span>
+              <div>
+                <h4>حالت شب</h4>
+                <p>تغییر تم برنامه به حالت تاریک</p>
+              </div>
+            </div>
+            <label className={styles.switch}>
+              <input
+                type="checkbox"
+                checked={displaySettings.darkMode}
+                onChange={() =>
+                  setDisplaySettings((prev) => ({
+                    ...prev,
+                    darkMode: !prev.darkMode,
+                  }))
+                }
+              />
+              <span className={styles.switchSlider}></span>
+            </label>
+          </div>
+        </div>
+
+        {/* <div className={styles.settingCard}>
+          <div className={styles.settingHeader}>
+            <div className={styles.settingInfo}>
+              <span className={styles.settingIcon}>👁️</span>
+              <div>
+                <h4>نمایش اعلان‌های خوانده شده</h4>
+                <p>نمایش اعلان‌های قدیمی در لیست</p>
+              </div>
+            </div>
+            <label className={styles.switch}>
+              <input
+                type="checkbox"
+                checked={displaySettings.showReadNotifications}
+                onChange={() =>
+                  setDisplaySettings((prev) => ({
+                    ...prev,
+                    showReadNotifications: !prev.showReadNotifications,
+                  }))
+                }
+              />
+              <span className={styles.switchSlider}></span>
+            </label>
+          </div>
+        </div> */}
+
+        <div className={styles.settingCard}>
+          <div className={styles.settingHeader}>
+            <div className={styles.settingInfo}>
+              {/* <span className={styles.settingIcon}>🌐</span> */}
+              <div>
+                <h4>زبان برنامه</h4>
+                <p>انتخاب زبان نمایشی</p>
+              </div>
+            </div>
+            <div className={styles.languageButtons}>
+              <button
+                className={`${styles.langBtn} ${
+                  displaySettings.language === "fa" ? styles.active : ""
+                }`}
+                onClick={() =>
+                  setDisplaySettings((prev) => ({ ...prev, language: "fa" }))
+                }
+              >
+                فارسی
+              </button>
+              <button
+                className={`${styles.langBtn} ${
+                  displaySettings.language === "en" ? styles.active : ""
+                }`}
+                onClick={() =>
+                  setDisplaySettings((prev) => ({ ...prev, language: "en" }))
+                }
+              >
+                English
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ===== بخش حریم خصوصی ===== */}
+      {/* <div className={styles.settingsSection}>
+        <h3>🔒 حریم خصوصی</h3>
+        <p className={styles.sectionDescription}>
+          مدیریت دسترسی و اشتراک‌گذاری اطلاعات
+        </p>
+
+        <div className={styles.settingCard}>
+          <div className={styles.settingHeader}>
+            <div className={styles.settingInfo}>
+              <span className={styles.settingIcon}>🏥</span>
+              <div>
+                <h4>اشتراک اطلاعات پزشکی</h4>
+                <p>اجازه دسترسی روانشناس به اطلاعات پزشکی</p>
+              </div>
+            </div>
+            <label className={styles.switch}>
+              <input
+                type="checkbox"
+                checked={privacySettings.shareMedicalInfo}
+                onChange={() =>
+                  setPrivacySettings((prev) => ({
+                    ...prev,
+                    shareMedicalInfo: !prev.shareMedicalInfo,
+                  }))
+                }
+              />
+              <span className={styles.switchSlider}></span>
+            </label>
+          </div>
+        </div>
+
+        <div className={styles.settingCard}>
+          <div className={styles.settingHeader}>
+            <div className={styles.settingInfo}>
+              <span className={styles.settingIcon}>📈</span>
+              <div>
+                <h4>اشتراک پیشرفت درمانی</h4>
+                <p>به اشتراک‌گذاری پیشرفت با روانشناس</p>
+              </div>
+            </div>
+            <label className={styles.switch}>
+              <input
+                type="checkbox"
+                checked={privacySettings.shareProgress}
+                onChange={() =>
+                  setPrivacySettings((prev) => ({
+                    ...prev,
+                    shareProgress: !prev.shareProgress,
+                  }))
+                }
+              />
+              <span className={styles.switchSlider}></span>
+            </label>
+          </div>
+        </div>
+      </div> */}
+
+      {/* ===== بخش امنیت ===== */}
+      <div className={styles.settingsSection}>
+        <h3>امنیت</h3>
+        <p className={styles.sectionDescription}>مدیریت رمز عبور و دسترسی‌ها</p>
+
+        {/* <div className={styles.settingCard}>
+          <div className={styles.settingHeader}>
+            <div className={styles.settingInfo}>
+              <span className={styles.settingIcon}>🔑</span>
+              <div>
+                <h4>تغییر رمز عبور</h4>
+                <p>رمز عبور خود را به‌روزرسانی کنید</p>
+              </div>
+            </div>
+            <button className={styles.actionBtn}>تغییر</button>
+          </div>
+        </div> */}
+
+        <div className={styles.settingCard}>
+          <div className={styles.settingHeader}>
+            <div className={styles.settingInfo}>
+              {/* <span className={styles.settingIcon}>📱</span> */}
+              <div>
+                <h4>تغییر شماره موبایل</h4>
+                <p>شماره موبایل خود را تغییر دهید</p>
+              </div>
+            </div>
+            <button className={styles.actionBtn}>تغییر</button>
+          </div>
+        </div>
+      </div>
+
+      {/* ===== بخش خطرناک ===== */}
+      <div className={styles.dangerSection}>
+        <h4>⚠️ هشدار</h4>
+        <p>
+          با حذف حساب کاربری، تمام اطلاعات شما به صورت دائمی پاک خواهد شد و قابل
+          بازیابی نیست.
+        </p>
+        <button className={styles.deleteAccountBtn}>🗑️ حذف حساب کاربری</button>
       </div>
     </div>
   );

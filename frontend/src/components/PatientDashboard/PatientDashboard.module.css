@@ -3173,6 +3173,7 @@
   grid-template-columns: 1fr 1fr;
   gap: 24px;
   margin-bottom: 32px;
+  margin-top: 32px;
 }
 
 /* ===== Progress Circle ===== */
@@ -5000,5 +5001,386 @@
 
   .changePasswordBtn {
     width: auto;
+  }
+}
+
+/* ============================================
+   SETTINGS CONTENT
+============================================ */
+
+.pageContent {
+  animation: fadeIn 0.4s ease;
+}
+
+.pageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.headerInfo h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0 0 4px;
+}
+
+.headerInfo p {
+  font-size: 15px;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* ===== Settings Section ===== */
+.settingsSection {
+  margin-bottom: 40px;
+}
+
+.settingsSection h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0 0 4px;
+}
+
+.sectionDescription {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin: 0 0 16px;
+}
+
+/* ===== Setting Card ===== */
+.settingCard {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  margin-bottom: 12px;
+  transition: var(--transition);
+}
+
+.settingCard:hover {
+  box-shadow: var(--shadow-md);
+  border-color: rgba(45, 125, 110, 0.08);
+}
+
+.settingHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.settingInfo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 1;
+}
+
+.settingIcon {
+  font-size: 28px;
+  flex-shrink: 0;
+}
+
+.settingInfo h4 {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0;
+}
+
+.settingInfo p {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 2px 0 0;
+}
+
+/* ===== Setting Options ===== */
+.settingOptions {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--gray-light);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.optionGroup {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.optionLabel {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  min-width: 80px;
+}
+
+/* ===== Method Buttons ===== */
+.methodButtons {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.methodBtn {
+  padding: 4px 14px;
+  border: 1.5px solid var(--gray-light);
+  border-radius: 30px;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.methodBtn:hover {
+  border-color: var(--text-muted);
+  color: var(--text-dark);
+}
+
+.methodBtn.active {
+  border-color: #2d7d6e;
+  background: rgba(45, 125, 110, 0.06);
+  color: #2d7d6e;
+}
+
+/* ===== Timing Buttons ===== */
+.timingButtons {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.timingBtn {
+  padding: 4px 14px;
+  border: 1.5px solid var(--gray-light);
+  border-radius: 30px;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.timingBtn:hover {
+  border-color: var(--text-muted);
+  color: var(--text-dark);
+}
+
+.timingBtn.active {
+  border-color: #2d7d6e;
+  background: rgba(45, 125, 110, 0.06);
+  color: #2d7d6e;
+}
+
+/* ===== Language Buttons ===== */
+.languageButtons {
+  display: flex;
+  gap: 6px;
+}
+
+.langBtn {
+  padding: 4px 16px;
+  border: 1.5px solid var(--gray-light);
+  border-radius: 30px;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.langBtn:hover {
+  border-color: var(--text-muted);
+  color: var(--text-dark);
+}
+
+.langBtn.active {
+  border-color: #2d7d6e;
+  background: rgba(45, 125, 110, 0.06);
+  color: #2d7d6e;
+}
+
+/* ===== Action Button ===== */
+.actionBtn {
+  padding: 6px 20px;
+  border: 1.5px solid #2d7d6e;
+  border-radius: 30px;
+  background: transparent;
+  color: #2d7d6e;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+  flex-shrink: 0;
+}
+
+.actionBtn:hover {
+  background: #2d7d6e;
+  color: white;
+}
+
+/* ===== Switch ===== */
+.switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.switchSlider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #d5d0ca;
+  border-radius: 30px;
+  transition: var(--transition);
+}
+
+.switchSlider::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: 50%;
+  transition: var(--transition);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.switch input:checked + .switchSlider {
+  background: #2d7d6e;
+}
+
+.switch input:checked + .switchSlider::after {
+  transform: translateX(20px);
+}
+
+/* ===== Danger Section ===== */
+.dangerSection {
+  margin-top: 24px;
+  padding: 24px;
+  background: #fbe9e7;
+  border-radius: var(--radius);
+  border: 1px solid #f5c6c6;
+}
+
+.dangerSection h4 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #c62828;
+  margin: 0 0 8px;
+}
+
+.dangerSection p {
+  font-size: 14px;
+  color: #c62828;
+  opacity: 0.8;
+  margin: 0 0 16px;
+}
+
+.deleteAccountBtn {
+  padding: 10px 28px;
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.deleteAccountBtn:hover {
+  background: #c0392b;
+  transform: translateY(-2px);
+}
+
+/* ============================================
+   RESPONSIVE
+============================================ */
+@media (max-width: 768px) {
+  .settingHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .switch {
+    align-self: flex-end;
+  }
+
+  .optionGroup {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .methodButtons,
+  .timingButtons {
+    width: 100%;
+  }
+
+  .methodBtn,
+  .timingBtn {
+    flex: 1;
+    text-align: center;
+  }
+
+  .languageButtons {
+    width: 100%;
+  }
+
+  .langBtn {
+    flex: 1;
+    text-align: center;
+  }
+
+  .actionBtn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .settingCard {
+    padding: 16px;
+  }
+
+  .settingInfo {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .methodBtn,
+  .timingBtn {
+    font-size: 12px;
+    padding: 3px 10px;
   }
 }
