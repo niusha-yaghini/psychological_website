@@ -4,6 +4,8 @@ import Landing from "./components/Landing/Landing";
 import Login from "./components/Auth/Login/Login";
 import Signup from "./components/Auth/Signup/Signup";
 import PatientDashboard from "./components/PatientDashboard/PatientDashboard";
+import DoctorDashboard from "./components/DrDashboard/DrDashboard";
+
 import "./App.css";
 
 function App() {
@@ -55,14 +57,12 @@ function App() {
       <Routes>
         {/* صفحه اصلی */}
         <Route path="/" element={<Landing />} />
-
         {/* صفحات احراز هویت */}
         <Route
           path="/login"
           element={<Login onLoginSuccess={handleLoginSuccess} />}
         />
         <Route path="/signup" element={<Signup />} />
-
         {/* ===== پنل مشتری ===== */}
         <Route
           path="/patient-dashboard"
@@ -74,10 +74,9 @@ function App() {
             )
           }
         />
-
         {/* ===== پنل روانشناس (برای آینده) ===== */}
-        {/* <Route
-          path="/doctor-panel"
+        <Route
+          path="/doctor-dashboard"
           element={
             user && user.role === "doctor" ? (
               <DoctorDashboard user={user} onLogout={handleLogout} />
@@ -85,8 +84,7 @@ function App() {
               <Navigate to="/login" />
             )
           }
-        /> */}
-
+        />
         {/* اگر مسیر اشتباه بود */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
