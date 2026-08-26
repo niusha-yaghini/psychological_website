@@ -198,7 +198,6 @@
   flex: 1;
   white-space: nowrap;
   overflow: hidden;
-  /* align-items: right; */
   text-align: right;
 }
 
@@ -475,10 +474,10 @@
   color: #ffffffb6;
 }
 
-.welcomeImage {
+/* .welcomeImage {
   font-size: 64px;
   animation: float 3s ease-in-out infinite;
-}
+} */
 
 /* ===== Stats Grid ===== */
 .statsGrid {
