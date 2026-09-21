@@ -21,7 +21,7 @@ import {
 import seedData from "../../../../backend/seed";
 
 import moment from "moment-jalaali";
-moment.loadPersian({ usePersianDigits: true });
+moment.loadPersian({ usePersianDigits: false, dialect: 'persian' });
 
 import logo from "../../../public/images/logo/logo2.png";
 import userAvatar from "../../../public/images/Patient_Panel/usericon.png";
@@ -451,7 +451,7 @@ function AppointmentsContent({ appointments, setAppointments }) {
       "jYYYY/jMM/jDD HH:mm",
     );
 
-    console.log("converted:", result.format(), result.isValid());
+    // console.log("converted:", result.format(), result.isValid());
 
     return result.toDate();
   };
@@ -529,12 +529,12 @@ function AppointmentsContent({ appointments, setAppointments }) {
 
     const diffHours = diffMilliseconds / (1000 * 60 * 60);
 
-    console.log(
-      appointment.date,
-      appointment.time,
-      "remaining hours:",
-      diffHours,
-    );
+    // console.log(
+    //   appointment.date,
+    //   appointment.time,
+    //   "remaining hours:",
+    //   diffHours,
+    // );
 
     return diffHours >= 24;
   };
@@ -699,9 +699,16 @@ function AppointmentsContent({ appointments, setAppointments }) {
           filteredAppointments.map((appointment) => {
             const statusInfo = getStatusInfo(appointment.status);
             const isCancellable = canCancel(appointment);
+            const isPast = isAppointmentPast(appointment); // ← جدید
 
             return (
-              <div key={appointment.id} className={styles.appointmentCard}>
+              // <div key={appointment.id} className={styles.appointmentCard}>
+              <div
+                key={appointment.id}
+                className={`${styles.appointmentCard} ${
+                  isPast ? styles.pastAppointment : ""
+                }`} // ← کلاس جدید
+              >
                 {/* وضعیت */}
                 <div className={styles.appointmentStatusBar}>
                   <span
@@ -1274,6 +1281,284 @@ const timeToMinutes = (time) => {
   return hours * 60 + minutes;
 };
 
+
+// ===== چک کردن آیا نوبت گذشته است =====
+const isAppointmentPast = (appointment) => {
+  // ===== تبدیل اعداد فارسی به انگلیسی =====
+  const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
+  const englishDigits = "0123456789";
+  const toEnglish = (str) =>
+    String(str).replace(
+      /[۰-۹]/g,
+      (d) => englishDigits[persianDigits.indexOf(d)]
+    );
+
+  // ===== دریافت تاریخ و ساعت شروع =====
+  const dateParts = toEnglish(appointment.date).split("/");
+  const timeParts = toEnglish(appointment.time.split(" - ")[0]).split(":");
+
+  const year = parseInt(dateParts[0]);
+  const month = parseInt(dateParts[1]);
+  const day = parseInt(dateParts[2]);
+  const hours = parseInt(timeParts[0]);
+  const minutes = parseInt(timeParts[1]);
+
+  // ===== ساخت تاریخ شمسی =====
+  const appointmentMoment = moment(
+    `${year}/${month}/${day} ${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`,
+    "jYYYY/jMM/jDD HH:mm"
+  );
+
+  if (!appointmentMoment.isValid()) {
+    console.warn("تاریخ نامعتبر:", appointment.date, appointment.time);
+    return false;
+  }
+
+  // ===== مقایسه با الان =====
+  return appointmentMoment.isBefore(moment());
+};
+
+// const isAppointmentPast = (appointment) => {
+//   if (
+//     appointment.status === "completed" ||
+//     appointment.status === "cancelled"
+//   ) {
+//     return false;
+//   }
+
+//   const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
+//   const englishDigits = "0123456789";
+//   const toEnglish = (str) =>
+//     String(str).replace(
+//       /[۰-۹]/g,
+//       (d) => englishDigits[persianDigits.indexOf(d)]
+//     );
+
+//   const dateParts = toEnglish(appointment.date).split("/");
+//   const timeParts = toEnglish(appointment.time.split(" - ")[0]).split(":");
+
+//   const year = parseInt(dateParts[0]);
+//   const month = parseInt(dateParts[1]);
+//   const day = parseInt(dateParts[2]);
+//   const hours = parseInt(timeParts[0]);
+//   const minutes = parseInt(timeParts[1]);
+
+//   const appointmentMoment = moment(
+//     `${year}/${month}/${day} ${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`,
+//     "jYYYY/jMM/jDD HH:mm"
+//   );
+
+//   // ===== لاگ دقیق =====
+//   console.log("🔍 isAppointmentPast:");
+//   console.log("  - ID:", appointment.id);
+//   console.log("  - Date:", appointment.date);
+//   console.log("  - Status:", appointment.status);
+//   console.log("  - appointmentMoment:", appointmentMoment.format("jYYYY/jMM/jDD HH:mm"));
+//   console.log("  - now:", moment().format("jYYYY/jMM/jDD HH:mm"));
+//   console.log("  - isPast:", appointmentMoment.isBefore(moment()));
+
+//   return appointmentMoment.isBefore(moment());
+// };
+
+// ===== چک کردن آیا نوبت گذشته است =====
+// const isAppointmentPast = (appointment) => {
+//   // ===== نوبت‌های لغو شده یا انجام شده، کمرنگ نمیشن =====
+//   if (
+//     appointment.status === "completed" ||
+//     appointment.status === "cancelled"
+//   ) {
+//     return false;
+//   }
+
+//   // ===== تبدیل اعداد فارسی به انگلیسی =====
+//   const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
+//   const englishDigits = "0123456789";
+//   const toEnglish = (str) =>
+//     String(str).replace(
+//       /[۰-۹]/g,
+//       (d) => englishDigits[persianDigits.indexOf(d)]
+//     );
+
+//   // ===== دریافت تاریخ و ساعت شروع =====
+//   const dateParts = toEnglish(appointment.date).split("/");
+//   const timeParts = toEnglish(appointment.time.split(" - ")[0]).split(":");
+
+//   const year = parseInt(dateParts[0]);
+//   const month = parseInt(dateParts[1]);
+//   const day = parseInt(dateParts[2]);
+//   const hours = parseInt(timeParts[0]);
+//   const minutes = parseInt(timeParts[1]);
+
+//   // ===== ساخت تاریخ شمسی =====
+//   const appointmentMoment = moment(
+//     `${year}/${month}/${day} ${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`,
+//     "jYYYY/jMM/jDD HH:mm"
+//   );
+
+//   if (!appointmentMoment.isValid()) {
+//     console.warn("تاریخ نامعتبر:", appointment.date, appointment.time);
+//     return false;
+//   }
+
+//   // ===== مقایسه با الان =====
+//   // moment-jalaali با isBefore کار میکنه
+//   return appointmentMoment.isBefore(moment());
+// };
+
+// ===== چک کردن آیا نوبت گذشته است =====
+// const isAppointmentPast = (appointment) => {
+//   if (
+//     appointment.status === "completed" ||
+//     appointment.status === "cancelled"
+//   ) {
+//     return false;
+//   }
+
+//   const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
+//   const englishDigits = "0123456789";
+//   const toEnglish = (str) =>
+//     String(str).replace(
+//       /[۰-۹]/g,
+//       (d) => englishDigits[persianDigits.indexOf(d)]
+//     );
+
+//   const dateParts = toEnglish(appointment.date).split("/");
+//   const timeParts = toEnglish(appointment.time.split(" - ")[0]).split(":");
+
+//   const year = parseInt(dateParts[0]);
+//   const month = parseInt(dateParts[1]);
+//   const day = parseInt(dateParts[2]);
+//   const hours = parseInt(timeParts[0]);
+//   const minutes = parseInt(timeParts[1]);
+
+//   const appointmentMoment = moment(
+//     `${year}/${month}/${day} ${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`,
+//     "jYYYY/jMM/jDD HH:mm"
+//   );
+
+//   if (!appointmentMoment.isValid()) return false;
+
+//   return appointmentMoment.isBefore(moment());
+// };
+
+// const isAppointmentPast = (appointment) => {
+//   if (
+//     appointment.status === "completed" ||
+//     appointment.status === "cancelled"
+//   ) {
+//     return false;
+//   }
+
+//   const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
+//   const englishDigits = "0123456789";
+//   const toEnglish = (str) =>
+//     String(str).replace(
+//       /[۰-۹]/g,
+//       (d) => englishDigits[persianDigits.indexOf(d)]
+//     );
+
+//   const dateParts = toEnglish(appointment.date).split("/");
+//   const timeParts = toEnglish(appointment.time.split(" - ")[0]).split(":");
+
+//   const year = parseInt(dateParts[0]);
+//   const month = parseInt(dateParts[1]);
+//   const day = parseInt(dateParts[2]);
+//   const hours = parseInt(timeParts[0]);
+//   const minutes = parseInt(timeParts[1]);
+
+//   const appointmentMoment = moment(
+//     `${year}/${month}/${day} ${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`,
+//     "jYYYY/jMM/jDD HH:mm"
+//   );
+
+//   // ===== لاگ برای دیباگ =====
+//   console.log("نوبت:", appointment.date, appointment.time, appointment.status);
+//   console.log("تاریخ نوبت:", appointmentMoment.format("jYYYY/jMM/jDD HH:mm"));
+//   console.log("الان:", moment().format("jYYYY/jMM/jDD HH:mm"));
+//   console.log("گذشته؟", appointmentMoment.isBefore(moment()));
+//   console.log("---");
+
+//   return appointmentMoment.isBefore(moment());
+// };
+// ===== چک کردن آیا نوبت گذشته است =====
+// const isAppointmentPast = (appointment) => {
+//   // ===== نوبت‌های لغو شده یا انجام شده، کمرنگ نمیشن =====
+//   if (
+//     appointment.status === "completed" ||
+//     appointment.status === "cancelled"
+//   ) {
+//     return false;
+//   }
+
+//   // ===== تبدیل اعداد فارسی به انگلیسی =====
+//   const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
+//   const englishDigits = "0123456789";
+//   const toEnglish = (str) =>
+//     String(str).replace(
+//       /[۰-۹]/g,
+//       (d) => englishDigits[persianDigits.indexOf(d)]
+//     );
+
+//   // ===== دریافت تاریخ و ساعت شروع =====
+//   const dateParts = toEnglish(appointment.date).split("/");
+//   const timeParts = toEnglish(appointment.time.split(" - ")[0]).split(":");
+
+//   const year = parseInt(dateParts[0]);
+//   const month = parseInt(dateParts[1]);
+//   const day = parseInt(dateParts[2]);
+//   const hours = parseInt(timeParts[0]);
+//   const minutes = parseInt(timeParts[1]);
+
+//   // ===== ساخت تاریخ شمسی با moment =====
+//   const appointmentMoment = moment(
+//     `${year}/${month}/${day} ${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`,
+//     "jYYYY/jMM/jDD HH:mm"
+//   );
+
+//   // ===== بررسی معتبر بودن =====
+//   if (!appointmentMoment.isValid()) {
+//     console.warn("تاریخ نامعتبر:", appointment.date, appointment.time);
+//     return false;
+//   }
+
+//   // ===== مقایسه با الان =====
+//   return appointmentMoment.isBefore(moment());
+// };
+
+// ===== چک کردن آیا نوبت گذشته است =====
+// const isAppointmentPast = (appointment) => {
+//   // ===== نوبت‌های لغو شده یا انجام شده، همیشه "گذشته" حساب نمیشن =====
+//   if (
+//     appointment.status === "completed" ||
+//     appointment.status === "cancelled"
+//   ) {
+//     return false;
+//   }
+
+//   // ===== تبدیل تاریخ شمسی به میلادی =====
+//   const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
+//   const englishDigits = "0123456789";
+//   const toEnglish = (str) =>
+//     str?.replace(/[۰-۹]/g, (d) => englishDigits[persianDigits.indexOf(d)]) ||
+//     str;
+
+//   const [year, month, day] = toEnglish(appointment.date).split("/").map(Number);
+
+//   // ===== دریافت ساعت شروع =====
+//   const [startTime] = appointment.time.split(" - ");
+//   const [hours, minutes] = toEnglish(startTime).split(":").map(Number);
+
+//   // ===== ساخت تاریخ و ساعت نوبت =====
+//   const appointmentDate = moment(
+//     `${year}/${month}/${day} ${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`,
+//     "jYYYY/jMM/jDD HH:mm",
+//   ).toDate();
+
+//   // ===== مقایسه با الان =====
+//   const now = new Date();
+//   return appointmentDate < now;
+// };
+
 function NewAppointmentModal({ isOpen, onClose, onSuccess, appointments }) {
   const [step, setStep] = useState(1); // 1: انتخاب روانشناس | 2: انتخاب زمان | 3: تأیید
   const [selectedDoctor, setSelectedDoctor] = useState(null);
@@ -1665,7 +1950,7 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess, appointments }) {
                 disabled={weekOffset >= 4}
                 title="هفته بعد"
               >
-                                ←
+                ←
               </button>
             </div>
 

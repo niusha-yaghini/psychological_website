@@ -979,6 +979,29 @@
   border-color: rgba(45, 125, 110, 0.08);
 }
 
+/* ===== نوبت‌های گذشته (توسی کمرنگ) ===== */
+.pastAppointment {
+  opacity: 0.6;
+  background: #fafafa;
+  filter: grayscale(0.3);
+}
+
+.pastAppointment:hover {
+  opacity: 0.85;
+  filter: grayscale(0);
+  transform: translateY(-3px);
+}
+
+/* ===== اثر روی متن‌ها ===== */
+.pastAppointment h4,
+.pastAppointment .metaItem {
+  color: var(--text-muted);
+}
+
+.pastAppointment .statusBadge {
+  opacity: 0.7;
+}
+
 /* ===== Status Bar ===== */
 .appointmentStatusBar {
   display: flex;
@@ -1929,7 +1952,6 @@
   border-color: #d5d0ca;
   color: #b5b0aa;
 } */
-
 
 /* version 2 */
 
