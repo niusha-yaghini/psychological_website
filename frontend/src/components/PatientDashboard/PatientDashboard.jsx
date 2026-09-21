@@ -1,3 +1,4 @@
+// PatientDashboard.jsx
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./PatientDashboard.module.css";
@@ -17,6 +18,8 @@ import {
   FaBell,
 } from "react-icons/fa";
 
+import seedData from "../../../../backend/seed";
+
 import moment from "moment-jalaali";
 moment.loadPersian({ usePersianDigits: true });
 
@@ -31,93 +34,14 @@ function PatientDashboard() {
   const navigate = useNavigate();
 
   // ==========================================
-  // 📌 STATE های اصلی اینجا تعریف میشن
+  // 📌 STATE های اصلی از seed.js
   // ==========================================
+
   // ===== داده‌های نوبت‌ها =====
-  const [appointments, setAppointments] = useState([
-    {
-      id: 1,
-      type: "جلسه مشاوره فردی",
-      doctor: "دکتر محمد رضایی",
-      doctorId: 1,
-      date: "۱۴۰۵/۰۶/۰۴",
-      time: "۱۶:۰۰ - ۱۷:۰۰",
-      status: "confirmed",
-      isOnline: true,
-      cancelledBy: null,
-      cancelReason: null,
-      createdAt: "۱۴۰۵/۰۵/۳۰",
-    },
-    {
-      id: 2,
-      type: "جلسه زوج درمانی",
-      doctor: "دکتر سارا احمدی",
-      doctorId: 2,
-      date: "۱۴۰۵/۰۶/۰۶",
-      time: "۱۸:۰۰ - ۱۹:۰۰",
-      status: "pending",
-      isOnline: false,
-      cancelledBy: null,
-      cancelReason: null,
-      createdAt: "۱۴۰۵/۰۵/۳۰",
-    },
-    {
-      id: 3,
-      type: "جلسه مشاوره فردی",
-      doctor: "دکتر محمد رضایی",
-      doctorId: 1,
-      date: "۱۴۰۵/۰۵/۲۰",
-      time: "۱۵:۰۰ - ۱۶:۰۰",
-      status: "completed",
-      isOnline: true,
-      cancelledBy: null,
-      cancelReason: null,
-      createdAt: "۱۴۰۵/۰۵/۱۵",
-    },
-    {
-      id: 4,
-      type: "جلسه مشاوره فردی",
-      doctor: "دکتر علی کریمی",
-      doctorId: 3,
-      date: "۱۴۰۵/۰۵/۱۸",
-      time: "۱۰:۰۰ - ۱۱:۰۰",
-      status: "cancelled",
-      isOnline: true,
-      cancelledBy: "user",
-      cancelReason: "مشکل شخصی",
-      createdAt: "۱۴۰۵/۰۶/۱۰",
-    },
-  ]);
+  const [appointments, setAppointments] = useState(seedData.appointments);
 
   // ===== داده‌های نوتیفیکیشن =====
-  const [notifications, setNotifications] = useState([
-    {
-      id: 1,
-      type: "reminder",
-      // icon: "⏰",
-      title: "یادآوری جلسه فردا",
-      message:
-        "جلسه مشاوره فردی شما با دکتر محمد رضایی فردا ساعت ۱۶:۰۰ برگزار میشود.",
-      time: "۵ دقیقه پیش",
-      isRead: false,
-      date: "۱۴۰۵/۰۵/۲۴",
-      link: "/sessions",
-      action: "مشاهده جلسه",
-    },
-    {
-      id: 2,
-      type: "confirmed",
-      // icon: "✅",
-      title: "تأیید جلسه",
-      message: "دکتر سارا احمدی درخواست جلسه زوج درمانی شما را تأیید کرد.",
-      time: "۱ ساعت پیش",
-      isRead: false,
-      date: "۱۴۰۵/۰۵/۲۴",
-      link: "/appointments",
-      action: "مشاهده نوبت",
-    },
-    // ... بقیه اعلان‌ها
-  ]);
+  const [notifications, setNotifications] = useState(seedData.notifications);
 
   // ===== محاسبه تعداد جلسات پیش‌رو =====
   const upcomingAppointmentsCount = useMemo(() => {
@@ -167,7 +91,6 @@ function PatientDashboard() {
   const menuItems = [
     {
       id: "dashboard",
-
       label: "داشبورد",
       icon: <FaHome />,
       path: "/dashboard",
@@ -177,7 +100,6 @@ function PatientDashboard() {
       label: "نوبت‌های من",
       icon: <FaCalendarAlt />,
       path: "/appointments",
-      // badge: 3,
       badge:
         upcomingAppointmentsCount > 0 ? upcomingAppointmentsCount : undefined,
     },
@@ -192,7 +114,6 @@ function PatientDashboard() {
       label: "پیام‌ها",
       icon: <FaCommentDots />,
       path: "/messages",
-      // badge: 5,
       badge: unreadMessagesCount > 0 ? unreadMessagesCount : undefined,
     },
     {
@@ -228,13 +149,25 @@ function PatientDashboard() {
   const renderContent = () => {
     switch (activeTab) {
       case "dashboard":
-        return <DashboardContent userData={userData} />;
+        return (
+          <DashboardContent userData={userData} appointments={appointments} />
+        );
       case "appointments":
-        return <AppointmentsContent />;
+        return (
+          <AppointmentsContent
+            appointments={appointments}
+            setAppointments={setAppointments}
+          />
+        );
       case "sessions":
         return <SessionsContent />;
       case "messages":
-        return <MessagesContent />;
+        return (
+          <MessagesContent
+            notifications={notifications}
+            setNotifications={setNotifications}
+          />
+        );
       case "progress":
         return <ProgressContent />;
       case "exercise":
@@ -244,7 +177,9 @@ function PatientDashboard() {
       case "settings":
         return <SettingsContent />;
       default:
-        return <DashboardContent userData={userData} />;
+        return (
+          <DashboardContent userData={userData} appointments={appointments} />
+        );
     }
   };
 
@@ -342,15 +277,6 @@ function PatientDashboard() {
               onMarkAsRead={markAsRead}
               onMarkAllAsRead={markAllAsRead}
             />
-
-            {/* کاربر */}
-            {/* <div className={styles.userProfile}>
-              <img
-                src={userAvatar}
-                alt="پروفایل"
-                className={styles.userAvatar}
-              />
-            </div> */}
           </div>
         </header>
 
@@ -364,10 +290,17 @@ function PatientDashboard() {
 // ============================================
 // COMPONENT: Dashboard Content
 // ============================================
-function DashboardContent({ userData }) {
+function DashboardContent({ userData, appointments }) {
+  // ===== آمار بر اساس داده‌های واقعی =====
   const stats = [
-    { label: "جلسات برگزار شده", value: 8 },
-    { label: "جلسات پیش‌رو", value: 3 },
+    { 
+      label: "جلسات برگزار شده", 
+      value: appointments.filter(a => a.status === "completed").length 
+    },
+    { 
+      label: "جلسات پیش‌رو", 
+      value: appointments.filter(a => a.status === "confirmed" || a.status === "pending").length 
+    },
     { label: "پیشرفت کلی", value: "۶۵٪" },
     { label: "یادداشت‌ها", value: 12 },
   ];
@@ -452,7 +385,7 @@ function DashboardContent({ userData }) {
 // ============================================
 // moment.loadPersian({ usePersianDigits: false });
 
-function AppointmentsContent() {
+function AppointmentsContent({ appointments, setAppointments }) {
   // =============================================
   // ۱. STATE‌ها
   // =============================================
@@ -462,91 +395,10 @@ function AppointmentsContent() {
   const [selectedAppointmentId, setSelectedAppointmentId] = useState(null);
   const [cancelReason, setCancelReason] = useState("");
 
-  const [appointments, setAppointments] = useState([
-    {
-      id: 1,
-      type: "جلسه مشاوره فردی",
-      doctor: "دکتر محمد رضایی",
-      doctorId: 1,
-      date: "۱۴۰۵/۰۶/۰۴",
-      time: "۱۰:۰۰ - ۱۱:۰۰",
-      status: "confirmed", // confirmed | pending | completed | cancelled
-      isOnline: true,
-      cancelledBy: null, // 'user' | 'doctor' | null
-      cancelReason: null,
-      createdAt: "۱۴۰۵/۰۶/۳",
-    },
-    {
-      id: 2,
-      type: "جلسه زوج درمانی",
-      doctor: "دکتر سارا احمدی",
-      doctorId: 2,
-      date: "۱۴۰۵/۰۶/۰۶",
-      time: "۱۸:۰۰ - ۱۹:۰۰",
-      status: "pending",
-      isOnline: false,
-      cancelledBy: null,
-      cancelReason: null,
-      createdAt: "۱۴۰۵/۰۶/۵",
-    },
-    {
-      id: 3,
-      type: "جلسه مشاوره فردی",
-      doctor: "دکتر محمد رضایی",
-      doctorId: 1,
-      date: "۱۴۰۵/۰۵/۲۰",
-      time: "۱۵:۰۰ - ۱۶:۰۰",
-      status: "completed",
-      isOnline: true,
-      cancelledBy: null,
-      cancelReason: null,
-      createdAt: "۱۴۰۵/۰۵/۱۰",
-    },
-    {
-      id: 4,
-      type: "جلسه مشاوره فردی",
-      doctor: "دکتر علی کریمی",
-      doctorId: 3,
-      date: "۱۴۰۵/۰۵/۱۸",
-      time: "۱۰:۰۰ - ۱۱:۰۰",
-      status: "cancelled",
-      isOnline: true,
-      cancelledBy: "user",
-      cancelReason: "مشکل شخصی",
-      createdAt: "۱۴۰۵/۰۶/۰۱",
-    },
-    {
-      id: 5,
-      type: "جلسه زوج درمانی",
-      doctor: "دکتر سارا احمدی",
-      doctorId: 2,
-      date: "۱۴۰۵/۰۵/۱۵",
-      time: "۱۷:۰۰ - ۱۸:۰۰",
-      status: "cancelled",
-      isOnline: false,
-      cancelledBy: "doctor",
-      cancelReason: "هماهنگی با پزشک",
-      createdAt: "۱۴۰۵/۰۵/۳۰",
-    },
-    {
-      id: 6, // جدید - قابل لغو
-      type: "جلسه مشاوره فردی",
-      doctor: "دکتر محمد رضایی",
-      doctorId: 1,
-      date: "۱۴۰۵/۰۶/۱۰", // ۱۴ روز بعد - قابل لغو
-      time: "۱۴:۰۰ - ۱۵:۰۰",
-      status: "confirmed",
-      isOnline: true,
-      cancelledBy: null,
-      cancelReason: null,
-      createdAt: "۱۴۰۵/۰۶/۰۵",
-    },
-  ]);
 
   // =============================================
   // ۲. توابع تبدیل و کمکی
   // =============================================
-
   const convertPersianToNumber = (persianDate) => {
     if (!persianDate) return 0;
 
@@ -756,7 +608,7 @@ function AppointmentsContent() {
         status: "pending",
         cancelledBy: null,
         cancelReason: null,
-        createdAt: new Date().toISOString().split("T")[0],
+        createdAt: toPersianDigits(moment().format("jYYYY/jMM/jDD")),
       },
       ...prev,
     ]);
@@ -1094,36 +946,7 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess }) {
   const [selectedTime, setSelectedTime] = useState(null);
   const [appointmentType, setAppointmentType] = useState("individual"); // individual | couple | teen
 
-  // لیست روانشناسان نمونه
-  const doctors = [
-    {
-      id: 1,
-      name: "دکتر محمد رضایی",
-      specialty: "روانشناس بالینی",
-      experience: "۱۲ سال",
-      rating: 4.8,
-      image: "/images/doctors/doctor1.png",
-      availableDays: ["شنبه", "یکشنبه", "سه‌شنبه"],
-    },
-    {
-      id: 2,
-      name: "دکتر سارا احمدی",
-      specialty: "روانشناس خانواده و زوج",
-      experience: "۸ سال",
-      rating: 4.9,
-      image: "/images/doctors/doctor2.png",
-      availableDays: ["شنبه", "دوشنبه", "چهارشنبه"],
-    },
-    {
-      id: 3,
-      name: "دکتر علی کریمی",
-      specialty: "روانشناس کودک و نوجوان",
-      experience: "۱۰ سال",
-      rating: 4.7,
-      image: "/images/doctors/doctor3.png",
-      availableDays: ["یکشنبه", "سه‌شنبه", "پنجشنبه"],
-    },
-  ];
+  const doctors = seedData.doctors;
 
   // ساعت‌های قابل انتخاب
   const timeSlots = [
@@ -1264,42 +1087,6 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess }) {
         )}
 
         {/* ===== مرحله ۳: تأیید نهایی ===== */}
-        {/* {step === 3 && (
-          <div className={styles.modalStep}>
-            <div className={styles.confirmBox}>
-              <div className={styles.confirmIcon}>
-                <img src={confirmIcon} alt="تأیید" />
-              </div>
-              <h3>اطلاعات نوبت شما</h3>
-              <div className={styles.confirmDetails}>
-                <div className={styles.confirmItem}>
-                  <span className={styles.confirmLabel}>روانشناس:</span>
-                  <span className={styles.confirmValue}>
-                    {selectedDoctor?.name}
-                  </span>
-                </div>
-                <div className={styles.confirmItem}>
-                  <span className={styles.confirmLabel}>تخصص:</span>
-                  <span className={styles.confirmValue}>
-                    {selectedDoctor?.specialty}
-                  </span>
-                </div>
-                <div className={styles.confirmItem}>
-                  <span className={styles.confirmLabel}>تاریخ:</span>
-                  <span className={styles.confirmValue}>{selectedDate}</span>
-                </div>
-                <div className={styles.confirmItem}>
-                  <span className={styles.confirmLabel}>ساعت:</span>
-                  <span className={styles.confirmValue}>{selectedTime}</span>
-                </div>
-              </div>
-              <p className={styles.confirmNote}>
-                پس از تأیید، پیامک تأیید نوبت برای شما ارسال خواهد شد.
-              </p>
-            </div>
-          </div>
-        )} */}
-        {/* ===== مرحله ۳: تأیید نهایی ===== */}
         {step === 3 && (
           <div className={styles.modalStep}>
             <div className={styles.confirmBox}>
@@ -1414,96 +1201,6 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess }) {
             >
               تأیید و ثبت نوبت
             </button>
-            // <button
-            //   className={styles.btnConfirm}
-            //   onClick={() => {
-            //     // ===== تبدیل اعداد فارسی به انگلیسی برای محاسبه =====
-            //     const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
-            //     const englishDigits = "0123456789";
-            //     const toEnglish = (str) =>
-            //       str?.replace(
-            //         /[۰-۹]/g,
-            //         (d) => englishDigits[persianDigits.indexOf(d)],
-            //       ) || str;
-
-            //     // ===== تبدیل اعداد انگلیسی به فارسی برای نمایش =====
-            //     const toPersian = (str) =>
-            //       String(str).replace(
-            //         /[0-9]/g,
-            //         (d) => persianDigits[englishDigits.indexOf(d)],
-            //       );
-
-            //     // ===== محاسبه تاریخ بر اساس روز هفته =====
-            //     const weekDays = {
-            //       شنبه: 6,
-            //       یکشنبه: 0,
-            //       دوشنبه: 1,
-            //       سه‌شنبه: 2,
-            //       چهارشنبه: 3,
-            //       پنجشنبه: 4,
-            //       جمعه: 5,
-            //     };
-
-            //     // دریافت تاریخ امروز شمسی
-            //     const todayJalali = moment().format("jYYYY/jMM/jDD");
-            //     const [todayYear, todayMonth, todayDay] = toEnglish(todayJalali)
-            //       .split("/")
-            //       .map(Number);
-
-            //     const todayDate = moment(
-            //       `${todayYear}/${todayMonth}/${todayDay}`,
-            //       "jYYYY/jMM/jDD",
-            //     );
-
-            //     // محاسبه تعداد روز تا روز هفته مورد نظر
-            //     const targetDayOfWeek = weekDays[selectedDate];
-            //     const currentDayOfWeek = todayDate.day();
-
-            //     let daysToAdd = targetDayOfWeek - currentDayOfWeek;
-            //     if (daysToAdd <= 0) daysToAdd += 7;
-
-            //     // تاریخ جدید شمسی
-            //     const appointmentDate = todayDate
-            //       .clone()
-            //       .add(daysToAdd, "days");
-            //     const persianDate = appointmentDate.format("jYYYY/jMM/jDD");
-
-            //     // ===== تبدیل ساعت =====
-            //     const timeStart = toEnglish(selectedTime);
-            //     const [hours] = timeStart.split(":").map(Number);
-
-            //     const endHour = (hours + 1) % 24;
-            //     const startHourStr = String(hours).padStart(2, "0");
-            //     const endHourStr = String(endHour).padStart(2, "0");
-
-            //     // ===== نام نوع جلسه =====
-            //     const typeNames = {
-            //       individual: "جلسه مشاوره فردی",
-            //       couple: "جلسه زوج درمانی",
-            //       teen: "جلسه مشاوره نوجوان",
-            //     };
-
-            //     // ===== ایجاد نوبت جدید با اعداد فارسی =====
-            //     const newAppointment = {
-            //       id: Date.now(),
-            //       type: typeNames[appointmentType] || "جلسه مشاوره فردی",
-            //       doctor: selectedDoctor?.name,
-            //       doctorId: selectedDoctor?.id,
-            //       date: toPersian(persianDate), // ✅ تاریخ با اعداد فارسی
-            //       time: `${toPersian(startHourStr)}:۰۰ - ${toPersian(endHourStr)}:۰۰`, // ✅ ساعت با اعداد فارسی
-            //       status: "pending",
-            //       isOnline: true,
-            //       cancelledBy: null,
-            //       cancelReason: null,
-            //       createdAt: toPersian(moment().format("jYYYY/jMM/jDD")), // ✅ تاریخ ایجاد با اعداد فارسی
-            //     };
-
-            //     onSuccess?.(newAppointment);
-            //     onClose();
-            //   }}
-            // >
-            //   تأیید و ثبت نوبت
-            // </button>
           )}
         </div>
       </div>
@@ -1515,65 +1212,12 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess }) {
 // COMPONENT: Sessions Content
 // ============================================
 function SessionsContent() {
-  const [activeTab, setActiveTab] = useState("upcoming"); // upcoming | past
+  
+  const [activeTab, setActiveTab] = useState("upcoming");
   const [selectedSession, setSelectedSession] = useState(null);
-
-  // داده‌های نمونه
-  const sessions = [
-    {
-      id: 1,
-      title: "جلسه مشاوره فردی",
-      doctor: "دکتر محمد رضایی",
-      doctorImage: "/images/doctors/doctor1.png",
-      date: "۱۴۰۵/۰۶/۰۳",
-      time: "۱۶:۰۰",
-      duration: "۶۰ دقیقه",
-      status: "upcoming", // upcoming | ongoing | completed | cancelled
-      isOnline: true,
-      meetingLink: "https://meet.google.com/abc-defg-hij",
-      type: "individual",
-    },
-    {
-      id: 2,
-      title: "جلسه زوج درمانی",
-      doctor: "دکتر سارا احمدی",
-      doctorImage: "/images/doctors/doctor2.png",
-      date: "۱۴۰۵/۰۶/۰۶",
-      time: "۱۸:۰۰",
-      duration: "۹۰ دقیقه",
-      status: "upcoming",
-      isOnline: true,
-      meetingLink: "https://meet.google.com/klm-nopq-rst",
-      type: "couple",
-    },
-    {
-      id: 3,
-      title: "جلسه مشاوره فردی",
-      doctor: "دکتر محمد رضایی",
-      doctorImage: "/images/doctors/doctor1.png",
-      date: "۱۴۰۵/۰۵/۲۰",
-      time: "۱۵:۰۰",
-      duration: "۶۰ دقیقه",
-      status: "completed",
-      isOnline: true,
-      meetingLink: "https://meet.google.com/xyz-uvwx-yza",
-      type: "individual",
-    },
-    // {
-    //   id: 4,
-    //   title: "جلسه مشاوره نوجوان",
-    //   doctor: "دکتر علی کریمی",
-    //   doctorImage: "/images/doctors/doctor3.png",
-    //   date: "۱۴۰۳/۰۹/۱۰",
-    //   time: "۱۰:۰۰",
-    //   duration: "۶۰ دقیقه",
-    //   status: "cancelled",
-    //   isOnline: true,
-    //   meetingLink: null,
-    //   type: "teen",
-    // },
-  ];
-
+  
+  const [sessions, setSessions] = useState(seedData.sessions);
+  
   // ===== فیلتر کردن جلسات =====
   const getFilteredSessions = () => {
     if (activeTab === "upcoming") {
@@ -1647,13 +1291,6 @@ function SessionsContent() {
 
       return dateA - dateB;
     })[0];
-
-    // مرتب‌سازی بر اساس تاریخ و زمان
-    // return upcomingSessions.sort((a, b) => {
-    //   const dateA = new Date(a.date + " " + a.time);
-    //   const dateB = new Date(b.date + " " + b.time);
-    //   return dateA - dateB;
-    // })[0];
   };
 
   const nextSession = getNextSession();
@@ -1674,12 +1311,7 @@ function SessionsContent() {
       if (diff <= 0) {
         clearInterval(interval);
         setTimeLeft(null);
-        // می‌تونی وضعیت جلسه رو به "ongoing" تغییر بدی
       } else {
-        // const hours = Math.floor(diff / (1000 * 60 * 60));
-        // const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        // setTimeLeft({ hours, minutes });
-
         const days = Math.floor(diff / (1000 * 60 * 60 * 24));
 
         const hours = Math.floor(
@@ -1760,7 +1392,6 @@ function SessionsContent() {
         </div>
         <div className={styles.sessionStats}>
           <span className={styles.statItem}>
-            {/* <span className={styles.statNumber}>۳</span> */}
             <span className={styles.statNumber}>
               {
                 sessions.filter(
@@ -1772,7 +1403,6 @@ function SessionsContent() {
           </span>
           <span className={styles.statDivider}>|</span>
           <span className={styles.statItem}>
-            {/* <span className={styles.statNumber}>۱۲</span> */}
             <span className={styles.statNumber}>
               {sessions.filter((s) => s.status === "completed").length}
             </span>
@@ -1929,9 +1559,6 @@ function SessionsContent() {
                               لغو غیرفعال (کمتر از ۲۴ ساعت)
                             </button>
                           )}
-                          {/* <button className={styles.btnRemind}>
-                            🔔 یادآوری
-                          </button> */}
                         </>
                       )}
                     </>
@@ -1949,9 +1576,6 @@ function SessionsContent() {
                       <button className={styles.btnViewRecord}>
                         مشاهده ضبط جلسه
                       </button>
-                      {/* <button className={styles.btnFeedback}>
-                        ثبت بازخورد
-                      </button> */}
                     </>
                   )}
                 </div>
@@ -1977,91 +1601,8 @@ function SessionsContent() {
 // ============================================
 // COMPONENT: Messages Content (Notification Center)
 // ============================================
-function MessagesContent() {
+function MessagesContent({ notifications, setNotifications }) {
   const [filter, setFilter] = useState("all"); // all | unread | read
-  const [notifications, setNotifications] = useState([
-    {
-      id: 1,
-      type: "reminder",
-      title: "یادآوری جلسه فردا",
-      message:
-        "جلسه مشاوره فردی شما با دکتر محمد رضایی فردا ساعت ۱۶:۰۰ برگزار میشود.",
-      time: "۵ دقیقه پیش",
-      isRead: false,
-      date: "۱۴۰۵/۰۵/۲۴",
-      link: "/sessions",
-      action: "مشاهده جلسه",
-    },
-    {
-      id: 2,
-      type: "confirmed",
-      title: "تأیید جلسه",
-      message: "دکتر سارا احمدی درخواست جلسه زوج درمانی شما را تأیید کرد.",
-      time: "۱ ساعت پیش",
-      isRead: false,
-      date: "۱۴۰۵/۰۵/۲۴",
-      link: "/appointments",
-      action: "مشاهده نوبت",
-    },
-    {
-      id: 3,
-      type: "cancelled",
-      title: "لغو جلسه توسط روانشناس",
-      message: "دکتر علی کریمی جلسه مشاوره نوجوان را به دلیل هماهنگی لغو کرد.",
-      time: "۳ ساعت پیش",
-      isRead: false,
-      date: "۱۴۰۵/۰۵/۲۴",
-      link: "/appointments",
-      action: "مشاهده جلسات",
-    },
-    {
-      id: 4,
-      type: "note",
-      title: "یادداشت جدید از روانشناس",
-      message: "دکتر محمد رضایی برای جلسه قبلی شما یادداشتی ثبت کرده است.",
-      time: "۵ ساعت پیش",
-      isRead: true,
-      date: "۱۴۰۵/۰۵/۲۳",
-      link: "/sessions",
-      action: "مشاهده یادداشت",
-    },
-    {
-      id: 5,
-      type: "booking",
-      title: "رزرو جلسه جدید",
-      message:
-        "شما جلسه مشاوره فردی را برای تاریخ ۱۴۰۵/۰۵/۲۸ ساعت ۱۷:۰۰ رزرو کردید.",
-      time: "۱ روز پیش",
-      isRead: true,
-      date: "۱۴۰۵/۰۵/۲۳",
-      link: "/appointments",
-      action: "مشاهده نوبت",
-    },
-    {
-      id: 6,
-      type: "weekly",
-      title: "زمان جلسات هفتگی",
-      message:
-        "زمان جلسات هفتگی شما فرا رسیده است. آیا مایل به رزرو جلسه جدید هستید؟",
-      time: "۲ روز پیش",
-      isRead: true,
-      date: "۱۴۰۵/۰۵/۲۲",
-      link: "/appointments",
-      action: "رزرو جلسه",
-    },
-    {
-      id: 7,
-      type: "reminder",
-      title: "یادآوری جلسه امروز",
-      message:
-        "جلسه مشاوره فردی شما با دکتر سارا احمدی امروز ساعت ۱۸:۰۰ برگزار میشود.",
-      time: "۳ روز پیش",
-      isRead: true,
-      date: "۱۴۰۵/۰۵/۲۲",
-      link: "/sessions",
-      action: "ورود به جلسه",
-    },
-  ]);
 
   // ===== علامت‌گذاری به عنوان خوانده شده =====
   const markAsRead = (id) => {
@@ -2182,14 +1723,6 @@ function MessagesContent() {
                 }`}
                 onClick={() => markAsRead(notification.id)}
               >
-                {/* آیکون */}
-                {/* <div
-                  className={styles.notificationIcon}
-                  style={{ background: typeStyle.bg }}
-                >
-                  <span>{typeStyle.icon}</span>
-                </div> */}
-
                 {/* محتوای اصلی */}
                 <div className={styles.notificationContent}>
                   <div className={styles.notificationHeader}>
@@ -2206,28 +1739,6 @@ function MessagesContent() {
                   <p className={styles.notificationMessage}>
                     {notification.message}
                   </p>
-                  {/* <div className={styles.notificationFooter}> */}
-                  {/* <button
-                      className={styles.notificationAction}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        // هدایت به صفحه مربوطه
-                        // navigate(notification.link);
-                      }}
-                    >
-                      {notification.action}
-                      <span>→</span>
-                    </button> */}
-                  {/* <button
-                      className={styles.notificationDelete}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        deleteNotification(notification.id);
-                      }}
-                    >
-                      ✕
-                    </button> */}
-                  {/* </div> */}
                 </div>
 
                 {/* وضعیت خوانده/نخوانده */}
@@ -2239,7 +1750,6 @@ function MessagesContent() {
           })
         ) : (
           <div className={styles.emptyState}>
-            {/* <span className={styles.emptyIcon}>🔔</span> */}
             <h3>هیچ اعلانی وجود ندارد</h3>
             <p>
               {filter === "unread"
@@ -2284,19 +1794,6 @@ function NotificationDropdown({
     .slice(0, 5);
 
   const unreadCount = notifications.filter((n) => !n.isRead).length;
-
-  // ===== دریافت آیکون بر اساس نوع =====
-  // const getIcon = (type) => {
-  //   const icons = {
-  //     reminder: "⏰",
-  //     confirmed: "✅",
-  //     cancelled: "❌",
-  //     note: "📝",
-  //     booking: "📅",
-  //     weekly: "🔄",
-  //   };
-  //   return icons[type] || "🔔";
-  // };
 
   // ===== دریافت استایل بر اساس نوع =====
   const getTypeStyle = (type) => {
@@ -2357,12 +1854,6 @@ function NotificationDropdown({
                     }
                   }}
                 >
-                  {/* <div
-                    className={styles.dropdownIcon}
-                    style={{ background: getTypeStyle(notification.type) }}
-                  >
-                    <span>{getIcon(notification.type)}</span>
-                  </div> */}
                   <div className={styles.dropdownContent}>
                     <div className={styles.dropdownText}>
                       <span className={styles.dropdownTitleText}>
@@ -2382,7 +1873,6 @@ function NotificationDropdown({
               ))
             ) : (
               <div className={styles.dropdownEmpty}>
-                {/* <span className={styles.dropdownEmptyIcon}>🎉</span> */}
                 <p>همه اعلان‌ها را خوانده‌اید!</p>
                 <span className={styles.dropdownEmptySub}>
                   هیچ اعلان جدیدی وجود ندارد
@@ -2414,66 +1904,7 @@ function NotificationDropdown({
 // COMPONENT: Progress Content
 // ============================================
 function ProgressContent() {
-  // ===== داده‌های نمونه =====
-  const progressData = {
-    totalSessions: 12,
-    completedSessions: 8,
-    cancelledSessions: 1,
-    upcomingSessions: 3,
-    percentage: 65,
-    status: "در مسیر",
-    startDate: "۱۴۰۳/۰۶/۱۵",
-    estimatedEndDate: "۱۴۰۳/۱۲/۱۵",
-
-    // داده‌های نمودار ماهانه
-    monthlyProgress: [
-      { month: "مهر", sessions: 2 },
-      { month: "آبان", sessions: 3 },
-      { month: "آذر", sessions: 3 },
-      { month: "دی", sessions: 0 },
-    ],
-
-    // نقاط عطف
-    milestones: [
-      {
-        id: 1,
-        title: "شروع درمان",
-        date: "۱۴۰۳/۰۶/۱۵",
-        completed: true,
-        description: "اولین جلسه مشاوره",
-      },
-      {
-        id: 2,
-        title: "ارزیابی اولیه",
-        date: "۱۴۰۳/۰۷/۰۵",
-        completed: true,
-        description: "تکمیل پرسشنامه‌ها",
-      },
-      {
-        id: 3,
-        title: "تثبیت پیشرفت",
-        date: "۱۴۰۳/۰۹/۱۵",
-        completed: false,
-        description: "هدف: کاهش ۵۰٪ علائم",
-      },
-      {
-        id: 4,
-        title: "پایان درمان",
-        date: "۱۴۰۳/۱۲/۱۵",
-        completed: false,
-        description: "ارزیابی نهایی",
-      },
-    ],
-
-    // حوزه‌های بهبود
-    improvementAreas: [
-      { label: "مدیریت استرس", score: 75, color: "#4CAF84" },
-      { label: "کیفیت خواب", score: 60, color: "#FF9800" },
-      { label: "اعتماد به نفس", score: 80, color: "#2196F3" },
-      { label: "روابط اجتماعی", score: 55, color: "#9C27B0" },
-      { label: "مدیریت خشم", score: 70, color: "#E91E63" },
-    ],
-  };
+  const progressData = seedData.progress;
 
   const [activeMilestone, setActiveMilestone] = useState(null);
 
@@ -2754,91 +2185,7 @@ function ProgressContent() {
 // COMPONENT: Exercise Content
 // ============================================
 function ExerciseContent() {
-  const [exercises, setExercises] = useState([
-    {
-      id: 1,
-      title: "تمرین تنفس عمیق",
-      description:
-        "هر شب قبل از خواب، ۱۰ دقیقه تنفس عمیق انجام دهید. ۴ ثانیه دم، ۷ ثانیه نگه‌داری، ۸ ثانیه بازدم.",
-      type: "daily", // daily | weekly | one-time
-      category: "meditation", // meditation | writing | test | activity
-      icon: "🧘",
-      dueDate: "۱۴۰۳/۰۹/۳۰",
-      completed: false,
-      priority: "high", // high | medium | low
-      progress: 0, // 0-100
-      instructions: [
-        "در جای آرام بنشینید",
-        "چشم‌ها را ببندید",
-        "روی تنفس خود تمرکز کنید",
-        "۴ ثانیه دم، ۷ ثانیه نگه‌داری، ۸ ثانیه بازدم",
-      ],
-      assignedBy: "دکتر محمد رضایی",
-      assignedDate: "۱۴۰۳/۰۹/۲۰",
-    },
-    {
-      id: 2,
-      title: "نوشتن نامه به خود",
-      description:
-        "نامه‌ای به خودتان بنویسید و احساسات و افکارتان را بیان کنید.",
-      type: "one-time",
-      category: "writing",
-      icon: "✍️",
-      dueDate: "۱۴۰۳/۱۰/۰۵",
-      completed: false,
-      priority: "medium",
-      progress: 0,
-      instructions: [
-        "یک مکان آرام پیدا کنید",
-        "نامه را با 'خود عزیزم' شروع کنید",
-        "احساسات واقعی خود را بنویسید",
-        "نامه را برای خودتان بخوانید",
-      ],
-      assignedBy: "دکتر محمد رضایی",
-      assignedDate: "۱۴۰۳/۰۹/۲۲",
-    },
-    {
-      id: 3,
-      title: "تست ارزیابی استرس",
-      description:
-        "پرسشنامه ارزیابی سطح استرس را تکمیل کنید و نتیجه را ثبت کنید.",
-      type: "weekly",
-      category: "test",
-      icon: "📊",
-      dueDate: "۱۴۰۳/۱۰/۰۱",
-      completed: false,
-      priority: "high",
-      progress: 0,
-      instructions: [
-        "به سوالات با دقت پاسخ دهید",
-        "پاسخ‌ها را صادقانه بدهید",
-        "نتیجه را یادداشت کنید",
-        "در جلسه بعد با دکتر خود به اشتراک بگذارید",
-      ],
-      assignedBy: "دکتر محمد رضایی",
-      assignedDate: "۱۴۰۳/۰۹/۲۳",
-    },
-    {
-      id: 4,
-      title: "تمرین شکرگزاری روزانه",
-      description: "هر روز ۳ مورد که بابت آنها شکرگزار هستید را بنویسید.",
-      type: "daily",
-      category: "activity",
-      icon: "🙏",
-      dueDate: "۱۴۰۳/۰۹/۳۰",
-      completed: true,
-      priority: "low",
-      progress: 100,
-      instructions: [
-        "هر شب قبل از خواب انجام دهید",
-        "۳ مورد را یادداشت کنید",
-        "می‌توانید کوچک یا بزرگ باشند",
-        "احساس خود را هنگام نوشتن ثبت کنید",
-      ],
-      assignedBy: "دکتر محمد رضایی",
-      assignedDate: "۱۴۰۳/۰۹/۱۸",
-    },
-  ]);
+  const [exercises, setExercises] = useState(seedData.exercises);
 
   const [selectedExercise, setSelectedExercise] = useState(null);
   const [filter, setFilter] = useState("all"); // all | daily | weekly | one-time
@@ -3170,42 +2517,13 @@ function ExerciseContent() {
 // COMPONENT: Profile Content
 // ============================================
 function ProfileContent({ userData }) {
+
   const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState({
-    firstName: "محمد",
-    lastName: "کریمی",
-    phone: userData?.phone || "۹۱۲۳۴۵۶۷۸۹",
-    email: "mohammad.karimi@email.com",
-    gender: "male", // male | female
-    birthDate: "۱۳۷۵/۰۳/۱۵",
-    occupation: "برنامه‌نویس",
-    education: "کارشناسی ارشد",
-    address: "تهران، خیابان ولیعصر، پلاک ۱۲۳",
-    emergencyContact: "۰۹۱۲۳۴۵۶۷۸۹",
-    emergencyRelation: "همسر",
-  });
+  const [formData, setFormData] = useState(seedData.profile.formData);
+  const [activeTab, setActiveTab] = useState("info");
 
-  const [activeTab, setActiveTab] = useState("info"); // info | medical | settings
-
-  // ===== آمار کاربر =====
-  const userStats = {
-    totalSessions: 8,
-    completedExercises: 12,
-    totalExercises: 18,
-    joinDate: "۱۴۰۳/۰۶/۱۵",
-    lastVisit: "۱۴۰۳/۰۹/۲۴",
-    upcomingAppointment: "۱۴۰۳/۰۹/۲۸",
-  };
-
-  // ===== اطلاعات پزشکی (نمونه) =====
-  const medicalInfo = {
-    therapist: "دکتر محمد رضایی",
-    diagnosis: "اضطراب فراگیر",
-    treatmentPlan: "درمان شناختی-رفتاری (CBT)",
-    medications: "ندارد",
-    allergies: "ندارد",
-    specialNotes: "جلسات به صورت هفتگی برگزار می‌شود.",
-  };
+  const userStats = seedData.profile.userStats;
+  const medicalInfo = seedData.profile.medicalInfo;
 
   // ===== تغییرات فرم =====
   const handleInputChange = (e) => {
@@ -3331,14 +2649,6 @@ function ProfileContent({ userData }) {
           >
             اطلاعات درمانی
           </button>
-          {/* <button
-            className={`${styles.profileTab} ${
-              activeTab === "settings" ? styles.active : ""
-            }`}
-            onClick={() => setActiveTab("settings")}
-          >
-            تنظیمات
-          </button> */}
         </div>
 
         {/* محتوای تب‌ها */}
@@ -3581,73 +2891,6 @@ function ProfileContent({ userData }) {
               </div>
             </div>
           )}
-
-          {/* ===== تب تنظیمات ===== */}
-          {/* {activeTab === "settings" && (
-            <div className={styles.settingsTab}>
-              <div className={styles.settingsGroup}>
-                <h4>اعلان‌ها</h4>
-                <div className={styles.settingItem}>
-                  <span>یادآوری جلسات</span>
-                  <label className={styles.switch}>
-                    <input type="checkbox" defaultChecked />
-                    <span className={styles.switchSlider}></span>
-                  </label>
-                </div>
-                <div className={styles.settingItem}>
-                  <span>یادآوری تمارین</span>
-                  <label className={styles.switch}>
-                    <input type="checkbox" defaultChecked />
-                    <span className={styles.switchSlider}></span>
-                  </label>
-                </div>
-                <div className={styles.settingItem}>
-                  <span>پیام‌های روانشناس</span>
-                  <label className={styles.switch}>
-                    <input type="checkbox" defaultChecked />
-                    <span className={styles.switchSlider}></span>
-                  </label>
-                </div>
-              </div>
-
-              <div className={styles.settingsGroup}>
-                <h4>🌙 نمایش</h4>
-                <div className={styles.settingItem}>
-                  <span>حالت شب</span>
-                  <label className={styles.switch}>
-                    <input type="checkbox" />
-                    <span className={styles.switchSlider}></span>
-                  </label>
-                </div>
-                <div className={styles.settingItem}>
-                  <span>نمایش اعلان‌های خوانده شده</span>
-                  <label className={styles.switch}>
-                    <input type="checkbox" defaultChecked />
-                    <span className={styles.switchSlider}></span>
-                  </label>
-                </div>
-              </div>
-
-              <div className={styles.settingsGroup}>
-                <h4>حریم خصوصی</h4>
-                <div className={styles.settingItem}>
-                  <span>تغییر رمز عبور</span>
-                  <button className={styles.changePasswordBtn}>تغییر</button>
-                </div>
-                <div className={styles.settingItem}>
-                  <span>دسترسی به اطلاعات پزشکی</span>
-                  <button className={styles.changePasswordBtn}>مدیریت</button>
-                </div>
-              </div>
-
-              <div className={styles.settingsDanger}>
-                <h4>⚠️ خطرناک</h4>
-                <button className={styles.deleteAccountBtn}>
-                  🗑️ حذف حساب کاربری
-                </button>
-              </div>
-            </div>
-          )} */}
         </div>
       </div>
     </div>
@@ -3657,45 +2900,17 @@ function ProfileContent({ userData }) {
 // ============================================
 // COMPONENT: Setting Content
 // ============================================
-
 function SettingsContent() {
-  // ===== تنظیمات اعلان‌ها =====
-  const [notificationSettings, setNotificationSettings] = useState({
-    // ===== یادآوری جلسات =====
-    sessionReminder: {
-      enabled: true,
-      method: "sms", // sms | email | both
-      timing: 2, // چند ساعت قبل
-    },
-    // ===== یادآوری تمارین =====
-    exerciseReminder: {
-      enabled: true,
-      method: "sms",
-    },
-    // ===== پیام‌های روانشناس =====
-    therapistMessages: {
-      enabled: true,
-      method: "sms",
-    },
-    // ===== گزارش هفتگی =====
-    weeklyReport: {
-      enabled: false,
-      method: "email",
-    },
-  });
 
-  // ===== تنظیمات نمایش =====
-  const [displaySettings, setDisplaySettings] = useState({
-    darkMode: false,
-    showReadNotifications: true,
-    language: "fa", // fa | en
-  });
-
-  // ===== تنظیمات حریم خصوصی =====
-  const [privacySettings, setPrivacySettings] = useState({
-    shareMedicalInfo: true,
-    shareProgress: true,
-  });
+  const [notificationSettings, setNotificationSettings] = useState(
+    seedData.settings.notificationSettings
+  );
+  const [displaySettings, setDisplaySettings] = useState(
+    seedData.settings.displaySettings
+  );
+  const [privacySettings, setPrivacySettings] = useState(
+    seedData.settings.privacySettings
+  );
 
   // ===== تابع تغییر تنظیمات =====
   const toggleSetting = (category, key, subKey = null) => {

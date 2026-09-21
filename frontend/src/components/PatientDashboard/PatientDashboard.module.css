@@ -1802,9 +1802,9 @@
   display: flex;
   justify-content: space-between;
   gap: 12px;
-  margin-top: 8px;
-  /* padding-top: 5px; */
-  /* border-top: 1px solid var(--gray-light); */
+  margin-top: 18px;
+  padding-top: 24px;
+  border-top: 1px solid var(--gray-light);
 }
 
 .btnPrev {
