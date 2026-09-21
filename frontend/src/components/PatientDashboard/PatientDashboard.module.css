@@ -1002,6 +1002,12 @@
   opacity: 0.7;
 }
 
+/* ===== وضعیت گذشتن از موعد تأیید ===== */
+.statusCancelled {
+  background: #fbe9e7;
+  color: #c62828;
+}
+
 /* ===== Status Bar ===== */
 .appointmentStatusBar {
   display: flex;

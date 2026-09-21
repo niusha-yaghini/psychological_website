@@ -21,11 +21,320 @@ import {
 import seedData from "../../../../backend/seed";
 
 import moment from "moment-jalaali";
-moment.loadPersian({ usePersianDigits: false, dialect: 'persian' });
+moment.loadPersian({ usePersianDigits: false, dialect: "persian" });
 
 import logo from "../../../public/images/logo/logo2.png";
 import userAvatar from "../../../public/images/Patient_Panel/usericon.png";
 import confirmIcon from "../../../public/images/Patient_Panel/confirm_icon.png";
+
+// ============================================
+// 📌 ثابت‌های گلوبال (Global Constants)
+// ============================================
+
+// ===== ترتیب روزهای هفته =====
+const WEEK_DAYS_ORDER = {
+  شنبه: 0,
+  یکشنبه: 1,
+  دوشنبه: 2,
+  سه‌شنبه: 3,
+  چهارشنبه: 4,
+  پنجشنبه: 5,
+  جمعه: 6,
+};
+
+// ============================================
+// 📌 توابع کمکی گلوبال (Global Helper Functions)
+// ============================================
+
+// ===== تبدیل اعداد فارسی به انگلیسی =====
+const toEnglishDigits = (str) => {
+  if (!str) return str;
+  const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
+  const englishDigits = "0123456789";
+  return String(str).replace(
+    /[۰-۹]/g,
+    (d) => englishDigits[persianDigits.indexOf(d)],
+  );
+};
+
+// ===== تبدیل اعداد انگلیسی به فارسی =====
+const toPersianDigits = (str) => {
+  if (!str) return str;
+  const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
+  const englishDigits = "0123456789";
+  return String(str).replace(
+    /[0-9]/g,
+    (d) => persianDigits[englishDigits.indexOf(d)],
+  );
+};
+
+// ===== تبدیل ساعت به دقیقه (برای مقایسه) =====
+const timeToMinutes = (time) => {
+  const englishTime = toEnglishDigits(time);
+  const [hours, minutes] = englishTime.split(":").map(Number);
+  return hours * 60 + minutes;
+};
+
+// ===== تبدیل روز هفته به تاریخ شمسی (با پشتیبانی از هفته) =====
+const getDateFromWeekDay = (dayName, weekOffset = 0) => {
+  const todayJalali = moment().format("jYYYY/jMM/jDD");
+  const [todayYear, todayMonth, todayDay] = toEnglishDigits(todayJalali)
+    .split("/")
+    .map(Number);
+
+  const todayDate = moment(
+    `${todayYear}/${todayMonth}/${todayDay}`,
+    "jYYYY/jMM/jDD",
+  );
+
+  // ===== تبدیل روز هفته میلادی به ترتیب ایرانی =====
+  const gregorianDayOfWeek = todayDate.day();
+  const persianDayOfWeek =
+    gregorianDayOfWeek === 6 ? 0 : gregorianDayOfWeek + 1;
+
+  // ===== پیدا کردن شنبه این هفته =====
+  const saturdayOfThisWeek = todayDate
+    .clone()
+    .subtract(persianDayOfWeek, "days");
+
+  // ===== اضافه کردن هفته =====
+  const saturdayOfTargetWeek = saturdayOfThisWeek
+    .clone()
+    .add(weekOffset, "weeks");
+
+  // ===== محاسبه تاریخ روز مورد نظر =====
+  const targetDayOfWeek = WEEK_DAYS_ORDER[dayName];
+  const targetDate = saturdayOfTargetWeek.clone().add(targetDayOfWeek, "days");
+
+  return targetDate.format("jYYYY/jMM/jDD");
+};
+
+// ===== تبدیل روز هفته به تاریخ شمسی (بر اساس هفته جاری) =====
+// ===== گرفتن روز ماه از تاریخ شمسی =====
+const getDayOfMonthFromWeekDay = (dayName, weekOffset = 0) => {
+  const fullDate = getDateFromWeekDay(dayName, weekOffset);
+  const parts = toEnglishDigits(fullDate).split("/");
+  return toPersianDigits(parts[2]);
+};
+
+// ===== چک کردن آیا روز گذشته است =====
+const isDayPast = (dayName, weekOffset = 0) => {
+  const todayJalali = moment().format("jYYYY/jMM/jDD");
+  const [todayYear, todayMonth, todayDay] = toEnglishDigits(todayJalali)
+    .split("/")
+    .map(Number);
+
+  const todayDate = moment(
+    `${todayYear}/${todayMonth}/${todayDay}`,
+    "jYYYY/jMM/jDD",
+  );
+
+  const gregorianDayOfWeek = todayDate.day();
+  const persianDayOfWeek =
+    gregorianDayOfWeek === 6 ? 0 : gregorianDayOfWeek + 1;
+
+  const targetDayOfWeek = WEEK_DAYS_ORDER[dayName];
+
+  // ===== اگه هفته آینده یا بعدتر بود، غیرفعال نمیشه =====
+  if (weekOffset > 0) return false;
+
+  // ===== هفته فعلی: فقط روزهای قبل غیرفعال =====
+  return targetDayOfWeek < persianDayOfWeek;
+};
+
+// ===== چک کردن آیا یک ساعت قابل انتخاب است (حداقل ۱ ساعت فاصله) =====
+const isTimeSelectable = (timeString, dayName, weekOffset = 0) => {
+  const timeStart = toEnglishDigits(timeString);
+  const [hours, minutes] = timeStart.split(":").map(Number);
+
+  const now = moment();
+  const targetDate = getDateFromWeekDay(dayName, weekOffset);
+
+  const [targetYear, targetMonth, targetDay] = toEnglishDigits(targetDate)
+    .split("/")
+    .map(Number);
+
+  const appointmentDateTime = moment(
+    `${targetYear}/${targetMonth}/${targetDay} ${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`,
+    "jYYYY/jMM/jDD HH:mm",
+  );
+
+  const diffMinutes = appointmentDateTime.diff(now, "minutes");
+  return diffMinutes >= 60;
+};
+
+// ===== چک کردن آیا ساعت قبلاً رزرو شده =====
+const isTimeAlreadyBooked = (
+  appointments,
+  dayName,
+  timeString,
+  weekOffset = 0,
+) => {
+  const targetDate = getDateFromWeekDay(dayName, weekOffset);
+  const targetTime = toPersianDigits(timeString);
+
+  return appointments.some((appointment) => {
+    if (
+      appointment.status !== "confirmed" &&
+      appointment.status !== "pending"
+    ) {
+      return false;
+    }
+
+    if (appointment.date !== targetDate) return false;
+
+    if (appointment.hours && Array.isArray(appointment.hours)) {
+      return appointment.hours.includes(targetTime);
+    }
+
+    const [start, end] = appointment.time
+      .split(" - ")
+      .map((t) => toPersianDigits(t));
+
+    return targetTime >= start && targetTime < end;
+  });
+};
+
+// ===== محاسبه ساعت پایان =====
+const getEndTime = (startTime) => {
+  const timeStart = toEnglishDigits(startTime);
+  const [hours] = timeStart.split(":").map(Number);
+  const endHour = (hours + 1) % 24;
+  return `${String(hours).padStart(2, "0")}:۰۰ - ${String(endHour).padStart(2, "0")}:۰۰`;
+};
+
+// ===== تبدیل اعداد به فرمت با کاما =====
+const formatPrice = (price) => {
+  if (!price && price !== 0) return "۰";
+  return price.toLocaleString("fa-IR");
+};
+
+// ===== ساخت moment از تاریخ و ساعت نوبت =====
+const getAppointmentMoment = (appointment) => {
+  const dateParts = toEnglishDigits(appointment.date).split("/");
+  const timeParts = toEnglishDigits(appointment.time.split(" - ")[0]).split(
+    ":",
+  );
+
+  const year = parseInt(dateParts[0]);
+  const month = parseInt(dateParts[1]);
+  const day = parseInt(dateParts[2]);
+  const hours = parseInt(timeParts[0]);
+  const minutes = parseInt(timeParts[1]);
+
+  return moment(
+    `${year}/${month}/${day} ${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`,
+    "jYYYY/jMM/jDD HH:mm",
+  );
+};
+
+// ===== تعیین وضعیت نمایشی نوبت =====
+const getDisplayStatus = (appointment) => {
+  if (appointment.status === "completed") return "completed";
+  if (appointment.status === "cancelled") return "cancelled";
+
+  const appointmentMoment = getAppointmentMoment(appointment);
+  if (!appointmentMoment.isValid()) return appointment.status;
+
+  const isPast = appointmentMoment.isBefore(moment());
+
+  if (isPast && appointment.status === "pending") return "expired";
+  if (isPast && appointment.status === "confirmed") return "no-show";
+
+  return appointment.status;
+};
+
+const canCancel = (appointment) => {
+  const displayStatus = getDisplayStatus(appointment);
+  if (displayStatus !== "confirmed" && displayStatus !== "pending")
+    return false;
+
+  const appointmentMoment = getAppointmentMoment(appointment);
+  if (!appointmentMoment.isValid()) return false;
+
+  const diffHours = appointmentMoment.diff(moment(), "hours", true);
+
+  if (appointment.status === "pending") return true;
+  if (appointment.status === "confirmed") return diffHours >= 24;
+
+  return false;
+};
+
+const isCancelDisabled = (appointment) => {
+  const displayStatus = getDisplayStatus(appointment);
+  if (displayStatus !== "confirmed") return false;
+
+  const appointmentMoment = getAppointmentMoment(appointment);
+  if (!appointmentMoment.isValid()) return false;
+
+  const diffHours = appointmentMoment.diff(moment(), "hours", true);
+  return diffHours < 24 && diffHours > 0;
+};
+
+const isAppointmentPast = (appointment) => {
+  const appointmentMoment = getAppointmentMoment(appointment);
+  if (!appointmentMoment.isValid()) return false;
+  return appointmentMoment.isBefore(moment());
+};
+
+// ===== چک کردن اینکه ساعت‌ها پشت سر هم هستن =====
+const areTimesConsecutive = (times) => {
+  if (times.length <= 1) return true;
+
+  // ===== مرتب‌سازی بر اساس دقیقه =====
+  const sortedMinutes = times
+    .map((t) => timeToMinutes(t))
+    .sort((a, b) => a - b);
+
+  const ONE_HOUR = 60;
+
+  // ===== چک کردن اختلاف ۶۰ دقیقه بین هر دو تا =====
+  for (let i = 1; i < sortedMinutes.length; i++) {
+    const diff = sortedMinutes[i] - sortedMinutes[i - 1];
+    if (diff !== ONE_HOUR) {
+      return false;
+    }
+  }
+  return true;
+};
+
+// ===== چک کردن اینکه ساعت جدید با ساعت‌های انتخاب‌شده پشت سر هم است =====
+const canAddTime = (newTime, selectedTimes, availableTimes) => {
+  // اگه به سقف ۳ ساعت رسیده باشه
+  if (selectedTimes.length >= 3) return false;
+
+  // اگه ساعت قبلاً انتخاب شده باشه
+  if (selectedTimes.includes(newTime)) return false;
+
+  // اگه هنوز چیزی انتخاب نشده، میتونه اضافه کنه
+  if (selectedTimes.length === 0) return true;
+
+  // ===== چک کردن پشت سر هم بودن با اختلاف ۶۰ دقیقه =====
+  const newTimeMinutes = timeToMinutes(newTime);
+  const ONE_HOUR = 60;
+
+  return selectedTimes.some((existingTime) => {
+    const existingMinutes = timeToMinutes(existingTime);
+    const diff = Math.abs(newTimeMinutes - existingMinutes);
+
+    // اختلاف باید دقیقاً ۶۰ دقیقه باشه
+    return diff === ONE_HOUR;
+  });
+};
+
+// ===== چک کردن آیا نوبت "انجام نشده" است =====
+const isNotCompleted = (appointment) => {
+  const displayStatus = getDisplayStatus(appointment);
+  return (
+    displayStatus === "cancelled" ||
+    displayStatus === "expired" ||
+    displayStatus === "no-show"
+  );
+};
+
+// ============================================
+// 📌 کامپوننت‌ها (Components)
+// ============================================
 
 function PatientDashboard() {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -385,7 +694,6 @@ function DashboardContent({ userData, appointments }) {
 // ============================================
 // COMPONENT: Appointments Content
 // ============================================
-// moment.loadPersian({ usePersianDigits: false });
 
 function AppointmentsContent({ appointments, setAppointments }) {
   // =============================================
@@ -433,27 +741,42 @@ function AppointmentsContent({ appointments, setAppointments }) {
     }
   };
 
-  const convertJalaliToDate = (date, time) => {
-    const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
-    const englishDigits = "0123456789";
+  // ===== دریافت اطلاعات وضعیت اصلی (Badge اول) =====
+  const getOriginalStatusInfo = (status) => {
+    const statusMap = {
+      confirmed: {
+        label: "تأیید شده",
+        className: styles.statusConfirmed,
+      },
+      pending: {
+        label: "در انتظار تأیید",
+        className: styles.statusPending,
+      },
+      completed: {
+        label: "انجام شده",
+        className: styles.statusCompleted,
+      },
+      cancelled: {
+        label: "لغو شده",
+        className: styles.statusCancelled,
+      },
+    };
+    return statusMap[status] || statusMap.pending;
+  };
 
-    const normalize = (str) =>
-      str.replace(/[۰-۹]/g, (d) => englishDigits[persianDigits.indexOf(d)]);
-
-    const normalizedDate = normalize(date);
-    const normalizedTime = normalize(time);
-
-    const [y, m, d] = normalizedDate.split("/");
-    const [hour, minute] = normalizedTime.split(":");
-
-    const result = moment(
-      `${y}/${m}/${d} ${hour}:${minute}`,
-      "jYYYY/jMM/jDD HH:mm",
-    );
-
-    // console.log("converted:", result.format(), result.isValid());
-
-    return result.toDate();
+  // ===== دریافت اطلاعات وضعیت مشتق شده (Badge دوم) =====
+  const getDerivedStatusInfo = (displayStatus) => {
+    const statusMap = {
+      expired: {
+        label: "گذشتن از موعد تأیید",
+        className: styles.cancelBadge,
+      },
+      "no-show": {
+        label: "انجام نشده",
+        className: styles.cancelBadge,
+      },
+    };
+    return statusMap[displayStatus] || null;
   };
 
   // =============================================
@@ -479,95 +802,35 @@ function AppointmentsContent({ appointments, setAppointments }) {
   // =============================================
   // ۴. توابعی که از متغیرهای مشتق شده استفاده میکنن
   // =============================================
-  const normalizeTime = (time) => {
-    const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
-    const englishDigits = "0123456789";
-
-    const normalized = time.replace(
-      /[۰-۹]/g,
-      (d) => englishDigits[persianDigits.indexOf(d)],
-    );
-
-    let [hour, minute] = normalized.split(":").map(Number);
-
-    const extraDays = Math.floor(hour / 24);
-
-    hour = hour % 24;
-
-    return {
-      hour,
-      minute,
-      extraDays,
-    };
-  };
-
-  // ===== بررسی قانون ۲۴ ساعت =====
-  const canCancel = (appointment) => {
-    if (
-      appointment.status !== "confirmed" &&
-      appointment.status !== "pending"
-    ) {
-      return false;
-    }
-
-    const [rawStartTime] = appointment.time.split(" - ");
-
-    const normalizedTime = normalizeTime(rawStartTime);
-
-    const appointmentDate = convertJalaliToDate(
-      appointment.date,
-      `${normalizedTime.hour}:${String(normalizedTime.minute).padStart(2, "0")}`,
-    );
-
-    appointmentDate.setDate(
-      appointmentDate.getDate() + normalizedTime.extraDays,
-    );
-
-    const now = new Date();
-
-    const diffMilliseconds = appointmentDate.getTime() - now.getTime();
-
-    const diffHours = diffMilliseconds / (1000 * 60 * 60);
-
-    // console.log(
-    //   appointment.date,
-    //   appointment.time,
-    //   "remaining hours:",
-    //   diffHours,
-    // );
-
-    return diffHours >= 24;
-  };
-
-  // ===== فیلتر کردن (با استفاده از sortedAppointments) =====
   const getFilteredAppointments = () => {
     if (activeFilter === "all") return sortedAppointments;
-    return sortedAppointments.filter((item) => item.status === activeFilter);
+
+    if (activeFilter === "not-completed") {
+      return sortedAppointments.filter((item) => isNotCompleted(item));
+    }
+
+    return sortedAppointments.filter((item) => {
+      const displayStatus = getDisplayStatus(item);
+      return displayStatus === activeFilter;
+    });
   };
 
   const filteredAppointments = getFilteredAppointments();
 
-  // ===== تابع لغو نوبت =====
   const handleCancelAppointment = (appointmentId) => {
     const appointment = appointments.find((a) => a.id === appointmentId);
     if (!appointment) return;
 
-    const now = new Date();
-    const [rawStartTime] = appointment.time.split(" - ");
-    const normalizedTime = normalizeTime(rawStartTime);
+    const displayStatus = getDisplayStatus(appointment);
 
-    const appointmentDate = convertJalaliToDate(
-      appointment.date,
-      `${normalizedTime.hour}:${normalizedTime.minute}`,
-    );
+    // ===== اگه منقضی شده یا انجام نشده، نمیشه لغو کرد =====
+    if (displayStatus !== "confirmed" && displayStatus !== "pending") {
+      alert("امکان لغو این نوبت وجود ندارد.");
+      return;
+    }
 
-    appointmentDate.setDate(
-      appointmentDate.getDate() + normalizedTime.extraDays,
-    );
-
-    const diffHours = (appointmentDate - now) / (1000 * 60 * 60);
-
-    if (diffHours < 24) {
+    // ===== چک کردن قانون ۲۴ ساعت =====
+    if (!canCancel(appointment)) {
       alert("امکان لغو نوبت کمتر از ۲۴ ساعت قبل وجود ندارد.");
       return;
     }
@@ -618,16 +881,22 @@ function AppointmentsContent({ appointments, setAppointments }) {
   };
 
   // ===== وضعیت‌ها =====
+  // اگر تایید شده باشه ولی انجام نشه => انجام نشده
+  // اگر رزرو شده اما تایید نشه و از موعدش بگذره => منقضی شده
   const filters = [
     { id: "all", label: "همه" },
     { id: "confirmed", label: "تأیید شده" },
     { id: "pending", label: "در انتظار" },
     { id: "completed", label: "انجام شده" },
-    { id: "cancelled", label: "لغو شده" },
+    // { id: "cancelled", label: "لغو شده" },
+    // { id: "expired", label: "منقضی شده" },
+    { id: "not-completed", label: "انجام نشده" },
   ];
 
-  // ===== دریافت اطلاعات وضعیت =====
-  const getStatusInfo = (status) => {
+  // ===== دریافت اطلاعات وضعیت (نسخه اصلاح‌شده) =====
+  const getStatusInfo = (appointment) => {
+    const displayStatus = getDisplayStatus(appointment);
+
     const statusMap = {
       confirmed: {
         label: "تأیید شده",
@@ -645,8 +914,17 @@ function AppointmentsContent({ appointments, setAppointments }) {
         label: "لغو شده",
         className: styles.statusCancelled,
       },
+      expired: {
+        label: "گذشتن از موعد تأیید",
+        className: styles.statusCancelled, // ← رنگ قرمز
+      },
+      "no-show": {
+        label: "انجام نشده",
+        className: styles.statusCancelled, // ← رنگ قرمز
+      },
     };
-    return statusMap[status] || statusMap.pending;
+
+    return statusMap[displayStatus] || statusMap.pending;
   };
 
   // =============================================
@@ -682,13 +960,13 @@ function AppointmentsContent({ appointments, setAppointments }) {
           >
             {filter.label}
             &nbsp;
-            <span className={styles.filterCount}>
-              {
-                sortedAppointments.filter((item) =>
-                  filter.id === "all" ? true : item.status === filter.id,
-                ).length
-              }
-            </span>
+          <span className={styles.filterCount}>
+            {sortedAppointments.filter((item) => {
+              if (filter.id === "all") return true;
+              if (filter.id === "not-completed") return isNotCompleted(item);
+              return getDisplayStatus(item) === filter.id;
+            }).length}
+          </span>
           </button>
         ))}
       </div>
@@ -697,21 +975,20 @@ function AppointmentsContent({ appointments, setAppointments }) {
       <div className={styles.appointmentsList}>
         {filteredAppointments.length > 0 ? (
           filteredAppointments.map((appointment) => {
-            const statusInfo = getStatusInfo(appointment.status);
+            const statusInfo = getStatusInfo(appointment);
             const isCancellable = canCancel(appointment);
-            const isPast = isAppointmentPast(appointment); // ← جدید
+            const isPast = isAppointmentPast(appointment);
 
             return (
-              // <div key={appointment.id} className={styles.appointmentCard}>
               <div
                 key={appointment.id}
                 className={`${styles.appointmentCard} ${
                   isPast ? styles.pastAppointment : ""
-                }`} // ← کلاس جدید
+                }`}
               >
                 {/* وضعیت */}
                 <div className={styles.appointmentStatusBar}>
-                  <span
+                  {/* <span
                     className={`${styles.statusBadge} ${statusInfo.className}`}
                   >
                     {statusInfo.label}
@@ -719,14 +996,37 @@ function AppointmentsContent({ appointments, setAppointments }) {
 
                   {appointment.isOnline && (
                     <span className={styles.onlineBadge}>آنلاین</span>
-                  )}
+                  )} */}
 
+                  <span
+                    className={`${styles.statusBadge} ${
+                      getOriginalStatusInfo(appointment.status).className
+                    }`}
+                  >
+                    {getOriginalStatusInfo(appointment.status).label}
+                  </span>
+
+                  {appointment.isOnline && (
+                    <span className={styles.onlineBadge}>آنلاین</span>
+                  )}
                   {appointment.status === "cancelled" && (
                     <span className={styles.cancelBadge}>
                       {appointment.cancelledBy === "user"
                         ? "لغو توسط شما"
                         : "لغو توسط روانشناس"}
                     </span>
+                  )}
+
+                  {/* اگر منقضی شده (گذشتن از موعد تأیید) */}
+                  {getDisplayStatus(appointment) === "expired" && (
+                    <span className={styles.cancelBadge}>
+                      گذشتن از موعد تأیید
+                    </span>
+                  )}
+
+                  {/* اگر انجام نشده (no-show) */}
+                  {getDisplayStatus(appointment) === "no-show" && (
+                    <span className={styles.cancelBadge}>انجام نشده</span>
                   )}
                 </div>
 
@@ -766,11 +1066,12 @@ function AppointmentsContent({ appointments, setAppointments }) {
                   </div>
 
                   {/* دکمه‌های اکشن */}
+                  {/* دکمه‌های اکشن */}
                   <div className={styles.appointmentActions}>
-                    {/* ===== وضعیت تأیید شده ===== */}
-                    {appointment.status === "confirmed" && (
+                    {/* ===== وضعیت تأیید شده (فقط اگه آینده باشه) ===== */}
+                    {appointment.status === "confirmed" && !isPast && (
                       <>
-                        {isCancellable ? (
+                        {isCancellable && (
                           <button
                             className={styles.btnCancel}
                             onClick={() =>
@@ -779,7 +1080,8 @@ function AppointmentsContent({ appointments, setAppointments }) {
                           >
                             لغو نوبت
                           </button>
-                        ) : (
+                        )}
+                        {isCancelDisabled(appointment) && (
                           <button className={styles.btnCancelDisabled} disabled>
                             لغو غیرفعال (کمتر از ۲۴ ساعت)
                           </button>
@@ -787,13 +1089,13 @@ function AppointmentsContent({ appointments, setAppointments }) {
                       </>
                     )}
 
-                    {/* ===== وضعیت در انتظار ===== */}
-                    {appointment.status === "pending" && (
+                    {/* ===== وضعیت در انتظار (فقط اگه آینده باشه) ===== */}
+                    {appointment.status === "pending" && !isPast && (
                       <>
-                        {/* <button className={styles.btnPending}>
+                        <button className={styles.btnPending}>
                           در انتظار تأیید
-                        </button> */}
-                        {isCancellable ? (
+                        </button>
+                        {isCancellable && (
                           <button
                             className={styles.btnCancel}
                             onClick={() =>
@@ -801,10 +1103,6 @@ function AppointmentsContent({ appointments, setAppointments }) {
                             }
                           >
                             لغو درخواست
-                          </button>
-                        ) : (
-                          <button className={styles.btnCancelDisabled} disabled>
-                            لغو غیرفعال (کمتر از ۲۴ ساعت)
                           </button>
                         )}
                       </>
@@ -891,674 +1189,6 @@ function AppointmentsContent({ appointments, setAppointments }) {
 // COMPONENT: New Appointment Modal
 // ============================================
 
-// توابع کمکی (Helper Functions)
-
-// ===== تبدیل اعداد به فرمت با کاما =====
-const formatPrice = (price) => {
-  if (!price && price !== 0) return "۰";
-  return price.toLocaleString("fa-IR");
-};
-
-// ===== تبدیل اعداد فارسی به انگلیسی =====
-const toEnglishDigits = (str) => {
-  if (!str) return str;
-  const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
-  const englishDigits = "0123456789";
-  return String(str).replace(
-    /[۰-۹]/g,
-    (d) => englishDigits[persianDigits.indexOf(d)],
-  );
-};
-
-// ===== تبدیل اعداد انگلیسی به فارسی =====
-const toPersianDigits = (str) => {
-  if (!str) return str;
-  const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
-  const englishDigits = "0123456789";
-  return String(str).replace(
-    /[0-9]/g,
-    (d) => persianDigits[englishDigits.indexOf(d)],
-  );
-};
-
-// ===== ترتیب روزهای هفته =====
-const WEEK_DAYS_ORDER = {
-  شنبه: 0,
-  یکشنبه: 1,
-  دوشنبه: 2,
-  سه‌شنبه: 3,
-  چهارشنبه: 4,
-  پنجشنبه: 5,
-  جمعه: 6,
-};
-
-// ===== تبدیل روز هفته به تاریخ شمسی (با پشتیبانی از هفته) =====
-const getDateFromWeekDay = (dayName, weekOffset = 0) => {
-  const todayJalali = moment().format("jYYYY/jMM/jDD");
-  const [todayYear, todayMonth, todayDay] = toEnglishDigits(todayJalali)
-    .split("/")
-    .map(Number);
-
-  const todayDate = moment(
-    `${todayYear}/${todayMonth}/${todayDay}`,
-    "jYYYY/jMM/jDD",
-  );
-
-  // ===== تبدیل روز هفته میلادی به ترتیب ایرانی =====
-  const gregorianDayOfWeek = todayDate.day();
-  const persianDayOfWeek =
-    gregorianDayOfWeek === 6 ? 0 : gregorianDayOfWeek + 1;
-
-  // ===== پیدا کردن شنبه این هفته =====
-  const saturdayOfThisWeek = todayDate
-    .clone()
-    .subtract(persianDayOfWeek, "days");
-
-  // ===== اضافه کردن هفته =====
-  const saturdayOfTargetWeek = saturdayOfThisWeek
-    .clone()
-    .add(weekOffset, "weeks");
-
-  // ===== محاسبه تاریخ روز مورد نظر =====
-  const targetDayOfWeek = WEEK_DAYS_ORDER[dayName];
-  const targetDate = saturdayOfTargetWeek.clone().add(targetDayOfWeek, "days");
-
-  return targetDate.format("jYYYY/jMM/jDD");
-};
-
-// ===== تبدیل روز هفته به تاریخ شمسی (بر اساس هفته جاری) =====
-// const getDateFromWeekDay = (dayNam, weekOffset = 0) => {
-//   // const weekDaysOrder =
-
-//   const todayJalali = moment().format("jYYYY/jMM/jDD");
-//   const [todayYear, todayMonth, todayDay] = toEnglishDigits(todayJalali)
-//     .split("/")
-//     .map(Number);
-
-//   const todayDate = moment(
-//     `${todayYear}/${todayMonth}/${todayDay}`,
-//     "jYYYY/jMM/jDD",
-//   );
-
-//   // ===== تبدیل روز هفته میلادی به ترتیب ایرانی =====
-//   const gregorianDayOfWeek = todayDate.day();
-//   const persianDayOfWeek =
-//     gregorianDayOfWeek === 6 ? 0 : gregorianDayOfWeek + 1;
-
-//   // ===== پیدا کردن شنبه این هفته =====
-//   const saturdayOfThisWeek = todayDate
-//     .clone()
-//     .subtract(persianDayOfWeek, "days");
-
-//   // ===== محاسبه تاریخ روز مورد نظر =====
-//   // const targetDayOfWeek = weekDaysOrder[dayName];
-//   const targetDayOfWeek = WEEK_DAYS_ORDER[dayName];
-//   const targetDate = saturdayOfThisWeek.clone().add(targetDayOfWeek, "days");
-
-//   return targetDate.format("jYYYY/jMM/jDD");
-// };
-
-// ===== گرفتن روز ماه از تاریخ شمسی =====
-// const getDayOfMonthFromWeekDay = (dayName) => {
-//   const fullDate = getDateFromWeekDay(dayName); // مثلا "۱۴۰۵/۰۶/۳۰"
-//   const parts = toEnglishDigits(fullDate).split("/");
-//   return toPersianDigits(parts[2]); // روز ماه رو برمی‌گردونه
-// };
-
-// ===== گرفتن روز ماه از تاریخ شمسی =====
-const getDayOfMonthFromWeekDay = (dayName, weekOffset = 0) => {
-  const fullDate = getDateFromWeekDay(dayName, weekOffset);
-  const parts = toEnglishDigits(fullDate).split("/");
-  return toPersianDigits(parts[2]);
-};
-
-// ===== چک کردن آیا روز گذشته است (نه امروز) =====
-// const isDayPast = (dayName) => {
-//   // const weekDaysOrder = {
-//   //   شنبه: 0,
-//   //   یکشنبه: 1,
-//   //   دوشنبه: 2,
-//   //   سه‌شنبه: 3,
-//   //   چهارشنبه: 4,
-//   //   پنجشنبه: 5,
-//   //   جمعه: 6,
-//   // };
-
-//   const todayJalali = moment().format("jYYYY/jMM/jDD");
-//   const [todayYear, todayMonth, todayDay] = toEnglishDigits(todayJalali)
-//     .split("/")
-//     .map(Number);
-
-//   const todayDate = moment(
-//     `${todayYear}/${todayMonth}/${todayDay}`,
-//     "jYYYY/jMM/jDD",
-//   );
-
-//   const gregorianDayOfWeek = todayDate.day();
-//   const persianDayOfWeek =
-//     gregorianDayOfWeek === 6 ? 0 : gregorianDayOfWeek + 1;
-
-//   // const targetDayOfWeek = weekDaysOrder[dayName];
-//   const targetDayOfWeek = WEEK_DAYS_ORDER[dayName];
-
-//   // فقط روزهای قبل از امروز غیرفعال میشن
-//   return targetDayOfWeek < persianDayOfWeek;
-// };
-
-// ===== چک کردن آیا روز گذشته است =====
-const isDayPast = (dayName, weekOffset = 0) => {
-  const todayJalali = moment().format("jYYYY/jMM/jDD");
-  const [todayYear, todayMonth, todayDay] = toEnglishDigits(todayJalali)
-    .split("/")
-    .map(Number);
-
-  const todayDate = moment(
-    `${todayYear}/${todayMonth}/${todayDay}`,
-    "jYYYY/jMM/jDD",
-  );
-
-  const gregorianDayOfWeek = todayDate.day();
-  const persianDayOfWeek =
-    gregorianDayOfWeek === 6 ? 0 : gregorianDayOfWeek + 1;
-
-  const targetDayOfWeek = WEEK_DAYS_ORDER[dayName];
-
-  // ===== اگه هفته آینده یا بعدتر بود، غیرفعال نمیشه =====
-  if (weekOffset > 0) return false;
-
-  // ===== هفته فعلی: فقط روزهای قبل غیرفعال =====
-  return targetDayOfWeek < persianDayOfWeek;
-};
-
-// ===== چک کردن آیا یک ساعت قابل انتخاب است (حداقل ۱ ساعت فاصله) =====
-// const isTimeSelectable = (timeString, dayName) => {
-//   const timeStart = toEnglishDigits(timeString);
-//   const [hours, minutes] = timeStart.split(":").map(Number);
-
-//   // ===== دریافت تاریخ امروز =====
-//   const now = moment();
-
-//   // ===== ساخت تاریخ و ساعت جلسه =====
-//   const targetDate = getDateFromWeekDay(dayName);
-//   const [targetYear, targetMonth, targetDay] = toEnglishDigits(targetDate)
-//     .split("/")
-//     .map(Number);
-
-//   const appointmentDateTime = moment(
-//     `${targetYear}/${targetMonth}/${targetDay} ${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`,
-//     "jYYYY/jMM/jDD HH:mm",
-//   );
-
-//   // ===== محاسبه اختلاف =====
-//   const diffMinutes = appointmentDateTime.diff(now, "minutes");
-
-//   // حداقل ۶۰ دقیقه فاصله لازمه
-//   return diffMinutes >= 60;
-// };
-
-// ===== چک کردن آیا یک ساعت قابل انتخاب است =====
-const isTimeSelectable = (timeString, dayName, weekOffset = 0) => {
-  const timeStart = toEnglishDigits(timeString);
-  const [hours, minutes] = timeStart.split(":").map(Number);
-
-  const now = moment();
-  const targetDate = getDateFromWeekDay(dayName, weekOffset);
-
-  const [targetYear, targetMonth, targetDay] = toEnglishDigits(targetDate)
-    .split("/")
-    .map(Number);
-
-  const appointmentDateTime = moment(
-    `${targetYear}/${targetMonth}/${targetDay} ${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`,
-    "jYYYY/jMM/jDD HH:mm",
-  );
-
-  const diffMinutes = appointmentDateTime.diff(now, "minutes");
-  return diffMinutes >= 60;
-};
-
-// ===== محاسبه ساعت پایان =====
-const getEndTime = (startTime) => {
-  const timeStart = toEnglishDigits(startTime);
-  const [hours] = timeStart.split(":").map(Number);
-  const endHour = (hours + 1) % 24;
-  return `${String(hours).padStart(2, "0")}:۰۰ - ${String(endHour).padStart(2, "0")}:۰۰`;
-};
-
-// ===== چک کردن آیا ساعت قبلاً رزرو شده =====
-// const isTimeAlreadyBooked = (appointments, dayName, timeString) => {
-//   const targetDate = getDateFromWeekDay(dayName);
-//   const targetTime = toPersianDigits(timeString);
-
-//   return appointments.some((appointment) => {
-//     if (
-//       appointment.status !== "confirmed" &&
-//       appointment.status !== "pending"
-//     ) {
-//       return false;
-//     }
-
-//     if (appointment.date !== targetDate) return false;
-
-//     // ===== اگه hours داره، مستقیم چک کن =====
-//     if (appointment.hours && Array.isArray(appointment.hours)) {
-//       return appointment.hours.includes(targetTime);
-//     }
-
-//     // ===== fallback =====
-//     const [start, end] = appointment.time
-//       .split(" - ")
-//       .map((t) => toPersianDigits(t));
-
-//     return targetTime >= start && targetTime < end;
-//   });
-// };
-
-// ===== چک کردن آیا ساعت قبلاً رزرو شده =====
-const isTimeAlreadyBooked = (
-  appointments,
-  dayName,
-  timeString,
-  weekOffset = 0,
-) => {
-  const targetDate = getDateFromWeekDay(dayName, weekOffset);
-  const targetTime = toPersianDigits(timeString);
-
-  return appointments.some((appointment) => {
-    if (
-      appointment.status !== "confirmed" &&
-      appointment.status !== "pending"
-    ) {
-      return false;
-    }
-
-    if (appointment.date !== targetDate) return false;
-
-    if (appointment.hours && Array.isArray(appointment.hours)) {
-      return appointment.hours.includes(targetTime);
-    }
-
-    const [start, end] = appointment.time
-      .split(" - ")
-      .map((t) => toPersianDigits(t));
-
-    return targetTime >= start && targetTime < end;
-  });
-};
-
-// ===== پیدا کردن ایندکس ساعت در لیست =====
-const getTimeIndex = (time, availableTimes) => {
-  return availableTimes.indexOf(time);
-};
-
-// ===== چک کردن اینکه ساعت‌ها پشت سر هم هستن =====
-// const areTimesConsecutive = (times, availableTimes) => {
-//   if (times.length <= 1) return true;
-
-//   const indices = times
-//     .map((t) => getTimeIndex(t, availableTimes))
-//     .sort((a, b) => a - b);
-
-//   for (let i = 1; i < indices.length; i++) {
-//     if (indices[i] - indices[i - 1] !== 1) {
-//       return false;
-//     }
-//   }
-//   return true;
-// };
-
-const areTimesConsecutive = (times) => {
-  if (times.length <= 1) return true;
-
-  // ===== مرتب‌سازی بر اساس دقیقه =====
-  const sortedMinutes = times
-    .map((t) => timeToMinutes(t))
-    .sort((a, b) => a - b);
-
-  const ONE_HOUR = 60;
-
-  // ===== چک کردن اختلاف ۶۰ دقیقه بین هر دو تا =====
-  for (let i = 1; i < sortedMinutes.length; i++) {
-    const diff = sortedMinutes[i] - sortedMinutes[i - 1];
-    if (diff !== ONE_HOUR) {
-      return false;
-    }
-  }
-  return true;
-};
-
-// ===== چک کردن اینکه ساعت جدید با ساعت‌های انتخاب‌شده پشت سر هم است =====
-// const canAddTime = (newTime, selectedTimes, availableTimes) => {
-//   // اگه به سقف ۳ ساعت رسیده باشه
-//   if (selectedTimes.length >= 3) return false;
-
-//   // اگه ساعت قبلاً انتخاب شده باشه
-//   if (selectedTimes.includes(newTime)) return false;
-
-//   // اگه هنوز چیزی انتخاب نشده، میتونه اضافه کنه
-//   if (selectedTimes.length === 0) return true;
-
-//   // ایندکس‌ها
-//   const newIndex = getTimeIndex(newTime, availableTimes);
-//   const selectedIndices = selectedTimes.map((t) =>
-//     getTimeIndex(t, availableTimes),
-//   );
-
-//   const minIndex = Math.min(...selectedIndices);
-//   const maxIndex = Math.max(...selectedIndices);
-
-//   // ساعت جدید باید دقیقاً یکی قبل از min یا یکی بعد از max باشه
-//   return newIndex === minIndex - 1 || newIndex === maxIndex + 1;
-// };
-
-const canAddTime = (newTime, selectedTimes, availableTimes) => {
-  // اگه به سقف ۳ ساعت رسیده باشه
-  if (selectedTimes.length >= 3) return false;
-
-  // اگه ساعت قبلاً انتخاب شده باشه
-  if (selectedTimes.includes(newTime)) return false;
-
-  // اگه هنوز چیزی انتخاب نشده، میتونه اضافه کنه
-  if (selectedTimes.length === 0) return true;
-
-  // ===== چک کردن پشت سر هم بودن با اختلاف ۶۰ دقیقه =====
-  const newTimeMinutes = timeToMinutes(newTime);
-  const ONE_HOUR = 60;
-
-  return selectedTimes.some((existingTime) => {
-    const existingMinutes = timeToMinutes(existingTime);
-    const diff = Math.abs(newTimeMinutes - existingMinutes);
-
-    // اختلاف باید دقیقاً ۶۰ دقیقه باشه
-    return diff === ONE_HOUR;
-  });
-};
-
-// ===== تبدیل ساعت به دقیقه (برای مقایسه) =====
-const timeToMinutes = (time) => {
-  const englishTime = toEnglishDigits(time);
-  const [hours, minutes] = englishTime.split(":").map(Number);
-  return hours * 60 + minutes;
-};
-
-
-// ===== چک کردن آیا نوبت گذشته است =====
-const isAppointmentPast = (appointment) => {
-  // ===== تبدیل اعداد فارسی به انگلیسی =====
-  const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
-  const englishDigits = "0123456789";
-  const toEnglish = (str) =>
-    String(str).replace(
-      /[۰-۹]/g,
-      (d) => englishDigits[persianDigits.indexOf(d)]
-    );
-
-  // ===== دریافت تاریخ و ساعت شروع =====
-  const dateParts = toEnglish(appointment.date).split("/");
-  const timeParts = toEnglish(appointment.time.split(" - ")[0]).split(":");
-
-  const year = parseInt(dateParts[0]);
-  const month = parseInt(dateParts[1]);
-  const day = parseInt(dateParts[2]);
-  const hours = parseInt(timeParts[0]);
-  const minutes = parseInt(timeParts[1]);
-
-  // ===== ساخت تاریخ شمسی =====
-  const appointmentMoment = moment(
-    `${year}/${month}/${day} ${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`,
-    "jYYYY/jMM/jDD HH:mm"
-  );
-
-  if (!appointmentMoment.isValid()) {
-    console.warn("تاریخ نامعتبر:", appointment.date, appointment.time);
-    return false;
-  }
-
-  // ===== مقایسه با الان =====
-  return appointmentMoment.isBefore(moment());
-};
-
-// const isAppointmentPast = (appointment) => {
-//   if (
-//     appointment.status === "completed" ||
-//     appointment.status === "cancelled"
-//   ) {
-//     return false;
-//   }
-
-//   const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
-//   const englishDigits = "0123456789";
-//   const toEnglish = (str) =>
-//     String(str).replace(
-//       /[۰-۹]/g,
-//       (d) => englishDigits[persianDigits.indexOf(d)]
-//     );
-
-//   const dateParts = toEnglish(appointment.date).split("/");
-//   const timeParts = toEnglish(appointment.time.split(" - ")[0]).split(":");
-
-//   const year = parseInt(dateParts[0]);
-//   const month = parseInt(dateParts[1]);
-//   const day = parseInt(dateParts[2]);
-//   const hours = parseInt(timeParts[0]);
-//   const minutes = parseInt(timeParts[1]);
-
-//   const appointmentMoment = moment(
-//     `${year}/${month}/${day} ${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`,
-//     "jYYYY/jMM/jDD HH:mm"
-//   );
-
-//   // ===== لاگ دقیق =====
-//   console.log("🔍 isAppointmentPast:");
-//   console.log("  - ID:", appointment.id);
-//   console.log("  - Date:", appointment.date);
-//   console.log("  - Status:", appointment.status);
-//   console.log("  - appointmentMoment:", appointmentMoment.format("jYYYY/jMM/jDD HH:mm"));
-//   console.log("  - now:", moment().format("jYYYY/jMM/jDD HH:mm"));
-//   console.log("  - isPast:", appointmentMoment.isBefore(moment()));
-
-//   return appointmentMoment.isBefore(moment());
-// };
-
-// ===== چک کردن آیا نوبت گذشته است =====
-// const isAppointmentPast = (appointment) => {
-//   // ===== نوبت‌های لغو شده یا انجام شده، کمرنگ نمیشن =====
-//   if (
-//     appointment.status === "completed" ||
-//     appointment.status === "cancelled"
-//   ) {
-//     return false;
-//   }
-
-//   // ===== تبدیل اعداد فارسی به انگلیسی =====
-//   const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
-//   const englishDigits = "0123456789";
-//   const toEnglish = (str) =>
-//     String(str).replace(
-//       /[۰-۹]/g,
-//       (d) => englishDigits[persianDigits.indexOf(d)]
-//     );
-
-//   // ===== دریافت تاریخ و ساعت شروع =====
-//   const dateParts = toEnglish(appointment.date).split("/");
-//   const timeParts = toEnglish(appointment.time.split(" - ")[0]).split(":");
-
-//   const year = parseInt(dateParts[0]);
-//   const month = parseInt(dateParts[1]);
-//   const day = parseInt(dateParts[2]);
-//   const hours = parseInt(timeParts[0]);
-//   const minutes = parseInt(timeParts[1]);
-
-//   // ===== ساخت تاریخ شمسی =====
-//   const appointmentMoment = moment(
-//     `${year}/${month}/${day} ${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`,
-//     "jYYYY/jMM/jDD HH:mm"
-//   );
-
-//   if (!appointmentMoment.isValid()) {
-//     console.warn("تاریخ نامعتبر:", appointment.date, appointment.time);
-//     return false;
-//   }
-
-//   // ===== مقایسه با الان =====
-//   // moment-jalaali با isBefore کار میکنه
-//   return appointmentMoment.isBefore(moment());
-// };
-
-// ===== چک کردن آیا نوبت گذشته است =====
-// const isAppointmentPast = (appointment) => {
-//   if (
-//     appointment.status === "completed" ||
-//     appointment.status === "cancelled"
-//   ) {
-//     return false;
-//   }
-
-//   const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
-//   const englishDigits = "0123456789";
-//   const toEnglish = (str) =>
-//     String(str).replace(
-//       /[۰-۹]/g,
-//       (d) => englishDigits[persianDigits.indexOf(d)]
-//     );
-
-//   const dateParts = toEnglish(appointment.date).split("/");
-//   const timeParts = toEnglish(appointment.time.split(" - ")[0]).split(":");
-
-//   const year = parseInt(dateParts[0]);
-//   const month = parseInt(dateParts[1]);
-//   const day = parseInt(dateParts[2]);
-//   const hours = parseInt(timeParts[0]);
-//   const minutes = parseInt(timeParts[1]);
-
-//   const appointmentMoment = moment(
-//     `${year}/${month}/${day} ${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`,
-//     "jYYYY/jMM/jDD HH:mm"
-//   );
-
-//   if (!appointmentMoment.isValid()) return false;
-
-//   return appointmentMoment.isBefore(moment());
-// };
-
-// const isAppointmentPast = (appointment) => {
-//   if (
-//     appointment.status === "completed" ||
-//     appointment.status === "cancelled"
-//   ) {
-//     return false;
-//   }
-
-//   const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
-//   const englishDigits = "0123456789";
-//   const toEnglish = (str) =>
-//     String(str).replace(
-//       /[۰-۹]/g,
-//       (d) => englishDigits[persianDigits.indexOf(d)]
-//     );
-
-//   const dateParts = toEnglish(appointment.date).split("/");
-//   const timeParts = toEnglish(appointment.time.split(" - ")[0]).split(":");
-
-//   const year = parseInt(dateParts[0]);
-//   const month = parseInt(dateParts[1]);
-//   const day = parseInt(dateParts[2]);
-//   const hours = parseInt(timeParts[0]);
-//   const minutes = parseInt(timeParts[1]);
-
-//   const appointmentMoment = moment(
-//     `${year}/${month}/${day} ${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`,
-//     "jYYYY/jMM/jDD HH:mm"
-//   );
-
-//   // ===== لاگ برای دیباگ =====
-//   console.log("نوبت:", appointment.date, appointment.time, appointment.status);
-//   console.log("تاریخ نوبت:", appointmentMoment.format("jYYYY/jMM/jDD HH:mm"));
-//   console.log("الان:", moment().format("jYYYY/jMM/jDD HH:mm"));
-//   console.log("گذشته؟", appointmentMoment.isBefore(moment()));
-//   console.log("---");
-
-//   return appointmentMoment.isBefore(moment());
-// };
-// ===== چک کردن آیا نوبت گذشته است =====
-// const isAppointmentPast = (appointment) => {
-//   // ===== نوبت‌های لغو شده یا انجام شده، کمرنگ نمیشن =====
-//   if (
-//     appointment.status === "completed" ||
-//     appointment.status === "cancelled"
-//   ) {
-//     return false;
-//   }
-
-//   // ===== تبدیل اعداد فارسی به انگلیسی =====
-//   const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
-//   const englishDigits = "0123456789";
-//   const toEnglish = (str) =>
-//     String(str).replace(
-//       /[۰-۹]/g,
-//       (d) => englishDigits[persianDigits.indexOf(d)]
-//     );
-
-//   // ===== دریافت تاریخ و ساعت شروع =====
-//   const dateParts = toEnglish(appointment.date).split("/");
-//   const timeParts = toEnglish(appointment.time.split(" - ")[0]).split(":");
-
-//   const year = parseInt(dateParts[0]);
-//   const month = parseInt(dateParts[1]);
-//   const day = parseInt(dateParts[2]);
-//   const hours = parseInt(timeParts[0]);
-//   const minutes = parseInt(timeParts[1]);
-
-//   // ===== ساخت تاریخ شمسی با moment =====
-//   const appointmentMoment = moment(
-//     `${year}/${month}/${day} ${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`,
-//     "jYYYY/jMM/jDD HH:mm"
-//   );
-
-//   // ===== بررسی معتبر بودن =====
-//   if (!appointmentMoment.isValid()) {
-//     console.warn("تاریخ نامعتبر:", appointment.date, appointment.time);
-//     return false;
-//   }
-
-//   // ===== مقایسه با الان =====
-//   return appointmentMoment.isBefore(moment());
-// };
-
-// ===== چک کردن آیا نوبت گذشته است =====
-// const isAppointmentPast = (appointment) => {
-//   // ===== نوبت‌های لغو شده یا انجام شده، همیشه "گذشته" حساب نمیشن =====
-//   if (
-//     appointment.status === "completed" ||
-//     appointment.status === "cancelled"
-//   ) {
-//     return false;
-//   }
-
-//   // ===== تبدیل تاریخ شمسی به میلادی =====
-//   const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
-//   const englishDigits = "0123456789";
-//   const toEnglish = (str) =>
-//     str?.replace(/[۰-۹]/g, (d) => englishDigits[persianDigits.indexOf(d)]) ||
-//     str;
-
-//   const [year, month, day] = toEnglish(appointment.date).split("/").map(Number);
-
-//   // ===== دریافت ساعت شروع =====
-//   const [startTime] = appointment.time.split(" - ");
-//   const [hours, minutes] = toEnglish(startTime).split(":").map(Number);
-
-//   // ===== ساخت تاریخ و ساعت نوبت =====
-//   const appointmentDate = moment(
-//     `${year}/${month}/${day} ${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`,
-//     "jYYYY/jMM/jDD HH:mm",
-//   ).toDate();
-
-//   // ===== مقایسه با الان =====
-//   const now = new Date();
-//   return appointmentDate < now;
-// };
-
 function NewAppointmentModal({ isOpen, onClose, onSuccess, appointments }) {
   const [step, setStep] = useState(1); // 1: انتخاب روانشناس | 2: انتخاب زمان | 3: تأیید
   const [selectedDoctor, setSelectedDoctor] = useState(null);
@@ -1578,7 +1208,6 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess, appointments }) {
       setStep(1);
       setSelectedDoctor(null);
       setSelectedDate(null);
-      // setSelectedTime(null);
       setSelectedTimes([]); // ← آرایه خالی
       setAppointmentType("individual");
       setWeekOffset(0); // ← ریست
@@ -1586,46 +1215,6 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess, appointments }) {
   }, [isOpen]);
 
   // ===== مدیریت کلیک روی ساعت =====
-  // const handleTimeClick = (time) => {
-  //   const isSelected = selectedTimes.includes(time);
-
-  //   if (isSelected) {
-  //     // اگه انتخاب شده بود، حذفش کن
-  //     // ولی فقط اگه با حذفش، بقیه هنوز پشت سر هم بمونن
-  //     const newTimes = selectedTimes.filter((t) => t !== time);
-  //     if (areTimesConsecutive(newTimes, selectedDoctor?.availableTimes || [])) {
-  //       setSelectedTimes(newTimes);
-  //     } else {
-  //       alert("با حذف این ساعت، ساعت‌های باقی‌مانده پشت سر هم نیستند.");
-  //     }
-  //   } else {
-  //     // اضافه کردن
-  //     if (
-  //       canAddTime(time, selectedTimes, selectedDoctor?.availableTimes || [])
-  //     ) {
-  //       setSelectedTimes(
-  //         [...selectedTimes, time].sort((a, b) => {
-  //           const indexA = getTimeIndex(
-  //             a,
-  //             selectedDoctor?.availableTimes || [],
-  //           );
-  //           const indexB = getTimeIndex(
-  //             b,
-  //             selectedDoctor?.availableTimes || [],
-  //           );
-  //           return indexA - indexB;
-  //         }),
-  //       );
-  //     } else {
-  //       if (selectedTimes.length >= 3) {
-  //         alert("حداکثر تا ۳ ساعت پشت سر هم را میتواند انتخاب کنید.");
-  //       } else {
-  //         alert("ساعت‌ها باید پشت سر هم باشند.");
-  //       }
-  //     }
-  //   }
-  // };
-
   const handleTimeClick = (time) => {
     const isSelected = selectedTimes.includes(time);
 
@@ -1659,31 +1248,6 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess, appointments }) {
   };
 
   // ===== محاسبه ساعت شروع و پایان =====
-  // const getFinalTimeRange = () => {
-  //   if (selectedTimes.length === 0) return null;
-
-  //   const sortedTimes = [...selectedTimes].sort((a, b) => {
-  //     const indexA = getTimeIndex(a, selectedDoctor?.availableTimes || []);
-  //     const indexB = getTimeIndex(b, selectedDoctor?.availableTimes || []);
-  //     return indexA - indexB;
-  //   });
-
-  //   const startTime = sortedTimes[0];
-  //   const lastTime = sortedTimes[sortedTimes.length - 1];
-
-  //   // محاسبه ساعت پایان (یک ساعت بعد از آخرین ساعت)
-  //   const lastTimeEnglish = toEnglishDigits(lastTime);
-  //   const [lastHours] = lastTimeEnglish.split(":").map(Number);
-  //   const endHour = (lastHours + 1) % 24;
-  //   const endTime = `${String(endHour).padStart(2, "0")}:۰۰`;
-
-  //   return {
-  //     start: startTime,
-  //     end: toPersianDigits(endTime),
-  //     count: selectedTimes.length,
-  //   };
-  // };
-
   const getFinalTimeRange = () => {
     if (selectedTimes.length === 0) return null;
 
@@ -1800,130 +1364,11 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess, appointments }) {
         )}
 
         {/* ===== مرحله ۲: انتخاب زمان ===== */}
-        {/* {step === 2 && (
-          <div className={styles.modalStep}>
-            <p className={styles.stepDescription}>
-              {selectedDoctor?.name} - روز و ساعت مورد نظر را انتخاب کنید:
-            </p>
-            <div className={styles.dateTimeSection}>
-              <div className={styles.dateGrid}>
-                {selectedDoctor?.availableDays?.map((day) => {
-                  const isDisabled = isDayPast(day);
-                  return (
-                    <button
-                      key={day}
-                      className={`${styles.dateBtn} ${
-                        selectedDate === day ? styles.selected : ""
-                      } ${isDisabled ? styles.disabled : ""}`}
-                      onClick={() => {
-                        if (!isDisabled) {
-                          setSelectedDate(day);
-                          setSelectedTimes([]);
-                          // if (selectedDate !== day) {
-                          //   setSelectedTimes([]);
-                          // }
-                          // setSelectedDate(day);
-                        }
-                      }}
-                      disabled={isDisabled}
-                    >
-                      <span className={styles.dateDay}>{day}</span>
-                      <span className={styles.dateNum}>
-                        {getDayOfMonthFromWeekDay(day)}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-
-              {selectedDate && (
-                <div className={styles.timeGrid}>
-  
-
-                  {selectedDoctor?.availableTimes?.map((time) => {
-                    const isPast = !isTimeSelectable(time, selectedDate);
-                    const isBooked = isTimeAlreadyBooked(
-                      appointments,
-                      selectedDate,
-                      time,
-                    );
-                    const isSelected = selectedTimes.includes(time);
-                    const isDisabled = isPast || isBooked;
-
-                    // ===== چک کردن اینکه آیا اضافه کردن این ساعت ممکنه =====
-                    const canBeAdded =
-                      !isDisabled && !isSelected && selectedTimes.length > 0
-                        ? canAddTime(
-                            time,
-                            selectedTimes,
-                            selectedDoctor?.availableTimes || [],
-                          )
-                        : true;
-
-                    return (
-                      <button
-                        key={time}
-                        className={`${styles.timeBtn} ${
-                          isSelected ? styles.selected : ""
-                        } ${isDisabled ? styles.disabled : ""} ${
-                          !canBeAdded && !isSelected && selectedTimes.length > 0
-                            ? styles.notConsecutive
-                            : ""
-                        }`}
-                        onClick={() => !isDisabled && handleTimeClick(time)}
-                        disabled={isDisabled}
-                      >
-                        {time}
-                        {isBooked && (
-                          <span className={styles.bookedLabel}>رزرو شده</span>
-                        )}
-                      </button>
-                    );
-                  })}
-
-                  <div className={styles.timeHint}>
-                    تا حداکثر ۳ ساعت <strong>پشت سر هم</strong> را می توانید
-                    انتخاب کنید.
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        )} */}
-
-        {/* ===== مرحله ۲: انتخاب زمان ===== */}
         {step === 2 && (
           <div className={styles.modalStep}>
             <p className={styles.stepDescription}>
               {selectedDoctor?.name} - روز و ساعت مورد نظر را انتخاب کنید:
             </p>
-
-            {/* ===== انتخاب هفته ===== */}
-            {/* <div className={styles.weekSelector}>
-              <button
-                className={styles.weekNavBtn}
-                onClick={() => setWeekOffset(weekOffset - 1)}
-                disabled={weekOffset === 0}
-              >
-                ← هفته قبل
-              </button>
-
-              <span className={styles.weekLabel}>
-                {weekOffset === 0 && "هفته جاری"}
-                {weekOffset === 1 && "هفته آینده"}
-                {weekOffset === 2 && "دو هفته آینده"}
-                {weekOffset === 3 && "سه هفته آینده"}
-                {weekOffset > 3 && `${toPersianDigits(weekOffset)} هفته آینده`}
-              </span>
-
-              <button
-                className={styles.weekNavBtn}
-                onClick={() => setWeekOffset(weekOffset + 1)}
-                disabled={weekOffset >= 4} // ← حداکثر ۴ هفته جلوتر
-              >
-                هفته بعد →
-              </button>
-            </div> */}
 
             {/* ===== انتخاب هفته ===== */}
             <div className={styles.weekSelector}>
@@ -2031,62 +1476,6 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess, appointments }) {
         )}
 
         {/* ===== مرحله ۳: تأیید نهایی ===== */}
-        {/* {step === 3 && (
-          <div className={styles.modalStep}>
-            <div className={styles.confirmBox}>
-              <div className={styles.confirmIcon}>
-                <img src={confirmIcon} alt="تأیید" />
-              </div>
-              <h3>اطلاعات نوبت شما</h3>
-              <div className={styles.confirmDetails}>
-                <div className={styles.confirmItem}>
-                  <span className={styles.confirmLabel}>روانشناس:</span>
-                  <span className={styles.confirmValue}>
-                    {selectedDoctor?.name}
-                  </span>
-                </div>
-                <div className={styles.confirmItem}>
-                  <span className={styles.confirmLabel}>تخصص:</span>
-                  <span className={styles.confirmValue}>
-                    {selectedDoctor?.specialty}
-                  </span>
-                </div>
-                <div className={styles.confirmItem}>
-                  <span className={styles.confirmLabel}>نوع جلسه:</span>
-                  <span className={styles.confirmValue}>
-                    {appointmentType === "individual" && "جلسه مشاوره فردی"}
-                    {appointmentType === "couple" && "جلسه زوج درمانی"}
-                    {appointmentType === "teen" && "جلسه مشاوره نوجوان"}
-                  </span>
-                </div>
-                <div className={styles.confirmItem}>
-                  <span className={styles.confirmLabel}>تاریخ:</span>
-                  <span className={styles.confirmValue}>
-                    {selectedDate} -{" "}
-                    {toPersianDigits(getDateFromWeekDay(selectedDate))}
-                  </span>
-                </div>
-                <div className={styles.confirmItem}>
-                  <span className={styles.confirmLabel}>ساعت:</span>
-                  <span className={styles.confirmValue}>
-                    {selectedTime && toPersianDigits(getEndTime(selectedTime))}
-                  </span>
-                </div>
-                <div className={styles.confirmItem}>
-                  <span className={styles.confirmLabel}>هزینه جلسه:</span>
-                  <span className={styles.confirmValuePrice}>
-                    {formatPrice(selectedDoctor?.pricePerHour)} تومان
-                  </span>
-                </div>
-              </div>
-              <p className={styles.confirmNote}>
-                پس از تأیید، پیامک تأیید نوبت برای شما ارسال خواهد شد.
-              </p>
-            </div>
-          </div>
-        )} */}
-
-        {/* ===== مرحله ۳: تأیید نهایی ===== */}
         {step === 3 && (
           <div className={styles.modalStep}>
             <div className={styles.confirmBox}>
@@ -2119,7 +1508,10 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess, appointments }) {
                   <span className={styles.confirmLabel}>تاریخ:</span>
                   <span className={styles.confirmValue}>
                     {selectedDate} -{" "}
-                    {toPersianDigits(getDateFromWeekDay(selectedDate))}
+                    {toPersianDigits(
+                      getDateFromWeekDay(selectedDate, weekOffset),
+                    )}{" "}
+                    {/* ← weekOffset اضافه شد */}
                   </span>
                 </div>
 
@@ -2186,80 +1578,6 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess, appointments }) {
               {step === 1 ? "انتخاب زمان" : "مرحله بعد"}
             </button>
           ) : (
-            // <button
-            //   className={styles.btnConfirm}
-            //   onClick={() => {
-            //     // ===== محاسبه تاریخ شمسی =====
-            //     const persianDate = getDateFromWeekDay(selectedDate);
-
-            //     // ===== محاسبه ساعت =====
-            //     const fullTime = getEndTime(selectedTime);
-
-            //     // ===== نام نوع جلسه =====
-            //     const typeNames = {
-            //       individual: "جلسه مشاوره فردی",
-            //       couple: "جلسه زوج درمانی",
-            //       teen: "جلسه مشاوره نوجوان",
-            //     };
-
-            //     // ===== ایجاد نوبت جدید =====
-            //     const newAppointment = {
-            //       id: Date.now(),
-            //       type: typeNames[appointmentType] || "جلسه مشاوره فردی",
-            //       doctor: selectedDoctor?.name,
-            //       doctorId: selectedDoctor?.id,
-            //       date: toPersianDigits(persianDate),
-            //       time: toPersianDigits(fullTime),
-            //       status: "pending",
-            //       isOnline: true,
-            //       cancelledBy: null,
-            //       cancelReason: null,
-            //       createdAt: toPersianDigits(moment().format("jYYYY/jMM/jDD")),
-            //       price: selectedDoctor?.pricePerHour,
-            //     };
-
-            //     onSuccess?.(newAppointment);
-            //     onClose();
-            //   }}
-            // >
-            //   تأیید و ثبت نوبت
-            // </button>
-            // <button
-            //   className={styles.btnConfirm}
-            //   onClick={() => {
-            //     const persianDate = getDateFromWeekDay(selectedDate);
-            //     const range = getFinalTimeRange();
-            //     const fullTime = `${range.start} - ${range.end}`;
-            //     const finalPrice = getFinalPrice();
-
-            //     const typeNames = {
-            //       individual: "جلسه مشاوره فردی",
-            //       couple: "جلسه زوج درمانی",
-            //       teen: "جلسه مشاوره نوجوان",
-            //     };
-
-            //     const newAppointment = {
-            //       id: Date.now(),
-            //       type: typeNames[appointmentType] || "جلسه مشاوره فردی",
-            //       doctor: selectedDoctor?.name,
-            //       doctorId: selectedDoctor?.id,
-            //       date: toPersianDigits(persianDate),
-            //       time: toPersianDigits(fullTime),
-            //       status: "pending",
-            //       isOnline: true,
-            //       cancelledBy: null,
-            //       cancelReason: null,
-            //       createdAt: toPersianDigits(moment().format("jYYYY/jMM/jDD")),
-            //       price: finalPrice,
-            //       duration: selectedTimes.length, // ← تعداد ساعت (اختیاری)
-            //     };
-
-            //     onSuccess?.(newAppointment);
-            //     onClose();
-            //   }}
-            // >
-            //   تأیید و ثبت نوبت
-            // </button>
             <button
               className={styles.btnConfirm}
               onClick={() => {
@@ -2880,7 +2198,6 @@ function NotificationDropdown({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
-  // const navigate = useNavigate();
 
   // ===== بستن دراپ‌داون با کلیک خارج =====
   useEffect(() => {
@@ -2914,80 +2231,7 @@ function NotificationDropdown({
       </button>
 
       {/* ===== دراپ‌داون ===== */}
-      {/* {isOpen && (
-        <div className={styles.dropdownMenu}>
-          <div className={styles.dropdownHeader}>
-            <span className={styles.dropdownTitle}>اعلان‌ها</span>
-            {unreadCount > 0 && (
-              <button
-                className={styles.dropdownMarkAll}
-                onClick={() => {
-                  onMarkAllAsRead();
-                  setIsOpen(false);
-                }}
-              >
-                همه را خوانده شد
-              </button>
-            )}
-          </div>
 
-          <div className={styles.dropdownList}>
-            {unreadNotifications.length > 0 ? (
-              unreadNotifications.map((notification) => (
-                <div
-                  key={notification.id}
-                  className={styles.dropdownItem}
-                  onClick={() => {
-                    onMarkAsRead(notification.id);
-                    setIsOpen(false);
-                    // هدایت به صفحه مربوطه
-                    if (notification.link) {
-                      navigate(notification.link);
-                    }
-                  }}
-                >
-                  <div className={styles.dropdownContent}>
-                    <div className={styles.dropdownText}>
-                      <span className={styles.dropdownTitleText}>
-                        {notification.title}
-                      </span>
-                      <span className={styles.dropdownTime}>
-                        {notification.time}
-                      </span>
-                    </div>
-                    <p className={styles.dropdownMessage}>
-                      {notification.message.length > 50
-                        ? notification.message.slice(0, 50) + "..."
-                        : notification.message}
-                    </p>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <div className={styles.dropdownEmpty}>
-                <p>همه اعلان‌ها را خوانده‌اید!</p>
-                <span className={styles.dropdownEmptySub}>
-                  هیچ اعلان جدیدی وجود ندارد
-                </span>
-              </div>
-            )}
-          </div>
-
-          {unreadCount > 5 && (
-            <div className={styles.dropdownFooter}>
-              <button
-                className={styles.dropdownViewAll}
-                onClick={() => {
-                  setIsOpen(false);
-                  setActiveTab("messages"); // هدایت به بخش پیام‌ها
-                }}
-              >
-                مشاهده همه اعلان‌ها ({unreadCount})
-              </button>
-            </div>
-          )}
-        </div>
-      )} */}
       {isOpen && (
         <div className={styles.dropdownMenu}>
           <div className={styles.dropdownHeader}>
@@ -3011,9 +2255,7 @@ function NotificationDropdown({
                   key={notification.id}
                   className={styles.dropdownItem}
                   onClick={() => {
-                    // ===== فقط علامت‌گذاری به عنوان خوانده شده =====
                     onMarkAsRead(notification.id);
-                    // ← navigate حذف شد
                   }}
                 >
                   <div className={styles.dropdownContent}>
@@ -3025,11 +2267,6 @@ function NotificationDropdown({
                         {notification.time}
                       </span>
                     </div>
-                    {/* <p className={styles.dropdownMessage}>
-                      {notification.message.length > 50
-                        ? notification.message.slice(0, 50) + "..."
-                        : notification.message}
-                    </p> */}
                     <p className={styles.dropdownMessage}>
                       {notification.message}
                     </p>
@@ -4139,7 +3376,6 @@ function SettingsContent() {
         <div className={styles.settingCard}>
           <div className={styles.settingHeader}>
             <div className={styles.settingInfo}>
-              {/* <span className={styles.settingIcon}>📅</span> */}
               <div>
                 <h4>یادآوری جلسات</h4>
                 <p>ارسال پیامک یادآوری قبل از جلسات</p>
@@ -4170,26 +3406,6 @@ function SettingsContent() {
                   >
                     پیامک
                   </button>
-                  {/* <button
-                    className={`${styles.methodBtn} ${
-                      notificationSettings.sessionReminder.method === "email"
-                        ? styles.active
-                        : ""
-                    }`}
-                    onClick={() => changeMethod("sessionReminder", "email")}
-                  >
-                    ایمیل
-                  </button> */}
-                  {/* <button
-                    className={`${styles.methodBtn} ${
-                      notificationSettings.sessionReminder.method === "both"
-                        ? styles.active
-                        : ""
-                    }`}
-                    onClick={() => changeMethod("sessionReminder", "both")}
-                  >
-                    📱✉️ هر دو
-                  </button> */}
                 </div>
               </div>
 
@@ -4219,7 +3435,6 @@ function SettingsContent() {
         <div className={styles.settingCard}>
           <div className={styles.settingHeader}>
             <div className={styles.settingInfo}>
-              {/* <span className={styles.settingIcon}>🧠</span> */}
               <div>
                 <h4>یادآوری تمارین</h4>
                 <p>یادآوری برای انجام تمارین روزانه</p>
@@ -4311,7 +3526,6 @@ function SettingsContent() {
         <div className={styles.settingCard}>
           <div className={styles.settingHeader}>
             <div className={styles.settingInfo}>
-              {/* <span className={styles.settingIcon}>📊</span> */}
               <div>
                 <h4>گزارش هفتگی</h4>
                 <p>دریافت گزارش پیشرفت هفتگی</p>
@@ -4419,19 +3633,6 @@ function SettingsContent() {
       <div className={styles.settingsSection}>
         <h3>امنیت</h3>
         <p className={styles.sectionDescription}>مدیریت رمز عبور و دسترسی‌ها</p>
-
-        {/* <div className={styles.settingCard}>
-          <div className={styles.settingHeader}>
-            <div className={styles.settingInfo}>
-              <span className={styles.settingIcon}>🔑</span>
-              <div>
-                <h4>تغییر رمز عبور</h4>
-                <p>رمز عبور خود را به‌روزرسانی کنید</p>
-              </div>
-            </div>
-            <button className={styles.actionBtn}>تغییر</button>
-          </div>
-        </div> */}
 
         <div className={styles.settingCard}>
           <div className={styles.settingHeader}>
