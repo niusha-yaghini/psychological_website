@@ -1849,7 +1849,7 @@
 
 /* ===== ساعت‌های انتخاب شده ===== */
 .timeBtn.selected {
-  background: linear-gradient(135deg, #2d7d6ee8, #4caf84e0);
+  background: linear-gradient(135deg, #2d7d6ed5, #4caf84cc);
   color: white;
   border-color: #2d7d6eb1;
   transform: scale(1.02);
@@ -1880,6 +1880,121 @@
   background: #fafafa;
   color: #ccc;
 } */
+
+/* version 1 */
+/* ===== Week Selector ===== */
+/* .weekSelector {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: var(--gray-light);
+  border-radius: var(--radius);
+  margin-bottom: 20px;
+  gap: 12px;
+} */
+
+/* .weekLabel {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-dark);
+  text-align: center;
+  flex: 1;
+} */
+
+/* .weekNavBtn {
+  padding: 8px 16px;
+  background: var(--white);
+  color: #2d7d6e;
+  border: 1.5px solid #2d7d6e;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+  white-space: nowrap;
+} */
+
+/* .weekNavBtn:hover:not(:disabled) {
+  background: #2d7d6e;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(45, 125, 110, 0.2);
+}
+
+.weekNavBtn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  border-color: #d5d0ca;
+  color: #b5b0aa;
+} */
+
+
+/* version 2 */
+
+/* ===== Week Selector (مینیمال) ===== */
+.weekSelector {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.weekNavBtn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: #2d7d6e;
+  border: 1.5px solid #e8e0d8;
+  border-radius: 50%;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  padding: 0;
+}
+
+.weekNavBtn:hover:not(:disabled) {
+  background: #2d7d6e;
+  color: white;
+  border-color: #2d7d6e;
+  transform: scale(1.1);
+}
+
+.weekNavBtn:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
+.weekLabel {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-dark);
+  min-width: 100px;
+  text-align: center;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 480px) {
+  .weekSelector {
+    padding: 10px 12px;
+  }
+
+  .weekLabel {
+    font-size: 13px;
+  }
+
+  .weekNavBtn {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
 
 /* ===== Confirm ===== */
 .confirmBox {

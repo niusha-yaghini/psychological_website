@@ -925,10 +925,8 @@ const WEEK_DAYS_ORDER = {
   جمعه: 6,
 };
 
-// ===== تبدیل روز هفته به تاریخ شمسی (بر اساس هفته جاری) =====
-const getDateFromWeekDay = (dayName) => {
-  // const weekDaysOrder =
-
+// ===== تبدیل روز هفته به تاریخ شمسی (با پشتیبانی از هفته) =====
+const getDateFromWeekDay = (dayName, weekOffset = 0) => {
   const todayJalali = moment().format("jYYYY/jMM/jDD");
   const [todayYear, todayMonth, todayDay] = toEnglishDigits(todayJalali)
     .split("/")
@@ -949,33 +947,99 @@ const getDateFromWeekDay = (dayName) => {
     .clone()
     .subtract(persianDayOfWeek, "days");
 
+  // ===== اضافه کردن هفته =====
+  const saturdayOfTargetWeek = saturdayOfThisWeek
+    .clone()
+    .add(weekOffset, "weeks");
+
   // ===== محاسبه تاریخ روز مورد نظر =====
-  // const targetDayOfWeek = weekDaysOrder[dayName];
   const targetDayOfWeek = WEEK_DAYS_ORDER[dayName];
-  const targetDate = saturdayOfThisWeek.clone().add(targetDayOfWeek, "days");
+  const targetDate = saturdayOfTargetWeek.clone().add(targetDayOfWeek, "days");
 
   return targetDate.format("jYYYY/jMM/jDD");
 };
 
+// ===== تبدیل روز هفته به تاریخ شمسی (بر اساس هفته جاری) =====
+// const getDateFromWeekDay = (dayNam, weekOffset = 0) => {
+//   // const weekDaysOrder =
+
+//   const todayJalali = moment().format("jYYYY/jMM/jDD");
+//   const [todayYear, todayMonth, todayDay] = toEnglishDigits(todayJalali)
+//     .split("/")
+//     .map(Number);
+
+//   const todayDate = moment(
+//     `${todayYear}/${todayMonth}/${todayDay}`,
+//     "jYYYY/jMM/jDD",
+//   );
+
+//   // ===== تبدیل روز هفته میلادی به ترتیب ایرانی =====
+//   const gregorianDayOfWeek = todayDate.day();
+//   const persianDayOfWeek =
+//     gregorianDayOfWeek === 6 ? 0 : gregorianDayOfWeek + 1;
+
+//   // ===== پیدا کردن شنبه این هفته =====
+//   const saturdayOfThisWeek = todayDate
+//     .clone()
+//     .subtract(persianDayOfWeek, "days");
+
+//   // ===== محاسبه تاریخ روز مورد نظر =====
+//   // const targetDayOfWeek = weekDaysOrder[dayName];
+//   const targetDayOfWeek = WEEK_DAYS_ORDER[dayName];
+//   const targetDate = saturdayOfThisWeek.clone().add(targetDayOfWeek, "days");
+
+//   return targetDate.format("jYYYY/jMM/jDD");
+// };
+
 // ===== گرفتن روز ماه از تاریخ شمسی =====
-const getDayOfMonthFromWeekDay = (dayName) => {
-  const fullDate = getDateFromWeekDay(dayName); // مثلا "۱۴۰۵/۰۶/۳۰"
+// const getDayOfMonthFromWeekDay = (dayName) => {
+//   const fullDate = getDateFromWeekDay(dayName); // مثلا "۱۴۰۵/۰۶/۳۰"
+//   const parts = toEnglishDigits(fullDate).split("/");
+//   return toPersianDigits(parts[2]); // روز ماه رو برمی‌گردونه
+// };
+
+// ===== گرفتن روز ماه از تاریخ شمسی =====
+const getDayOfMonthFromWeekDay = (dayName, weekOffset = 0) => {
+  const fullDate = getDateFromWeekDay(dayName, weekOffset);
   const parts = toEnglishDigits(fullDate).split("/");
-  return toPersianDigits(parts[2]); // روز ماه رو برمی‌گردونه
+  return toPersianDigits(parts[2]);
 };
 
 // ===== چک کردن آیا روز گذشته است (نه امروز) =====
-const isDayPast = (dayName) => {
-  // const weekDaysOrder = {
-  //   شنبه: 0,
-  //   یکشنبه: 1,
-  //   دوشنبه: 2,
-  //   سه‌شنبه: 3,
-  //   چهارشنبه: 4,
-  //   پنجشنبه: 5,
-  //   جمعه: 6,
-  // };
+// const isDayPast = (dayName) => {
+//   // const weekDaysOrder = {
+//   //   شنبه: 0,
+//   //   یکشنبه: 1,
+//   //   دوشنبه: 2,
+//   //   سه‌شنبه: 3,
+//   //   چهارشنبه: 4,
+//   //   پنجشنبه: 5,
+//   //   جمعه: 6,
+//   // };
 
+//   const todayJalali = moment().format("jYYYY/jMM/jDD");
+//   const [todayYear, todayMonth, todayDay] = toEnglishDigits(todayJalali)
+//     .split("/")
+//     .map(Number);
+
+//   const todayDate = moment(
+//     `${todayYear}/${todayMonth}/${todayDay}`,
+//     "jYYYY/jMM/jDD",
+//   );
+
+//   const gregorianDayOfWeek = todayDate.day();
+//   const persianDayOfWeek =
+//     gregorianDayOfWeek === 6 ? 0 : gregorianDayOfWeek + 1;
+
+//   // const targetDayOfWeek = weekDaysOrder[dayName];
+//   const targetDayOfWeek = WEEK_DAYS_ORDER[dayName];
+
+//   // فقط روزهای قبل از امروز غیرفعال میشن
+//   return targetDayOfWeek < persianDayOfWeek;
+// };
+
+// ===== چک کردن آیا روز گذشته است =====
+const isDayPast = (dayName, weekOffset = 0) => {
   const todayJalali = moment().format("jYYYY/jMM/jDD");
   const [todayYear, todayMonth, todayDay] = toEnglishDigits(todayJalali)
     .split("/")
@@ -990,23 +1054,49 @@ const isDayPast = (dayName) => {
   const persianDayOfWeek =
     gregorianDayOfWeek === 6 ? 0 : gregorianDayOfWeek + 1;
 
-  // const targetDayOfWeek = weekDaysOrder[dayName];
   const targetDayOfWeek = WEEK_DAYS_ORDER[dayName];
 
-  // فقط روزهای قبل از امروز غیرفعال میشن
+  // ===== اگه هفته آینده یا بعدتر بود، غیرفعال نمیشه =====
+  if (weekOffset > 0) return false;
+
+  // ===== هفته فعلی: فقط روزهای قبل غیرفعال =====
   return targetDayOfWeek < persianDayOfWeek;
 };
 
 // ===== چک کردن آیا یک ساعت قابل انتخاب است (حداقل ۱ ساعت فاصله) =====
-const isTimeSelectable = (timeString, dayName) => {
+// const isTimeSelectable = (timeString, dayName) => {
+//   const timeStart = toEnglishDigits(timeString);
+//   const [hours, minutes] = timeStart.split(":").map(Number);
+
+//   // ===== دریافت تاریخ امروز =====
+//   const now = moment();
+
+//   // ===== ساخت تاریخ و ساعت جلسه =====
+//   const targetDate = getDateFromWeekDay(dayName);
+//   const [targetYear, targetMonth, targetDay] = toEnglishDigits(targetDate)
+//     .split("/")
+//     .map(Number);
+
+//   const appointmentDateTime = moment(
+//     `${targetYear}/${targetMonth}/${targetDay} ${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`,
+//     "jYYYY/jMM/jDD HH:mm",
+//   );
+
+//   // ===== محاسبه اختلاف =====
+//   const diffMinutes = appointmentDateTime.diff(now, "minutes");
+
+//   // حداقل ۶۰ دقیقه فاصله لازمه
+//   return diffMinutes >= 60;
+// };
+
+// ===== چک کردن آیا یک ساعت قابل انتخاب است =====
+const isTimeSelectable = (timeString, dayName, weekOffset = 0) => {
   const timeStart = toEnglishDigits(timeString);
   const [hours, minutes] = timeStart.split(":").map(Number);
 
-  // ===== دریافت تاریخ امروز =====
   const now = moment();
+  const targetDate = getDateFromWeekDay(dayName, weekOffset);
 
-  // ===== ساخت تاریخ و ساعت جلسه =====
-  const targetDate = getDateFromWeekDay(dayName);
   const [targetYear, targetMonth, targetDay] = toEnglishDigits(targetDate)
     .split("/")
     .map(Number);
@@ -1016,10 +1106,7 @@ const isTimeSelectable = (timeString, dayName) => {
     "jYYYY/jMM/jDD HH:mm",
   );
 
-  // ===== محاسبه اختلاف =====
   const diffMinutes = appointmentDateTime.diff(now, "minutes");
-
-  // حداقل ۶۰ دقیقه فاصله لازمه
   return diffMinutes >= 60;
 };
 
@@ -1032,8 +1119,42 @@ const getEndTime = (startTime) => {
 };
 
 // ===== چک کردن آیا ساعت قبلاً رزرو شده =====
-const isTimeAlreadyBooked = (appointments, dayName, timeString) => {
-  const targetDate = getDateFromWeekDay(dayName);
+// const isTimeAlreadyBooked = (appointments, dayName, timeString) => {
+//   const targetDate = getDateFromWeekDay(dayName);
+//   const targetTime = toPersianDigits(timeString);
+
+//   return appointments.some((appointment) => {
+//     if (
+//       appointment.status !== "confirmed" &&
+//       appointment.status !== "pending"
+//     ) {
+//       return false;
+//     }
+
+//     if (appointment.date !== targetDate) return false;
+
+//     // ===== اگه hours داره، مستقیم چک کن =====
+//     if (appointment.hours && Array.isArray(appointment.hours)) {
+//       return appointment.hours.includes(targetTime);
+//     }
+
+//     // ===== fallback =====
+//     const [start, end] = appointment.time
+//       .split(" - ")
+//       .map((t) => toPersianDigits(t));
+
+//     return targetTime >= start && targetTime < end;
+//   });
+// };
+
+// ===== چک کردن آیا ساعت قبلاً رزرو شده =====
+const isTimeAlreadyBooked = (
+  appointments,
+  dayName,
+  timeString,
+  weekOffset = 0,
+) => {
+  const targetDate = getDateFromWeekDay(dayName, weekOffset);
   const targetTime = toPersianDigits(timeString);
 
   return appointments.some((appointment) => {
@@ -1046,12 +1167,10 @@ const isTimeAlreadyBooked = (appointments, dayName, timeString) => {
 
     if (appointment.date !== targetDate) return false;
 
-    // ===== اگه hours داره، مستقیم چک کن =====
     if (appointment.hours && Array.isArray(appointment.hours)) {
       return appointment.hours.includes(targetTime);
     }
 
-    // ===== fallback =====
     const [start, end] = appointment.time
       .split(" - ")
       .map((t) => toPersianDigits(t));
@@ -1161,6 +1280,7 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess, appointments }) {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTimes, setSelectedTimes] = useState([]);
   const [appointmentType, setAppointmentType] = useState("individual"); // individual | couple | teen
+  const [weekOffset, setWeekOffset] = useState(0); // ← جدید (0 = این هفته، 1 = هفته بعد، ...)
 
   const doctors = seedData.doctors;
 
@@ -1176,6 +1296,7 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess, appointments }) {
       // setSelectedTime(null);
       setSelectedTimes([]); // ← آرایه خالی
       setAppointmentType("individual");
+      setWeekOffset(0); // ← ریست
     }
   }, [isOpen]);
 
@@ -1394,13 +1515,12 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess, appointments }) {
         )}
 
         {/* ===== مرحله ۲: انتخاب زمان ===== */}
-        {step === 2 && (
+        {/* {step === 2 && (
           <div className={styles.modalStep}>
             <p className={styles.stepDescription}>
               {selectedDoctor?.name} - روز و ساعت مورد نظر را انتخاب کنید:
             </p>
             <div className={styles.dateTimeSection}>
-              {/* ===== انتخاب روز (فقط روزهای کاری دکتر) ===== */}
               <div className={styles.dateGrid}>
                 {selectedDoctor?.availableDays?.map((day) => {
                   const isDisabled = isDayPast(day);
@@ -1431,35 +1551,9 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess, appointments }) {
                 })}
               </div>
 
-              {/* ===== انتخاب ساعت (فقط ساعت‌های کاری دکتر) ===== */}
               {selectedDate && (
                 <div className={styles.timeGrid}>
-                  {/* {selectedDoctor?.availableTimes?.map((time) => {
-                    const isPast = !isTimeSelectable(time, selectedDate);
-                    const isBooked = isTimeAlreadyBooked(
-                      appointments,
-                      selectedDate,
-                      time,
-                    );
-                    const isSelected = selectedTimes.includes(time);
-                    const isDisabled = isPast || isBooked;
-                    return (
-                      <button
-                        key={time}
-                        className={`${styles.timeBtn} ${
-                          isSelected ? styles.selected : ""
-                        } ${isDisabled ? styles.disabled : ""}`}
-                        onClick={() => !isDisabled && handleTimeClick(time)}
-                        disabled={isDisabled}
-                        title={isBooked ? "این ساعت قبلاً رزرو شده است" : ""}
-                      >
-                        {time}
-                        {isBooked && (
-                          <span className={styles.bookedLabel}>رزرو شده</span>
-                        )}
-                      </button>
-                    );
-                  })} */}
+  
 
                   {selectedDoctor?.availableTimes?.map((time) => {
                     const isPast = !isTimeSelectable(time, selectedDate);
@@ -1502,10 +1596,148 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess, appointments }) {
                     );
                   })}
 
-                  {/* ===== راهنما ===== */}
                   <div className={styles.timeHint}>
                     تا حداکثر ۳ ساعت <strong>پشت سر هم</strong> را می توانید
                     انتخاب کنید.
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )} */}
+
+        {/* ===== مرحله ۲: انتخاب زمان ===== */}
+        {step === 2 && (
+          <div className={styles.modalStep}>
+            <p className={styles.stepDescription}>
+              {selectedDoctor?.name} - روز و ساعت مورد نظر را انتخاب کنید:
+            </p>
+
+            {/* ===== انتخاب هفته ===== */}
+            {/* <div className={styles.weekSelector}>
+              <button
+                className={styles.weekNavBtn}
+                onClick={() => setWeekOffset(weekOffset - 1)}
+                disabled={weekOffset === 0}
+              >
+                ← هفته قبل
+              </button>
+
+              <span className={styles.weekLabel}>
+                {weekOffset === 0 && "هفته جاری"}
+                {weekOffset === 1 && "هفته آینده"}
+                {weekOffset === 2 && "دو هفته آینده"}
+                {weekOffset === 3 && "سه هفته آینده"}
+                {weekOffset > 3 && `${toPersianDigits(weekOffset)} هفته آینده`}
+              </span>
+
+              <button
+                className={styles.weekNavBtn}
+                onClick={() => setWeekOffset(weekOffset + 1)}
+                disabled={weekOffset >= 4} // ← حداکثر ۴ هفته جلوتر
+              >
+                هفته بعد →
+              </button>
+            </div> */}
+
+            {/* ===== انتخاب هفته ===== */}
+            <div className={styles.weekSelector}>
+              <button
+                className={styles.weekNavBtn}
+                onClick={() => setWeekOffset(weekOffset - 1)}
+                disabled={weekOffset === 0}
+                title="هفته قبل"
+              >
+                →
+              </button>
+
+              <span className={styles.weekLabel}>
+                {weekOffset === 0 && "هفته جاری"}
+                {weekOffset === 1 && "هفته آینده"}
+                {weekOffset === 2 && "۲ هفته آینده"}
+                {weekOffset === 3 && "۳ هفته آینده"}
+                {weekOffset > 3 && `${toPersianDigits(weekOffset)} هفته آینده`}
+              </span>
+
+              <button
+                className={styles.weekNavBtn}
+                onClick={() => setWeekOffset(weekOffset + 1)}
+                disabled={weekOffset >= 4}
+                title="هفته بعد"
+              >
+                                ←
+              </button>
+            </div>
+
+            <div className={styles.dateTimeSection}>
+              {/* ===== انتخاب روز ===== */}
+              <div className={styles.dateGrid}>
+                {sortedAvailableDays.map((day) => {
+                  const isDisabled = isDayPast(day, weekOffset);
+                  return (
+                    <button
+                      key={day}
+                      className={`${styles.dateBtn} ${
+                        selectedDate === day ? styles.selected : ""
+                      } ${isDisabled ? styles.disabled : ""}`}
+                      onClick={() => {
+                        if (!isDisabled) {
+                          if (selectedDate !== day) {
+                            setSelectedTimes([]);
+                          }
+                          setSelectedDate(day);
+                        }
+                      }}
+                      disabled={isDisabled}
+                    >
+                      <span className={styles.dateDay}>{day}</span>
+                      <span className={styles.dateNum}>
+                        {getDayOfMonthFromWeekDay(day, weekOffset)}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* ===== انتخاب ساعت ===== */}
+              {selectedDate && (
+                <div className={styles.timeGrid}>
+                  {selectedDoctor?.availableTimes?.map((time) => {
+                    const isPast = !isTimeSelectable(
+                      time,
+                      selectedDate,
+                      weekOffset,
+                    );
+                    const isBooked = isTimeAlreadyBooked(
+                      appointments,
+                      selectedDate,
+                      time,
+                      weekOffset,
+                    );
+                    const isSelected = selectedTimes.includes(time);
+                    const isDisabled = isPast || isBooked;
+
+                    return (
+                      <button
+                        key={time}
+                        className={`${styles.timeBtn} ${
+                          isSelected ? styles.selected : ""
+                        } ${isDisabled ? styles.disabled : ""}`}
+                        onClick={() => !isDisabled && handleTimeClick(time)}
+                        disabled={isDisabled}
+                        title={isBooked ? "این ساعت قبلاً رزرو شده است" : ""}
+                      >
+                        {time}
+                        {isBooked && (
+                          <span className={styles.bookedLabel}>رزرو شده</span>
+                        )}
+                      </button>
+                    );
+                  })}
+
+                  <div className={styles.timeHint}>
+                    حداکثر ۳ ساعت <strong>پشت سر هم</strong> را میتوانید انتخاب
+                    کنید.
                   </div>
                 </div>
               )}
@@ -1746,7 +1978,10 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess, appointments }) {
             <button
               className={styles.btnConfirm}
               onClick={() => {
-                const persianDate = getDateFromWeekDay(selectedDate);
+                const persianDate = getDateFromWeekDay(
+                  selectedDate,
+                  weekOffset,
+                );
                 const range = getFinalTimeRange();
                 const fullTime = `${range.start} - ${range.end}`;
                 const finalPrice = getFinalPrice();
