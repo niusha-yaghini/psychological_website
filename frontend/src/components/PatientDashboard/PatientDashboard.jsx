@@ -18,9 +18,11 @@ import {
 } from "react-icons/fa";
 
 import moment from "moment-jalaali";
+moment.loadPersian({ usePersianDigits: true });
 
 import logo from "../../../public/images/logo/logo2.png";
 import userAvatar from "../../../public/images/Patient_Panel/usericon.png";
+import confirmIcon from "../../../public/images/Patient_Panel/confirm_icon.png";
 
 function PatientDashboard() {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -448,10 +450,7 @@ function DashboardContent({ userData }) {
 // ============================================
 // COMPONENT: Appointments Content
 // ============================================
-// moment.loadPersian();
-// import moment from "moment-jalaali";
-
-moment.loadPersian({ usePersianDigits: false });
+// moment.loadPersian({ usePersianDigits: false });
 
 function AppointmentsContent() {
   // =============================================
@@ -832,7 +831,6 @@ function AppointmentsContent() {
             &nbsp;
             <span className={styles.filterCount}>
               {
-                // appointments.filter((item) =>
                 sortedAppointments.filter((item) =>
                   filter.id === "all" ? true : item.status === filter.id,
                 ).length
@@ -1024,6 +1022,71 @@ function AppointmentsContent() {
 // ============================================
 // COMPONENT: New Appointment Modal
 // ============================================
+
+// توابع کمکی (Helper Functions)
+
+// ===== تبدیل اعداد فارسی به انگلیسی =====
+const toEnglishDigits = (str) => {
+  if (!str) return str;
+  const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
+  const englishDigits = "0123456789";
+  return String(str).replace(
+    /[۰-۹]/g,
+    (d) => englishDigits[persianDigits.indexOf(d)],
+  );
+};
+
+// ===== تبدیل اعداد انگلیسی به فارسی =====
+const toPersianDigits = (str) => {
+  if (!str) return str;
+  const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
+  const englishDigits = "0123456789";
+  return String(str).replace(
+    /[0-9]/g,
+    (d) => persianDigits[englishDigits.indexOf(d)],
+  );
+};
+
+// ===== تبدیل روز هفته به تاریخ شمسی =====
+const getDateFromWeekDay = (dayName) => {
+  const weekDays = {
+    شنبه: 6,
+    یکشنبه: 0,
+    دوشنبه: 1,
+    سه‌شنبه: 2,
+    چهارشنبه: 3,
+    پنجشنبه: 4,
+    جمعه: 5,
+  };
+
+  const todayJalali = moment().format("jYYYY/jMM/jDD");
+  const [todayYear, todayMonth, todayDay] = toEnglishDigits(todayJalali)
+    .split("/")
+    .map(Number);
+
+  const todayDate = moment(
+    `${todayYear}/${todayMonth}/${todayDay}`,
+    "jYYYY/jMM/jDD",
+  );
+
+  const targetDayOfWeek = weekDays[dayName];
+  const currentDayOfWeek = todayDate.day();
+
+  let daysToAdd = targetDayOfWeek - currentDayOfWeek;
+  if (daysToAdd <= 0) daysToAdd += 7;
+
+  const appointmentDate = todayDate.clone().add(daysToAdd, "days");
+  return appointmentDate.format("jYYYY/jMM/jDD");
+};
+
+// ===== محاسبه ساعت پایان =====
+const getEndTime = (startTime) => {
+  const timeStart = toEnglishDigits(startTime);
+  const [hours] = timeStart.split(":").map(Number);
+  const endHour = (hours + 1) % 24;
+  return `${String(hours).padStart(2, "0")}:۰۰ - ${String(endHour).padStart(2, "0")}:۰۰`;
+};
+
 function NewAppointmentModal({ isOpen, onClose, onSuccess }) {
   const [step, setStep] = useState(1); // 1: انتخاب روانشناس | 2: انتخاب زمان | 3: تأیید
   const [selectedDoctor, setSelectedDoctor] = useState(null);
@@ -1201,10 +1264,12 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess }) {
         )}
 
         {/* ===== مرحله ۳: تأیید نهایی ===== */}
-        {step === 3 && (
+        {/* {step === 3 && (
           <div className={styles.modalStep}>
             <div className={styles.confirmBox}>
-              <div className={styles.confirmIcon}>✅</div>
+              <div className={styles.confirmIcon}>
+                <img src={confirmIcon} alt="تأیید" />
+              </div>
               <h3>اطلاعات نوبت شما</h3>
               <div className={styles.confirmDetails}>
                 <div className={styles.confirmItem}>
@@ -1226,6 +1291,55 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess }) {
                 <div className={styles.confirmItem}>
                   <span className={styles.confirmLabel}>ساعت:</span>
                   <span className={styles.confirmValue}>{selectedTime}</span>
+                </div>
+              </div>
+              <p className={styles.confirmNote}>
+                پس از تأیید، پیامک تأیید نوبت برای شما ارسال خواهد شد.
+              </p>
+            </div>
+          </div>
+        )} */}
+        {/* ===== مرحله ۳: تأیید نهایی ===== */}
+        {step === 3 && (
+          <div className={styles.modalStep}>
+            <div className={styles.confirmBox}>
+              <div className={styles.confirmIcon}>
+                <img src={confirmIcon} alt="تأیید" />
+              </div>
+              <h3>اطلاعات نوبت شما</h3>
+              <div className={styles.confirmDetails}>
+                <div className={styles.confirmItem}>
+                  <span className={styles.confirmLabel}>روانشناس:</span>
+                  <span className={styles.confirmValue}>
+                    {selectedDoctor?.name}
+                  </span>
+                </div>
+                <div className={styles.confirmItem}>
+                  <span className={styles.confirmLabel}>تخصص:</span>
+                  <span className={styles.confirmValue}>
+                    {selectedDoctor?.specialty}
+                  </span>
+                </div>
+                <div className={styles.confirmItem}>
+                  <span className={styles.confirmLabel}>نوع جلسه:</span>
+                  <span className={styles.confirmValue}>
+                    {appointmentType === "individual" && "جلسه مشاوره فردی"}
+                    {appointmentType === "couple" && "جلسه زوج درمانی"}
+                    {appointmentType === "teen" && "جلسه مشاوره نوجوان"}
+                  </span>
+                </div>
+                <div className={styles.confirmItem}>
+                  <span className={styles.confirmLabel}>تاریخ:</span>
+                  <span className={styles.confirmValue}>
+                    {selectedDate} -{" "}
+                    {toPersianDigits(getDateFromWeekDay(selectedDate))}
+                  </span>
+                </div>
+                <div className={styles.confirmItem}>
+                  <span className={styles.confirmLabel}>ساعت:</span>
+                  <span className={styles.confirmValue}>
+                    {selectedTime && toPersianDigits(getEndTime(selectedTime))}
+                  </span>
                 </div>
               </div>
               <p className={styles.confirmNote}>
@@ -1266,23 +1380,130 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess }) {
             <button
               className={styles.btnConfirm}
               onClick={() => {
-                // ذخیره نوبت
+                // ===== محاسبه تاریخ شمسی =====
+                const persianDate = getDateFromWeekDay(selectedDate);
+
+                // ===== محاسبه ساعت =====
+                const fullTime = getEndTime(selectedTime);
+
+                // ===== نام نوع جلسه =====
+                const typeNames = {
+                  individual: "جلسه مشاوره فردی",
+                  couple: "جلسه زوج درمانی",
+                  teen: "جلسه مشاوره نوجوان",
+                };
+
+                // ===== ایجاد نوبت جدید =====
                 const newAppointment = {
                   id: Date.now(),
+                  type: typeNames[appointmentType] || "جلسه مشاوره فردی",
                   doctor: selectedDoctor?.name,
                   doctorId: selectedDoctor?.id,
-                  date: selectedDate,
-                  time: selectedTime,
+                  date: toPersianDigits(persianDate),
+                  time: toPersianDigits(fullTime),
                   status: "pending",
+                  isOnline: true,
+                  cancelledBy: null,
+                  cancelReason: null,
+                  createdAt: toPersianDigits(moment().format("jYYYY/jMM/jDD")),
                 };
-                // اضافه کردن به لیست نوبت‌ها
-                // ...
+
                 onSuccess?.(newAppointment);
                 onClose();
               }}
             >
               تأیید و ثبت نوبت
             </button>
+            // <button
+            //   className={styles.btnConfirm}
+            //   onClick={() => {
+            //     // ===== تبدیل اعداد فارسی به انگلیسی برای محاسبه =====
+            //     const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
+            //     const englishDigits = "0123456789";
+            //     const toEnglish = (str) =>
+            //       str?.replace(
+            //         /[۰-۹]/g,
+            //         (d) => englishDigits[persianDigits.indexOf(d)],
+            //       ) || str;
+
+            //     // ===== تبدیل اعداد انگلیسی به فارسی برای نمایش =====
+            //     const toPersian = (str) =>
+            //       String(str).replace(
+            //         /[0-9]/g,
+            //         (d) => persianDigits[englishDigits.indexOf(d)],
+            //       );
+
+            //     // ===== محاسبه تاریخ بر اساس روز هفته =====
+            //     const weekDays = {
+            //       شنبه: 6,
+            //       یکشنبه: 0,
+            //       دوشنبه: 1,
+            //       سه‌شنبه: 2,
+            //       چهارشنبه: 3,
+            //       پنجشنبه: 4,
+            //       جمعه: 5,
+            //     };
+
+            //     // دریافت تاریخ امروز شمسی
+            //     const todayJalali = moment().format("jYYYY/jMM/jDD");
+            //     const [todayYear, todayMonth, todayDay] = toEnglish(todayJalali)
+            //       .split("/")
+            //       .map(Number);
+
+            //     const todayDate = moment(
+            //       `${todayYear}/${todayMonth}/${todayDay}`,
+            //       "jYYYY/jMM/jDD",
+            //     );
+
+            //     // محاسبه تعداد روز تا روز هفته مورد نظر
+            //     const targetDayOfWeek = weekDays[selectedDate];
+            //     const currentDayOfWeek = todayDate.day();
+
+            //     let daysToAdd = targetDayOfWeek - currentDayOfWeek;
+            //     if (daysToAdd <= 0) daysToAdd += 7;
+
+            //     // تاریخ جدید شمسی
+            //     const appointmentDate = todayDate
+            //       .clone()
+            //       .add(daysToAdd, "days");
+            //     const persianDate = appointmentDate.format("jYYYY/jMM/jDD");
+
+            //     // ===== تبدیل ساعت =====
+            //     const timeStart = toEnglish(selectedTime);
+            //     const [hours] = timeStart.split(":").map(Number);
+
+            //     const endHour = (hours + 1) % 24;
+            //     const startHourStr = String(hours).padStart(2, "0");
+            //     const endHourStr = String(endHour).padStart(2, "0");
+
+            //     // ===== نام نوع جلسه =====
+            //     const typeNames = {
+            //       individual: "جلسه مشاوره فردی",
+            //       couple: "جلسه زوج درمانی",
+            //       teen: "جلسه مشاوره نوجوان",
+            //     };
+
+            //     // ===== ایجاد نوبت جدید با اعداد فارسی =====
+            //     const newAppointment = {
+            //       id: Date.now(),
+            //       type: typeNames[appointmentType] || "جلسه مشاوره فردی",
+            //       doctor: selectedDoctor?.name,
+            //       doctorId: selectedDoctor?.id,
+            //       date: toPersian(persianDate), // ✅ تاریخ با اعداد فارسی
+            //       time: `${toPersian(startHourStr)}:۰۰ - ${toPersian(endHourStr)}:۰۰`, // ✅ ساعت با اعداد فارسی
+            //       status: "pending",
+            //       isOnline: true,
+            //       cancelledBy: null,
+            //       cancelReason: null,
+            //       createdAt: toPersian(moment().format("jYYYY/jMM/jDD")), // ✅ تاریخ ایجاد با اعداد فارسی
+            //     };
+
+            //     onSuccess?.(newAppointment);
+            //     onClose();
+            //   }}
+            // >
+            //   تأیید و ثبت نوبت
+            // </button>
           )}
         </div>
       </div>
@@ -1921,8 +2142,7 @@ function MessagesContent() {
           }`}
           onClick={() => setFilter("all")}
         >
-          همه
-           &nbsp;
+          همه &nbsp;
           <span className={styles.filterCount}>{notifications.length}</span>
         </button>
         <button
@@ -1931,8 +2151,7 @@ function MessagesContent() {
           }`}
           onClick={() => setFilter("unread")}
         >
-          خوانده نشده
-           &nbsp;
+          خوانده نشده &nbsp;
           {unreadCount > 0 && (
             <span className={styles.filterCount}>{unreadCount}</span>
           )}
@@ -1943,8 +2162,7 @@ function MessagesContent() {
           }`}
           onClick={() => setFilter("read")}
         >
-          خوانده شده
-           &nbsp;
+          خوانده شده &nbsp;
           <span className={styles.filterCount}>
             {notifications.filter((n) => n.isRead).length}
           </span>
@@ -1989,7 +2207,7 @@ function MessagesContent() {
                     {notification.message}
                   </p>
                   {/* <div className={styles.notificationFooter}> */}
-                    {/* <button
+                  {/* <button
                       className={styles.notificationAction}
                       onClick={(e) => {
                         e.stopPropagation();
@@ -2000,7 +2218,7 @@ function MessagesContent() {
                       {notification.action}
                       <span>→</span>
                     </button> */}
-                    {/* <button
+                  {/* <button
                       className={styles.notificationDelete}
                       onClick={(e) => {
                         e.stopPropagation();
@@ -2737,8 +2955,7 @@ function ExerciseContent() {
             }`}
             onClick={() => setFilter("all")}
           >
-            همه
-             &nbsp;
+            همه &nbsp;
             <span className={styles.filterCount}>{exercises.length}</span>
           </button>
           <button
@@ -2747,8 +2964,7 @@ function ExerciseContent() {
             }`}
             onClick={() => setFilter("daily")}
           >
-            🌙 روزانه
-             &nbsp;
+            🌙 روزانه &nbsp;
             <span className={styles.filterCount}>
               {exercises.filter((ex) => ex.type === "daily").length}
             </span>
@@ -2759,8 +2975,7 @@ function ExerciseContent() {
             }`}
             onClick={() => setFilter("weekly")}
           >
-            📅 هفتگی
-             &nbsp;
+            📅 هفتگی &nbsp;
             <span className={styles.filterCount}>
               {exercises.filter((ex) => ex.type === "weekly").length}
             </span>
@@ -2771,8 +2986,7 @@ function ExerciseContent() {
             }`}
             onClick={() => setFilter("one-time")}
           >
-            ⭐ یک‌باره
-             &nbsp;
+            ⭐ یک‌باره &nbsp;
             <span className={styles.filterCount}>
               {exercises.filter((ex) => ex.type === "one-time").length}
             </span>
@@ -3658,16 +3872,6 @@ function SettingsContent() {
                   >
                     پیامک
                   </button>
-                  {/* <button
-                    className={`${styles.methodBtn} ${
-                      notificationSettings.exerciseReminder.method === "email"
-                        ? styles.active
-                        : ""
-                    }`}
-                    onClick={() => changeMethod("exerciseReminder", "email")}
-                  >
-                    ایمیل
-                  </button> */}
                 </div>
               </div>
             </div>
@@ -3799,35 +4003,9 @@ function SettingsContent() {
           </div>
         </div>
 
-        {/* <div className={styles.settingCard}>
-          <div className={styles.settingHeader}>
-            <div className={styles.settingInfo}>
-              <span className={styles.settingIcon}>👁️</span>
-              <div>
-                <h4>نمایش اعلان‌های خوانده شده</h4>
-                <p>نمایش اعلان‌های قدیمی در لیست</p>
-              </div>
-            </div>
-            <label className={styles.switch}>
-              <input
-                type="checkbox"
-                checked={displaySettings.showReadNotifications}
-                onChange={() =>
-                  setDisplaySettings((prev) => ({
-                    ...prev,
-                    showReadNotifications: !prev.showReadNotifications,
-                  }))
-                }
-              />
-              <span className={styles.switchSlider}></span>
-            </label>
-          </div>
-        </div> */}
-
         <div className={styles.settingCard}>
           <div className={styles.settingHeader}>
             <div className={styles.settingInfo}>
-              {/* <span className={styles.settingIcon}>🌐</span> */}
               <div>
                 <h4>زبان برنامه</h4>
                 <p>انتخاب زبان نمایشی</p>
@@ -3859,64 +4037,6 @@ function SettingsContent() {
         </div>
       </div>
 
-      {/* ===== بخش حریم خصوصی ===== */}
-      {/* <div className={styles.settingsSection}>
-        <h3>🔒 حریم خصوصی</h3>
-        <p className={styles.sectionDescription}>
-          مدیریت دسترسی و اشتراک‌گذاری اطلاعات
-        </p>
-
-        <div className={styles.settingCard}>
-          <div className={styles.settingHeader}>
-            <div className={styles.settingInfo}>
-              <span className={styles.settingIcon}>🏥</span>
-              <div>
-                <h4>اشتراک اطلاعات پزشکی</h4>
-                <p>اجازه دسترسی روانشناس به اطلاعات پزشکی</p>
-              </div>
-            </div>
-            <label className={styles.switch}>
-              <input
-                type="checkbox"
-                checked={privacySettings.shareMedicalInfo}
-                onChange={() =>
-                  setPrivacySettings((prev) => ({
-                    ...prev,
-                    shareMedicalInfo: !prev.shareMedicalInfo,
-                  }))
-                }
-              />
-              <span className={styles.switchSlider}></span>
-            </label>
-          </div>
-        </div>
-
-        <div className={styles.settingCard}>
-          <div className={styles.settingHeader}>
-            <div className={styles.settingInfo}>
-              <span className={styles.settingIcon}>📈</span>
-              <div>
-                <h4>اشتراک پیشرفت درمانی</h4>
-                <p>به اشتراک‌گذاری پیشرفت با روانشناس</p>
-              </div>
-            </div>
-            <label className={styles.switch}>
-              <input
-                type="checkbox"
-                checked={privacySettings.shareProgress}
-                onChange={() =>
-                  setPrivacySettings((prev) => ({
-                    ...prev,
-                    shareProgress: !prev.shareProgress,
-                  }))
-                }
-              />
-              <span className={styles.switchSlider}></span>
-            </label>
-          </div>
-        </div>
-      </div> */}
-
       {/* ===== بخش امنیت ===== */}
       <div className={styles.settingsSection}>
         <h3>امنیت</h3>
@@ -3938,7 +4058,6 @@ function SettingsContent() {
         <div className={styles.settingCard}>
           <div className={styles.settingHeader}>
             <div className={styles.settingInfo}>
-              {/* <span className={styles.settingIcon}>📱</span> */}
               <div>
                 <h4>تغییر شماره موبایل</h4>
                 <p>شماره موبایل خود را تغییر دهید</p>

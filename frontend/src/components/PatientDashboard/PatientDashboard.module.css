@@ -1480,6 +1480,7 @@
   max-height: 90vh;
   overflow-y: auto;
   padding: 32px;
+  /* padding-top: 32p; */
   animation: modalSlideUp 0.4s ease;
 }
 
@@ -1742,12 +1743,20 @@
 /* ===== Confirm ===== */
 .confirmBox {
   text-align: center;
-  padding: 24px;
+  /* padding: 24px; */
+  padding-top: 24px;
+  padding-bottom: 24px;
 }
 
 .confirmIcon {
-  font-size: 56px;
-  margin-bottom: 12px;
+  /* font-size: 56px; */
+  margin-bottom: 15px;
+}
+
+.confirmIcon img {
+  width: 50px;
+  /* height: 100%; */
+  /* object-fit: contain; */
 }
 
 .confirmBox h3 {
@@ -1793,9 +1802,9 @@
   display: flex;
   justify-content: space-between;
   gap: 12px;
-  margin-top: 24px;
-  padding-top: 20px;
-  border-top: 1px solid var(--gray-light);
+  margin-top: 8px;
+  /* padding-top: 5px; */
+  /* border-top: 1px solid var(--gray-light); */
 }
 
 .btnPrev {
@@ -2054,7 +2063,6 @@
   align-items: center;
   padding: 12px 0;
   border-top: 1px solid var(--gray-light);
-  /* border-bottom: 1px solid var(--gray-light); */
   margin-bottom: 16px;
   flex-wrap: wrap;
   gap: 12px;
@@ -2135,8 +2143,6 @@
   gap: 6px;
   padding: 8px 24px;
   background: linear-gradient(135deg, #2d7d6ee7, #4caf84df);
-  /* background: linear-gradient(135deg, #1b3a5ccf, #2d7d6ed4); */
-
   color: white;
   border: none;
   border-radius: 30px;
@@ -2335,11 +2341,8 @@
 /* ===== Next Session Banner ===== */
 .nextSessionBanner {
   background: linear-gradient(135deg, #1b3a5ccf, #2d7d6ed4);
-  /* background: linear-gradient(135deg, rgba(103, 110, 97, 1), rgba(152, 161, 143, 1)); */
-
   border-radius: var(--radius-lg);
   padding: 28px 32px;
-  /* margin-top: 24px; */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -2381,7 +2384,6 @@
 
 .nextSessionTimerEnterContainer {
   text-align: left;
-  /* text-align: center; */
 }
 
 .btnNextSession {
@@ -2570,7 +2572,6 @@
 /* ============================================
    NOTIFICATIONS CONTENT
 ============================================ */
-
 /* ===== Notification Actions ===== */
 .notificationActions {
   display: flex;
@@ -2900,15 +2901,19 @@
 
 /* ===== Dropdown Menu ===== */
 .dropdownMenu {
-  position: absolute;
-  top: calc(100% + 12px);
-  left: -280px;
+  /* position: absolute; */
+  /* top: calc(100% + 12px); */
+  position: fixed;
+  top: 11%;
+  /* left: -280px; */
+  left: 1%;
   width: 380px;
   max-height: 480px;
   background: var(--white);
-  border-radius: var(--radius);
+  /* border-radius: var(--radius); */
+  border-radius: 8px;
   box-shadow: var(--shadow-lg);
-  border: 1px solid rgba(0, 0, 0, 0.04);
+  border: 2px solid rgba(0, 0, 0, 0.08);
   overflow: hidden;
   animation: dropdownSlideDown 0.25s ease;
   z-index: 1000;

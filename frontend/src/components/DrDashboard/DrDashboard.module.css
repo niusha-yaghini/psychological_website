@@ -381,17 +381,12 @@
 .mainColumn {
   display: flex;
   flex-direction: column;
-  /* gap: 24px; */
-  /* height: 100vh; */
 }
 
 /* ===== ستون چپ (ساید) ===== */
 .pendingColumn {
   display: flex;
   flex-direction: column;
-  /* gap: 24px; */
-  /* height: 100vh; */
-  /* height: 100vh; */
 }
 
 .sectionCard {
@@ -443,38 +438,6 @@
   margin: 0;
   color: #ffffffb6;
 }
-
-/* .welcomeImage {
-  font-size: 64px;
-  animation: float 3s ease-in-out infinite;
-} */
-
-/* .welcomeBanner {
-  background: linear-gradient(135deg, #1b3a5c, #2d7d6e);
-  border-radius: var(--radius-lg);
-  padding: 32px 40px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 32px;
-  color: white;
-}
-
-.welcomeText h2 {
-  font-size: 28px;
-  font-weight: 700;
-  margin: 0;
-}
-
-.welcomeText p {
-  font-size: 16px;
-  opacity: 0.8;
-  margin: 4px 0 0;
-}
-
-.welcomeImage {
-  font-size: 64px;
-} */
 
 .statsGrid {
   display: grid;
@@ -599,44 +562,6 @@
   align-items: start;
 }
 
-/* .sectionHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 16px;
-} */
-
-/* .sectionCount {
-  min-width: 28px;
-  height: 28px;
-  padding: 0 8px;
-  border-radius: 14px;
-  background: #fff3e0;
-  color: #f57c00;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  font-weight: 600;
-} */
-
-/* .pendingSessions {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.pendingSessionCard {
-  padding: 14px;
-  border: 1px solid #eee;
-  border-radius: 12px;
-  background: #fff;
-} */
-
-.sectionCard {
-  /* height: 100vh; */
-}
-
 .sectionHeader {
   display: flex;
   align-items: center;
@@ -676,21 +601,10 @@
   gap: 12px;
 }
 
-/* .pendingSessionCard {
-  padding: 14px;
-  border: 1px solid #eee;
-  border-radius: 12px;
-  background: #fff;
-} */
-
 .pendingSessionCard {
   padding: 14px 16px;
-  /* background: var(--gray-light); */
-  
   background: rgba(201, 184, 143, 0.116);
   border-radius: var(--radius);
-  /* border-right: 4px solid #ff9800; */
-  
   border-right: 4px solid rgb(201, 185, 143);
   transition: var(--transition);
 }
@@ -1057,26 +971,6 @@
   }
 }
 
-/* .dashboardGrid {
-  display: grid;
-  grid-template-columns: 380px minmax(0, 1fr);
-  grid-template-columns: 2fr 1fr;
-  gap: 24px;
-  align-items: start;
-} */
-
-/* ستون چپ */
-/* .pendingColumn {
-  min-width: 0;
-} */
-
-/* ستون راست */
-/* .mainColumn {
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-} */
-
 @media (max-width: 1100px) {
   .dashboardGrid {
     grid-template-columns: 320px minmax(0, 1fr);
@@ -1130,11 +1024,11 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 24px;
-  background: linear-gradient(135deg, #2d7d6e, #4caf84);
+  padding: 14px 24px;
+  background: linear-gradient(135deg, #2d7d6ed7, #4caf84de);
   color: white;
   border: none;
-  border-radius: 30px;
+  border-radius: 10px;
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
@@ -1144,6 +1038,8 @@
 
 .newBtn:hover {
   transform: translateY(-2px);
+  background: linear-gradient(135deg, #2d7d6e, #4caf84);
+
   box-shadow: 0 4px 20px rgba(45, 125, 110, 0.3);
 }
 
@@ -1177,6 +1073,9 @@
 }
 
 .filterTab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px; /* ← فاصله بین متن و تعداد */
   padding: 8px 20px;
   border: none;
   border-radius: 30px;
@@ -1228,7 +1127,7 @@
 }
 
 /* ============================================
-   APPOINTMENTS
+   COMPONENT: Appointments Management
 ============================================ */
 .appointmentsList {
   display: flex;
@@ -1367,6 +1266,860 @@
 
 .btnMore:hover {
   color: var(--text-dark);
+}
+
+/* // ============================================
+// COMPONENT: Sessions Management (Doctor Panel)
+// ============================================ */
+/* ===== Session Stats ===== */
+.sessionStats {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--gray-light);
+  padding: 8px 20px;
+  border-radius: 30px;
+}
+
+.statItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.statNumber {
+  font-size: 18px;
+  font-weight: 700;
+  color: #2d7d6e;
+}
+
+.statLabel {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.statDivider {
+  color: #d5d0ca;
+}
+
+/* ===== Sessions List ===== */
+.sessionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+/* ===== Session Card ===== */
+.sessionCard {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.sessionCard:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(45, 125, 110, 0.08);
+}
+
+/* ===== Card Header ===== */
+.sessionCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.sessionDoctor {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sessionDoctorAvatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--gray-light);
+}
+
+.sessionDoctor h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0;
+}
+
+.sessionType {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* ===== Session Status ===== */
+.sessionStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 14px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.statusDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.sessionUpcoming {
+  background: #e3f2fd;
+  color: #0d47a1;
+}
+
+.sessionUpcoming .statusDot {
+  background: #0d47a1;
+}
+
+.sessionOngoing {
+  background: #fce4ec;
+  color: #c62828;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.sessionOngoing .statusDot {
+  background: #c62828;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.sessionCompleted {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.sessionCompleted .statusDot {
+  background: #2e7d32;
+}
+
+.sessionCancelled {
+  background: #fbe9e7;
+  color: #c62828;
+}
+
+.sessionCancelled .statusDot {
+  background: #c62828;
+}
+
+/* ===== Session Details ===== */
+.sessionDetails {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-top: 1px solid var(--gray-light);
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.sessionMeta {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.metaGroup {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.metaIcon {
+  font-size: 16px;
+}
+
+/* ===== Timer ===== */
+.sessionTimer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.timerLabel {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.timerDigits {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.timerDigit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4px 8px;
+  background: #1b3a5c;
+  color: white;
+  border-radius: 8px;
+  font-size: 20px;
+  font-weight: 700;
+  min-width: 36px;
+}
+
+.timerUnit {
+  font-size: 9px;
+  font-weight: 400;
+  opacity: 0.7;
+}
+
+.timerSeparator {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+/* ===== Session Actions ===== */
+.sessionActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btnJoinSession {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 24px;
+  background: linear-gradient(135deg, #2d7d6ee7, #4caf84df);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btnJoinSession:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 16px rgba(45, 125, 110, 0.3);
+}
+
+.btnJoinNow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 28px;
+  background: #c62828;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+  animation: pulseBg 2s ease-in-out infinite;
+}
+
+@keyframes pulseBg {
+  0%,
+  100% {
+    background: #c62828;
+  }
+  50% {
+    background: #e53935;
+  }
+}
+
+.btnJoinNow .pulseDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: white;
+  display: inline-block;
+  animation: pulseDot 1s ease-in-out infinite;
+}
+
+@keyframes pulseDot {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0.5;
+  }
+}
+
+.btnRemind {
+  padding: 8px 20px;
+  background: transparent;
+  color: var(--text-muted);
+  border: 1.5px solid var(--gray-light);
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btnRemind:hover {
+  border-color: #2d7d6e;
+  color: #2d7d6e;
+}
+
+.btnViewRecord {
+  padding: 8px 20px;
+  background: transparent;
+  color: #0d47a1;
+  border: 1.5px solid #0d47a1;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btnViewRecord:hover {
+  background: #0d47a1;
+  color: white;
+}
+
+.btnFeedback {
+  padding: 8px 20px;
+  background: transparent;
+  color: #2d7d6e;
+  border: 1.5px solid #2d7d6e;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btnFeedback:hover {
+  background: #2d7d6e;
+  color: white;
+}
+
+.btnRescheduleSession {
+  padding: 8px 20px;
+  background: transparent;
+  color: #e65100;
+  border: 1.5px solid #e65100;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btnRescheduleSession:hover {
+  background: #e65100;
+  color: white;
+}
+
+.btnMore {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btnMore:hover {
+  background: var(--gray-light);
+  color: var(--text-dark);
+}
+
+/* ===== Cancel Session Button ===== */
+.btnCancelSession {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 20px;
+  background: #fbe9e7;
+  color: #c62828;
+  border: 1.5px solid #c62828;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btnCancelSession:hover {
+  background: #c62828;
+  color: white;
+  transform: scale(1.05);
+  box-shadow: 0 4px 16px rgba(198, 40, 40, 0.2);
+}
+
+/* ===== Cancel Disabled Button ===== */
+.btnCancelDisabled {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 20px;
+  background: var(--gray-light);
+  color: var(--text-muted);
+  border: none;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: not-allowed;
+  font-family: inherit;
+  opacity: 0.6;
+}
+
+/* ===== Next Session Banner ===== */
+.nextSessionBanner {
+  background: linear-gradient(135deg, #1b3a5ccf, #2d7d6ed4);
+  border-radius: var(--radius-lg);
+  padding: 28px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  box-shadow: var(--shadow-md);
+}
+
+.nextSessionContent {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nextSessionLabel {
+  font-size: 13px;
+  opacity: 0.7;
+}
+
+.nextSessionContent h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.nextSessionContent p {
+  font-size: 15px;
+  opacity: 0.8;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.887);
+}
+
+.nextSessionTime {
+  display: flex;
+  gap: 16px;
+  font-size: 14px;
+  opacity: 0.7;
+  margin-top: 4px;
+}
+
+.nextSessionTimerEnterContainer {
+  text-align: left;
+}
+
+.btnNextSession {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 32px;
+  background: var(--white);
+  color: #1b3a5c;
+  border: none;
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+  flex-shrink: 0;
+}
+
+.btnNextSession:hover {
+  transform: scale(1.05) translateX(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.btnNextSession span {
+  transition: transform 0.3s ease;
+}
+
+.btnNextSession:hover span {
+  transform: translateX(4px);
+}
+
+/* ===== Next Session Timer ===== */
+.nextSessionTimer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius);
+  backdrop-filter: blur(10px);
+}
+
+.nextSessionTimer .timerLabel {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.nextSessionTimer .timerDigits {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.nextSessionTimer .timerDigit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4px 10px;
+  background: rgba(0, 0, 0, 0.3);
+  color: white;
+  border-radius: 8px;
+  font-size: 20px;
+  font-weight: 700;
+  min-width: 40px;
+}
+
+.nextSessionTimer .timerUnit {
+  font-size: 9px;
+  font-weight: 400;
+  opacity: 0.7;
+}
+
+.nextSessionTimer .timerSeparator {
+  font-size: 20px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ===== Patient Avatar ===== */
+.sessionPatientAvatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--gray-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+/* ===== Filter Count ===== */
+.filterCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  background: rgba(45, 125, 110, 0.1);
+  color: #2d7d6e;
+  border-radius: 30px;
+  font-size: 11px;
+  font-weight: 700;
+  margin-right: 4px;
+}
+
+.filterTab.active .filterCount {
+  background: rgba(45, 125, 110, 0.15);
+}
+
+/* ===== Next Session Notes ===== */
+.nextSessionNotes {
+  margin-top: 8px;
+  padding: 6px 14px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 30px;
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+/* ===== Next Session Actions ===== */
+.nextSessionActions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+/* ===== Session Notes ===== */
+.sessionNotes {
+  margin-top: 8px;
+  padding: 6px 14px;
+  background: var(--gray-light);
+  border-radius: 30px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* ===== End Session Button ===== */
+.btnEndSession {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 24px;
+  background: #fbe9e7;
+  color: #c62828;
+  border: 1.5px solid #c62828;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btnEndSession:hover {
+  background: #c62828;
+  color: white;
+}
+
+/* ===== View Notes Button ===== */
+.btnViewNotes {
+  padding: 8px 20px;
+  background: transparent;
+  color: #e65100;
+  border: 1.5px solid #e65100;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btnViewNotes:hover {
+  background: #e65100;
+  color: white;
+}
+
+/* ===== Cancelled Info ===== */
+.cancelledInfo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  background: #fbe9e7;
+  color: #c62828;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.cancelReasonText {
+  font-weight: 400;
+  opacity: 0.8;
+}
+
+/* ===== Ongoing Badge ===== */
+.ongoingBadge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffeb3b;
+  animation: pulseGlow 1.5s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.02);
+  }
+}
+
+.ongoingBadge .pulseDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ffeb3b;
+  display: inline-block;
+  animation: pulseDot 1s ease-in-out infinite;
+}
+
+@keyframes pulseDot {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0.5;
+  }
+}
+
+/* ============================================
+   RESPONSIVE UPDATES
+============================================ */
+@media (max-width: 992px) {
+  .nextSessionActions {
+    align-items: center;
+    width: 100%;
+  }
+
+  .nextSessionTimer {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .nextSessionBanner {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+    padding: 20px;
+  }
+
+  .nextSessionTime {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .nextSessionActions {
+    width: 100%;
+  }
+
+  .btnNextSession {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .nextSessionTimer {
+    width: 100%;
+  }
+
+  .nextSessionTimer .timerDigits {
+    justify-content: center;
+  }
+
+  .cancelledInfo {
+    flex-direction: column;
+    text-align: center;
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .sessionCard {
+    padding: 16px;
+  }
+
+  .sessionCardHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .sessionDoctor {
+    width: 100%;
+  }
+
+  .sessionActions button {
+    flex: 1;
+    justify-content: center;
+    min-width: 120px;
+  }
+
+  .sessionStats {
+    padding: 6px 16px;
+    gap: 12px;
+  }
+
+  .statNumber {
+    font-size: 16px;
+  }
+
+  .statLabel {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sessionMeta {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .sessionTimer {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .timerDigits {
+    font-size: 14px;
+  }
+
+  .timerDigit {
+    font-size: 16px;
+    min-width: 30px;
+    padding: 2px 6px;
+  }
+
+  .sessionActions button {
+    min-width: 100%;
+  }
+
+  .btnMore {
+    display: none;
+  }
+
+  .nextSessionContent h3 {
+    font-size: 17px;
+  }
 }
 
 /* ============================================
@@ -1611,9 +2364,124 @@
   transform: translateX(20px);
 }
 
+/* ===== Add Modal ===== */
+.addModal {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  max-width: 520px;
+  width: 100%;
+  padding: 32px;
+  animation: modalSlideUp 0.3s ease;
+}
+
+.formGroup {
+  margin-bottom: 16px;
+}
+
+.formGroup label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.formInput,
+.formSelect {
+  width: 100%;
+  padding: 10px 14px;
+  border: 2px solid var(--gray-light);
+  border-radius: var(--radius);
+  font-size: 15px;
+  font-family: inherit;
+  color: var(--text-dark);
+  transition: var(--transition);
+  background: var(--white);
+}
+
+.formInput:focus,
+.formSelect:focus {
+  border-color: #2d7d6e;
+  box-shadow: 0 0 0 4px rgba(45, 125, 110, 0.08);
+  outline: none;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.btnAddModal {
+  flex: 1;
+  padding: 12px;
+  background: linear-gradient(135deg, #2d7d6e, #4caf84);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btnAddModal:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(45, 125, 110, 0.3);
+}
+
+/* ===== Status Labels ===== */
+.completedLabel {
+  padding: 4px 14px;
+  background: #e8f5e9;
+  color: #2e7d32;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.cancelledLabel {
+  padding: 4px 14px;
+  background: #fbe9e7;
+  color: #c62828;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.filterCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  background: rgba(45, 125, 110, 0.1);
+  color: #2d7d6e;
+  border-radius: 30px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.filterTab.active .filterCount {
+  background: rgba(45, 125, 110, 0.15);
+}
+
 /* ============================================
    RESPONSIVE
 ============================================ */
+@media (max-width: 768px) {
+  .formRow {
+    grid-template-columns: 1fr;
+  }
+
+  .addModal {
+    padding: 24px;
+    margin: 0 16px;
+  }
+}
+
 @media (max-width: 992px) {
   .statsGrid {
     grid-template-columns: repeat(2, 1fr);
