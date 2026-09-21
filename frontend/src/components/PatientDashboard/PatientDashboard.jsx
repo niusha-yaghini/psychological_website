@@ -293,13 +293,15 @@ function PatientDashboard() {
 function DashboardContent({ userData, appointments }) {
   // ===== آمار بر اساس داده‌های واقعی =====
   const stats = [
-    { 
-      label: "جلسات برگزار شده", 
-      value: appointments.filter(a => a.status === "completed").length 
+    {
+      label: "جلسات برگزار شده",
+      value: appointments.filter((a) => a.status === "completed").length,
     },
-    { 
-      label: "جلسات پیش‌رو", 
-      value: appointments.filter(a => a.status === "confirmed" || a.status === "pending").length 
+    {
+      label: "جلسات پیش‌رو",
+      value: appointments.filter(
+        (a) => a.status === "confirmed" || a.status === "pending",
+      ).length,
     },
     { label: "پیشرفت کلی", value: "۶۵٪" },
     { label: "یادداشت‌ها", value: 12 },
@@ -394,7 +396,6 @@ function AppointmentsContent({ appointments, setAppointments }) {
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [selectedAppointmentId, setSelectedAppointmentId] = useState(null);
   const [cancelReason, setCancelReason] = useState("");
-
 
   // =============================================
   // ۲. توابع تبدیل و کمکی
@@ -740,6 +741,13 @@ function AppointmentsContent({ appointments, setAppointments }) {
                       </span>
                     </div>
 
+                    {/* ===== قیمت (اگه وجود داشت) ===== */}
+                    {appointment.price && (
+                      <div className={styles.appointmentPrice}>
+                        {formatPrice(appointment.price)} تومان
+                      </div>
+                    )}
+
                     {/* نمایش دلیل لغو */}
                     {appointment.status === "cancelled" &&
                       appointment.cancelReason && (
@@ -775,9 +783,9 @@ function AppointmentsContent({ appointments, setAppointments }) {
                     {/* ===== وضعیت در انتظار ===== */}
                     {appointment.status === "pending" && (
                       <>
-                        <button className={styles.btnPending}>
+                        {/* <button className={styles.btnPending}>
                           در انتظار تأیید
-                        </button>
+                        </button> */}
                         {isCancellable ? (
                           <button
                             className={styles.btnCancel}
@@ -866,6 +874,7 @@ function AppointmentsContent({ appointments, setAppointments }) {
         isOpen={showModal}
         onClose={() => setShowModal(false)}
         onSuccess={handleNewAppointment}
+        appointments={appointments}
       />
     </div>
   );
@@ -876,6 +885,12 @@ function AppointmentsContent({ appointments, setAppointments }) {
 // ============================================
 
 // توابع کمکی (Helper Functions)
+
+// ===== تبدیل اعداد به فرمت با کاما =====
+const formatPrice = (price) => {
+  if (!price && price !== 0) return "۰";
+  return price.toLocaleString("fa-IR");
+};
 
 // ===== تبدیل اعداد فارسی به انگلیسی =====
 const toEnglishDigits = (str) => {
@@ -899,17 +914,20 @@ const toPersianDigits = (str) => {
   );
 };
 
-// ===== تبدیل روز هفته به تاریخ شمسی =====
+// ===== ترتیب روزهای هفته =====
+const WEEK_DAYS_ORDER = {
+  شنبه: 0,
+  یکشنبه: 1,
+  دوشنبه: 2,
+  سه‌شنبه: 3,
+  چهارشنبه: 4,
+  پنجشنبه: 5,
+  جمعه: 6,
+};
+
+// ===== تبدیل روز هفته به تاریخ شمسی (بر اساس هفته جاری) =====
 const getDateFromWeekDay = (dayName) => {
-  const weekDays = {
-    شنبه: 6,
-    یکشنبه: 0,
-    دوشنبه: 1,
-    سه‌شنبه: 2,
-    چهارشنبه: 3,
-    پنجشنبه: 4,
-    جمعه: 5,
-  };
+  // const weekDaysOrder =
 
   const todayJalali = moment().format("jYYYY/jMM/jDD");
   const [todayYear, todayMonth, todayDay] = toEnglishDigits(todayJalali)
@@ -921,14 +939,88 @@ const getDateFromWeekDay = (dayName) => {
     "jYYYY/jMM/jDD",
   );
 
-  const targetDayOfWeek = weekDays[dayName];
-  const currentDayOfWeek = todayDate.day();
+  // ===== تبدیل روز هفته میلادی به ترتیب ایرانی =====
+  const gregorianDayOfWeek = todayDate.day();
+  const persianDayOfWeek =
+    gregorianDayOfWeek === 6 ? 0 : gregorianDayOfWeek + 1;
 
-  let daysToAdd = targetDayOfWeek - currentDayOfWeek;
-  if (daysToAdd <= 0) daysToAdd += 7;
+  // ===== پیدا کردن شنبه این هفته =====
+  const saturdayOfThisWeek = todayDate
+    .clone()
+    .subtract(persianDayOfWeek, "days");
 
-  const appointmentDate = todayDate.clone().add(daysToAdd, "days");
-  return appointmentDate.format("jYYYY/jMM/jDD");
+  // ===== محاسبه تاریخ روز مورد نظر =====
+  // const targetDayOfWeek = weekDaysOrder[dayName];
+  const targetDayOfWeek = WEEK_DAYS_ORDER[dayName];
+  const targetDate = saturdayOfThisWeek.clone().add(targetDayOfWeek, "days");
+
+  return targetDate.format("jYYYY/jMM/jDD");
+};
+
+// ===== گرفتن روز ماه از تاریخ شمسی =====
+const getDayOfMonthFromWeekDay = (dayName) => {
+  const fullDate = getDateFromWeekDay(dayName); // مثلا "۱۴۰۵/۰۶/۳۰"
+  const parts = toEnglishDigits(fullDate).split("/");
+  return toPersianDigits(parts[2]); // روز ماه رو برمی‌گردونه
+};
+
+// ===== چک کردن آیا روز گذشته است (نه امروز) =====
+const isDayPast = (dayName) => {
+  // const weekDaysOrder = {
+  //   شنبه: 0,
+  //   یکشنبه: 1,
+  //   دوشنبه: 2,
+  //   سه‌شنبه: 3,
+  //   چهارشنبه: 4,
+  //   پنجشنبه: 5,
+  //   جمعه: 6,
+  // };
+
+  const todayJalali = moment().format("jYYYY/jMM/jDD");
+  const [todayYear, todayMonth, todayDay] = toEnglishDigits(todayJalali)
+    .split("/")
+    .map(Number);
+
+  const todayDate = moment(
+    `${todayYear}/${todayMonth}/${todayDay}`,
+    "jYYYY/jMM/jDD",
+  );
+
+  const gregorianDayOfWeek = todayDate.day();
+  const persianDayOfWeek =
+    gregorianDayOfWeek === 6 ? 0 : gregorianDayOfWeek + 1;
+
+  // const targetDayOfWeek = weekDaysOrder[dayName];
+  const targetDayOfWeek = WEEK_DAYS_ORDER[dayName];
+
+  // فقط روزهای قبل از امروز غیرفعال میشن
+  return targetDayOfWeek < persianDayOfWeek;
+};
+
+// ===== چک کردن آیا یک ساعت قابل انتخاب است (حداقل ۱ ساعت فاصله) =====
+const isTimeSelectable = (timeString, dayName) => {
+  const timeStart = toEnglishDigits(timeString);
+  const [hours, minutes] = timeStart.split(":").map(Number);
+
+  // ===== دریافت تاریخ امروز =====
+  const now = moment();
+
+  // ===== ساخت تاریخ و ساعت جلسه =====
+  const targetDate = getDateFromWeekDay(dayName);
+  const [targetYear, targetMonth, targetDay] = toEnglishDigits(targetDate)
+    .split("/")
+    .map(Number);
+
+  const appointmentDateTime = moment(
+    `${targetYear}/${targetMonth}/${targetDay} ${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`,
+    "jYYYY/jMM/jDD HH:mm",
+  );
+
+  // ===== محاسبه اختلاف =====
+  const diffMinutes = appointmentDateTime.diff(now, "minutes");
+
+  // حداقل ۶۰ دقیقه فاصله لازمه
+  return diffMinutes >= 60;
 };
 
 // ===== محاسبه ساعت پایان =====
@@ -939,7 +1031,32 @@ const getEndTime = (startTime) => {
   return `${String(hours).padStart(2, "0")}:۰۰ - ${String(endHour).padStart(2, "0")}:۰۰`;
 };
 
-function NewAppointmentModal({ isOpen, onClose, onSuccess }) {
+// ===== چک کردن آیا یک ساعت قبلاً رزرو شده است =====
+const isTimeAlreadyBooked = (appointments, dayName, timeString) => {
+  const targetDate = getDateFromWeekDay(dayName);
+  const targetTime = toEnglishDigits(timeString); // مثلا "14:00"
+
+  return appointments.some((appointment) => {
+    if (
+      appointment.status !== "confirmed" &&
+      appointment.status !== "pending"
+    ) {
+      return false;
+    }
+
+    if (appointment.date !== targetDate) return false;
+
+    // استخراج ساعت شروع و پایان نوبت
+    const [start, end] = appointment.time
+      .split(" - ")
+      .map((t) => toEnglishDigits(t));
+
+    // چک کردن اینکه ساعت مورد نظر با بازه نوبت تداخل داره یا نه
+    return targetTime === start;
+  });
+};
+
+function NewAppointmentModal({ isOpen, onClose, onSuccess, appointments }) {
   const [step, setStep] = useState(1); // 1: انتخاب روانشناس | 2: انتخاب زمان | 3: تأیید
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
@@ -948,16 +1065,19 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess }) {
 
   const doctors = seedData.doctors;
 
-  // ساعت‌های قابل انتخاب
-  const timeSlots = [
-    "۱۰:۰۰",
-    "۱۱:۰۰",
-    "۱۲:۰۰",
-    "۱۴:۰۰",
-    "۱۵:۰۰",
-    "۱۶:۰۰",
-    "۱۷:۰۰",
-  ];
+  const sortedAvailableDays = [...(selectedDoctor?.availableDays || [])].sort(
+    (a, b) => WEEK_DAYS_ORDER[a] - WEEK_DAYS_ORDER[b],
+  );
+
+  useEffect(() => {
+    if (!isOpen) {
+      setStep(1);
+      setSelectedDoctor(null);
+      setSelectedDate(null);
+      setSelectedTime(null);
+      setAppointmentType("individual");
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -1023,6 +1143,10 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess }) {
                       <span>📅 {doctor.experience}</span>
                       <span>⭐ {doctor.rating}</span>
                     </div>
+                    {/* ===== قیمت ===== */}
+                    <div className={styles.doctorPrice}>
+                      {formatPrice(doctor.pricePerHour)} تومان / ساعت
+                    </div>
                     <div className={styles.doctorDays}>
                       {doctor.availableDays.map((day) => (
                         <span key={day} className={styles.dayTag}>
@@ -1047,41 +1171,68 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess }) {
               {selectedDoctor?.name} - روز و ساعت مورد نظر را انتخاب کنید:
             </p>
             <div className={styles.dateTimeSection}>
+              {/* ===== انتخاب روز (فقط روزهای کاری دکتر) ===== */}
               <div className={styles.dateGrid}>
-                {[
-                  "شنبه",
-                  "یکشنبه",
-                  "دوشنبه",
-                  "سه‌شنبه",
-                  "چهارشنبه",
-                  "پنجشنبه",
-                ].map((day) => (
-                  <button
-                    key={day}
-                    className={`${styles.dateBtn} ${
-                      selectedDate === day ? styles.selected : ""
-                    }`}
-                    onClick={() => setSelectedDate(day)}
-                  >
-                    <span className={styles.dateDay}>{day}</span>
-                    <span className={styles.dateNum}>۲۵</span>
-                  </button>
-                ))}
+                {selectedDoctor?.availableDays?.map((day) => {
+                  const isDisabled = isDayPast(day);
+                  return (
+                    <button
+                      key={day}
+                      className={`${styles.dateBtn} ${
+                        selectedDate === day ? styles.selected : ""
+                      } ${isDisabled ? styles.disabled : ""}`}
+                      onClick={() => {
+                        if (!isDisabled) {
+                          setSelectedDate(day);
+                          setSelectedTime(null);
+                        }
+                      }}
+                      disabled={isDisabled}
+                    >
+                      <span className={styles.dateDay}>{day}</span>
+                      <span className={styles.dateNum}>
+                        {getDayOfMonthFromWeekDay(day)}
+                      </span>
+                    </button>
+                  );
+                })}
               </div>
+              
+              {/* ===== انتخاب ساعت (فقط ساعت‌های کاری دکتر) ===== */}
+              {selectedDate && (
+                <div className={styles.timeGrid}>
+                  {selectedDoctor?.availableTimes?.map((time) => {
+                    const isPast = !isTimeSelectable(time, selectedDate);
+                    const isBooked = isTimeAlreadyBooked(
+                      appointments,
+                      selectedDate,
+                      time,
+                    );
+                    const isDisabled = isPast || isBooked;
 
-              <div className={styles.timeGrid}>
-                {timeSlots.map((time) => (
-                  <button
-                    key={time}
-                    className={`${styles.timeBtn} ${
-                      selectedTime === time ? styles.selected : ""
-                    }`}
-                    onClick={() => setSelectedTime(time)}
-                  >
-                    {time}
-                  </button>
-                ))}
-              </div>
+                    return (
+                      <button
+                        key={time}
+                        className={`${styles.timeBtn} ${
+                          selectedTime === time ? styles.selected : ""
+                        } ${isDisabled ? styles.disabled : ""}`}
+                        onClick={() => {
+                          if (!isDisabled) {
+                            setSelectedTime(time);
+                          }
+                        }}
+                        disabled={isDisabled}
+                        title={isBooked ? "این ساعت قبلاً رزرو شده است" : ""}
+                      >
+                        {time}
+                        {isBooked && (
+                          <span className={styles.bookedLabel}>رزرو شده</span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -1126,6 +1277,12 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess }) {
                   <span className={styles.confirmLabel}>ساعت:</span>
                   <span className={styles.confirmValue}>
                     {selectedTime && toPersianDigits(getEndTime(selectedTime))}
+                  </span>
+                </div>
+                <div className={styles.confirmItem}>
+                  <span className={styles.confirmLabel}>هزینه جلسه:</span>
+                  <span className={styles.confirmValuePrice}>
+                    {formatPrice(selectedDoctor?.pricePerHour)} تومان
                   </span>
                 </div>
               </div>
@@ -1193,6 +1350,7 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess }) {
                   cancelledBy: null,
                   cancelReason: null,
                   createdAt: toPersianDigits(moment().format("jYYYY/jMM/jDD")),
+                  price: selectedDoctor?.pricePerHour,
                 };
 
                 onSuccess?.(newAppointment);
@@ -1212,12 +1370,11 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess }) {
 // COMPONENT: Sessions Content
 // ============================================
 function SessionsContent() {
-  
   const [activeTab, setActiveTab] = useState("upcoming");
   const [selectedSession, setSelectedSession] = useState(null);
-  
+
   const [sessions, setSessions] = useState(seedData.sessions);
-  
+
   // ===== فیلتر کردن جلسات =====
   const getFilteredSessions = () => {
     if (activeTab === "upcoming") {
@@ -1670,7 +1827,7 @@ function MessagesContent({ notifications, setNotifications }) {
             <span className={styles.unreadBadge}>{unreadCount} جدید</span>
           )}
           <button className={styles.markAllBtn} onClick={markAllAsRead}>
-            ✓ همه را خوانده شد
+            ✓ همه پیام ها خوانده شدند
           </button>
         </div>
       </div>
@@ -1775,7 +1932,7 @@ function NotificationDropdown({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   // ===== بستن دراپ‌داون با کلیک خارج =====
   useEffect(() => {
@@ -1795,19 +1952,6 @@ function NotificationDropdown({
 
   const unreadCount = notifications.filter((n) => !n.isRead).length;
 
-  // ===== دریافت استایل بر اساس نوع =====
-  const getTypeStyle = (type) => {
-    const styles = {
-      reminder: "#e3f2fd",
-      confirmed: "#e8f5e9",
-      cancelled: "#fbe9e7",
-      note: "#fff3e0",
-      booking: "#e8eaf6",
-      weekly: "#f3e5f5",
-    };
-    return styles[type] || "#f5f5f5";
-  };
-
   return (
     <div className={styles.dropdownWrapper} ref={dropdownRef}>
       {/* ===== دکمه زنگوله ===== */}
@@ -1822,7 +1966,7 @@ function NotificationDropdown({
       </button>
 
       {/* ===== دراپ‌داون ===== */}
-      {isOpen && (
+      {/* {isOpen && (
         <div className={styles.dropdownMenu}>
           <div className={styles.dropdownHeader}>
             <span className={styles.dropdownTitle}>اعلان‌ها</span>
@@ -1888,6 +2032,79 @@ function NotificationDropdown({
                 onClick={() => {
                   setIsOpen(false);
                   setActiveTab("messages"); // هدایت به بخش پیام‌ها
+                }}
+              >
+                مشاهده همه اعلان‌ها ({unreadCount})
+              </button>
+            </div>
+          )}
+        </div>
+      )} */}
+      {isOpen && (
+        <div className={styles.dropdownMenu}>
+          <div className={styles.dropdownHeader}>
+            <span className={styles.dropdownTitle}>اعلان‌ها</span>
+            {unreadCount > 0 && (
+              <button
+                className={styles.dropdownMarkAll}
+                onClick={() => {
+                  onMarkAllAsRead();
+                }}
+              >
+                همه پیام ها خوانده شدند.
+              </button>
+            )}
+          </div>
+
+          <div className={styles.dropdownList}>
+            {unreadNotifications.length > 0 ? (
+              unreadNotifications.map((notification) => (
+                <div
+                  key={notification.id}
+                  className={styles.dropdownItem}
+                  onClick={() => {
+                    // ===== فقط علامت‌گذاری به عنوان خوانده شده =====
+                    onMarkAsRead(notification.id);
+                    // ← navigate حذف شد
+                  }}
+                >
+                  <div className={styles.dropdownContent}>
+                    <div className={styles.dropdownText}>
+                      <span className={styles.dropdownTitleText}>
+                        {notification.title}
+                      </span>
+                      <span className={styles.dropdownTime}>
+                        {notification.time}
+                      </span>
+                    </div>
+                    {/* <p className={styles.dropdownMessage}>
+                      {notification.message.length > 50
+                        ? notification.message.slice(0, 50) + "..."
+                        : notification.message}
+                    </p> */}
+                    <p className={styles.dropdownMessage}>
+                      {notification.message}
+                    </p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className={styles.dropdownEmpty}>
+                <p>همه اعلان‌ها را خوانده‌اید!</p>
+                <span className={styles.dropdownEmptySub}>
+                  هیچ اعلان جدیدی وجود ندارد
+                </span>
+              </div>
+            )}
+          </div>
+
+          {unreadCount > 5 && (
+            <div className={styles.dropdownFooter}>
+              <button
+                className={styles.dropdownViewAll}
+                onClick={() => {
+                  setIsOpen(false);
+                  // ← setActiveTab حذف شد
                 }}
               >
                 مشاهده همه اعلان‌ها ({unreadCount})
@@ -2517,7 +2734,6 @@ function ExerciseContent() {
 // COMPONENT: Profile Content
 // ============================================
 function ProfileContent({ userData }) {
-
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState(seedData.profile.formData);
   const [activeTab, setActiveTab] = useState("info");
@@ -2901,15 +3117,14 @@ function ProfileContent({ userData }) {
 // COMPONENT: Setting Content
 // ============================================
 function SettingsContent() {
-
   const [notificationSettings, setNotificationSettings] = useState(
-    seedData.settings.notificationSettings
+    seedData.settings.notificationSettings,
   );
   const [displaySettings, setDisplaySettings] = useState(
-    seedData.settings.displaySettings
+    seedData.settings.displaySettings,
   );
   const [privacySettings, setPrivacySettings] = useState(
-    seedData.settings.privacySettings
+    seedData.settings.privacySettings,
   );
 
   // ===== تابع تغییر تنظیمات =====

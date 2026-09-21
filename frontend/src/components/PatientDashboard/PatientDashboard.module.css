@@ -1641,6 +1641,34 @@
   margin: 8px 0;
 }
 
+.doctorPrice {
+  font-size: 13px;
+  font-weight: 600;
+  color: #2d7d6e;
+  margin: 6px 0;
+  padding: 4px 12px;
+  background: rgba(45, 125, 110, 0.08);
+  border-radius: 30px;
+  display: inline-block;
+}
+
+.confirmValuePrice {
+  color: #2d7d6e;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.appointmentPrice {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 4px 12px;
+  background: rgba(45, 125, 110, 0.08);
+  color: #2d7d6e;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
 .doctorDays {
   display: flex;
   flex-wrap: wrap;
@@ -1738,6 +1766,68 @@
   border-color: #2d7d6e;
   background: rgba(45, 125, 110, 0.08);
   color: #2d7d6e;
+}
+
+/* ===== حالت غیرفعال (توسی کمرنگ) ===== */
+.dateBtn.disabled,
+.timeBtn.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background: #f5f5f5;
+  color: #b5b0aa;
+  border-color: #e8e0d8;
+  position: relative;
+}
+
+.dateBtn.disabled:hover,
+.timeBtn.disabled:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: #e8e0d8;
+}
+
+/* ===== خط روی دکمه غیرفعال ===== */
+.dateBtn.disabled::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 10%;
+  right: 10%;
+  height: 2px;
+  background: #d5d0ca;
+  transform: rotate(-30deg);
+}
+
+.dateBtn.disabled .dateDay,
+.dateBtn.disabled .dateNum,
+.timeBtn.disabled {
+  text-decoration: line-through;
+  text-decoration-color: #d5d0ca;
+}
+
+/* ===== ساعت رزرو شده ===== */
+.timeBtn.disabled {
+  position: relative;
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: #f5f5f5;
+  color: #b5b0aa;
+  border-color: #e8e0d8;
+}
+
+.timeBtn.disabled:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* ===== برچسب "رزرو شده" ===== */
+.bookedLabel {
+  display: block;
+  font-size: 9px;
+  color: #c62828;
+  font-weight: 600;
+  margin-top: 2px;
+  letter-spacing: 0;
 }
 
 /* ===== Confirm ===== */

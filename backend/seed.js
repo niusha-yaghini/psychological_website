@@ -214,8 +214,12 @@ const seedData = {
       specialty: "روانشناس بالینی",
       experience: "۱۲ سال",
       rating: 4.8,
+      pricePerHour: 2800000,
       image: "/images/doctors/doctor1.png",
+      // ===== روزهای کاری =====
       availableDays: ["شنبه", "یکشنبه", "سه‌شنبه"],
+      // ===== ساعت‌های کاری =====
+      availableTimes: ["۱۰:۰۰", "۱۱:۰۰", "۱۲:۰۰", "۱۴:۰۰", "۱۵:۰۰", "۱۶:۰۰"],
     },
     {
       id: 2,
@@ -223,8 +227,10 @@ const seedData = {
       specialty: "روانشناس خانواده و زوج",
       experience: "۸ سال",
       rating: 4.9,
+      pricePerHour: 3200000,
       image: "/images/doctors/doctor2.png",
       availableDays: ["شنبه", "دوشنبه", "چهارشنبه"],
+      availableTimes: ["۰۹:۰۰", "۱۰:۰۰", "۱۱:۰۰", "۱۶:۰۰", "۱۷:۰۰", "۱۸:۰۰"],
     },
     {
       id: 3,
@@ -232,8 +238,10 @@ const seedData = {
       specialty: "روانشناس کودک و نوجوان",
       experience: "۱۰ سال",
       rating: 4.7,
+      pricePerHour: 2500000,
       image: "/images/doctors/doctor3.png",
       availableDays: ["یکشنبه", "سه‌شنبه", "پنجشنبه"],
+      availableTimes: ["۱۴:۰۰", "۱۵:۰۰", "۱۶:۰۰", "۱۷:۰۰"],
     },
   ],
 
