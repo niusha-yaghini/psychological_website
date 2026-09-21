@@ -1031,10 +1031,10 @@ const getEndTime = (startTime) => {
   return `${String(hours).padStart(2, "0")}:۰۰ - ${String(endHour).padStart(2, "0")}:۰۰`;
 };
 
-// ===== چک کردن آیا یک ساعت قبلاً رزرو شده است =====
+// ===== چک کردن آیا ساعت قبلاً رزرو شده =====
 const isTimeAlreadyBooked = (appointments, dayName, timeString) => {
   const targetDate = getDateFromWeekDay(dayName);
-  const targetTime = toEnglishDigits(timeString); // مثلا "14:00"
+  const targetTime = toPersianDigits(timeString);
 
   return appointments.some((appointment) => {
     if (
@@ -1046,21 +1046,120 @@ const isTimeAlreadyBooked = (appointments, dayName, timeString) => {
 
     if (appointment.date !== targetDate) return false;
 
-    // استخراج ساعت شروع و پایان نوبت
+    // ===== اگه hours داره، مستقیم چک کن =====
+    if (appointment.hours && Array.isArray(appointment.hours)) {
+      return appointment.hours.includes(targetTime);
+    }
+
+    // ===== fallback =====
     const [start, end] = appointment.time
       .split(" - ")
-      .map((t) => toEnglishDigits(t));
+      .map((t) => toPersianDigits(t));
 
-    // چک کردن اینکه ساعت مورد نظر با بازه نوبت تداخل داره یا نه
-    return targetTime === start;
+    return targetTime >= start && targetTime < end;
   });
+};
+
+// ===== پیدا کردن ایندکس ساعت در لیست =====
+const getTimeIndex = (time, availableTimes) => {
+  return availableTimes.indexOf(time);
+};
+
+// ===== چک کردن اینکه ساعت‌ها پشت سر هم هستن =====
+// const areTimesConsecutive = (times, availableTimes) => {
+//   if (times.length <= 1) return true;
+
+//   const indices = times
+//     .map((t) => getTimeIndex(t, availableTimes))
+//     .sort((a, b) => a - b);
+
+//   for (let i = 1; i < indices.length; i++) {
+//     if (indices[i] - indices[i - 1] !== 1) {
+//       return false;
+//     }
+//   }
+//   return true;
+// };
+
+const areTimesConsecutive = (times) => {
+  if (times.length <= 1) return true;
+
+  // ===== مرتب‌سازی بر اساس دقیقه =====
+  const sortedMinutes = times
+    .map((t) => timeToMinutes(t))
+    .sort((a, b) => a - b);
+
+  const ONE_HOUR = 60;
+
+  // ===== چک کردن اختلاف ۶۰ دقیقه بین هر دو تا =====
+  for (let i = 1; i < sortedMinutes.length; i++) {
+    const diff = sortedMinutes[i] - sortedMinutes[i - 1];
+    if (diff !== ONE_HOUR) {
+      return false;
+    }
+  }
+  return true;
+};
+
+// ===== چک کردن اینکه ساعت جدید با ساعت‌های انتخاب‌شده پشت سر هم است =====
+// const canAddTime = (newTime, selectedTimes, availableTimes) => {
+//   // اگه به سقف ۳ ساعت رسیده باشه
+//   if (selectedTimes.length >= 3) return false;
+
+//   // اگه ساعت قبلاً انتخاب شده باشه
+//   if (selectedTimes.includes(newTime)) return false;
+
+//   // اگه هنوز چیزی انتخاب نشده، میتونه اضافه کنه
+//   if (selectedTimes.length === 0) return true;
+
+//   // ایندکس‌ها
+//   const newIndex = getTimeIndex(newTime, availableTimes);
+//   const selectedIndices = selectedTimes.map((t) =>
+//     getTimeIndex(t, availableTimes),
+//   );
+
+//   const minIndex = Math.min(...selectedIndices);
+//   const maxIndex = Math.max(...selectedIndices);
+
+//   // ساعت جدید باید دقیقاً یکی قبل از min یا یکی بعد از max باشه
+//   return newIndex === minIndex - 1 || newIndex === maxIndex + 1;
+// };
+
+const canAddTime = (newTime, selectedTimes, availableTimes) => {
+  // اگه به سقف ۳ ساعت رسیده باشه
+  if (selectedTimes.length >= 3) return false;
+
+  // اگه ساعت قبلاً انتخاب شده باشه
+  if (selectedTimes.includes(newTime)) return false;
+
+  // اگه هنوز چیزی انتخاب نشده، میتونه اضافه کنه
+  if (selectedTimes.length === 0) return true;
+
+  // ===== چک کردن پشت سر هم بودن با اختلاف ۶۰ دقیقه =====
+  const newTimeMinutes = timeToMinutes(newTime);
+  const ONE_HOUR = 60;
+
+  return selectedTimes.some((existingTime) => {
+    const existingMinutes = timeToMinutes(existingTime);
+    const diff = Math.abs(newTimeMinutes - existingMinutes);
+
+    // اختلاف باید دقیقاً ۶۰ دقیقه باشه
+    return diff === ONE_HOUR;
+  });
+};
+
+// ===== تبدیل ساعت به دقیقه (برای مقایسه) =====
+const timeToMinutes = (time) => {
+  const englishTime = toEnglishDigits(time);
+  const [hours, minutes] = englishTime.split(":").map(Number);
+  return hours * 60 + minutes;
 };
 
 function NewAppointmentModal({ isOpen, onClose, onSuccess, appointments }) {
   const [step, setStep] = useState(1); // 1: انتخاب روانشناس | 2: انتخاب زمان | 3: تأیید
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedTime, setSelectedTime] = useState(null);
+  const [selectedTimes, setSelectedTimes] = useState([]);
   const [appointmentType, setAppointmentType] = useState("individual"); // individual | couple | teen
 
   const doctors = seedData.doctors;
@@ -1074,10 +1173,140 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess, appointments }) {
       setStep(1);
       setSelectedDoctor(null);
       setSelectedDate(null);
-      setSelectedTime(null);
+      // setSelectedTime(null);
+      setSelectedTimes([]); // ← آرایه خالی
       setAppointmentType("individual");
     }
   }, [isOpen]);
+
+  // ===== مدیریت کلیک روی ساعت =====
+  // const handleTimeClick = (time) => {
+  //   const isSelected = selectedTimes.includes(time);
+
+  //   if (isSelected) {
+  //     // اگه انتخاب شده بود، حذفش کن
+  //     // ولی فقط اگه با حذفش، بقیه هنوز پشت سر هم بمونن
+  //     const newTimes = selectedTimes.filter((t) => t !== time);
+  //     if (areTimesConsecutive(newTimes, selectedDoctor?.availableTimes || [])) {
+  //       setSelectedTimes(newTimes);
+  //     } else {
+  //       alert("با حذف این ساعت، ساعت‌های باقی‌مانده پشت سر هم نیستند.");
+  //     }
+  //   } else {
+  //     // اضافه کردن
+  //     if (
+  //       canAddTime(time, selectedTimes, selectedDoctor?.availableTimes || [])
+  //     ) {
+  //       setSelectedTimes(
+  //         [...selectedTimes, time].sort((a, b) => {
+  //           const indexA = getTimeIndex(
+  //             a,
+  //             selectedDoctor?.availableTimes || [],
+  //           );
+  //           const indexB = getTimeIndex(
+  //             b,
+  //             selectedDoctor?.availableTimes || [],
+  //           );
+  //           return indexA - indexB;
+  //         }),
+  //       );
+  //     } else {
+  //       if (selectedTimes.length >= 3) {
+  //         alert("حداکثر تا ۳ ساعت پشت سر هم را میتواند انتخاب کنید.");
+  //       } else {
+  //         alert("ساعت‌ها باید پشت سر هم باشند.");
+  //       }
+  //     }
+  //   }
+  // };
+
+  const handleTimeClick = (time) => {
+    const isSelected = selectedTimes.includes(time);
+
+    if (isSelected) {
+      // ===== حذف ساعت =====
+      const newTimes = selectedTimes.filter((t) => t !== time);
+
+      if (areTimesConsecutive(newTimes)) {
+        setSelectedTimes(newTimes);
+      } else {
+        alert("با حذف این ساعت، ساعت‌های باقی‌مانده پشت سر هم نیستند.");
+      }
+    } else {
+      // ===== اضافه کردن ساعت =====
+      if (
+        canAddTime(time, selectedTimes, selectedDoctor?.availableTimes || [])
+      ) {
+        // مرتب‌سازی بر اساس دقیقه
+        const newTimes = [...selectedTimes, time].sort(
+          (a, b) => timeToMinutes(a) - timeToMinutes(b),
+        );
+        setSelectedTimes(newTimes);
+      } else {
+        if (selectedTimes.length >= 3) {
+          alert("حداکثر تا ۳ ساعت پشت سر هم را میتواند انتخاب کنید.");
+        } else {
+          alert("ساعت‌ها باید پشت سر هم (با فاصله ۱ ساعت) باشند.");
+        }
+      }
+    }
+  };
+
+  // ===== محاسبه ساعت شروع و پایان =====
+  // const getFinalTimeRange = () => {
+  //   if (selectedTimes.length === 0) return null;
+
+  //   const sortedTimes = [...selectedTimes].sort((a, b) => {
+  //     const indexA = getTimeIndex(a, selectedDoctor?.availableTimes || []);
+  //     const indexB = getTimeIndex(b, selectedDoctor?.availableTimes || []);
+  //     return indexA - indexB;
+  //   });
+
+  //   const startTime = sortedTimes[0];
+  //   const lastTime = sortedTimes[sortedTimes.length - 1];
+
+  //   // محاسبه ساعت پایان (یک ساعت بعد از آخرین ساعت)
+  //   const lastTimeEnglish = toEnglishDigits(lastTime);
+  //   const [lastHours] = lastTimeEnglish.split(":").map(Number);
+  //   const endHour = (lastHours + 1) % 24;
+  //   const endTime = `${String(endHour).padStart(2, "0")}:۰۰`;
+
+  //   return {
+  //     start: startTime,
+  //     end: toPersianDigits(endTime),
+  //     count: selectedTimes.length,
+  //   };
+  // };
+
+  const getFinalTimeRange = () => {
+    if (selectedTimes.length === 0) return null;
+
+    // ===== مرتب‌سازی بر اساس دقیقه =====
+    const sortedTimes = [...selectedTimes].sort(
+      (a, b) => timeToMinutes(a) - timeToMinutes(b),
+    );
+
+    const startTime = sortedTimes[0];
+    const lastTime = sortedTimes[sortedTimes.length - 1];
+
+    // ===== محاسبه ساعت پایان (۱ ساعت بعد از آخرین ساعت) =====
+    const lastMinutes = timeToMinutes(lastTime);
+    const endMinutes = lastMinutes + 60;
+    const endHours = Math.floor(endMinutes / 60) % 24;
+    const endTime = `${String(endHours).padStart(2, "0")}:۰۰`;
+
+    return {
+      start: startTime,
+      end: toPersianDigits(endTime),
+      count: selectedTimes.length,
+    };
+  };
+
+  // ===== محاسبه قیمت نهایی =====
+  const getFinalPrice = () => {
+    if (!selectedDoctor?.pricePerHour) return 0;
+    return selectedDoctor.pricePerHour * selectedTimes.length;
+  };
 
   if (!isOpen) return null;
 
@@ -1184,7 +1413,11 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess, appointments }) {
                       onClick={() => {
                         if (!isDisabled) {
                           setSelectedDate(day);
-                          setSelectedTime(null);
+                          setSelectedTimes([]);
+                          // if (selectedDate !== day) {
+                          //   setSelectedTimes([]);
+                          // }
+                          // setSelectedDate(day);
                         }
                       }}
                       disabled={isDisabled}
@@ -1197,30 +1430,26 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess, appointments }) {
                   );
                 })}
               </div>
-              
+
               {/* ===== انتخاب ساعت (فقط ساعت‌های کاری دکتر) ===== */}
               {selectedDate && (
                 <div className={styles.timeGrid}>
-                  {selectedDoctor?.availableTimes?.map((time) => {
+                  {/* {selectedDoctor?.availableTimes?.map((time) => {
                     const isPast = !isTimeSelectable(time, selectedDate);
                     const isBooked = isTimeAlreadyBooked(
                       appointments,
                       selectedDate,
                       time,
                     );
+                    const isSelected = selectedTimes.includes(time);
                     const isDisabled = isPast || isBooked;
-
                     return (
                       <button
                         key={time}
                         className={`${styles.timeBtn} ${
-                          selectedTime === time ? styles.selected : ""
+                          isSelected ? styles.selected : ""
                         } ${isDisabled ? styles.disabled : ""}`}
-                        onClick={() => {
-                          if (!isDisabled) {
-                            setSelectedTime(time);
-                          }
-                        }}
+                        onClick={() => !isDisabled && handleTimeClick(time)}
                         disabled={isDisabled}
                         title={isBooked ? "این ساعت قبلاً رزرو شده است" : ""}
                       >
@@ -1230,7 +1459,54 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess, appointments }) {
                         )}
                       </button>
                     );
+                  })} */}
+
+                  {selectedDoctor?.availableTimes?.map((time) => {
+                    const isPast = !isTimeSelectable(time, selectedDate);
+                    const isBooked = isTimeAlreadyBooked(
+                      appointments,
+                      selectedDate,
+                      time,
+                    );
+                    const isSelected = selectedTimes.includes(time);
+                    const isDisabled = isPast || isBooked;
+
+                    // ===== چک کردن اینکه آیا اضافه کردن این ساعت ممکنه =====
+                    const canBeAdded =
+                      !isDisabled && !isSelected && selectedTimes.length > 0
+                        ? canAddTime(
+                            time,
+                            selectedTimes,
+                            selectedDoctor?.availableTimes || [],
+                          )
+                        : true;
+
+                    return (
+                      <button
+                        key={time}
+                        className={`${styles.timeBtn} ${
+                          isSelected ? styles.selected : ""
+                        } ${isDisabled ? styles.disabled : ""} ${
+                          !canBeAdded && !isSelected && selectedTimes.length > 0
+                            ? styles.notConsecutive
+                            : ""
+                        }`}
+                        onClick={() => !isDisabled && handleTimeClick(time)}
+                        disabled={isDisabled}
+                      >
+                        {time}
+                        {isBooked && (
+                          <span className={styles.bookedLabel}>رزرو شده</span>
+                        )}
+                      </button>
+                    );
                   })}
+
+                  {/* ===== راهنما ===== */}
+                  <div className={styles.timeHint}>
+                    تا حداکثر ۳ ساعت <strong>پشت سر هم</strong> را می توانید
+                    انتخاب کنید.
+                  </div>
                 </div>
               )}
             </div>
@@ -1238,7 +1514,7 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess, appointments }) {
         )}
 
         {/* ===== مرحله ۳: تأیید نهایی ===== */}
-        {step === 3 && (
+        {/* {step === 3 && (
           <div className={styles.modalStep}>
             <div className={styles.confirmBox}>
               <div className={styles.confirmIcon}>
@@ -1291,6 +1567,75 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess, appointments }) {
               </p>
             </div>
           </div>
+        )} */}
+
+        {/* ===== مرحله ۳: تأیید نهایی ===== */}
+        {step === 3 && (
+          <div className={styles.modalStep}>
+            <div className={styles.confirmBox}>
+              <div className={styles.confirmIcon}>
+                <img src={confirmIcon} alt="تأیید" />
+              </div>
+              <h3>اطلاعات نوبت شما</h3>
+              <div className={styles.confirmDetails}>
+                <div className={styles.confirmItem}>
+                  <span className={styles.confirmLabel}>روانشناس:</span>
+                  <span className={styles.confirmValue}>
+                    {selectedDoctor?.name}
+                  </span>
+                </div>
+                <div className={styles.confirmItem}>
+                  <span className={styles.confirmLabel}>تخصص:</span>
+                  <span className={styles.confirmValue}>
+                    {selectedDoctor?.specialty}
+                  </span>
+                </div>
+                <div className={styles.confirmItem}>
+                  <span className={styles.confirmLabel}>نوع جلسه:</span>
+                  <span className={styles.confirmValue}>
+                    {appointmentType === "individual" && "جلسه مشاوره فردی"}
+                    {appointmentType === "couple" && "جلسه زوج درمانی"}
+                    {appointmentType === "teen" && "جلسه مشاوره نوجوان"}
+                  </span>
+                </div>
+                <div className={styles.confirmItem}>
+                  <span className={styles.confirmLabel}>تاریخ:</span>
+                  <span className={styles.confirmValue}>
+                    {selectedDate} -{" "}
+                    {toPersianDigits(getDateFromWeekDay(selectedDate))}
+                  </span>
+                </div>
+
+                {/* ===== ساعت شروع تا پایان ===== */}
+                <div className={styles.confirmItem}>
+                  <span className={styles.confirmLabel}>ساعت:</span>
+                  <span className={styles.confirmValue}>
+                    {(() => {
+                      const range = getFinalTimeRange();
+                      if (!range) return "—";
+                      if (range.count === 1) {
+                        // اگه ۱ ساعت بود، همون فرمت قبلی
+                        return `${range.start} - ${range.end}`;
+                      }
+                      // اگه چند ساعت بود
+                      return `${range.start} تا ${range.end} (${toPersianDigits(range.count)} ساعت)`;
+                    })()}
+                  </span>
+                </div>
+
+                {/* ===== قیمت ===== */}
+                <div className={styles.confirmItem}>
+                  <span className={styles.confirmLabel}>هزینه جلسه:</span>
+                  <span className={styles.confirmValuePrice}>
+                    {formatPrice(getFinalPrice())} تومان
+                  </span>
+                </div>
+              </div>
+              <p className={styles.confirmNote}>
+                پس از تأیید، پیامک تأیید نوبت برای شما ارسال خواهد شد.
+              </p>
+            </div>
+          </div>
         )}
 
         {/* دکمه‌های ناوبری */}
@@ -1308,11 +1653,14 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess, appointments }) {
               className={styles.btnNext}
               onClick={() => {
                 if (step === 1 && !selectedDoctor) {
-                  alert("لطفاً یک روانشناس انتخاب کنید");
+                  alert("لطفاً یک روانشناس انتخاب کنید.");
                   return;
                 }
-                if (step === 2 && (!selectedDate || !selectedTime)) {
-                  alert("لطفاً تاریخ و ساعت را انتخاب کنید");
+                if (
+                  step === 2 &&
+                  (!selectedDate || selectedTimes.length === 0)
+                ) {
+                  alert("لطفاً تاریخ و حداقل یک ساعت را انتخاب کنید.");
                   return;
                 }
                 setStep(step + 1);
@@ -1321,23 +1669,99 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess, appointments }) {
               {step === 1 ? "انتخاب زمان" : "مرحله بعد"}
             </button>
           ) : (
+            // <button
+            //   className={styles.btnConfirm}
+            //   onClick={() => {
+            //     // ===== محاسبه تاریخ شمسی =====
+            //     const persianDate = getDateFromWeekDay(selectedDate);
+
+            //     // ===== محاسبه ساعت =====
+            //     const fullTime = getEndTime(selectedTime);
+
+            //     // ===== نام نوع جلسه =====
+            //     const typeNames = {
+            //       individual: "جلسه مشاوره فردی",
+            //       couple: "جلسه زوج درمانی",
+            //       teen: "جلسه مشاوره نوجوان",
+            //     };
+
+            //     // ===== ایجاد نوبت جدید =====
+            //     const newAppointment = {
+            //       id: Date.now(),
+            //       type: typeNames[appointmentType] || "جلسه مشاوره فردی",
+            //       doctor: selectedDoctor?.name,
+            //       doctorId: selectedDoctor?.id,
+            //       date: toPersianDigits(persianDate),
+            //       time: toPersianDigits(fullTime),
+            //       status: "pending",
+            //       isOnline: true,
+            //       cancelledBy: null,
+            //       cancelReason: null,
+            //       createdAt: toPersianDigits(moment().format("jYYYY/jMM/jDD")),
+            //       price: selectedDoctor?.pricePerHour,
+            //     };
+
+            //     onSuccess?.(newAppointment);
+            //     onClose();
+            //   }}
+            // >
+            //   تأیید و ثبت نوبت
+            // </button>
+            // <button
+            //   className={styles.btnConfirm}
+            //   onClick={() => {
+            //     const persianDate = getDateFromWeekDay(selectedDate);
+            //     const range = getFinalTimeRange();
+            //     const fullTime = `${range.start} - ${range.end}`;
+            //     const finalPrice = getFinalPrice();
+
+            //     const typeNames = {
+            //       individual: "جلسه مشاوره فردی",
+            //       couple: "جلسه زوج درمانی",
+            //       teen: "جلسه مشاوره نوجوان",
+            //     };
+
+            //     const newAppointment = {
+            //       id: Date.now(),
+            //       type: typeNames[appointmentType] || "جلسه مشاوره فردی",
+            //       doctor: selectedDoctor?.name,
+            //       doctorId: selectedDoctor?.id,
+            //       date: toPersianDigits(persianDate),
+            //       time: toPersianDigits(fullTime),
+            //       status: "pending",
+            //       isOnline: true,
+            //       cancelledBy: null,
+            //       cancelReason: null,
+            //       createdAt: toPersianDigits(moment().format("jYYYY/jMM/jDD")),
+            //       price: finalPrice,
+            //       duration: selectedTimes.length, // ← تعداد ساعت (اختیاری)
+            //     };
+
+            //     onSuccess?.(newAppointment);
+            //     onClose();
+            //   }}
+            // >
+            //   تأیید و ثبت نوبت
+            // </button>
             <button
               className={styles.btnConfirm}
               onClick={() => {
-                // ===== محاسبه تاریخ شمسی =====
                 const persianDate = getDateFromWeekDay(selectedDate);
+                const range = getFinalTimeRange();
+                const fullTime = `${range.start} - ${range.end}`;
+                const finalPrice = getFinalPrice();
 
-                // ===== محاسبه ساعت =====
-                const fullTime = getEndTime(selectedTime);
-
-                // ===== نام نوع جلسه =====
                 const typeNames = {
                   individual: "جلسه مشاوره فردی",
                   couple: "جلسه زوج درمانی",
                   teen: "جلسه مشاوره نوجوان",
                 };
 
-                // ===== ایجاد نوبت جدید =====
+                // ===== مرتب‌سازی ساعت‌ها =====
+                const sortedHours = [...selectedTimes].sort(
+                  (a, b) => timeToMinutes(a) - timeToMinutes(b),
+                );
+
                 const newAppointment = {
                   id: Date.now(),
                   type: typeNames[appointmentType] || "جلسه مشاوره فردی",
@@ -1345,12 +1769,16 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess, appointments }) {
                   doctorId: selectedDoctor?.id,
                   date: toPersianDigits(persianDate),
                   time: toPersianDigits(fullTime),
+                  hours: sortedHours.map(toPersianDigits), // ← آرایه ساعت‌ها
+                  startTime: sortedHours[0],
+                  endTime: toPersianDigits(range.end),
                   status: "pending",
                   isOnline: true,
                   cancelledBy: null,
                   cancelReason: null,
                   createdAt: toPersianDigits(moment().format("jYYYY/jMM/jDD")),
-                  price: selectedDoctor?.pricePerHour,
+                  price: finalPrice,
+                  duration: selectedTimes.length,
                 };
 
                 onSuccess?.(newAppointment);

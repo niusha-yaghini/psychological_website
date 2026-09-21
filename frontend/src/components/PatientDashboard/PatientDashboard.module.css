@@ -1830,6 +1830,57 @@
   letter-spacing: 0;
 }
 
+/* ===== راهنمای انتخاب ساعت ===== */
+.timeHint {
+  grid-column: 1 / -1;
+  padding: 10px 16px;
+  background: rgba(45, 125, 110, 0.06);
+  border-radius: var(--radius);
+  font-size: 13px;
+  color: #2d7d6e;
+  text-align: center;
+  margin-top: 8px;
+  border-right: 3px solid #2d7d6e;
+}
+
+.timeHint strong {
+  color: #1b5a4e;
+}
+
+/* ===== ساعت‌های انتخاب شده ===== */
+.timeBtn.selected {
+  background: linear-gradient(135deg, #2d7d6ee8, #4caf84e0);
+  color: white;
+  border-color: #2d7d6eb1;
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(45, 125, 110, 0.3);
+}
+
+/* ===== نشانگر تعداد ===== */
+.timeBtn.selected::after {
+  content: "✓";
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 18px;
+  height: 18px;
+  background: #4caf84;
+  color: white;
+  border-radius: 50%;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid white;
+}
+
+/* .timeBtn.notConsecutive {
+  opacity: 0.7;
+  cursor: not-allowed;
+  background: #fafafa;
+  color: #ccc;
+} */
+
 /* ===== Confirm ===== */
 .confirmBox {
   text-align: center;
