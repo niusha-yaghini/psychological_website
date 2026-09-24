@@ -1293,9 +1293,12 @@
 
 .btnCancel {
   padding: 8px 20px;
-  background: transparent;
-  color: #e74c3c;
-  border: 1.5px solid #e74c3c;
+  /* background: transparent; */
+  background: #fdfcfc;
+  /* color: #e74c3c; */
+  color: #c62828;
+  /* border: 1.5px solid #e74c3c; */
+  border: 1.5px solid #c62828;
   border-radius: 30px;
   font-size: 14px;
   font-weight: 600;
@@ -1305,11 +1308,13 @@
 }
 
 .btnCancel:hover {
-  background: #e74c3c;
+  background: #c62828;
   color: white;
+  transform: scale(1.03);
+  box-shadow: 0 4px 16px rgba(198, 40, 40, 0.2);
 }
 
-.btnReview {
+/* .btnReview {
   padding: 8px 20px;
   background: transparent;
   color: #0d47a1;
@@ -1320,12 +1325,12 @@
   cursor: pointer;
   transition: var(--transition);
   font-family: inherit;
-}
+} */
 
-.btnReview:hover {
+/* .btnReview:hover {
   background: #0d47a1;
   color: white;
-}
+} */
 
 .btnMore {
   width: 36px;
@@ -2294,12 +2299,15 @@
 }
 
 .sessionUpcoming {
-  background: #e3f2fd;
-  color: #0d47a1;
+  /* background: #e3f2fd;
+  color: #0d47a1; */
+  background: #e8f5e9;
+  color: #2e7d32;
 }
 
 .sessionUpcoming .statusDot {
-  background: #0d47a1;
+  /* background: #0d47a1; */
+  background: #2e7d32;
 }
 
 .sessionOngoing {
@@ -2323,12 +2331,15 @@
 }
 
 .sessionCompleted {
-  background: #e8f5e9;
-  color: #2e7d32;
+  /* background: #e8f5e9;
+  color: #2e7d32; */
+  background: #e3f2fd;
+  color: #0d47a1;
 }
 
 .sessionCompleted .statusDot {
-  background: #2e7d32;
+  /* background: #2e7d32; */
+  background: #0d47a1;
 }
 
 .sessionCancelled {
@@ -2524,6 +2535,7 @@
 .btnViewRecord:hover {
   background: #0d47a1;
   color: white;
+  transform: translateY(-2px);
 }
 
 .btnFeedback {
@@ -2587,7 +2599,7 @@
   align-items: center;
   gap: 6px;
   padding: 8px 20px;
-  background: #fbe9e7;
+  background: #fdfcfc;
   color: #c62828;
   border: 1.5px solid #c62828;
   border-radius: 30px;
@@ -2601,7 +2613,7 @@
 .btnCancelSession:hover {
   background: #c62828;
   color: white;
-  transform: scale(1.05);
+  transform: scale(1.03);
   box-shadow: 0 4px 16px rgba(198, 40, 40, 0.2);
 }
 
@@ -2685,6 +2697,7 @@
   transition: var(--transition);
   font-family: inherit;
   flex-shrink: 0;
+  text-decoration: none; 
 }
 
 .btnNextSession:hover {
@@ -2698,6 +2711,29 @@
 
 .btnNextSession:hover span {
   transform: translateX(4px);
+}
+
+/* ===== دکمه ورود به جلسه غیرفعال ===== */
+.btnNextSessionDisabled {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 32px;
+  background: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.6);
+  border: none;
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: not-allowed;
+  font-family: inherit;
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+.btnNextSessionDisabled svg,
+.btnNextSessionDisabled span {
+  opacity: 0.5;
 }
 
 /* ===== Next Session Timer ===== */
@@ -2746,6 +2782,51 @@
   font-size: 20px;
   font-weight: 700;
   color: rgba(255, 255, 255, 0.5);
+}
+
+/* ===== بنر جلسه در حال برگزاری (قرمز) ===== */
+.nextSessionOngoing {
+  background: linear-gradient(135deg, #ce2525dd, #c82a27ca) !important;
+  animation: pulseOngoing 2s ease-in-out infinite;
+}
+
+@keyframes pulseOngoing {
+  0%,
+  100% {
+    box-shadow: 0 8px 30px rgba(198, 40, 40, 0.3);
+  }
+  50% {
+    box-shadow: 0 8px 40px rgba(198, 40, 40, 0.5);
+  }
+}
+
+/* ===== دکمه ورود در حال برگزاری ===== */
+.btnNextSessionOngoing {
+  background: white !important;
+  color: #c62828 !important;
+  font-weight: 800 !important;
+  animation: pulseButton 1.5s ease-in-out infinite;
+}
+
+@keyframes pulseButton {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* ===== تایمر صفر در حال برگزاری ===== */
+.nextSessionOngoing .timerDigit {
+  background: rgba(0, 0, 0, 0.4) !important;
+}
+
+.nextSessionOngoing .timerLabel {
+  color: #fff !important;
+  font-weight: 700;
+  font-size: 14px !important;
 }
 
 /* ============================================
@@ -2850,6 +2931,259 @@
 
   .nextSessionContent h3 {
     font-size: 17px;
+  }
+}
+
+/* ============================================
+   REVIEW MODAL
+============================================ */
+.reviewModal {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  max-width: 500px;
+  width: 100%;
+  padding: 32px;
+  animation: modalSlideUp 0.3s ease;
+}
+
+.reviewModalBody {
+  margin: 20px 0;
+}
+
+/* ===== اطلاعات جلسه ===== */
+.reviewSessionInfo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  background: var(--gray-light);
+  border-radius: var(--radius);
+  margin-bottom: 20px;
+}
+
+.reviewSessionIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.reviewSessionInfo h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0;
+}
+
+.reviewSessionInfo p {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 2px 0 0;
+}
+
+.reviewSessionDate {
+  font-size: 12px !important;
+  color: #2d7d6e !important;
+}
+
+/* ===== سوال ===== */
+.reviewQuestion {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-dark);
+  text-align: center;
+  margin: 0 0 16px;
+}
+
+/* ===== ستاره‌ها ===== */
+.starsContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.starBtn {
+  background: transparent;
+  border: none;
+  font-size: 40px;
+  color: #d5d0ca;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+  line-height: 1;
+}
+
+.starBtn:hover {
+  transform: scale(1.15);
+}
+
+.starBtn.starActive {
+  color: #ffc107;
+  text-shadow: 0 2px 8px rgba(255, 193, 7, 0.3);
+}
+
+.ratingText {
+  width: 100%;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: #2d7d6e;
+  margin-top: 4px;
+}
+
+/* ===== ورودی نظر ===== */
+.reviewInputGroup {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.reviewLabel {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.optionalTag {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.reviewTextarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid var(--gray-light);
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--text-dark);
+  resize: vertical;
+  transition: var(--transition);
+  background: var(--white);
+  min-height: 100px;
+  line-height: 1.6;
+}
+
+.reviewTextarea:focus {
+  border-color: #2d7d6e;
+  box-shadow: 0 0 0 4px rgba(45, 125, 110, 0.08);
+  outline: none;
+}
+
+.reviewTextarea::placeholder {
+  color: #b5b0aa;
+}
+
+.charCount {
+  display: block;
+  text-align: left;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* ===== یادداشت ===== */
+.reviewNote {
+  font-size: 13px;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 10px 16px;
+  background: rgba(45, 125, 110, 0.06);
+  border-radius: var(--radius);
+  margin: 0;
+  border-right: 3px solid #2d7d6e;
+}
+
+/* ===== دکمه ثبت ===== */
+.btnSubmitReview {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 32px;
+  background: linear-gradient(135deg, #2d7d6e, #4caf84);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+  box-shadow: 0 4px 20px rgba(45, 125, 110, 0.2);
+}
+
+.btnSubmitReview:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(45, 125, 110, 0.3);
+}
+
+.btnSubmitReview:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ===== دکمه ثبت نظر (توی کارت جلسه) ===== */
+.btnReview {
+  padding: 8px 20px;
+  background: transparent;
+  color: #db9732;
+  border: 1.5px solid #ac7b32;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btnReview:hover {
+  background: #e3941d;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(255, 152, 0, 0.3);
+}
+
+/* ===== متن "نظر ثبت شد" ===== */
+.reviewSubmitted {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  background: #e8f5e9;
+  color: #2e7d32;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ===== ریسپانسیو ===== */
+@media (max-width: 480px) {
+  .reviewModal {
+    padding: 24px 20px;
+  }
+
+  .starBtn {
+    font-size: 32px;
+  }
+
+  .modalFooter {
+    flex-direction: column;
+  }
+
+  .btnCancelModalSecondary,
+  .btnSubmitReview {
+    width: 100%;
+    justify-content: center;
   }
 }
 

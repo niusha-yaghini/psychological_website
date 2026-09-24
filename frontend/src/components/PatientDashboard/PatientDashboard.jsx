@@ -58,8 +58,19 @@ const toEnglishDigits = (str) => {
 };
 
 // ===== تبدیل اعداد انگلیسی به فارسی =====
+// const toPersianDigits = (str) => {
+//   if (!str) return str;
+//   const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
+//   const englishDigits = "0123456789";
+//   return String(str).replace(
+//     /[0-9]/g,
+//     (d) => persianDigits[englishDigits.indexOf(d)],
+//   );
+// };
+
+// ===== تبدیل اعداد انگلیسی به فارسی =====
 const toPersianDigits = (str) => {
-  if (!str) return str;
+  if (str === null || str === undefined) return str; // ← اصلاح شد
   const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
   const englishDigits = "0123456789";
   return String(str).replace(
@@ -229,6 +240,22 @@ const getAppointmentMoment = (appointment) => {
 };
 
 // ===== تعیین وضعیت نمایشی نوبت =====
+// const getDisplayStatus = (appointment) => {
+//   if (appointment.status === "completed") return "completed";
+//   if (appointment.status === "cancelled") return "cancelled";
+
+//   const appointmentMoment = getAppointmentMoment(appointment);
+//   if (!appointmentMoment.isValid()) return appointment.status;
+
+//   const isPast = appointmentMoment.isBefore(moment());
+
+//   if (isPast && appointment.status === "pending") return "expired";
+//   if (isPast && appointment.status === "confirmed") return "no-show";
+
+//   return appointment.status;
+// };
+
+// ===== تعیین وضعیت نمایشی نوبت =====
 const getDisplayStatus = (appointment) => {
   if (appointment.status === "completed") return "completed";
   if (appointment.status === "cancelled") return "cancelled";
@@ -236,10 +263,23 @@ const getDisplayStatus = (appointment) => {
   const appointmentMoment = getAppointmentMoment(appointment);
   if (!appointmentMoment.isValid()) return appointment.status;
 
-  const isPast = appointmentMoment.isBefore(moment());
+  const now = moment();
+  const durationMinutes = (appointment.duration || 1) * 60;
+  const endMoment = appointmentMoment.clone().add(durationMinutes, "minutes");
 
-  if (isPast && appointment.status === "pending") return "expired";
-  if (isPast && appointment.status === "confirmed") return "no-show";
+  const isPast = appointmentMoment.isBefore(now);
+  const isEnded = endMoment.isBefore(now);
+
+  // ===== اگه جلسه در حال برگزاریه =====
+  if (isPast && !isEnded && appointment.status === "confirmed") {
+    return "confirmed"; // ← هنوز confirmed بمونه (ongoing جدا مدیریت میشه)
+  }
+
+  // ===== اگه جلسه کامل تموم شده =====
+  if (isEnded) {
+    if (appointment.status === "pending") return "expired";
+    if (appointment.status === "confirmed") return "no-show";
+  }
 
   return appointment.status;
 };
@@ -332,6 +372,22 @@ const isNotCompleted = (appointment) => {
   );
 };
 
+// ===== چک کردن آیا جلسه در حال برگزاری است =====
+const isSessionOngoing = (appointment) => {
+  const startMoment = getAppointmentMoment(appointment);
+  if (!startMoment.isValid()) return false;
+
+  const now = moment();
+  const diffMinutes = startMoment.diff(now, "minutes");
+
+  // اگه زمان شروع رسیده و هنوز تموم نشده
+  // duration به دقیقه: appointment.duration * 60
+  const durationMinutes = (appointment.duration || 1) * 60;
+  const endMoment = startMoment.clone().add(durationMinutes, "minutes");
+
+  return now.isAfter(startMoment) && now.isBefore(endMoment);
+};
+
 // ============================================
 // 📌 کامپوننت‌ها (Components)
 // ============================================
@@ -354,9 +410,10 @@ function PatientDashboard() {
 
   // ===== محاسبه تعداد جلسات پیش‌رو =====
   const upcomingAppointmentsCount = useMemo(() => {
-    return appointments.filter(
-      (app) => app.status === "confirmed" || app.status === "pending",
-    ).length;
+    return appointments.filter((app) => {
+      const displayStatus = getDisplayStatus(app);
+      return displayStatus === "confirmed" || displayStatus === "pending";
+    }).length;
   }, [appointments]);
 
   // ===== محاسبه تعداد پیام‌های خوانده نشده =====
@@ -468,8 +525,15 @@ function PatientDashboard() {
             setAppointments={setAppointments}
           />
         );
+      // case "sessions":
+      //   return <SessionsContent />;
       case "sessions":
-        return <SessionsContent />;
+        return (
+          <SessionsContent
+            appointments={appointments}
+            setAppointments={setAppointments}
+          />
+        );
       case "messages":
         return (
           <MessagesContent
@@ -606,11 +670,18 @@ function DashboardContent({ userData, appointments }) {
       label: "جلسات برگزار شده",
       value: appointments.filter((a) => a.status === "completed").length,
     },
+    // {
+    //   label: "جلسات پیش‌رو",
+    //   value: appointments.filter(
+    //     (a) => a.status === "confirmed" || a.status === "pending",
+    //   ).length,
+    // },
     {
       label: "جلسات پیش‌رو",
-      value: appointments.filter(
-        (a) => a.status === "confirmed" || a.status === "pending",
-      ).length,
+      value: appointments.filter((a) => {
+        const displayStatus = getDisplayStatus(a);
+        return displayStatus === "confirmed" || displayStatus === "pending";
+      }).length,
     },
     { label: "پیشرفت کلی", value: "۶۵٪" },
     { label: "یادداشت‌ها", value: 12 },
@@ -764,21 +835,6 @@ function AppointmentsContent({ appointments, setAppointments }) {
     return statusMap[status] || statusMap.pending;
   };
 
-  // ===== دریافت اطلاعات وضعیت مشتق شده (Badge دوم) =====
-  const getDerivedStatusInfo = (displayStatus) => {
-    const statusMap = {
-      expired: {
-        label: "گذشتن از موعد تأیید",
-        className: styles.cancelBadge,
-      },
-      "no-show": {
-        label: "انجام نشده",
-        className: styles.cancelBadge,
-      },
-    };
-    return statusMap[displayStatus] || null;
-  };
-
   // =============================================
   // ۳. متغیرهای مشتق شده (از stateها)
   // =============================================
@@ -893,40 +949,6 @@ function AppointmentsContent({ appointments, setAppointments }) {
     { id: "not-completed", label: "انجام نشده" },
   ];
 
-  // ===== دریافت اطلاعات وضعیت (نسخه اصلاح‌شده) =====
-  const getStatusInfo = (appointment) => {
-    const displayStatus = getDisplayStatus(appointment);
-
-    const statusMap = {
-      confirmed: {
-        label: "تأیید شده",
-        className: styles.statusConfirmed,
-      },
-      pending: {
-        label: "در انتظار تأیید",
-        className: styles.statusPending,
-      },
-      completed: {
-        label: "انجام شده",
-        className: styles.statusCompleted,
-      },
-      cancelled: {
-        label: "لغو شده",
-        className: styles.statusCancelled,
-      },
-      expired: {
-        label: "گذشتن از موعد تأیید",
-        className: styles.statusCancelled, // ← رنگ قرمز
-      },
-      "no-show": {
-        label: "انجام نشده",
-        className: styles.statusCancelled, // ← رنگ قرمز
-      },
-    };
-
-    return statusMap[displayStatus] || statusMap.pending;
-  };
-
   // =============================================
   // ۵. رندر
   // =============================================
@@ -960,13 +982,16 @@ function AppointmentsContent({ appointments, setAppointments }) {
           >
             {filter.label}
             &nbsp;
-          <span className={styles.filterCount}>
-            {sortedAppointments.filter((item) => {
-              if (filter.id === "all") return true;
-              if (filter.id === "not-completed") return isNotCompleted(item);
-              return getDisplayStatus(item) === filter.id;
-            }).length}
-          </span>
+            <span className={styles.filterCount}>
+              {
+                sortedAppointments.filter((item) => {
+                  if (filter.id === "all") return true;
+                  if (filter.id === "not-completed")
+                    return isNotCompleted(item);
+                  return getDisplayStatus(item) === filter.id;
+                }).length
+              }
+            </span>
           </button>
         ))}
       </div>
@@ -1339,8 +1364,8 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess, appointments }) {
                       {doctor.specialty}
                     </span>
                     <div className={styles.doctorMeta}>
-                      <span>📅 {doctor.experience}</span>
-                      <span>⭐ {doctor.rating}</span>
+                      <span>{doctor.experience}</span>
+                      <span>{doctor.rating}</span>
                     </div>
                     {/* ===== قیمت ===== */}
                     <div className={styles.doctorPrice}>
@@ -1608,7 +1633,9 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess, appointments }) {
                   date: toPersianDigits(persianDate),
                   time: toPersianDigits(fullTime),
                   hours: sortedHours.map(toPersianDigits), // ← آرایه ساعت‌ها
-                  startTime: sortedHours[0],
+                  // startTime: sortedHours[0],
+                  // endTime: toPersianDigits(range.end),
+                  startTime: toPersianDigits(sortedHours[0]),
                   endTime: toPersianDigits(range.end),
                   status: "pending",
                   isOnline: true,
@@ -1635,176 +1662,308 @@ function NewAppointmentModal({ isOpen, onClose, onSuccess, appointments }) {
 // ============================================
 // COMPONENT: Sessions Content
 // ============================================
-function SessionsContent() {
+function SessionsContent({ appointments, setAppointments }) {
   const [activeTab, setActiveTab] = useState("upcoming");
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [selectedAppointmentId, setSelectedAppointmentId] = useState(null);
+  const [cancelReason, setCancelReason] = useState("");
+
+  // ===== Stateهای مودال نظر =====
+  const [showReviewModal, setShowReviewModal] = useState(false);
   const [selectedSession, setSelectedSession] = useState(null);
+  const [rating, setRating] = useState(0);
+  const [hoverRating, setHoverRating] = useState(0);
+  const [comment, setComment] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [sessions, setSessions] = useState(seedData.sessions);
+  // ===== باز کردن مودال نظر =====
+  const handleOpenReviewModal = (session) => {
+    setSelectedSession(session);
+    setRating(0);
+    setHoverRating(0);
+    setComment("");
+    setShowReviewModal(true);
+  };
 
-  // ===== فیلتر کردن جلسات =====
-  const getFilteredSessions = () => {
-    if (activeTab === "upcoming") {
-      return sessions.filter(
-        (s) => s.status === "upcoming" || s.status === "ongoing",
-      );
+  // ===== بستن مودال نظر =====
+  const handleCloseReviewModal = () => {
+    setShowReviewModal(false);
+    setSelectedSession(null);
+    setRating(0);
+    setHoverRating(0);
+    setComment("");
+  };
+
+  // ===== ثبت نظر =====
+  // const handleSubmitReview = () => {
+  //   if (!rating) {
+  //     alert("لطفاً امتیاز خود را انتخاب کنید.");
+  //     return;
+  //   }
+
+  //   if (!comment.trim()) {
+  //     alert("لطفاً نظر خود را وارد کنید.");
+  //     return;
+  //   }
+
+  //   setIsSubmitting(true);
+
+  //   // ===== شبیه‌سازی ارسال به سرور =====
+  //   setTimeout(() => {
+  //     // ===== ذخیره در appointments (اضافه کردن فیلد hasReview) =====
+  //     setAppointments((prev) =>
+  //       prev.map((item) =>
+  //         item.id === selectedSession.id
+  //           ? {
+  //               ...item,
+  //               hasReview: true,
+  //               review: {
+  //                 id: Date.now(),
+  //                 rating: rating,
+  //                 comment: comment.trim(),
+  //                 date: toPersianDigits(moment().format("jYYYY/jMM/jDD")),
+  //                 doctorId: item.doctorId,
+  //                 doctorName: item.doctor,
+  //                 isApproved: false, // بعداً توسط روانشناس تأیید میشه
+  //               },
+  //             }
+  //           : item,
+  //       ),
+  //     );
+
+  //     setIsSubmitting(false);
+  //     alert("✅ نظر شما با موفقیت ثبت شد و پس از تأیید نمایش داده می‌شود.");
+  //     handleCloseReviewModal();
+  //   }, 1500);
+  // };
+
+  // ===== ثبت نظر =====
+  const handleSubmitReview = () => {
+    if (!rating) {
+      alert("لطفاً امتیاز خود را انتخاب کنید.");
+      return;
     }
-    return sessions.filter(
-      // (s) => s.status === "completed" || s.status === "cancelled",
 
-      (s) => s.status === "completed" || s.status === "cancelled",
-    );
+    setIsSubmitting(true);
+
+    // ===== شبیه‌سازی ارسال به سرور =====
+    setTimeout(() => {
+      setAppointments((prev) =>
+        prev.map((item) =>
+          item.id === selectedSession.id
+            ? {
+                ...item,
+                hasReview: true,
+                review: {
+                  id: Date.now(),
+                  rating: rating,
+                  comment: comment.trim() || "", // ← خالی قبول میشه
+                  date: toPersianDigits(moment().format("jYYYY/jMM/jDD")),
+                  doctorId: item.doctorId,
+                  doctorName: item.doctor,
+                  isApproved: false,
+                },
+              }
+            : item,
+        ),
+      );
+
+      setIsSubmitting(false);
+      alert("نظر شما با موفقیت ثبت شد و پس از تأیید نمایش داده می‌شود.");
+      handleCloseReviewModal();
+    }, 1500);
   };
 
-  const filteredSessions = getFilteredSessions();
+  // ============================================
+  // فیلتر کردن جلسات
+  // ============================================
 
-  // ===== وضعیت‌ها =====
-  const getStatusInfo = (status) => {
-    const statusMap = {
-      upcoming: {
-        label: "در انتظار",
-        className: styles.sessionUpcoming,
-      },
-      ongoing: {
-        label: "در حال برگزاری",
-        className: styles.sessionOngoing,
-      },
-      completed: {
-        label: "انجام شده",
-        className: styles.sessionCompleted,
-      },
-      // cancelled: {
-      //   label: "لغو شده",
-      //   className: styles.sessionCancelled,
-      // },
-    };
-    return statusMap[status] || statusMap.upcoming;
-  };
+  // ===== جلسات پیش‌رو (confirmed + آینده) =====
+  // const upcomingSessions = appointments
+  //   .filter((app) => {
+  //     const displayStatus = getDisplayStatus(app);
+  //     return displayStatus === "confirmed";
+  //   })
+  //   .sort((a, b) => {
+  //     const momentA = getAppointmentMoment(a);
+  //     const momentB = getAppointmentMoment(b);
+  //     return momentA - momentB; // نزدیک‌ترین اول
+  //   });
 
-  const normalizePersian = (str) => {
-    const persian = "۰۱۲۳۴۵۶۷۸۹";
-    const english = "0123456789";
+  // ===== جلسات پیش‌رو (شامل در حال برگزاری) =====
+  const upcomingSessions = appointments
+    .filter((app) => {
+      const displayStatus = getDisplayStatus(app);
 
-    return str.replace(/[۰-۹]/g, (d) => english[persian.indexOf(d)]);
-  };
+      // جلساتی که تأیید شده و هنوز تموم نشدن
+      if (displayStatus !== "confirmed") return false;
 
-  const convertJalaliToDate = (date, time) => {
-    const normalizedDate = normalizePersian(date);
-    const normalizedTime = normalizePersian(time);
+      const startMoment = getAppointmentMoment(app);
+      if (!startMoment.isValid()) return false;
 
-    const [y, m, d] = normalizedDate.split("/");
-    const [hour, minute] = normalizedTime.split(":");
+      const now = moment();
+      const durationMinutes = (app.duration || 1) * 60;
+      const endMoment = startMoment.clone().add(durationMinutes, "minutes");
 
-    return moment(
-      `${y}/${m}/${d} ${hour}:${minute}`,
-      "jYYYY/jMM/jDD HH:mm",
-    ).toDate();
-  };
+      // اگه هنوز تموم نشده (چه شروع نشده، چه در حال برگزاری)
+      return now.isBefore(endMoment);
+    })
+    .sort((a, b) => {
+      const momentA = getAppointmentMoment(a);
+      const momentB = getAppointmentMoment(b);
+      return momentA - momentB; // نزدیک‌ترین اول
+    });
 
-  // ===== پیدا کردن جلسه بعدی (نزدیک‌ترین جلسه) =====
-  const getNextSession = () => {
-    const upcomingSessions = sessions.filter(
-      (s) => s.status === "upcoming" || s.status === "ongoing",
-    );
+  // ===== تاریخچه (completed) =====
+  const pastSessions = appointments
+    .filter((app) => app.status === "completed")
+    .sort((a, b) => {
+      const momentA = getAppointmentMoment(a);
+      const momentB = getAppointmentMoment(b);
+      return momentB - momentA; // جدیدترین اول
+    });
 
-    if (upcomingSessions.length === 0) return null;
+  // ===== جلسه بعدی =====
+  // const nextSession = upcomingSessions[0] || null;
+  const nextSession = upcomingSessions[0] || null;
+  const isNextOngoing = nextSession ? isSessionOngoing(nextSession) : false;
 
-    return upcomingSessions.sort((a, b) => {
-      const dateA = convertJalaliToDate(a.date, a.time);
-      const dateB = convertJalaliToDate(b.date, b.time);
-
-      return dateA - dateB;
-    })[0];
-  };
-
-  const nextSession = getNextSession();
-
-  // ===== تایمر شمارش معکوس (فقط برای جلسه بعدی) =====
+  // ============================================
+  // تایمر شمارش معکوس
+  // ============================================
   const [timeLeft, setTimeLeft] = useState(null);
+
+  // useEffect(() => {
+  //   if (!nextSession) return;
+
+  //   const targetMoment = getAppointmentMoment(nextSession);
+  //   if (!targetMoment.isValid()) return;
+
+  //   const updateTimer = () => {
+  //     const now = moment();
+  //     const diff = targetMoment.diff(now, "seconds");
+
+  //     if (diff <= 0) {
+  //       setTimeLeft(null);
+  //       return false;
+  //     }
+
+  //     const days = Math.floor(diff / (60 * 60 * 24));
+  //     const hours = Math.floor((diff % (60 * 60 * 24)) / (60 * 60));
+  //     const minutes = Math.floor((diff % (60 * 60)) / 60);
+  //     const seconds = diff % 60;
+
+  //     setTimeLeft({ days, hours, minutes, seconds });
+  //     return true;
+  //   };
+
+  //   updateTimer();
+  //   const interval = setInterval(() => {
+  //     if (!updateTimer()) {
+  //       clearInterval(interval);
+  //     }
+  //   }, 1000);
+
+  //   return () => clearInterval(interval);
+  //   // }, [nextSession]);
+  // }, [nextSession?.id]);
 
   useEffect(() => {
     if (!nextSession) return;
 
-    // const targetDate = new Date(nextSession.date + " " + nextSession.time);
-    const targetDate = convertJalaliToDate(nextSession.date, nextSession.time);
+    const targetMoment = getAppointmentMoment(nextSession);
+    if (!targetMoment.isValid()) return;
 
-    const interval = setInterval(() => {
-      const now = new Date();
-      const diff = targetDate - now;
+    const updateTimer = () => {
+      const now = moment();
+      const diff = targetMoment.diff(now, "seconds");
 
+      // ===== اگه جلسه شروع شده یا در حال برگزاریه =====
       if (diff <= 0) {
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        return true; // ← همچنان تایمر رو آپدیت کن (برای تشخیص پایان جلسه)
+      }
+
+      const days = Math.floor(diff / (60 * 60 * 24));
+      const hours = Math.floor((diff % (60 * 60 * 24)) / (60 * 60));
+      const minutes = Math.floor((diff % (60 * 60)) / 60);
+      const seconds = diff % 60;
+
+      setTimeLeft({ days, hours, minutes, seconds });
+      return true;
+    };
+
+    updateTimer();
+    const interval = setInterval(() => {
+      if (!updateTimer()) {
         clearInterval(interval);
-        setTimeLeft(null);
-      } else {
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-
-        const hours = Math.floor(
-          (diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
-        );
-
-        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-
-        setTimeLeft({
-          days,
-          hours,
-          minutes,
-        });
       }
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [nextSession]);
+  }, [nextSession?.id]);
 
-  // ===== تابع لغو جلسه =====
-  const handleCancelSession = (sessionId) => {
-    const session = sessions.find((s) => s.id === sessionId);
-    if (!session) return;
+  // ============================================
+  // توابع کمکی
+  // ============================================
 
-    // ===== اگر قبلاً لغو شده =====
-    if (session.status === "cancelled") {
-      alert("این جلسه قبلاً لغو شده است.");
-      return;
-    }
+  // ===== بررسی امکان لغو =====
+  const canCancelSession = (appointment) => {
+    const displayStatus = getDisplayStatus(appointment);
+    if (displayStatus !== "confirmed") return false;
 
-    // ===== بررسی قانون ۲۴ ساعت =====
-    const now = new Date();
-    const sessionDate = new Date(session.date + " " + session.time);
-    const diffHours = (sessionDate - now) / (1000 * 60 * 60);
+    const appointmentMoment = getAppointmentMoment(appointment);
+    if (!appointmentMoment.isValid()) return false;
 
-    if (diffHours < 24) {
-      alert("امکان لغو جلسه کمتر از ۲۴ ساعت قبل وجود ندارد.");
-      return;
-    }
+    const diffHours = appointmentMoment.diff(moment(), "hours", true);
+    return diffHours >= 24;
+  };
 
-    const reason = prompt("لطفاً دلیل لغو جلسه را وارد کنید:");
-    if (reason === null) return;
+  // ===== بررسی "لغو غیرفعال" =====
+  const isCancelDisabledSession = (appointment) => {
+    const displayStatus = getDisplayStatus(appointment);
+    if (displayStatus !== "confirmed") return false;
 
-    // ===== به‌روزرسانی وضعیت =====
-    setSessions((prev) =>
+    const appointmentMoment = getAppointmentMoment(appointment);
+    if (!appointmentMoment.isValid()) return false;
+
+    const diffHours = appointmentMoment.diff(moment(), "hours", true);
+    return diffHours < 24 && diffHours > 0;
+  };
+
+  // ===== باز کردن مودال لغو =====
+  const handleCancelSession = (appointment) => {
+    setSelectedAppointmentId(appointment.id);
+    setCancelReason("");
+    setShowCancelModal(true);
+  };
+
+  // ===== تأیید لغو =====
+  const confirmCancelSession = () => {
+    if (!selectedAppointmentId) return;
+
+    setAppointments((prev) =>
       prev.map((item) =>
-        item.id === sessionId
+        item.id === selectedAppointmentId
           ? {
               ...item,
               status: "cancelled",
               cancelledBy: "user",
-              cancelReason: reason,
+              cancelReason: cancelReason.trim() || "بدون دلیل",
             }
           : item,
       ),
     );
 
+    setShowCancelModal(false);
+    setSelectedAppointmentId(null);
+    setCancelReason("");
     alert("جلسه با موفقیت لغو شد.");
   };
 
-  // ===== بررسی امکان لغو =====
-  const canCancelSession = (session) => {
-    if (session.status !== "upcoming") return false;
-
-    const now = new Date();
-    const sessionDate = new Date(session.date + " " + session.time);
-    const diffHours = (sessionDate - now) / (1000 * 60 * 60);
-    return diffHours >= 24;
-  };
-
+  // ============================================
+  // رندر
+  // ============================================
   return (
     <div className={styles.pageContent}>
       {/* هدر بخش */}
@@ -1815,20 +1974,12 @@ function SessionsContent() {
         </div>
         <div className={styles.sessionStats}>
           <span className={styles.statItem}>
-            <span className={styles.statNumber}>
-              {
-                sessions.filter(
-                  (s) => s.status === "upcoming" || s.status === "ongoing",
-                ).length
-              }
-            </span>
+            <span className={styles.statNumber}>{upcomingSessions.length}</span>
             <span className={styles.statLabel}>جلسه پیش‌رو</span>
           </span>
           <span className={styles.statDivider}>|</span>
           <span className={styles.statItem}>
-            <span className={styles.statNumber}>
-              {sessions.filter((s) => s.status === "completed").length}
-            </span>
+            <span className={styles.statNumber}>{pastSessions.length}</span>
             <span className={styles.statLabel}>جلسه برگزار شده</span>
           </span>
         </div>
@@ -1842,7 +1993,8 @@ function SessionsContent() {
           }`}
           onClick={() => setActiveTab("upcoming")}
         >
-          جلسات پیش‌رو
+          جلسات پیش‌رو &nbsp;
+          <span className={styles.filterCount}>{upcomingSessions.length}</span>
         </button>
         <button
           className={`${styles.filterTab} ${
@@ -1850,37 +2002,79 @@ function SessionsContent() {
           }`}
           onClick={() => setActiveTab("past")}
         >
-          تاریخچه جلسات
+          تاریخچه جلسات &nbsp;
+          <span className={styles.filterCount}>{pastSessions.length}</span>
         </button>
       </div>
 
       {/* لیست جلسات */}
       <div className={styles.sessionsList}>
-        {/* جلسه بعدی - کارت ویژه */}
+        {/* ===== جلسه بعدی - کارت ویژه ===== */}
         {activeTab === "upcoming" && nextSession && (
-          <div className={styles.nextSessionBanner}>
+          <div
+            className={`${styles.nextSessionBanner} ${
+              isNextOngoing ? styles.nextSessionOngoing : ""
+            }`}
+          >
             <div className={styles.nextSessionContent}>
-              <span className={styles.nextSessionLabel}>جلسه بعدی شما</span>
-              <h3>{nextSession.title}</h3>
+              <span className={styles.nextSessionLabel}>
+                {isNextOngoing ? "در حال برگزاری" : "جلسه بعدی شما"}
+              </span>
+              <h3>{nextSession.type}</h3>
               <p>با {nextSession.doctor}</p>
               <div className={styles.nextSessionTime}>
                 <span>{nextSession.date}</span>
-                <span>-</span>
+                <span>•</span>
                 <span>{nextSession.time}</span>
               </div>
             </div>
 
             <div className={styles.nextSessionTimerEnterContainer}>
-              <button className={styles.btnNextSession}>
-                ورود به جلسه
+              {/* <a
+                href="https://meet.google.com/cnt-rxmj-hoh"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`${styles.btnNextSession} ${
+                  isNextOngoing ? styles.btnNextSessionOngoing : ""
+                }`}
+              >
+                {isNextOngoing ? "🚀 ورود به جلسه" : "ورود به جلسه"}
                 <span>→</span>
-              </button>
+              </a> */}
+              {isNextOngoing ? (
+                <a
+                  href="https://meet.google.com/cnt-rxmj-hoh"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`${styles.btnNextSession} ${styles.btnNextSessionOngoing}`}
+                >
+                  ورود به جلسه
+                  <span>→</span>
+                </a>
+              ) : (
+                <button
+                  className={styles.btnNextSessionDisabled}
+                  disabled
+                  title="در زمان برگزاری جلسه فعال می‌شود"
+                >
+                  ورود به جلسه
+                  <span>→</span>
+                </button>
+              )}
 
-              {/* ===== تایمر فقط اینجا ===== */}
               {timeLeft && (
                 <div className={styles.nextSessionTimer}>
-                  <span className={styles.timerLabel}>زمان تا شروع:</span>
+                  <span className={styles.timerLabel}>
+                    {isNextOngoing
+                      ? "جلسه در حال برگزاری است."
+                      : "زمان تا شروع:"}
+                  </span>
                   <div className={styles.timerDigits}>
+                    <span className={styles.timerDigit}>
+                      {String(timeLeft.seconds).padStart(2, "0")}
+                      <span className={styles.timerUnit}>ثانیه</span>
+                    </span>
+                    <span className={styles.timerSeparator}>:</span>
                     <span className={styles.timerDigit}>
                       {String(timeLeft.minutes).padStart(2, "0")}
                       <span className={styles.timerUnit}>دقیقه</span>
@@ -1902,52 +2096,111 @@ function SessionsContent() {
           </div>
         )}
 
-        {/* ===== لیست بقیه جلسات (بدون تایمر) ===== */}
-        {filteredSessions.length > 0 ? (
-          filteredSessions.map((session) => {
-            // اگر این جلسه، جلسه بعدی هست، از رندر کردنش صرف‌نظر کن
-            if (nextSession && session.id === nextSession.id) return null;
+        {/* ===== لیست جلسات پیش‌رو ===== */}
+        {activeTab === "upcoming" &&
+          (upcomingSessions.length > 0 ? (
+            upcomingSessions.map((session) => {
+              // جلسه بعدی رو توی کارت ویژه نشون دادیم، اینجا رد کن
+              if (nextSession && session.id === nextSession.id) return null;
 
-            const statusInfo = getStatusInfo(session.status);
-            const isUpcoming =
-              session.status === "upcoming" || session.status === "ongoing";
+              const canCancel = canCancelSession(session);
+              const isDisabled = isCancelDisabledSession(session);
 
-            return (
+              return (
+                <div key={session.id} className={styles.sessionCard}>
+                  {/* هدر کارت */}
+                  <div className={styles.sessionCardHeader}>
+                    <div className={styles.sessionDoctor}>
+                      <div>
+                        <h4>{session.doctor}</h4>
+                        <span className={styles.sessionType}>
+                          {session.type}
+                        </span>
+                      </div>
+                    </div>
+                    <span
+                      className={`${styles.sessionStatus} ${styles.sessionUpcoming}`}
+                    >
+                      <span className={styles.statusDot}></span>
+                      تأیید شده
+                    </span>
+                  </div>
+
+                  {/* جزئیات */}
+                  <div className={styles.sessionDetails}>
+                    <div className={styles.sessionMeta}>
+                      <div className={styles.metaGroup}>
+                        <span>{session.date}</span>
+                      </div>
+                      <span>•</span>
+                      <div className={styles.metaGroup}>
+                        <span>{session.time}</span>
+                      </div>
+                      <span>•</span>
+                      <div className={styles.metaGroup}>
+                        <span>جلسه آنلاین</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* دکمه‌های اکشن */}
+                  <div className={styles.sessionActions}>
+                    {canCancel ? (
+                      <button
+                        className={styles.btnCancelSession}
+                        onClick={() => handleCancelSession(session)}
+                      >
+                        لغو نوبت
+                      </button>
+                    ) : isDisabled ? (
+                      <button className={styles.btnCancelDisabled} disabled>
+                        لغو غیرفعال (کمتر از ۲۴ ساعت)
+                      </button>
+                    ) : null}
+                  </div>
+                </div>
+              );
+            })
+          ) : (
+            <div className={styles.emptyState}>
+              <span className={styles.emptyIcon}>🎥</span>
+              <h3>هیچ جلسه پیش‌رویی ندارید</h3>
+              <p>برای رزرو جلسه، به بخش "نوبت‌های من" بروید.</p>
+            </div>
+          ))}
+
+        {/* ===== لیست تاریخچه جلسات ===== */}
+        {activeTab === "past" &&
+          (pastSessions.length > 0 ? (
+            pastSessions.map((session) => (
               <div key={session.id} className={styles.sessionCard}>
                 {/* هدر کارت */}
                 <div className={styles.sessionCardHeader}>
                   <div className={styles.sessionDoctor}>
-                    <img
-                      src={session.doctorImage}
-                      alt={session.doctor}
-                      className={styles.sessionDoctorAvatar}
-                    />
                     <div>
                       <h4>{session.doctor}</h4>
-                      <span className={styles.sessionType}>
-                        {session.title}
-                      </span>
+                      <span className={styles.sessionType}>{session.type}</span>
                     </div>
                   </div>
                   <span
-                    className={`${styles.sessionStatus} ${statusInfo.className}`}
+                    className={`${styles.sessionStatus} ${styles.sessionCompleted}`}
                   >
                     <span className={styles.statusDot}></span>
-                    {statusInfo.label}
+                    انجام شده
                   </span>
                 </div>
 
-                {/* جزئیات جلسه (بدون تایمر) */}
+                {/* جزئیات */}
                 <div className={styles.sessionDetails}>
                   <div className={styles.sessionMeta}>
                     <div className={styles.metaGroup}>
                       <span>{session.date}</span>
                     </div>
+                    <span>•</span>
                     <div className={styles.metaGroup}>
-                      <span>
-                        {session.time} - {session.duration}
-                      </span>
+                      <span>{session.time}</span>
                     </div>
+                    <span>•</span>
                     <div className={styles.metaGroup}>
                       <span>جلسه آنلاین</span>
                     </div>
@@ -1956,67 +2209,198 @@ function SessionsContent() {
 
                 {/* دکمه‌های اکشن */}
                 <div className={styles.sessionActions}>
-                  {session.status === "upcoming" && (
-                    <>
-                      {/* ===== اگر جلسه بعدی است ===== */}
-                      {nextSession && session.id === nextSession.id ? (
-                        <button className={styles.btnJoinSession}>
-                          <span>▶</span>
-                          ورود به جلسه
-                        </button>
-                      ) : (
-                        /* ===== اگر جلسه آتی است ===== */
-                        <>
-                          {canCancelSession(session) ? (
-                            <button
-                              className={styles.btnCancelSession}
-                              onClick={() => handleCancelSession(session.id)}
-                            >
-                              لغو جلسه
-                            </button>
-                          ) : (
-                            <button
-                              className={styles.btnCancelDisabled}
-                              disabled
-                            >
-                              لغو غیرفعال (کمتر از ۲۴ ساعت)
-                            </button>
-                          )}
-                        </>
-                      )}
-                    </>
-                  )}
+                  <button className={styles.btnViewRecord}>
+                    📹 مشاهده ضبط جلسه
+                  </button>
 
-                  {session.status === "ongoing" && (
-                    <button className={styles.btnJoinNow}>
-                      <span className={styles.pulseDot}></span>
-                      ورود به جلسه (در حال برگزاری)
+                  {/* ===== دکمه ثبت نظر ===== */}
+                  {session.hasReview ? (
+                    <span className={styles.reviewSubmitted}>
+                      نظر شما ثبت شد.
+                    </span>
+                  ) : (
+                    <button
+                      className={styles.btnReview}
+                      onClick={() => handleOpenReviewModal(session)}
+                    >
+                      ثبت نظر
                     </button>
-                  )}
-
-                  {session.status === "completed" && (
-                    <>
-                      <button className={styles.btnViewRecord}>
-                        مشاهده ضبط جلسه
-                      </button>
-                    </>
                   )}
                 </div>
               </div>
-            );
-          })
-        ) : (
-          <div className={styles.emptyState}>
-            <span className={styles.emptyIcon}>🎥</span>
-            <h3>هیچ جلسه‌ای در این دسته وجود ندارد</h3>
-            <p>
-              {activeTab === "upcoming"
-                ? "شما هیچ جلسه پیش‌رویی ندارید."
-                : "هنوز جلسه برگزار شده‌ای وجود ندارد."}
-            </p>
-          </div>
-        )}
+            ))
+          ) : (
+            <div className={styles.emptyState}>
+              <span className={styles.emptyIcon}>🎥</span>
+              <h3>هنوز جلسه برگزار شده‌ای وجود ندارد</h3>
+              <p>جلسات انجام شده شما در اینجا نمایش داده می‌شوند.</p>
+            </div>
+          ))}
       </div>
+
+      {/* ===== مودال لغو ===== */}
+      {showCancelModal && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.cancelModal}>
+            <div className={styles.modalHeader}>
+              <h3>لغو نوبت</h3>
+              <button
+                className={styles.modalClose}
+                onClick={() => setShowCancelModal(false)}
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className={styles.cancelModalBody}>
+              <p className={styles.cancelWarning}>
+                ⚠️ آیا از لغو این جلسه اطمینان دارید؟
+              </p>
+              <p className={styles.cancelHint}>
+                (اختیاری) در صورت تمایل، دلیل لغو را وارد کنید:
+              </p>
+              <textarea
+                className={styles.cancelTextarea}
+                placeholder="دلیل لغو (اختیاری)..."
+                value={cancelReason}
+                onChange={(e) => setCancelReason(e.target.value)}
+                rows="3"
+              />
+            </div>
+
+            <div className={styles.modalFooter}>
+              <button
+                className={styles.btnCancelModalSecondary}
+                onClick={() => setShowCancelModal(false)}
+              >
+                انصراف
+              </button>
+              <button
+                className={styles.btnCancelModalPrimary}
+                onClick={confirmCancelSession}
+              >
+                تأیید لغو
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ===== مودال ثبت نظر ===== */}
+      {showReviewModal && selectedSession && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.reviewModal}>
+            {/* هدر */}
+            <div className={styles.modalHeader}>
+              <h3>ثبت نظر</h3>
+              <button
+                className={styles.modalClose}
+                onClick={handleCloseReviewModal}
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* محتوا */}
+            <div className={styles.reviewModalBody}>
+              {/* اطلاعات جلسه */}
+              <div className={styles.reviewSessionInfo}>
+                <span className={styles.reviewSessionIcon}>🧑‍⚕️</span>
+                <div>
+                  <h4>{selectedSession.doctor}</h4>
+                  {/* <p>{selectedSession.type}</p> */}
+                  <p className={styles.reviewSessionDate}>
+                    {selectedSession.date}
+                  </p>
+                </div>
+              </div>
+
+              {/* سوال */}
+              <p className={styles.reviewQuestion}>
+                تجربه‌ات از این جلسه چطور بود؟
+              </p>
+
+              {/* ستاره‌ها */}
+              <div className={styles.starsContainer}>
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button
+                    key={star}
+                    type="button"
+                    className={`${styles.starBtn} ${
+                      star <= (hoverRating || rating) ? styles.starActive : ""
+                    }`}
+                    onClick={() => setRating(star)}
+                    onMouseEnter={() => setHoverRating(star)}
+                    onMouseLeave={() => setHoverRating(0)}
+                    aria-label={`${star} ستاره`}
+                  >
+                    ★
+                  </button>
+                ))}
+                {/* {rating > 0 && (
+                  <span className={styles.ratingText}>
+                    {rating === 1 && "خیلی ضعیف"}
+                    {rating === 2 && "ضعیف"}
+                    {rating === 3 && "متوسط"}
+                    {rating === 4 && "خوب"}
+                    {rating === 5 && "عالی"}
+                  </span>
+                )} */}
+              </div>
+
+              {/* کامنت */}
+              <div className={styles.reviewInputGroup}>
+                <label className={styles.reviewLabel}>
+                  نظرت رو بنویس{" "}
+                  <span className={styles.optionalTag}>(اختیاری)</span>
+                </label>
+                <textarea
+                  className={styles.reviewTextarea}
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                  rows="4"
+                  maxLength="500"
+                />
+                <span className={styles.charCount}>
+                  {toPersianDigits(comment.length)} / ۵۰۰
+                </span>
+              </div>
+
+              {/* یادداشت */}
+              <p className={styles.reviewNote}>
+                نظر شما پس از تأیید در صفحه اصلی سایت نمایش داده می‌شود.
+              </p>
+            </div>
+
+            {/* دکمه‌ها */}
+            <div className={styles.modalFooter}>
+              <button
+                className={styles.btnCancelModalSecondary}
+                onClick={handleCloseReviewModal}
+                disabled={isSubmitting}
+              >
+                انصراف
+              </button>
+              <button
+                className={styles.btnSubmitReview}
+                onClick={handleSubmitReview}
+                disabled={isSubmitting || !rating}
+              >
+                {isSubmitting ? (
+                  <>
+                    <span className={styles.spinner}></span>
+                    در حال ارسال...
+                  </>
+                ) : (
+                  <>
+                    <span>ثبت نظر</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -2603,17 +2987,6 @@ function ExerciseContent() {
               completed: !ex.completed,
               progress: ex.completed ? 0 : 100,
             }
-          : ex,
-      ),
-    );
-  };
-
-  // ===== تابع ثبت پیشرفت =====
-  const updateProgress = (id, value) => {
-    setExercises((prev) =>
-      prev.map((ex) =>
-        ex.id === id
-          ? { ...ex, progress: Math.min(100, Math.max(0, value)) }
           : ex,
       ),
     );
@@ -3307,9 +3680,6 @@ function SettingsContent() {
   );
   const [displaySettings, setDisplaySettings] = useState(
     seedData.settings.displaySettings,
-  );
-  const [privacySettings, setPrivacySettings] = useState(
-    seedData.settings.privacySettings,
   );
 
   // ===== تابع تغییر تنظیمات =====

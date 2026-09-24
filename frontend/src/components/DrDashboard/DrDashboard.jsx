@@ -494,7 +494,9 @@ function DoctorDashboard() {
     },
     {
       id: "messages",
-      label: "پیام‌ها",
+      // label: "پیام‌ها",
+      
+      label: "اعلان‌ها",
       icon: <FaCommentDots />,
       badge: 5,
     },
@@ -849,72 +851,6 @@ function AppointmentsManagement() {
           ),
         )}
       </div>
-
-      {/* ===== لیست نوبت‌ها ===== */}
-      {/* <div className={styles.appointmentsList}>
-        {filteredAppointments.length > 0 ? (
-          filteredAppointments.map((app) => {
-            const status = getStatusInfo(app.status);
-            return (
-              <div key={app.id} className={styles.appointmentCard}>
-                <div className={styles.appointmentInfo}>
-                  <h4>{app.patient}</h4>
-                  <p>
-                    {app.type} • {app.date} • {app.time}
-                  </p>
-                </div>
-
-                <span className={`${styles.statusBadge} ${status.className}`}>
-                  {status.label}
-                </span>
-
-                <div className={styles.appointmentActions}>
-                  {app.status === "pending" && (
-                    <>
-                      <button
-                        className={styles.btnApprove}
-                        onClick={() => handleConfirm(app)}
-                      >
-                        تأیید
-                      </button>
-                      <button
-                        className={styles.btnReject}
-                        onClick={() => handleReject(app)}
-                      >
-                        رد
-                      </button>
-                    </>
-                  )}
-
-                  {app.status === "confirmed" && (
-                    <button
-                      className={styles.btnComplete}
-                      onClick={() => handleComplete(app)}
-                    >
-                      ثبت انجام
-                    </button>
-                  )}
-
-                  {app.status === "completed" && (
-                    <span className={styles.completedLabel}>انجام شده</span>
-                  )}
-
-                  {app.status === "cancelled" && (
-                    <span className={styles.cancelledLabel}>لغو شده</span>
-                  )}
-
-                </div>
-              </div>
-            );
-          })
-        ) : (
-          <div className={styles.emptyState}>
-            <span className={styles.emptyIcon}>📭</span>
-            <h3>هیچ نوبتی در این دسته وجود ندارد</h3>
-            <p>برای افزودن نوبت جدید، روی دکمه "افزودن نوبت جدید" کلیک کنید.</p>
-          </div>
-        )}
-      </div> */}
 
       {/* ===== لیست نوبت‌ها ===== */}
       <div className={styles.appointmentsList}>

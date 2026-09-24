@@ -220,6 +220,8 @@ const seedData = {
       availableDays: ["شنبه", "یکشنبه", "سه‌شنبه"],
       // ===== ساعت‌های کاری =====
       availableTimes: ["۱۰:۰۰", "۱۱:۰۰", "۱۲:۰۰", "۱۴:۰۰", "۱۵:۰۰", "۱۶:۰۰"],
+      rating: 4.8, // ← میانگین (داینامیک یا ثابت)
+      reviewsCount: 125, // ← تعداد نظرات
     },
     {
       id: 2,
@@ -231,6 +233,8 @@ const seedData = {
       image: "/images/doctors/doctor2.png",
       availableDays: ["شنبه", "دوشنبه", "چهارشنبه"],
       availableTimes: ["۰۹:۰۰", "۱۰:۰۰", "۱۱:۰۰", "۱۶:۰۰", "۱۷:۰۰", "۱۸:۰۰"],
+      rating: 4.6, // ← میانگین (داینامیک یا ثابت)
+      reviewsCount: 55, // ← تعداد نظرات
     },
     {
       id: 3,
@@ -242,6 +246,8 @@ const seedData = {
       image: "/images/doctors/doctor3.png",
       availableDays: ["یکشنبه", "سه‌شنبه", "پنجشنبه"],
       availableTimes: ["۱۴:۰۰", "۱۵:۰۰", "۱۶:۰۰", "۱۷:۰۰"],
+      rating: 4.9, // ← میانگین (داینامیک یا ثابت)
+      reviewsCount: 105, // ← تعداد نظرات
     },
   ],
 
@@ -265,6 +271,7 @@ const seedData = {
       cancelReason: null,
       createdAt: "۱۴۰۵/۰۶/۰۳",
       price: 2800000,
+      duration: 1,
     },
     {
       id: 2,
@@ -282,6 +289,7 @@ const seedData = {
       cancelReason: null,
       createdAt: "۱۴۰۵/۰۶/۰۵",
       price: 3200000,
+      duration: 1,
     },
     {
       id: 3,
@@ -299,6 +307,8 @@ const seedData = {
       cancelReason: null,
       createdAt: "۱۴۰۵/۰۵/۱۰",
       price: 2800000,
+      hasReview: false, // ← جدید
+      duration: 1,
     },
     {
       id: 4,
@@ -316,6 +326,7 @@ const seedData = {
       cancelReason: "مشکل شخصی",
       createdAt: "۱۴۰۵/۰۶/۰۱",
       price: 2500000,
+      duration: 1,
     },
     {
       id: 5,
@@ -333,13 +344,50 @@ const seedData = {
       cancelReason: "هماهنگی با پزشک",
       createdAt: "۱۴۰۵/۰۵/۳۰",
       price: 3200000,
+      duration: 1,
     },
     {
       id: 6,
       type: "جلسه مشاوره فردی",
       doctor: "دکتر محمد رضایی",
       doctorId: 1,
-      date: "۱۴۰۵/۰۶/۱۰",
+      date: "۱۴۰۵/۰۷/۰۲",
+      time: "۱۲:۰۰ - ۱۴:۰۰",
+      hours: ["۱۲:۰۰", "۱۳:۰۰"],
+      startTime: "۱۲:۰۰",
+      endTime: "۱۴:۰۰",
+      status: "confirmed",
+      isOnline: true,
+      cancelledBy: null,
+      cancelReason: null,
+      createdAt: "۱۴۰۵/۰۶/۰۵",
+      price: 2800000,
+      duration: 2,
+    },
+    {
+      id: 7,
+      type: "جلسه مشاوره فردی",
+      doctor: "دکتر محمد رضایی",
+      doctorId: 1,
+      date: "۱۴۰۵/۰۷/۰۵",
+      time: "۱۴:۰۰ - ۱۵:۰۰",
+      hours: ["۱۴:۰۰"],
+      startTime: "۱۴:۰۰",
+      endTime: "۱۵:۰۰",
+      status: "pending",
+      isOnline: true,
+      cancelledBy: null,
+      cancelReason: null,
+      createdAt: "۱۴۰۵/۰۶/۰۵",
+      price: 2800000,
+      duration: 1,
+    },
+    {
+      id: 8,
+      type: "جلسه مشاوره فردی",
+      doctor: "دکتر محمد رضایی",
+      doctorId: 1,
+      date: "۱۴۰۵/۰۷/۰۶",
       time: "۱۴:۰۰ - ۱۵:۰۰",
       hours: ["۱۴:۰۰"],
       startTime: "۱۴:۰۰",
@@ -350,7 +398,65 @@ const seedData = {
       cancelReason: null,
       createdAt: "۱۴۰۵/۰۶/۰۵",
       price: 2800000,
+      duration: 1,
     },
+    {
+      id: 9,
+      type: "جلسه مشاوره فردی",
+      doctor: "دکتر محمد رضایی",
+      doctorId: 1,
+      date: "۱۴۰۵/۰۶/۲۳",
+      time: "۱۴:۰۰ - ۱۵:۰۰",
+      hours: ["۱۴:۰۰"],
+      startTime: "۱۴:۰۰",
+      endTime: "۱۵:۰۰",
+      status: "completed",
+      isOnline: true,
+      cancelledBy: null,
+      cancelReason: null,
+      createdAt: "۱۴۰۵/۰۶/۰۵",
+      price: 2800000,
+      hasReview: false, // ← جدید
+      duration: 1,
+    },
+  ],
+
+  // ============================================
+  // ثبت نظر
+  // ============================================
+  // ===== نظرات =====
+  // ============================================
+  // ⭐ نظرات (برای نمایش در لندینگ)
+  // ============================================
+  reviews: [
+    {
+      id: 1,
+      doctorId: 1,
+      rating: 5,
+      comment: "جلسه بسیار خوبی بود. دکتر رضایی خیلی کمکم کرد.",
+      date: "۱۴۰۵/۰۶/۲۵",
+      patientName: "محمد ک.",
+      isApproved: true,
+    },
+    {
+      id: 2,
+      doctorId: 1,
+      rating: 4,
+      comment: "", // ← فقط ستاره، بدون متن
+      date: "۱۴۰۵/۰۶/۲۶",
+      patientName: "زهرا الف.",
+      isApproved: true,
+    },
+    {
+      id: 3,
+      doctorId: 2,
+      rating: 5,
+      comment: "دکتر احمدی واقعاً حرفه‌ای هستن. پیشنهاد می‌کنم.",
+      date: "۱۴۰۵/۰۶/۲۰",
+      patientName: "رضا م.",
+      isApproved: true,
+    },
+    // ...
   ],
 
   // ============================================
@@ -623,51 +729,6 @@ const seedData = {
       specialNotes: "جلسات به صورت هفتگی برگزار می‌شود.",
     },
   },
-
-  // ============================================
-  // 🎥 جلسات آنلاین (Sessions)
-  // ============================================
-  sessions: [
-    {
-      id: 1,
-      title: "جلسه مشاوره فردی",
-      doctor: "دکتر محمد رضایی",
-      doctorImage: "/images/doctors/doctor1.png",
-      date: "۱۴۰۵/۰۶/۰۳",
-      time: "۱۶:۰۰",
-      duration: "۶۰ دقیقه",
-      status: "upcoming",
-      isOnline: true,
-      meetingLink: "https://meet.google.com/abc-defg-hij",
-      type: "individual",
-    },
-    {
-      id: 2,
-      title: "جلسه زوج درمانی",
-      doctor: "دکتر سارا احمدی",
-      doctorImage: "/images/doctors/doctor2.png",
-      date: "۱۴۰۵/۰۶/۰۶",
-      time: "۱۸:۰۰",
-      duration: "۹۰ دقیقه",
-      status: "upcoming",
-      isOnline: true,
-      meetingLink: "https://meet.google.com/klm-nopq-rst",
-      type: "couple",
-    },
-    {
-      id: 3,
-      title: "جلسه مشاوره فردی",
-      doctor: "دکتر محمد رضایی",
-      doctorImage: "/images/doctors/doctor1.png",
-      date: "۱۴۰۵/۰۵/۲۰",
-      time: "۱۵:۰۰",
-      duration: "۶۰ دقیقه",
-      status: "completed",
-      isOnline: true,
-      meetingLink: "https://meet.google.com/xyz-uvwx-yza",
-      type: "individual",
-    },
-  ],
 
   // ============================================
   // ⚙️ تنظیمات پیش‌فرض (Settings)
