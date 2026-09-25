@@ -28,7 +28,7 @@ import userAvatar from "../../../public/images/Patient_Panel/usericon.png";
 import confirmIcon from "../../../public/images/Patient_Panel/confirm_icon.png";
 
 // ============================================
-// 📌 ثابت‌های گلوبال (Global Constants)
+// ثابت‌های گلوبال (Global Constants)
 // ============================================
 
 // ===== ترتیب روزهای هفته =====
@@ -43,7 +43,7 @@ const WEEK_DAYS_ORDER = {
 };
 
 // ============================================
-// 📌 توابع کمکی گلوبال (Global Helper Functions)
+// توابع کمکی گلوبال (Global Helper Functions)
 // ============================================
 
 // ===== تبدیل اعداد فارسی به انگلیسی =====
@@ -56,17 +56,6 @@ const toEnglishDigits = (str) => {
     (d) => englishDigits[persianDigits.indexOf(d)],
   );
 };
-
-// ===== تبدیل اعداد انگلیسی به فارسی =====
-// const toPersianDigits = (str) => {
-//   if (!str) return str;
-//   const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
-//   const englishDigits = "0123456789";
-//   return String(str).replace(
-//     /[0-9]/g,
-//     (d) => persianDigits[englishDigits.indexOf(d)],
-//   );
-// };
 
 // ===== تبدیل اعداد انگلیسی به فارسی =====
 const toPersianDigits = (str) => {
@@ -240,22 +229,6 @@ const getAppointmentMoment = (appointment) => {
 };
 
 // ===== تعیین وضعیت نمایشی نوبت =====
-// const getDisplayStatus = (appointment) => {
-//   if (appointment.status === "completed") return "completed";
-//   if (appointment.status === "cancelled") return "cancelled";
-
-//   const appointmentMoment = getAppointmentMoment(appointment);
-//   if (!appointmentMoment.isValid()) return appointment.status;
-
-//   const isPast = appointmentMoment.isBefore(moment());
-
-//   if (isPast && appointment.status === "pending") return "expired";
-//   if (isPast && appointment.status === "confirmed") return "no-show";
-
-//   return appointment.status;
-// };
-
-// ===== تعیین وضعیت نمایشی نوبت =====
 const getDisplayStatus = (appointment) => {
   if (appointment.status === "completed") return "completed";
   if (appointment.status === "cancelled") return "cancelled";
@@ -400,7 +373,7 @@ const getStatusInfo = (status) => {
 };
 
 // ============================================
-// 📌 کامپوننت‌ها (Components)
+// کامپوننت‌ها (Components)
 // ============================================
 
 function PatientDashboard() {
@@ -410,7 +383,7 @@ function PatientDashboard() {
   const navigate = useNavigate();
 
   // ==========================================
-  // 📌 STATE های اصلی از seed.js
+  // STATE های اصلی از seed.js
   // ==========================================
 
   // ===== داده‌های نوبت‌ها =====
@@ -681,12 +654,6 @@ function DashboardContent({ userData, appointments }) {
       label: "جلسات برگزار شده",
       value: appointments.filter((a) => a.status === "completed").length,
     },
-    // {
-    //   label: "جلسات پیش‌رو",
-    //   value: appointments.filter(
-    //     (a) => a.status === "confirmed" || a.status === "pending",
-    //   ).length,
-    // },
     {
       label: "جلسات پیش‌رو",
       value: appointments.filter((a) => {
@@ -1024,16 +991,6 @@ function AppointmentsContent({ appointments, setAppointments }) {
               >
                 {/* وضعیت */}
                 <div className={styles.appointmentStatusBar}>
-                  {/* <span
-                    className={`${styles.statusBadge} ${statusInfo.className}`}
-                  >
-                    {statusInfo.label}
-                  </span>
-
-                  {appointment.isOnline && (
-                    <span className={styles.onlineBadge}>آنلاین</span>
-                  )} */}
-
                   <span
                     className={`${styles.statusBadge} ${
                       getOriginalStatusInfo(appointment.status).className
@@ -1705,49 +1662,6 @@ function SessionsContent({ appointments, setAppointments }) {
   };
 
   // ===== ثبت نظر =====
-  // const handleSubmitReview = () => {
-  //   if (!rating) {
-  //     alert("لطفاً امتیاز خود را انتخاب کنید.");
-  //     return;
-  //   }
-
-  //   if (!comment.trim()) {
-  //     alert("لطفاً نظر خود را وارد کنید.");
-  //     return;
-  //   }
-
-  //   setIsSubmitting(true);
-
-  //   // ===== شبیه‌سازی ارسال به سرور =====
-  //   setTimeout(() => {
-  //     // ===== ذخیره در appointments (اضافه کردن فیلد hasReview) =====
-  //     setAppointments((prev) =>
-  //       prev.map((item) =>
-  //         item.id === selectedSession.id
-  //           ? {
-  //               ...item,
-  //               hasReview: true,
-  //               review: {
-  //                 id: Date.now(),
-  //                 rating: rating,
-  //                 comment: comment.trim(),
-  //                 date: toPersianDigits(moment().format("jYYYY/jMM/jDD")),
-  //                 doctorId: item.doctorId,
-  //                 doctorName: item.doctor,
-  //                 isApproved: false, // بعداً توسط روانشناس تأیید میشه
-  //               },
-  //             }
-  //           : item,
-  //       ),
-  //     );
-
-  //     setIsSubmitting(false);
-  //     alert("✅ نظر شما با موفقیت ثبت شد و پس از تأیید نمایش داده می‌شود.");
-  //     handleCloseReviewModal();
-  //   }, 1500);
-  // };
-
-  // ===== ثبت نظر =====
   const handleSubmitReview = () => {
     if (!rating) {
       alert("لطفاً امتیاز خود را انتخاب کنید.");
@@ -1787,19 +1701,6 @@ function SessionsContent({ appointments, setAppointments }) {
   // ============================================
   // فیلتر کردن جلسات
   // ============================================
-
-  // ===== جلسات پیش‌رو (confirmed + آینده) =====
-  // const upcomingSessions = appointments
-  //   .filter((app) => {
-  //     const displayStatus = getDisplayStatus(app);
-  //     return displayStatus === "confirmed";
-  //   })
-  //   .sort((a, b) => {
-  //     const momentA = getAppointmentMoment(a);
-  //     const momentB = getAppointmentMoment(b);
-  //     return momentA - momentB; // نزدیک‌ترین اول
-  //   });
-
   // ===== جلسات پیش‌رو (شامل در حال برگزاری) =====
   const upcomingSessions = appointments
     .filter((app) => {
@@ -1842,41 +1743,6 @@ function SessionsContent({ appointments, setAppointments }) {
   // تایمر شمارش معکوس
   // ============================================
   const [timeLeft, setTimeLeft] = useState(null);
-
-  // useEffect(() => {
-  //   if (!nextSession) return;
-
-  //   const targetMoment = getAppointmentMoment(nextSession);
-  //   if (!targetMoment.isValid()) return;
-
-  //   const updateTimer = () => {
-  //     const now = moment();
-  //     const diff = targetMoment.diff(now, "seconds");
-
-  //     if (diff <= 0) {
-  //       setTimeLeft(null);
-  //       return false;
-  //     }
-
-  //     const days = Math.floor(diff / (60 * 60 * 24));
-  //     const hours = Math.floor((diff % (60 * 60 * 24)) / (60 * 60));
-  //     const minutes = Math.floor((diff % (60 * 60)) / 60);
-  //     const seconds = diff % 60;
-
-  //     setTimeLeft({ days, hours, minutes, seconds });
-  //     return true;
-  //   };
-
-  //   updateTimer();
-  //   const interval = setInterval(() => {
-  //     if (!updateTimer()) {
-  //       clearInterval(interval);
-  //     }
-  //   }, 1000);
-
-  //   return () => clearInterval(interval);
-  //   // }, [nextSession]);
-  // }, [nextSession?.id]);
 
   useEffect(() => {
     if (!nextSession) return;

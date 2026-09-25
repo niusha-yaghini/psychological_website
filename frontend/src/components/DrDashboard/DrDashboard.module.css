@@ -68,12 +68,6 @@
   overflow: hidden;
 }
 
-/* .logoImage {
-  width: 40px;
-  height: 40px;
-  flex-shrink: 0;
-} */
-
 .logoImage {
   height: 30px;
   padding-right: 10px;
@@ -1135,22 +1129,6 @@
   gap: 12px;
 }
 
-/* .appointmentCard {
-  background: var(--white);
-  border-radius: var(--radius);
-  padding: 16px 20px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  box-shadow: var(--shadow-sm);
-  transition: var(--transition);
-  flex-wrap: wrap;
-}
-
-.appointmentCard:hover {
-  box-shadow: var(--shadow-md);
-} */
-
 .appointmentCard {
   background: var(--white);
   border-radius: var(--radius);
@@ -1188,17 +1166,6 @@
 .pastAppointment .statusBadge {
   opacity: 0.7;
 }
-
-/* .appointmentInfo {
-  flex: 1;
-}
-
-.appointmentInfo h4 {
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--text-dark);
-  margin: 0;
-} */
 
 .appointmentInfo {
   flex: 1;
@@ -1255,8 +1222,6 @@
   background: #fdfffd;
   color: #2e7d32;
   border: 1.5px solid #2e7d32;
-
-  /* border: none; */
   border-radius: 30px;
   font-size: 13px;
   font-weight: 600;
@@ -1268,7 +1233,7 @@
 .btnApprove:hover {
   background: #2e7d32;
   color: white;
-  
+
   transform: scale(1.03);
   box-shadow: 0 4px 16px rgba(45, 198, 40, 0.2);
 }
@@ -1277,9 +1242,7 @@
   padding: 6px 16px;
   background: #fffefd;
   color: #c62828;
-    border: 1.5px solid #c62828;
-
-  /* border: none; */
+  border: 1.5px solid #c62828;
   border-radius: 30px;
   font-size: 13px;
   font-weight: 600;
@@ -1291,7 +1254,7 @@
 .btnReject:hover {
   background: #c62828;
   color: white;
-  
+
   transform: scale(1.03);
   box-shadow: 0 4px 16px rgba(198, 40, 40, 0.2);
 }
@@ -1325,23 +1288,6 @@
   background: #f5f5f5;
   color: #757575;
 }
-
-/* ===== نوبت‌های گذشته (کم‌رنگ) ===== */
-/* .pastAppointment {
-  opacity: 0.6;
-  background: #fafafa;
-  filter: grayscale(0.3);
-}
-
-.pastAppointment:hover {
-  opacity: 0.85;
-  filter: grayscale(0);
-}
-
-.pastAppointment h4,
-.pastAppointment .metaItem {
-  color: var(--text-muted);
-} */
 
 /* ===== نوار وضعیت ===== */
 .appointmentStatusBar {
@@ -1461,32 +1407,10 @@
 }
 
 /* ===== دکمه لغو توسط روانشناس ===== */
-/* .btnDoctorCancel {
-  padding: 6px 16px;
-  background: #fff3e0;
-  color: #e65100;
-  border: 1.5px solid #e65100;
-  border-radius: 30px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: var(--transition);
-  font-family: inherit;
-}
-
-.btnDoctorCancel:hover {
-  background: #e65100;
-  color: white;
-  transform: scale(1.03);
-} */
-
 .btnDoctorCancel {
   padding: 8px 20px;
-  /* background: transparent; */
   background: #fdfcfc;
-  /* color: #e74c3c; */
   color: #c62828;
-  /* border: 1.5px solid #e74c3c; */
   border: 1.5px solid #c62828;
   border-radius: 30px;
   font-size: 14px;
@@ -1577,21 +1501,6 @@
 }
 
 /* ===== متا ===== */
-/* .appointmentMeta {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  flex-wrap: wrap;
-}
-
-.metaItem {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 14px;
-  color: var(--text-muted);
-} */
-
 .appointmentMeta {
   display: flex;
   align-items: center;
