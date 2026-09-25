@@ -597,14 +597,16 @@
 
 .pendingSessionCard {
   padding: 14px 16px;
-  background: rgba(201, 184, 143, 0.116);
+  background: #fcfbf8;
   border-radius: var(--radius);
-  border-right: 4px solid rgb(201, 185, 143);
+  border-right: 4px solid #e5deca;
+  /* border-right: 4px solid rgb(75, 149, 101); */
+
   transition: var(--transition);
 }
 
 .pendingSessionCard:hover {
-  background: #fff3e0b3;
+  background: #f6f5ef;
 }
 
 .pendingSessionTop {
@@ -628,8 +630,8 @@
 
 .sessionType {
   font-size: 12px;
-  color: #777;
-  background: #f5f5f5;
+  color: #dadada;
+  background: rgba(231, 231, 231, 0.812);
   padding: 4px 8px;
   border-radius: 6px;
 }
@@ -684,9 +686,11 @@
 
 .btnConfirm {
   padding: 4px 16px;
-  background: #e8f5e9;
+  background: #f9faf9;
   color: #2e7d32;
-  border: none;
+  border: 1.5px solid #2e7d32;
+
+  /* border: none; */
   border-radius: 30px;
   font-size: 13px;
   font-weight: 600;
@@ -1167,6 +1171,11 @@
   opacity: 0.7;
 }
 
+/* .appointmentInfoWrapper {
+  display: flex;
+  flex: 1;
+} */
+
 .appointmentInfo {
   flex: 1;
   min-width: 200px;
@@ -1339,11 +1348,23 @@
 }
 
 /* ===== جعبه هشدار ۴۸ ساعته ===== */
-.awaitingConfirmationBox {
+/* .awaitingConfirmationBox {
   display: flex;
   align-items: center;
   gap: 10px;
   margin-top: 10px;
+  padding: 10px 14px;
+  background: #fff8e1;
+  border: 1px dashed #ffb74d;
+  border-radius: var(--radius);
+  animation: pulseAwaiting 2s ease-in-out infinite;
+} */
+
+.awaitingConfirmationBox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px; /* ← قبلاً ۱۰px یا ۰ بود، الان ۱۶px */
   padding: 10px 14px;
   background: #fff8e1;
   border: 1px dashed #ffb74d;
@@ -1368,10 +1389,18 @@
   flex-shrink: 0;
 }
 
-.awaitingText {
+/* .awaitingText {
   display: flex;
   flex-direction: column;
   gap: 2px;
+} */
+
+.awaitingText {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .awaitingTitle {
@@ -1664,12 +1693,15 @@
 }
 
 .sessionUpcoming {
-  background: #e3f2fd;
-  color: #0d47a1;
+  /* background: #e3f2fd;
+  color: #0d47a1; */
+  background: #e8f5e9;
+  color: #2e7d32;
 }
 
 .sessionUpcoming .statusDot {
-  background: #0d47a1;
+  /* background: #0d47a1; */
+  background: #2e7d32;
 }
 
 .sessionOngoing {
@@ -1693,12 +1725,15 @@
 }
 
 .sessionCompleted {
-  background: #e8f5e9;
-  color: #2e7d32;
+  /* background: #e8f5e9;
+  color: #2e7d32; */
+  background: #e3f2fd;
+  color: #0d47a1;
 }
 
 .sessionCompleted .statusDot {
-  background: #2e7d32;
+  /* background: #2e7d32; */
+  background: #0d47a1;
 }
 
 .sessionCancelled {
@@ -2155,6 +2190,385 @@
   color: rgba(255, 255, 255, 0.5);
 }
 
+/* ============================================
+   MEETING LINK SECTION
+============================================ */
+
+/* ===== بخش اکشن‌های جلسه بعدی ===== */
+.nextSessionActions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+/* ===== نمایش لینک ===== */
+.meetingLinkDisplay {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 30px;
+  /* width: 120%; */
+  width: 350px;
+}
+
+.meetingLinkIcon {
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.meetingLinkText {
+  color: rgba(255, 255, 255, 0.95);
+  direction: ltr;
+  font-family: monospace;
+  font-size: 12px;
+  flex: 1;
+  /* min-width: 0; */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  /* max-width حذف بشه */
+  /* width: 350px; */
+}
+
+.meetingLinkText {
+  /* color: rgba(255, 255, 255, 0.95);
+  direction: ltr;
+  font-family: monospace;
+  font-size: 12px; */
+  /* max-width: 300px; */
+  /* width: 300px; */
+  /* overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; */
+  /* flex: 1;  */
+  /* word-break: break-all;   */
+}
+
+.btnEditLink {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.btnEditLink:hover {
+  background: rgba(255, 255, 255, 0.35);
+  transform: scale(1.1);
+}
+
+/* ===== هشدار لینک نذاشته ===== */
+.noLinkWarning {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: rgba(255, 193, 7, 0.15);
+  border: 1px dashed rgba(255, 193, 7, 0.5);
+  border-radius: 30px;
+  font-size: 13px;
+  color: #ffecb3;
+  font-weight: 500;
+}
+
+/* ===== دکمه افزودن لینک ===== */
+.btnAddLink {
+  padding: 10px 24px;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  border: 1.5px dashed rgba(255, 255, 255, 0.5);
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btnAddLink:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.8);
+  transform: translateY(-2px);
+}
+
+/* ===== مودال لینک ===== */
+/* .linkModal {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  max-width: 480px;
+  width: 100%;
+  padding: 32px;
+  animation: modalSlideUp 0.3s ease;
+}
+
+.linkModalInfo {
+  font-size: 15px;
+  color: var(--text-secondary);
+  margin: 0 0 20px;
+}
+
+.linkModalInfo strong {
+  color: var(--text-dark);
+  font-weight: 700;
+}
+
+.linkModalHint {
+  font-size: 13px;
+  color: var(--text-muted);
+  background: rgba(45, 125, 110, 0.06);
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  margin: 16px 0 0;
+  border-right: 3px solid #2d7d6e;
+  line-height: 1.6;
+} */
+
+/* ===== فرم inline لینک ===== */
+.inlineLinkForm {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 30px;
+  border: 1.5px dashed rgba(255, 255, 255, 0.4);
+  /* width: 110%; */
+  /* max-width: 420px; */
+  width: 350px;
+}
+
+.inlineLinkInput {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: white;
+  font-family: monospace;
+  font-size: 12px;
+  direction: ltr;
+  padding: 4px 8px;
+  min-width: 0;
+}
+
+.inlineLinkInput::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+  font-family: inherit;
+}
+
+.btnSaveLink {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  background: #4caf84;
+  color: white;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.btnSaveLink:hover {
+  background: #2d7d6e;
+  transform: scale(1.1);
+}
+
+.btnCancelLink {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.btnCancelLink:hover {
+  background: rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+/* ============================================
+   NOTIFICATIONS
+============================================ */
+
+.notificationActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.unreadBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 14px;
+  background: #e74c3c;
+  color: white;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.markAllBtn {
+  padding: 8px 20px;
+  background: transparent;
+  color: #2d7d6e;
+  border: 1.5px solid #2d7d6e;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.markAllBtn:hover {
+  background: #2d7d6e;
+  color: white;
+}
+
+.notificationsList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.notificationCard {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 20px;
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  cursor: pointer;
+  position: relative;
+}
+
+.notificationCard:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(45, 125, 110, 0.08);
+}
+
+.notificationCard.unread {
+  background: #f8f9fa;
+  border-color: rgba(45, 125, 110, 0.12);
+}
+
+.notificationContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.notificationHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.notificationTitle {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.unreadDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #2d7d6e;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.notificationTime {
+  font-size: 12px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.notificationMessage {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 4px 0 0;
+}
+
+.unreadIndicator {
+  width: 4px;
+  height: 40px;
+  background: #2d7d6e;
+  border-radius: 0 4px 4px 0;
+  flex-shrink: 0;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.notificationCard:not(.unread) .notificationTitle {
+  color: var(--text-muted);
+}
+
+.notificationCard:not(.unread) .notificationMessage {
+  color: var(--text-muted);
+}
+
+/* ============================================
+   RESPONSIVE
+============================================ */
+@media (max-width: 768px) {
+  .nextSessionActions {
+    align-items: center;
+    width: 100%;
+  }
+
+  .meetingLinkDisplay {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .btnAddLink {
+    width: 100%;
+  }
+
+  .linkModal {
+    padding: 24px;
+    margin: 0 16px;
+  }
+}
+
 /* ===== Patient Avatar ===== */
 .sessionPatientAvatar {
   width: 48px;
@@ -2199,12 +2613,12 @@
 }
 
 /* ===== Next Session Actions ===== */
-.nextSessionActions {
+/* .nextSessionActions {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 12px;
-}
+} */
 
 /* ===== Session Notes ===== */
 .sessionNotes {
@@ -2751,6 +3165,39 @@
 .btnAddModal:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 20px rgba(45, 125, 110, 0.3);
+}
+
+/* ===== راهنمای فرم ===== */
+.formHint {
+  font-size: 12px;
+  color: var(--text-muted);
+  background: rgba(45, 125, 110, 0.06);
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  margin: -8px 0 16px;
+  border-right: 3px solid #2d7d6e;
+  line-height: 1.6;
+}
+
+/* ===== DatePicker input ===== */
+/* پکیج react-multi-date-picker از inputClass استفاده می‌کنه */
+/* اگه استایل formInput رو نداشت، اینو اضافه کن */
+:global(.rmdp-input) {
+  width: 100% !important;
+  padding: 10px 14px !important;
+  border: 2px solid var(--gray-light) !important;
+  border-radius: var(--radius) !important;
+  font-size: 15px !important;
+  font-family: inherit !important;
+  color: var(--text-dark) !important;
+  background: var(--white) !important;
+  transition: var(--transition) !important;
+}
+
+:global(.rmdp-input:focus) {
+  border-color: #2d7d6e !important;
+  box-shadow: 0 0 0 4px rgba(45, 125, 110, 0.08) !important;
+  outline: none !important;
 }
 
 /* ===== Status Labels ===== */

@@ -818,24 +818,25 @@ const seedData = {
       createdAt: "۱۴۰۵/۰۶/۰۳",
       price: 2800000,
       duration: 1,
+      meetingLink: null,
     },
-    // {
-    //   id: 2,
-    //   patient: "زهرا احمدی",
-    //   patientPhone: "۹۱۳۴۵۶۷۸۹۰",
-    //   type: "جلسه زوج درمانی",
-    //   typeKey: "couple",
-    //   date: "۱۴۰۵/۰۶/۰۵",
-    //   time: "۱۱:۳۰ - ۱۲:۳۰",
-    //   hours: ["۱۱:۳۰"],
-    //   startTime: "۱۱:۳۰",
-    //   endTime: "۱۲:۳۰",
-    //   status: "pending",
-    //   isOnline: true,
-    //   createdAt: "۱۴۰۵/۰۶/۰۳",
-    //   price: 3200000,
-    //   duration: 1,
-    // },
+    {
+      id: 2,
+      patient: "زهرا احمدی",
+      patientPhone: "۹۱۳۴۵۶۷۸۹۰",
+      type: "جلسه زوج درمانی",
+      typeKey: "couple",
+      date: "۱۴۰۵/۰۷/۰۲",
+      time: "۱۱:۳۰ - ۱۲:۳۰",
+      hours: ["۱۱:۳۰"],
+      startTime: "۱۱:۳۰",
+      endTime: "۱۲:۳۰",
+      status: "pending",
+      isOnline: true,
+      createdAt: "۱۴۰۵/۰۶/۰۳",
+      price: 3200000,
+      duration: 1,
+    },
     // {
     //   id: 3,
     //   patient: "علی رضایی",
@@ -886,6 +887,8 @@ const seedData = {
       createdAt: "۱۴۰۵/۰۶/۰۴",
       price: 2800000,
       duration: 1,
+
+      meetingLink: null,
     },
     {
       id: 6,
@@ -903,6 +906,8 @@ const seedData = {
       createdAt: "۱۴۰۵/۰۶/۰۵",
       price: 3200000,
       duration: 1,
+
+      meetingLink: null,
     },
 
     // ===== تأیید شده =====
@@ -922,6 +927,8 @@ const seedData = {
       createdAt: "۱۴۰۵/۰۶/۰۴",
       price: 3200000,
       duration: 1,
+
+      meetingLink: null,
     },
     {
       id: 8,
@@ -939,6 +946,8 @@ const seedData = {
       createdAt: "۱۴۰۵/۰۶/۰۵",
       price: 2800000,
       duration: 1,
+
+      meetingLink: null,
     },
     {
       id: 9,
@@ -956,6 +965,8 @@ const seedData = {
       createdAt: "۱۴۰۵/۰۶/۰۵",
       price: 2500000,
       duration: 1,
+
+      meetingLink: null,
     },
 
     // ===== انجام شده =====
@@ -976,6 +987,8 @@ const seedData = {
       price: 2800000,
       duration: 1,
       notes: "جلسه انجام شده",
+
+      meetingLink: null,
     },
     {
       id: 11,
@@ -994,6 +1007,8 @@ const seedData = {
       price: 2800000,
       duration: 1,
       notes: "پیشرفت خوب در مدیریت استرس",
+
+      meetingLink: null,
     },
 
     // ===== لغو شده =====
@@ -1016,8 +1031,10 @@ const seedData = {
       cancelledBy: "patient",
       cancelReason: "مشکل شخصی",
       notes: "لغو توسط بیمار",
+
+      meetingLink: null,
     },
-        {
+    {
       id: 13,
       patient: "نگار موسوی",
       patientPhone: "۹۱۷۸۹۰۱۲۳۴",
@@ -1036,6 +1053,8 @@ const seedData = {
       cancelledBy: "doctor",
       cancelReason: "مشکل شخصی",
       notes: "لغو توسط روانشناس",
+
+      meetingLink: null,
     },
   ],
 
@@ -1073,6 +1092,7 @@ const seedData = {
     darkMode: false,
     sessionReminders: true,
     autoConfirmBookings: false,
+    doctorNotifications: [],
   },
 };
 

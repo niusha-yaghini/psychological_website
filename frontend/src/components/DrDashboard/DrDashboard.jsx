@@ -28,6 +28,10 @@ import moment from "moment-jalaali";
 
 moment.loadPersian({ usePersianDigits: false, dialect: "persian" });
 
+import DatePicker from "react-multi-date-picker";
+import persian from "react-date-object/calendars/persian";
+import persian_fa from "react-date-object/locales/persian_fa";
+
 // ============================================
 // توابع کمکی (Global Helpers)
 // ============================================
@@ -263,6 +267,15 @@ const getOriginalStatusInfo = (status) => {
   return map[status] || map.pending;
 };
 
+// ===== چک کردن اینکه نوبت به وضعیت نهایی رسیده (برای کمرنگ شدن) =====
+const isFinalizedStatus = (displayStatus) => {
+  return (
+    displayStatus === "completed" ||
+    displayStatus === "cancelled" ||
+    displayStatus === "no-show"
+  );
+};
+
 // ============================================
 // COMPONENT: DashboardOverview Content
 // ============================================
@@ -278,9 +291,20 @@ function DashboardOverview({ appointments, setAppointments }) {
   // ==========================================
 
   // ===== نوبت‌های در انتظار تأیید =====
+  // const pendingSessions = useMemo(() => {
+  //   return appointments
+  //     .filter((a) => a.status === "pending")
+  //     .sort((a, b) => {
+  //       const momentA = getAppointmentMoment(a);
+  //       const momentB = getAppointmentMoment(b);
+  //       return momentA - momentB; // نزدیک‌ترین اول
+  //     });
+  // }, [appointments]);
+
+  // ===== نوبت‌های در انتظار تأیید (فقط pending با تاریخ آینده) =====
   const pendingSessions = useMemo(() => {
     return appointments
-      .filter((a) => a.status === "pending")
+      .filter((a) => getDisplayStatus(a) === "pending")
       .sort((a, b) => {
         const momentA = getAppointmentMoment(a);
         const momentB = getAppointmentMoment(b);
@@ -435,7 +459,7 @@ function DashboardOverview({ appointments, setAppointments }) {
               todaySessions.map((session) => (
                 <div key={session.id} className={styles.sessionRow}>
                   <span className={styles.sessionTime}>
-                    {toEnglishDigits(
+                    {toPersianDigits(
                       session.startTime || session.time.split(" - ")[0],
                     )}
                   </span>
@@ -494,7 +518,7 @@ function DashboardOverview({ appointments, setAppointments }) {
                       <span>{getRelativeDateLabel(session)}</span>
                       <span className={styles.dateDivider}>•</span>
                       <span>
-                        {toEnglishDigits(
+                        {toPersianDigits(
                           session.startTime || session.time.split(" - ")[0],
                         )}
                       </span>
@@ -683,6 +707,23 @@ function DoctorDashboard() {
 
   const [appointments, setAppointments] = useState(seedData.doctorAppointments);
 
+  // ===== state نوتیفیکیشن‌ها (از seed اولیه میاد، بعداً از بک‌اند) =====
+  const [notifications, setNotifications] = useState(
+    seedData.doctorNotifications || [],
+  );
+
+  // ===== زمان فعلی (برای محاسبه‌ی نوتیفیکیشن‌های dynamic) =====
+  const [currentTime, setCurrentTime] = useState(moment());
+
+  // ===== تیک هر ۱ دقیقه برای آپدیت نوتیفیکیشن‌های زمان‌محور =====
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTime(moment());
+    }, 60000); // هر ۶۰ ثانیه
+
+    return () => clearInterval(interval);
+  }, []);
+
   // ===== دریافت اطلاعات کاربر =====
   useEffect(() => {
     const loggedIn = localStorage.getItem("userLoggedIn");
@@ -700,6 +741,18 @@ function DoctorDashboard() {
     navigate("/");
   };
 
+  // ===== علامت‌گذاری به عنوان خوانده شده =====
+  const markNotificationAsRead = (id) => {
+    setNotifications((prev) =>
+      prev.map((n) => (n.id === id ? { ...n, isRead: true } : n)),
+    );
+  };
+
+  // ===== علامت‌گذاری همه =====
+  const markAllNotificationsAsRead = () => {
+    setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
+  };
+
   // ===== محاسبه تعداد نوبت‌های پیش‌رو (برای badge) =====
   const upcomingAppointmentsCount = useMemo(() => {
     return appointments.filter((app) => {
@@ -708,8 +761,91 @@ function DoctorDashboard() {
     }).length;
   }, [appointments]);
 
+  // ===== نوتیفیکیشن‌های dynamic (مشتق از state) =====
+  const derivedNotifications = useMemo(() => {
+    const result = [...notifications]; // نوتیفیکیشن‌های stored (از seed یا بک‌اند)
+
+    // ==========================================
+    // 📌 نوتیفیکیشن ۱: لینک جلسه تنظیم نشده
+    // ==========================================
+    // جلسه بعدی رو پیدا کن
+    const nextSession = appointments
+      .filter((a) => {
+        const displayStatus = getDisplayStatus(a);
+        return displayStatus === "confirmed" || displayStatus === "ongoing";
+      })
+      .sort((a, b) => {
+        const momentA = getAppointmentMoment(a);
+        const momentB = getAppointmentMoment(b);
+        return momentA - momentB;
+      })[0];
+
+    if (nextSession && !nextSession.meetingLink) {
+      const startMoment = getAppointmentMoment(nextSession);
+      const diffMinutes = startMoment.diff(currentTime, "minutes");
+
+      // اگه بین ۰ تا ۶۰ دقیقه مونده و لینک نداره
+      if (diffMinutes > 0 && diffMinutes < 60) {
+        result.push({
+          id: `link-reminder-${nextSession.id}`,
+          type: "reminder",
+          title: "لینک جلسه تنظیم نشده",
+          message: `جلسه با ${nextSession.patient} کمتر از ${toPersianDigits(Math.ceil(diffMinutes))} دقیقه دیگر شروع می‌شود. لطفاً لینک را وارد کنید.`,
+          time: "الان",
+          isRead: false,
+        });
+      }
+    }
+
+    // ==========================================
+    // 📌 نوتیفیکیشن ۲: جلسات در انتظار تأیید (بیش از ۲۴ ساعت)
+    // ==========================================
+    const stalePending = appointments.filter((a) => {
+      if (a.status !== "pending") return false;
+      const createdAtMoment = getAppointmentMoment(a);
+      const hoursPassed = currentTime.diff(createdAtMoment, "hours", true);
+      return hoursPassed > 24;
+    });
+
+    if (stalePending.length > 0) {
+      result.push({
+        id: `stale-pending-${stalePending.length}`,
+        type: "warning",
+        title: `${toPersianDigits(stalePending.length)} نوبت در انتظار تأیید`,
+        message: `${toPersianDigits(stalePending.length)} نوبت بیش از ۲۴ ساعت است که در انتظار تأیید شما هستند.`,
+        time: "الان",
+        isRead: false,
+      });
+    }
+
+    // ==========================================
+    // 📌 نوتیفیکیشن ۳: جلسات گذشته که نیاز به ثبت وضعیت دارند
+    // ==========================================
+    const awaitingConfirm = appointments.filter(
+      (a) => getDisplayStatus(a) === "awaiting-confirmation",
+    );
+
+    if (awaitingConfirm.length > 0) {
+      result.push({
+        id: `awaiting-confirm-${awaitingConfirm.length}`,
+        type: "reminder",
+        title: `${toPersianDigits(awaitingConfirm.length)} جلسه در انتظار ثبت وضعیت`,
+        message: `لطفاً وضعیت ${toPersianDigits(awaitingConfirm.length)} جلسه‌ی گذشته را مشخص کنید (برگزار شد / برگزار نشد).`,
+        time: "الان",
+        isRead: false,
+      });
+    }
+
+    return result;
+  }, [appointments, notifications, currentTime]);
+
   // ===== تعداد اعلان‌های خوانده نشده (فعلاً ثابت) =====
-  const unreadNotificationsCount = 5; // ← بعداً از state اعلانات میاد
+  // const unreadNotificationsCount = 5; // ← بعداً از state اعلانات میاد
+
+  // ===== تعداد اعلان‌های خوانده نشده =====
+  const unreadNotificationsCount = useMemo(() => {
+    return derivedNotifications.filter((n) => !n.isRead).length;
+  }, [derivedNotifications]);
 
   const menuItems = [
     {
@@ -782,16 +918,38 @@ function DoctorDashboard() {
             setAppointments={setAppointments}
           />
         );
+      // case "sessions":
+      //   return <SessionsManagement appointments={appointments} />;
+      // case "sessions":
+      //   return (
+      //     <SessionsManagement
+      //       appointments={appointments}
+      //       setAppointments={setAppointments}
+      //     />
+      //   );
       case "sessions":
-        return <SessionsManagement appointments={appointments} />;
+        return (
+          <SessionsManagement
+            appointments={appointments}
+            setAppointments={setAppointments}
+          />
+        );
       case "patients":
         return <PatientsList />;
       case "exercises":
         return <ExercisesManagement />;
       case "notes":
         return <PatientNotes />;
+      // case "messages":
+      //   return <DoctorMessages />;
       case "messages":
-        return <DoctorMessages />;
+        return (
+          <DoctorMessages
+            notifications={derivedNotifications}
+            onMarkAsRead={markNotificationAsRead}
+            onMarkAllAsRead={markAllNotificationsAsRead}
+          />
+        );
       case "profile":
         return <DoctorProfile userData={userData} />;
       case "settings":
@@ -891,11 +1049,24 @@ function DoctorDashboard() {
             </h1>
           </div>
 
-          <div className={styles.headerRight}>
-            {/* نوتیفیکیشن */}
+          {/* <div className={styles.headerRight}>
             <button className={styles.notificationBtn}>
               <FaBell />
               <span className={styles.notificationDot}></span>
+            </button>
+          </div> */}
+          <div className={styles.headerRight}>
+            <button
+              className={styles.notificationBtn}
+              onClick={() => setActiveTab("messages")}
+              title="مشاهده اعلان‌ها"
+            >
+              <FaBell />
+              {unreadNotificationsCount > 0 && (
+                <span className={styles.notificationDot}>
+                  {toPersianDigits(unreadNotificationsCount)}
+                </span>
+              )}
             </button>
           </div>
         </header>
@@ -918,10 +1089,19 @@ function AppointmentsManagement({ appointments, setAppointments }) {
   const [rejectReason, setRejectReason] = useState("");
 
   // ===== استیت فرم افزودن نوبت =====
+  // const [newAppointment, setNewAppointment] = useState({
+  //   patient: "",
+  //   date: "",
+  //   time: "",
+  //   typeKey: "individual",
+  //   status: "pending",
+  // });
+  // ===== استیت فرم افزودن نوبت =====
   const [newAppointment, setNewAppointment] = useState({
     patient: "",
-    date: "",
-    time: "",
+    date: null, // ← حالا یه DateObject هست، نه string
+    startTime: "",
+    endTime: "",
     typeKey: "individual",
     status: "pending",
   });
@@ -1049,9 +1229,72 @@ function AppointmentsManagement({ appointments, setAppointments }) {
     }
   };
 
+  // ===== محاسبه دقیقه از ساعت =====
+  const timeToMinutes = (timeStr) => {
+    if (!timeStr) return 0;
+    const clean = toEnglishDigits(timeStr.trim());
+    const parts = clean.split(":");
+    if (parts.length !== 2) return -1;
+    const h = parseInt(parts[0], 10);
+    const m = parseInt(parts[1], 10);
+    if (isNaN(h) || isNaN(m)) return -1;
+    if (h < 0 || h > 23 || m < 0 || m > 59) return -1;
+    return h * 60 + m;
+  };
+
+  // ===== افزودن نوبت جدید =====
+  // const handleAddAppointment = () => {
+  //   // اعتبارسنجی
+  //   if (!newAppointment.patient.trim()) {
+  //     alert("لطفاً نام بیمار را وارد کنید.");
+  //     return;
+  //   }
+  //   if (!newAppointment.date) {
+  //     alert("لطفاً تاریخ را انتخاب کنید.");
+  //     return;
+  //   }
+  //   if (!newAppointment.time) {
+  //     alert("لطفاً ساعت را انتخاب کنید.");
+  //     return;
+  //   }
+
+  //   const newId = Math.max(...appointments.map((a) => a.id), 0) + 1;
+
+  //   setAppointments((prev) => [
+  //     ...prev,
+  //     {
+  //       id: newId,
+  //       patient: newAppointment.patient,
+  //       type: getTypeLabel(newAppointment.typeKey),
+  //       typeKey: newAppointment.typeKey,
+  //       date: newAppointment.date,
+  //       time: `${newAppointment.time} - ${newAppointment.time}`,
+  //       startTime: newAppointment.time,
+  //       endTime: newAppointment.time,
+  //       hours: [newAppointment.time],
+  //       status: newAppointment.status,
+  //       isOnline: true,
+  //       createdAt: toPersianDigits(moment().format("jYYYY/jMM/jDD")),
+  //       duration: 1,
+  //     },
+  //   ]);
+
+  //   // ریست فرم
+  //   setNewAppointment({
+  //     patient: "",
+  //     date: "",
+  //     time: "",
+  //     typeKey: "individual",
+  //     status: "pending",
+  //   });
+
+  //   setShowAddModal(false);
+  //   alert("نوبت جدید با موفقیت اضافه شد.");
+  // };
+
   // ===== افزودن نوبت جدید =====
   const handleAddAppointment = () => {
-    // اعتبارسنجی
+    // ===== اعتبارسنجی =====
     if (!newAppointment.patient.trim()) {
       alert("لطفاً نام بیمار را وارد کنید.");
       return;
@@ -1060,11 +1303,54 @@ function AppointmentsManagement({ appointments, setAppointments }) {
       alert("لطفاً تاریخ را انتخاب کنید.");
       return;
     }
-    if (!newAppointment.time) {
-      alert("لطفاً ساعت را انتخاب کنید.");
+    if (!newAppointment.startTime.trim()) {
+      alert("لطفاً ساعت شروع را وارد کنید.");
+      return;
+    }
+    if (!newAppointment.endTime.trim()) {
+      alert("لطفاً ساعت پایان را وارد کنید.");
       return;
     }
 
+    // ===== اعتبارسنجی ساعت‌ها =====
+    const startMinutes = timeToMinutes(newAppointment.startTime);
+    const endMinutes = timeToMinutes(newAppointment.endTime);
+
+    if (startMinutes === -1) {
+      alert("ساعت شروع نامعتبر است. فرمت صحیح: مثلاً ۱۰:۰۰");
+      return;
+    }
+    if (endMinutes === -1) {
+      alert("ساعت پایان نامعتبر است. فرمت صحیح: مثلاً ۱۱:۰۰");
+      return;
+    }
+
+    const diffMinutes = endMinutes - startMinutes;
+    if (diffMinutes < 60) {
+      alert("ساعت پایان باید حداقل ۱ ساعت بعد از ساعت شروع باشد.");
+      return;
+    }
+
+    // ===== ساخت hours array =====
+    const hours = [];
+    for (let m = startMinutes; m < endMinutes; m += 60) {
+      const h = Math.floor(m / 60);
+      const min = m % 60;
+      hours.push(
+        `${String(h).padStart(2, "0")}:${String(min).padStart(2, "0")}`,
+      );
+    }
+
+    // ===== ساخت time string =====
+    const timeString = `${newAppointment.startTime.trim()} - ${newAppointment.endTime.trim()}`;
+
+    // ===== محاسبه duration (به ساعت) =====
+    const durationHours = diffMinutes / 60;
+
+    // ===== تاریخ شمسی به string =====
+    const persianDate = newAppointment.date.format("YYYY/MM/DD");
+
+    // ===== ساخت آبجکت نهایی =====
     const newId = Math.max(...appointments.map((a) => a.id), 0) + 1;
 
     setAppointments((prev) => [
@@ -1072,25 +1358,29 @@ function AppointmentsManagement({ appointments, setAppointments }) {
       {
         id: newId,
         patient: newAppointment.patient,
+        patientPhone: "",
         type: getTypeLabel(newAppointment.typeKey),
         typeKey: newAppointment.typeKey,
-        date: newAppointment.date,
-        time: `${newAppointment.time} - ${newAppointment.time}`,
-        startTime: newAppointment.time,
-        endTime: newAppointment.time,
-        hours: [newAppointment.time],
+        date: toPersianDigits(persianDate),
+        time: toPersianDigits(timeString),
+        hours: hours.map(toPersianDigits),
+        startTime: toPersianDigits(newAppointment.startTime.trim()),
+        endTime: toPersianDigits(newAppointment.endTime.trim()),
         status: newAppointment.status,
         isOnline: true,
         createdAt: toPersianDigits(moment().format("jYYYY/jMM/jDD")),
-        duration: 1,
+        price: 0,
+        duration: durationHours,
+        meetingLink: null,
       },
     ]);
 
-    // ریست فرم
+    // ===== ریست فرم =====
     setNewAppointment({
       patient: "",
-      date: "",
-      time: "",
+      date: null,
+      startTime: "",
+      endTime: "",
       typeKey: "individual",
       status: "pending",
     });
@@ -1169,7 +1459,15 @@ function AppointmentsManagement({ appointments, setAppointments }) {
             const displayStatusInfo = getDisplayStatusInfo(displayStatus);
 
             // ===== چک کردن گذشته =====
-            const isPast = isAppointmentPast(app);
+            // const isPast = isAppointmentPast(app);
+            // ===== چک کردن گذشته (فقط برای وضعیت‌های نهایی) =====
+            // awaiting-confirmation نباید کمرنگ بشه چون پزشک باید باهاش کار کنه
+            // const isPast =
+            //   displayStatus === "completed" ||
+            //   displayStatus === "cancelled" ||
+            //   displayStatus === "no-show";
+
+            const isPast = isFinalizedStatus(displayStatus);
 
             // ===== وضعیت برگزار نشده =====
             const isNoShow = displayStatus === "no-show";
@@ -1256,7 +1554,6 @@ function AppointmentsManagement({ appointments, setAppointments }) {
                       </span>
                     </div>
 
-                    {/* قیمت */}
                     {app.price && (
                       <div className={styles.appointmentPrice}>
                         {toPersianDigits(app.price.toLocaleString("en-US"))}{" "}
@@ -1264,34 +1561,16 @@ function AppointmentsManagement({ appointments, setAppointments }) {
                       </div>
                     )}
 
-                    {/* دلیل لغو */}
                     {app.status === "cancelled" && app.cancelReason && (
                       <div className={styles.cancelReason}>
                         <span>دلیل لغو:</span>
                         <span>{app.cancelReason}</span>
                       </div>
                     )}
-
-                    {/* هشدار ۴۸ ساعته */}
-                    {isAwaitingConfirmation && (
-                      <div className={styles.awaitingConfirmationBox}>
-                        <span className={styles.awaitingIcon}>⏰</span>
-                        <div className={styles.awaitingText}>
-                          <span className={styles.awaitingTitle}>
-                            آیا این جلسه برگزار شده؟
-                          </span>
-                          <span className={styles.awaitingTime}>
-                            ({toPersianDigits(remainingHours)} ساعت فرصت
-                            باقی‌مانده)
-                          </span>
-                        </div>
-                      </div>
-                    )}
                   </div>
 
                   {/* ===== دکمه‌های اکشن ===== */}
                   <div className={styles.appointmentActions}>
-                    {/* ===== وضعیت pending + آینده ===== */}
                     {displayStatus === "pending" && (
                       <>
                         <button
@@ -1309,10 +1588,8 @@ function AppointmentsManagement({ appointments, setAppointments }) {
                       </>
                     )}
 
-                    {/* ===== وضعیت confirmed + آینده ===== */}
                     {displayStatus === "confirmed" && (
                       <>
-                        {/* لغو فعال (>۲۴ ساعت) */}
                         {isMoreThan24HoursAway(app) && (
                           <button
                             className={styles.btnDoctorCancel}
@@ -1322,7 +1599,6 @@ function AppointmentsManagement({ appointments, setAppointments }) {
                           </button>
                         )}
 
-                        {/* لغو غیرفعال (<۲۴ ساعت) */}
                         {isLessThan24HoursAway(app) && (
                           <button
                             className={styles.btnCancelDisabled}
@@ -1335,7 +1611,6 @@ function AppointmentsManagement({ appointments, setAppointments }) {
                       </>
                     )}
 
-                    {/* ===== در حال برگزاری ===== */}
                     {displayStatus === "ongoing" && (
                       <button
                         className={styles.btnComplete}
@@ -1345,7 +1620,6 @@ function AppointmentsManagement({ appointments, setAppointments }) {
                       </button>
                     )}
 
-                    {/* ===== بازه ۴۸ ساعته ===== */}
                     {isAwaitingConfirmation && (
                       <>
                         <button
@@ -1364,6 +1638,21 @@ function AppointmentsManagement({ appointments, setAppointments }) {
                     )}
                   </div>
                 </div>
+
+                {/* ===== هشدار ۴۸ ساعته — تمام عرض زیر کارت ===== */}
+                {isAwaitingConfirmation && (
+                  <div className={styles.awaitingConfirmationBox}>
+                    {/* <span className={styles.awaitingIcon}>⏰</span> */}
+                    <div className={styles.awaitingText}>
+                      <span className={styles.awaitingTitle}>
+                        آیا این جلسه برگزار شده؟
+                      </span>
+                      <span className={styles.awaitingTime}>
+                        ({toPersianDigits(remainingHours)} ساعت فرصت باقی‌مانده)
+                      </span>
+                    </div>
+                  </div>
+                )}
               </div>
             );
           })
@@ -1517,7 +1806,7 @@ function AppointmentsManagement({ appointments, setAppointments }) {
       )}
 
       {/* ===== مودال افزودن نوبت ===== */}
-      {showAddModal && (
+      {/* {showAddModal && (
         <div className={styles.modalOverlay}>
           <div className={styles.addModal}>
             <div className={styles.modalHeader}>
@@ -1562,7 +1851,10 @@ function AppointmentsManagement({ appointments, setAppointments }) {
                   <input
                     type="text"
                     className={styles.formInput}
-                    placeholder="۱۴۰۵/۰۶/۰۵"
+                    // placeholder="۱۴۰۵/۰۶/۰۵"
+                     placeholder={toPersianDigits(
+                      moment().format("jYYYY/jMM/jDD"),
+                    )}
                     value={newAppointment.date}
                     onChange={(e) =>
                       setNewAppointment((prev) => ({
@@ -1654,6 +1946,177 @@ function AppointmentsManagement({ appointments, setAppointments }) {
             </div>
           </div>
         </div>
+      )} */}
+
+      {/* ===== مودال افزودن نوبت ===== */}
+      {showAddModal && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.addModal}>
+            <div className={styles.modalHeader}>
+              <h3>افزودن نوبت جدید</h3>
+              <button
+                className={styles.modalClose}
+                onClick={() => {
+                  setShowAddModal(false);
+                  setNewAppointment({
+                    patient: "",
+                    date: null,
+                    startTime: "",
+                    endTime: "",
+                    typeKey: "individual",
+                    status: "pending",
+                  });
+                }}
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className={styles.modalBody}>
+              {/* نام بیمار */}
+              <div className={styles.formGroup}>
+                <label>نام بیمار</label>
+                <input
+                  type="text"
+                  className={styles.formInput}
+                  placeholder="نام و نام خانوادگی بیمار"
+                  value={newAppointment.patient}
+                  onChange={(e) =>
+                    setNewAppointment((prev) => ({
+                      ...prev,
+                      patient: e.target.value,
+                    }))
+                  }
+                />
+              </div>
+
+              {/* تاریخ */}
+              <div className={styles.formGroup}>
+                <label>تاریخ</label>
+                <DatePicker
+                  value={newAppointment.date}
+                  onChange={(date) =>
+                    setNewAppointment((prev) => ({ ...prev, date }))
+                  }
+                  calendar={persian}
+                  locale={persian_fa}
+                  calendarPosition="bottom-right"
+                  inputClass={styles.formInput}
+                  placeholder="انتخاب تاریخ"
+                  format="YYYY/MM/DD"
+                  editable={false}
+                />
+              </div>
+
+              {/* ساعت شروع و پایان */}
+              <div className={styles.formRow}>
+                <div className={styles.formGroup}>
+                  <label>ساعت شروع</label>
+                  <input
+                    type="text"
+                    className={styles.formInput}
+                    placeholder="۱۰:۰۰"
+                    value={newAppointment.startTime}
+                    onChange={(e) =>
+                      setNewAppointment((prev) => ({
+                        ...prev,
+                        startTime: e.target.value,
+                      }))
+                    }
+                    dir="ltr"
+                    style={{ textAlign: "center" }}
+                  />
+                </div>
+                <div className={styles.formGroup}>
+                  <label>ساعت پایان</label>
+                  <input
+                    type="text"
+                    className={styles.formInput}
+                    placeholder="۱۱:۰۰"
+                    value={newAppointment.endTime}
+                    onChange={(e) =>
+                      setNewAppointment((prev) => ({
+                        ...prev,
+                        endTime: e.target.value,
+                      }))
+                    }
+                    dir="ltr"
+                    style={{ textAlign: "center" }}
+                  />
+                </div>
+              </div>
+
+              <p className={styles.formHint}>
+                ⏱ ساعت پایان باید حداقل ۱ ساعت بعد از ساعت شروع باشد.
+              </p>
+
+              {/* نوع جلسه و وضعیت */}
+              <div className={styles.formRow}>
+                <div className={styles.formGroup}>
+                  <label>نوع جلسه</label>
+                  <select
+                    className={styles.formSelect}
+                    value={newAppointment.typeKey}
+                    onChange={(e) =>
+                      setNewAppointment((prev) => ({
+                        ...prev,
+                        typeKey: e.target.value,
+                      }))
+                    }
+                  >
+                    <option value="individual">فردی</option>
+                    <option value="couple">زوج</option>
+                    <option value="teen">نوجوان</option>
+                    <option value="family">خانواده</option>
+                  </select>
+                </div>
+                <div className={styles.formGroup}>
+                  <label>وضعیت</label>
+                  <select
+                    className={styles.formSelect}
+                    value={newAppointment.status}
+                    onChange={(e) =>
+                      setNewAppointment((prev) => ({
+                        ...prev,
+                        status: e.target.value,
+                      }))
+                    }
+                  >
+                    <option value="pending">در انتظار</option>
+                    <option value="confirmed">تأیید شده</option>
+                    <option value="completed">برگزار شده</option>
+                    <option value="cancelled">لغو شده</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.modalFooter}>
+              <button
+                className={styles.btnCancelModal}
+                onClick={() => {
+                  setShowAddModal(false);
+                  setNewAppointment({
+                    patient: "",
+                    date: null,
+                    startTime: "",
+                    endTime: "",
+                    typeKey: "individual",
+                    status: "pending",
+                  });
+                }}
+              >
+                انصراف
+              </button>
+              <button
+                className={styles.btnAddModal}
+                onClick={handleAddAppointment}
+              >
+                افزودن نوبت
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
@@ -1661,13 +2124,46 @@ function AppointmentsManagement({ appointments, setAppointments }) {
 
 // ============================================
 // COMPONENT: Sessions Management (Doctor Panel)
-function SessionsManagement({ appointments }) {
+function SessionsManagement({ appointments, setAppointments }) {
   const [activeTab, setActiveTab] = useState("upcoming");
   const [timeLeft, setTimeLeft] = useState(null);
+
+  // const [showLinkModal, setShowLinkModal] = useState(false);
+  // const [linkInput, setLinkInput] = useState("");
+  // const [selectedSessionForLink, setSelectedSessionForLink] = useState(null);
+
+  // ===== State های لینک inline =====
+  const [linkInput, setLinkInput] = useState("");
+  const [isEditingLink, setIsEditingLink] = useState(false);
 
   // ==========================================
   // مشتق‌ها
   // ==========================================
+
+  // const handleSaveMeetingLink = () => {
+  //   if (!linkInput.trim()) {
+  //     alert("لطفاً لینک جلسه را وارد کنید.");
+  //     return;
+  //   }
+
+  //   if (!linkInput.startsWith("http")) {
+  //     alert("لطفاً لینک معتبر وارد کنید (با http یا https).");
+  //     return;
+  //   }
+
+  //   setAppointments((prev) =>
+  //     prev.map((item) =>
+  //       item.id === selectedSessionForLink.id
+  //         ? { ...item, meetingLink: linkInput.trim() }
+  //         : item,
+  //     ),
+  //   );
+
+  //   setShowLinkModal(false);
+  //   setLinkInput("");
+  //   setSelectedSessionForLink(null);
+  //   alert("لینک جلسه با موفقیت ذخیره شد.");
+  // };
 
   // ===== جلسات پیش‌رو: confirmed + آینده (شامل ongoing) =====
   const upcomingSessions = useMemo(() => {
@@ -1758,6 +2254,57 @@ function SessionsManagement({ appointments }) {
     }
   };
 
+  // ===== ذخیره لینک جلسه =====
+  // const handleSaveMeetingLink = () => {
+  //   if (!linkInput.trim()) {
+  //     alert("لطفاً لینک جلسه را وارد کنید.");
+  //     return;
+  //   }
+
+  //   if (!linkInput.startsWith("http")) {
+  //     alert("لطفاً لینک معتبر وارد کنید (با http یا https).");
+  //     return;
+  //   }
+
+  //   setAppointments((prev) =>
+  //     prev.map((item) =>
+  //       item.id === selectedSessionForLink.id
+  //         ? { ...item, meetingLink: linkInput.trim() }
+  //         : item,
+  //     ),
+  //   );
+
+  //   setShowLinkModal(false);
+  //   setLinkInput("");
+  //   setSelectedSessionForLink(null);
+  //   alert("لینک جلسه با موفقیت ذخیره شد.");
+  // };
+
+  // ===== ذخیره لینک جلسه =====
+  const handleSaveMeetingLink = (session) => {
+    if (!linkInput.trim()) {
+      alert("لطفاً لینک جلسه را وارد کنید.");
+      return;
+    }
+
+    if (!linkInput.startsWith("http")) {
+      alert("لطفاً لینک معتبر وارد کنید (با http یا https).");
+      return;
+    }
+
+    setAppointments((prev) =>
+      prev.map((item) =>
+        item.id === session.id
+          ? { ...item, meetingLink: linkInput.trim() }
+          : item,
+      ),
+    );
+
+    setLinkInput("");
+    setIsEditingLink(false);
+    alert("لینک جلسه با موفقیت ذخیره شد.");
+  };
+
   // ==========================================
   // رندر
   // ==========================================
@@ -1794,7 +2341,7 @@ function SessionsManagement({ appointments }) {
           }`}
           onClick={() => setActiveTab("upcoming")}
         >
-          📅 جلسات پیش‌رو
+          جلسات پیش‌رو
           <span className={styles.filterCount}>
             {toPersianDigits(upcomingSessions.length)}
           </span>
@@ -1805,7 +2352,7 @@ function SessionsManagement({ appointments }) {
           }`}
           onClick={() => setActiveTab("past")}
         >
-          📋 تاریخچه جلسات
+          تاریخچه جلسات
           <span className={styles.filterCount}>
             {toPersianDigits(pastSessions.length)}
           </span>
@@ -1843,20 +2390,111 @@ function SessionsManagement({ appointments }) {
               </div>
             </div>
 
-            <div className={styles.nextSessionTimerEnterContainer}>
-              <button
-                className={
-                  isNextOngoing
-                    ? styles.btnNextSession
-                    : styles.btnNextSessionDisabled
-                }
-                onClick={() => isNextOngoing && handleStartSession(nextSession)}
-                disabled={!isNextOngoing}
-              >
-                {isNextOngoing ? "ورود به جلسه" : "ورود به جلسه"}
-                <span>→</span>
-              </button>
+            <div className={styles.nextSessionActions}>
+              {/* دکمه ورود به جلسه */}
+              {/* {isNextOngoing ? (
+                <a
+                  href={nextSession.meetingLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`${styles.btnNextSession} ${styles.btnNextSessionOngoing}`}
+                >
+                  ورود به جلسه
+                  <span>→</span>
+                </a>
+              ) : (
+                <button
+                  className={styles.btnNextSessionDisabled}
+                  disabled
+                  title="در زمان برگزاری جلسه فعال می‌شود"
+                >
+                  ورود به جلسه
+                  <span>→</span>
+                </button>
+              )} */}
 
+              {/* ===== بخش لینک ===== */}
+              {isEditingLink ? (
+                /* حالت ویرایش/افزودن */
+                <div className={styles.inlineLinkForm}>
+                  <input
+                    type="text"
+                    className={styles.inlineLinkInput}
+                    placeholder="https://meet.google.com/abc-defg-hij"
+                    value={linkInput}
+                    onChange={(e) => setLinkInput(e.target.value)}
+                    dir="ltr"
+                    autoFocus
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        handleSaveMeetingLink(nextSession);
+                      } else if (e.key === "Escape") {
+                        setLinkInput("");
+                        setIsEditingLink(false);
+                      }
+                    }}
+                  />
+                  <button
+                    className={styles.btnSaveLink}
+                    onClick={() => handleSaveMeetingLink(nextSession)}
+                    title="ذخیره"
+                  >
+                    ✓
+                  </button>
+                  <button
+                    className={styles.btnCancelLink}
+                    onClick={() => {
+                      setLinkInput("");
+                      setIsEditingLink(false);
+                    }}
+                    title="انصراف"
+                  >
+                    ✕
+                  </button>
+                </div>
+              ) : nextSession.meetingLink ? (
+                /* حالت نمایش لینک ذخیره‌شده */
+                <>
+                  <div className={styles.meetingLinkDisplay}>
+                    <span className={styles.meetingLinkIcon}>🔗</span>
+                    <span className={styles.meetingLinkText}>
+                      {nextSession.meetingLink.length > 32
+                        ? nextSession.meetingLink.slice(0, 32) + "..."
+                        : nextSession.meetingLink}
+                    </span>
+                    <button
+                      className={styles.btnEditLink}
+                      onClick={() => {
+                        setLinkInput(nextSession.meetingLink);
+                        setIsEditingLink(true);
+                      }}
+                      title="ویرایش لینک"
+                    >
+                      ✏️
+                    </button>
+                  </div>
+                </>
+              ) : (
+                /* حالت بدون لینک */
+                <>
+                  <div className={styles.noLinkWarning}>
+                    <span>⚠️</span>
+                    <span>لینک جلسه تنظیم نشده</span>
+                  </div>
+
+                  <button
+                    className={styles.btnAddLink}
+                    onClick={() => {
+                      setLinkInput("");
+                      setIsEditingLink(true);
+                    }}
+                  >
+                    + افزودن لینک جلسه
+                  </button>
+                </>
+              )}
+
+              {/* تایمر */}
               {timeLeft && (
                 <div className={styles.nextSessionTimer}>
                   <span className={styles.timerLabel}>
@@ -1912,7 +2550,7 @@ function SessionsManagement({ appointments }) {
                       <div>
                         <h4>{session.patient}</h4>
                         <span className={styles.sessionType}>
-                          {session.type} • {getTypeLabel(session.typeKey)}
+                          {session.type}
                         </span>
                       </div>
                     </div>
@@ -1927,29 +2565,6 @@ function SessionsManagement({ appointments }) {
                       {isOngoing ? "در حال برگزاری" : "تأیید شده"}
                     </span>
                   </div>
-
-                  {/* جزئیات */}
-                  {/* <div className={styles.sessionDetails}>
-                    <div className={styles.sessionMeta}>
-                      <div className={styles.metaGroup}>
-                        <span>{session.date}</span>
-                      </div>
-                      <span>•</span>
-                      <div className={styles.metaGroup}>
-                        <span>
-                          {toPersianDigits(
-                            session.startTime || session.time.split(" - ")[0],
-                          )}
-                        </span>
-                      </div>
-                      <span>•</span>
-                      <div className={styles.metaGroup}>
-                        <span>
-                          {session.isOnline ? "جلسه آنلاین" : "جلسه حضوری"}
-                        </span>
-                      </div>
-                    </div>
-                  </div> */}
 
                   {/* ===== ردیف جزئیات + دکمه‌های اکشن ===== */}
                   <div className={styles.sessionFooter}>
@@ -2028,9 +2643,7 @@ function SessionsManagement({ appointments }) {
                     </div> */}
                     <div>
                       <h4>{session.patient}</h4>
-                      <span className={styles.sessionType}>
-                        {session.type} • {getTypeLabel(session.typeKey)}
-                      </span>
+                      <span className={styles.sessionType}>{session.type}</span>
                     </div>
                   </div>
                   <span
@@ -2070,10 +2683,10 @@ function SessionsManagement({ appointments }) {
                 {/* دکمه‌های اکشن */}
                 <div className={styles.sessionActions}>
                   <button className={styles.btnViewRecord}>
-                    📹 مشاهده ضبط جلسه
+                    مشاهده ضبط جلسه
                   </button>
                   <button className={styles.btnViewNotes}>
-                    📝 مشاهده یادداشت
+                    مشاهده یادداشت
                   </button>
                 </div>
               </div>
@@ -2086,6 +2699,69 @@ function SessionsManagement({ appointments }) {
             </div>
           ))}
       </div>
+
+      {/* ===== مودال تنظیم لینک جلسه ===== */}
+      {/* {showLinkModal && selectedSessionForLink && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.linkModal}>
+            <div className={styles.modalHeader}>
+              <h3>تنظیم لینک جلسه</h3>
+              <button
+                className={styles.modalClose}
+                onClick={() => {
+                  setShowLinkModal(false);
+                  setLinkInput("");
+                  setSelectedSessionForLink(null);
+                }}
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className={styles.modalBody}>
+              <p className={styles.linkModalInfo}>
+                جلسه با <strong>{selectedSessionForLink.patient}</strong>
+              </p>
+
+              <div className={styles.formGroup}>
+                <label>لینک جلسه (Google Meet، Zoom، ...)</label>
+                <input
+                  type="text"
+                  className={styles.formInput}
+                  placeholder="https://meet.google.com/abc-defg-hij"
+                  value={linkInput}
+                  onChange={(e) => setLinkInput(e.target.value)}
+                  dir="ltr"
+                  autoFocus
+                />
+              </div>
+
+              <p className={styles.linkModalHint}>
+                💡 این لینک فقط در زمان برگزاری جلسه برای بیمار فعال می‌شود.
+              </p>
+            </div>
+
+            <div className={styles.modalFooter}>
+              <button
+                className={styles.btnCancelModal}
+                onClick={() => {
+                  setShowLinkModal(false);
+                  setLinkInput("");
+                  setSelectedSessionForLink(null);
+                }}
+              >
+                انصراف
+              </button>
+              <button
+                className={styles.btnConfirmModal}
+                onClick={handleSaveMeetingLink}
+              >
+                ذخیره لینک
+              </button>
+            </div>
+          </div>
+        </div>
+      )} */}
     </div>
   );
 }
@@ -2204,19 +2880,161 @@ function PatientNotes() {
 // ============================================
 // COMPONENT: Doctor Messages
 // ============================================
-function DoctorMessages() {
+// function DoctorMessages() {
+//   return (
+//     <div className={styles.pageContent}>
+//       <div className={styles.pageHeader}>
+//         <div className={styles.headerInfo}>
+//           <h2>💬 پیام‌ها</h2>
+//           <p>ارتباط با بیماران</p>
+//         </div>
+//       </div>
+//       <div className={styles.emptyState}>
+//         <span className={styles.emptyIcon}>💬</span>
+//         <h3>هیچ پیامی وجود ندارد</h3>
+//         <p>پیام‌های بیماران در اینجا نمایش داده می‌شود.</p>
+//       </div>
+//     </div>
+//   );
+// }
+
+// ============================================
+// COMPONENT: Doctor Messages (Notifications)
+// ============================================
+function DoctorMessages({ notifications, onMarkAsRead, onMarkAllAsRead }) {
+  const [filter, setFilter] = useState("all"); // all | unread | read
+
+  const unreadCount = notifications.filter((n) => !n.isRead).length;
+
+  // ===== فیلتر =====
+  const filteredNotifications = useMemo(() => {
+    if (filter === "unread") return notifications.filter((n) => !n.isRead);
+    if (filter === "read") return notifications.filter((n) => n.isRead);
+    return notifications;
+  }, [notifications, filter]);
+
+  // ===== استایل بر اساس نوع =====
+  const getTypeStyle = (type) => {
+    const map = {
+      reminder: { bg: "#e3f2fd", color: "#0d47a1", icon: "⏰" },
+      warning: { bg: "#fff3e0", color: "#e65100", icon: "⚠️" },
+      confirmed: { bg: "#e8f5e9", color: "#2e7d32", icon: "✅" },
+      cancelled: { bg: "#fbe9e7", color: "#c62828", icon: "❌" },
+      note: { bg: "#f3e5f5", color: "#6a1b9a", icon: "📝" },
+    };
+    return map[type] || map.reminder;
+  };
+
   return (
     <div className={styles.pageContent}>
+      {/* ===== هدر ===== */}
       <div className={styles.pageHeader}>
         <div className={styles.headerInfo}>
-          <h2>💬 پیام‌ها</h2>
-          <p>ارتباط با بیماران</p>
+          <h2>🔔 اعلان‌ها</h2>
+          <p>رویدادها و یادآوری‌های مهم شما</p>
+        </div>
+        <div className={styles.notificationActions}>
+          {unreadCount > 0 && (
+            <span className={styles.unreadBadge}>
+              {toPersianDigits(unreadCount)} جدید
+            </span>
+          )}
+          {unreadCount > 0 && (
+            <button className={styles.markAllBtn} onClick={onMarkAllAsRead}>
+              ✓ همه خوانده شدند
+            </button>
+          )}
         </div>
       </div>
-      <div className={styles.emptyState}>
-        <span className={styles.emptyIcon}>💬</span>
-        <h3>هیچ پیامی وجود ندارد</h3>
-        <p>پیام‌های بیماران در اینجا نمایش داده می‌شود.</p>
+
+      {/* ===== فیلترها ===== */}
+      <div className={styles.filterTabs}>
+        <button
+          className={`${styles.filterTab} ${
+            filter === "all" ? styles.active : ""
+          }`}
+          onClick={() => setFilter("all")}
+        >
+          همه
+          <span className={styles.filterCount}>
+            {toPersianDigits(notifications.length)}
+          </span>
+        </button>
+        <button
+          className={`${styles.filterTab} ${
+            filter === "unread" ? styles.active : ""
+          }`}
+          onClick={() => setFilter("unread")}
+        >
+          خوانده نشده
+          {unreadCount > 0 && (
+            <span className={styles.filterCount}>
+              {toPersianDigits(unreadCount)}
+            </span>
+          )}
+        </button>
+        <button
+          className={`${styles.filterTab} ${
+            filter === "read" ? styles.active : ""
+          }`}
+          onClick={() => setFilter("read")}
+        >
+          خوانده شده
+          <span className={styles.filterCount}>
+            {toPersianDigits(notifications.filter((n) => n.isRead).length)}
+          </span>
+        </button>
+      </div>
+
+      {/* ===== لیست اعلان‌ها ===== */}
+      <div className={styles.notificationsList}>
+        {filteredNotifications.length > 0 ? (
+          filteredNotifications.map((notification) => {
+            const typeStyle = getTypeStyle(notification.type);
+            return (
+              <div
+                key={notification.id}
+                className={`${styles.notificationCard} ${
+                  !notification.isRead ? styles.unread : ""
+                }`}
+                onClick={() => onMarkAsRead(notification.id)}
+              >
+                <div className={styles.notificationContent}>
+                  <div className={styles.notificationHeader}>
+                    <h4 className={styles.notificationTitle}>
+                      {!notification.isRead && (
+                        <span className={styles.unreadDot}></span>
+                      )}
+                      {notification.title}
+                    </h4>
+                    <span className={styles.notificationTime}>
+                      {notification.time}
+                    </span>
+                  </div>
+                  <p className={styles.notificationMessage}>
+                    {notification.message}
+                  </p>
+                </div>
+
+                {!notification.isRead && (
+                  <div className={styles.unreadIndicator}></div>
+                )}
+              </div>
+            );
+          })
+        ) : (
+          <div className={styles.emptyState}>
+            <span className={styles.emptyIcon}>🔔</span>
+            <h3>هیچ اعلانی وجود ندارد</h3>
+            <p>
+              {filter === "unread"
+                ? "همه اعلان‌ها را خوانده‌اید."
+                : filter === "read"
+                  ? "هنوز اعلان خوانده شده‌ای وجود ندارد."
+                  : "هنوز اعلانی دریافت نکرده‌اید."}
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

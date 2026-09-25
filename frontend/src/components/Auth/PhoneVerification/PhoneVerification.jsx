@@ -133,7 +133,7 @@ function PhoneVerification({ onVerify }) {
               onClick={handleVerify}
               disabled={isLoading}
             >
-              {isLoading ? "⏳ در حال تایید..." : "تایید و ادامه"}
+              {isLoading ? "⏳ در حال تایید ..." : "تایید و ادامه"}
             </button>
 
             <div className={styles.resendSection}>
