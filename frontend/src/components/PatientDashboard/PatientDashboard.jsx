@@ -388,6 +388,17 @@ const isSessionOngoing = (appointment) => {
   return now.isAfter(startMoment) && now.isBefore(endMoment);
 };
 
+// ===== تبدیل وضعیت به اطلاعات نمایشی =====
+const getStatusInfo = (status) => {
+  const map = {
+    pending: { label: "در انتظار", className: "statusPending" },
+    confirmed: { label: "تأیید شده", className: "statusConfirmed" },
+    completed: { label: "انجام شده", className: "statusCompleted" },
+    cancelled: { label: "لغو شده", className: "statusCancelled" },
+  };
+  return map[status] || map.pending;
+};
+
 // ============================================
 // 📌 کامپوننت‌ها (Components)
 // ============================================

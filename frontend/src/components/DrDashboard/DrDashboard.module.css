@@ -1135,7 +1135,7 @@
   gap: 12px;
 }
 
-.appointmentCard {
+/* .appointmentCard {
   background: var(--white);
   border-radius: var(--radius);
   padding: 16px 20px;
@@ -1149,9 +1149,47 @@
 
 .appointmentCard:hover {
   box-shadow: var(--shadow-md);
+} */
+
+.appointmentCard {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  border: 1px solid rgba(0, 0, 0, 0.04);
 }
 
-.appointmentInfo {
+.appointmentCard:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(45, 125, 110, 0.08);
+}
+
+/* ===== نوبت‌های گذشته (توسی کمرنگ) ===== */
+.pastAppointment {
+  opacity: 0.6;
+  background: #fafafa;
+  filter: grayscale(0.3);
+}
+
+.pastAppointment:hover {
+  opacity: 0.85;
+  filter: grayscale(0);
+  transform: translateY(-3px);
+}
+
+/* ===== اثر روی متن‌ها ===== */
+.pastAppointment h4,
+.pastAppointment .metaItem {
+  color: var(--text-muted);
+}
+
+.pastAppointment .statusBadge {
+  opacity: 0.7;
+}
+
+/* .appointmentInfo {
   flex: 1;
 }
 
@@ -1160,6 +1198,18 @@
   font-weight: 600;
   color: var(--text-dark);
   margin: 0;
+} */
+
+.appointmentInfo {
+  flex: 1;
+  min-width: 200px;
+}
+
+.appointmentInfo h4 {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0 0 8px;
 }
 
 .appointmentInfo p {
@@ -1252,6 +1302,151 @@
 .btnComplete:hover {
   background: #0d47a1;
   color: white;
+}
+
+/* ===== وضعیت انجام نشده ===== */
+.statusNoShow {
+  background: #fbe9e7;
+  color: #c62828;
+}
+
+/* ===== وضعیت از موعد گذشته ===== */
+.statusExpired {
+  background: #f5f5f5;
+  color: #757575;
+}
+
+/* ===== نوبت‌های گذشته (کم‌رنگ) ===== */
+/* .pastAppointment {
+  opacity: 0.6;
+  background: #fafafa;
+  filter: grayscale(0.3);
+}
+
+.pastAppointment:hover {
+  opacity: 0.85;
+  filter: grayscale(0);
+}
+
+.pastAppointment h4,
+.pastAppointment .metaItem {
+  color: var(--text-muted);
+} */
+
+/* ===== نوار وضعیت ===== */
+.appointmentStatusBar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+/* ===== بدنه کارت ===== */
+.appointmentBody {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* ===== Badge آنلاین ===== */
+.onlineBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  background: rgba(45, 125, 110, 0.08);
+  color: #2d7d6e;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* ===== Badge لغو ===== */
+.cancelBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  background: #fbe9e7;
+  color: #c62828;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* ===== دلیل لغو ===== */
+.cancelReason {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: #fbe9e7;
+  border-radius: var(--radius);
+  font-size: 13px;
+  color: #c62828;
+  flex-wrap: wrap;
+}
+
+.cancelReason span:first-child {
+  font-weight: 600;
+}
+
+/* ===== متا ===== */
+/* .appointmentMeta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.metaItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  color: var(--text-muted);
+} */
+
+.appointmentMeta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.metaItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.metaDivider {
+  color: #d5d0ca;
+  font-size: 12px;
+}
+
+/* ===== قیمت ===== */
+.appointmentPrice {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 4px 12px;
+  background: rgba(45, 125, 110, 0.08);
+  color: #2d7d6e;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ===== جلسه در حال برگزاری در بنر ===== */
+.nextSessionOngoing {
+  background: linear-gradient(135deg, #ce2525dd, #c82a27ca) !important;
+  animation: pulseOngoing 2s ease-in-out infinite;
 }
 
 .btnMore {
