@@ -1711,16 +1711,33 @@
 }
 
 /* ===== Session Details ===== */
+/* ===== ردیف پایین کارت جلسه (جزئیات + اکشن‌ها) ===== */
+.sessionFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-top: 12px;
+  border-top: 1px solid var(--gray-light);
+  margin-top: 4px;
+}
+
 .sessionDetails {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 12px 0;
-  border-top: 1px solid var(--gray-light);
-  margin-bottom: 16px;
+  /* border-top: 1px solid var(--gray-light); */
+  /* margin-bottom: 16px; */
   flex-wrap: wrap;
   gap: 12px;
 }
+
+/* .sessionDetails {
+  flex: 1;
+  min-width: 0;
+} */
 
 .sessionMeta {
   display: flex;
@@ -1952,7 +1969,7 @@
 }
 
 /* ===== Cancel Session Button ===== */
-.btnCancelSession {
+/* .btnCancelSession {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -1972,6 +1989,26 @@
   background: #c62828;
   color: white;
   transform: scale(1.05);
+  box-shadow: 0 4px 16px rgba(198, 40, 40, 0.2);
+} */
+
+.btnCancelSession {
+  padding: 8px 20px;
+  background: #fdfcfc;
+  color: #c62828;
+  border: 1.5px solid #c62828;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btnCancelSession:hover {
+  background: #c62828;
+  color: white;
+  transform: scale(1.03);
   box-shadow: 0 4px 16px rgba(198, 40, 40, 0.2);
 }
 

@@ -168,15 +168,15 @@ const getTypeLabel = (typeKey) => {
 };
 
 // ===== تبدیل نوع جلسه به آیکون =====
-const getTypeIcon = (typeKey) => {
-  const map = {
-    individual: "🧑‍⚕️",
-    couple: "💑",
-    teen: "🧒",
-    family: "👨‍👩‍👧‍👦",
-  };
-  return map[typeKey] || "🧑‍⚕️";
-};
+// const getTypeIcon = (typeKey) => {
+//   const map = {
+//     individual: "🧑‍⚕️",
+//     couple: "💑",
+//     teen: "🧒",
+//     family: "👨‍👩‍👧‍👦",
+//   };
+//   return map[typeKey] || "🧑‍⚕️";
+// };
 
 // ===== تبدیل وضعیت به اطلاعات نمایشی =====
 const getStatusInfo = (status) => {
@@ -1823,7 +1823,7 @@ function SessionsManagement({ appointments }) {
           >
             <div className={styles.nextSessionContent}>
               <span className={styles.nextSessionLabel}>
-                {isNextOngoing ? "🔴 در حال برگزاری" : "⏰ جلسه بعدی شما"}
+                {isNextOngoing ? "🔴 در حال برگزاری" : "جلسه بعدی شما"}
               </span>
               <h3>{nextSession.type}</h3>
               <p>با {nextSession.patient}</p>
@@ -1837,7 +1837,7 @@ function SessionsManagement({ appointments }) {
                 </span>
                 <span>•</span>
                 <span>
-                  {getTypeIcon(nextSession.typeKey)}{" "}
+                  {/* {getTypeIcon(nextSession.typeKey)}{" "} */}
                   {getTypeLabel(nextSession.typeKey)}
                 </span>
               </div>
@@ -1906,9 +1906,9 @@ function SessionsManagement({ appointments }) {
                   {/* هدر کارت */}
                   <div className={styles.sessionCardHeader}>
                     <div className={styles.sessionDoctor}>
-                      <div className={styles.sessionPatientAvatar}>
+                      {/* <div className={styles.sessionPatientAvatar}>
                         {getTypeIcon(session.typeKey)}
-                      </div>
+                      </div> */}
                       <div>
                         <h4>{session.patient}</h4>
                         <span className={styles.sessionType}>
@@ -1929,15 +1929,12 @@ function SessionsManagement({ appointments }) {
                   </div>
 
                   {/* جزئیات */}
-                  <div className={styles.sessionDetails}>
+                  {/* <div className={styles.sessionDetails}>
                     <div className={styles.sessionMeta}>
                       <div className={styles.metaGroup}>
                         <span>{session.date}</span>
                       </div>
                       <span>•</span>
-                      {/* <div className={styles.metaGroup}>
-                        <span>{session.time}</span>
-                      </div> */}
                       <div className={styles.metaGroup}>
                         <span>
                           {toPersianDigits(
@@ -1952,34 +1949,60 @@ function SessionsManagement({ appointments }) {
                         </span>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
 
-                  {/* دکمه‌های اکشن */}
-                  <div className={styles.sessionActions}>
-                    {isOngoing ? (
-                      <button
-                        className={styles.btnJoinSession}
-                        onClick={() => handleStartSession(session)}
-                      >
-                        <span>▶</span>
-                        ورود به جلسه
-                      </button>
-                    ) : (
-                      <button
-                        className={styles.btnCancelSession}
-                        onClick={() => {
-                          if (
-                            window.confirm(
-                              `آیا از لغو جلسه ${session.patient} اطمینان دارید؟`,
-                            )
-                          ) {
-                            alert(`❌ جلسه ${session.patient} لغو شد.`);
-                          }
-                        }}
-                      >
-                        ❌ لغو جلسه
-                      </button>
-                    )}
+                  {/* ===== ردیف جزئیات + دکمه‌های اکشن ===== */}
+                  <div className={styles.sessionFooter}>
+                    {/* جزئیات */}
+                    <div className={styles.sessionDetails}>
+                      <div className={styles.sessionMeta}>
+                        <div className={styles.metaGroup}>
+                          <span>{session.date}</span>
+                        </div>
+                        <span>•</span>
+                        <div className={styles.metaGroup}>
+                          <span>
+                            {toPersianDigits(
+                              session.startTime || session.time.split(" - ")[0],
+                            )}
+                          </span>
+                        </div>
+                        <span>•</span>
+                        <div className={styles.metaGroup}>
+                          <span>
+                            {session.isOnline ? "جلسه آنلاین" : "جلسه حضوری"}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* دکمه‌های اکشن */}
+                    <div className={styles.sessionActions}>
+                      {isOngoing ? (
+                        <button
+                          className={styles.btnJoinSession}
+                          onClick={() => handleStartSession(session)}
+                        >
+                          <span>▶</span>
+                          ورود به جلسه
+                        </button>
+                      ) : (
+                        <button
+                          className={styles.btnCancelSession}
+                          onClick={() => {
+                            if (
+                              window.confirm(
+                                `آیا از لغو جلسه ${session.patient} اطمینان دارید؟`,
+                              )
+                            ) {
+                              alert(`❌ جلسه ${session.patient} لغو شد.`);
+                            }
+                          }}
+                        >
+                          لغو جلسه
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
               );
@@ -2000,9 +2023,9 @@ function SessionsManagement({ appointments }) {
                 {/* هدر کارت */}
                 <div className={styles.sessionCardHeader}>
                   <div className={styles.sessionDoctor}>
-                    <div className={styles.sessionPatientAvatar}>
+                    {/* <div className={styles.sessionPatientAvatar}>
                       {getTypeIcon(session.typeKey)}
-                    </div>
+                    </div> */}
                     <div>
                       <h4>{session.patient}</h4>
                       <span className={styles.sessionType}>
