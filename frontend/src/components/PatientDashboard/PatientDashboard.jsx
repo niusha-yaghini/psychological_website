@@ -1102,7 +1102,6 @@ function AppointmentsContent({ appointments, setAppointments }) {
                   </div>
 
                   {/* دکمه‌های اکشن */}
-                  {/* دکمه‌های اکشن */}
                   <div className={styles.appointmentActions}>
                     {/* ===== وضعیت تأیید شده (فقط اگه آینده باشه) ===== */}
                     {appointment.status === "confirmed" && !isPast && (

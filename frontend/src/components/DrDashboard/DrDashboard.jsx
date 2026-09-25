@@ -134,25 +134,53 @@ const isAppointmentTomorrow = (appointment) => {
   return appointmentMoment.isSame(moment().add(1, "day"), "day");
 };
 
+// ===== چک کردن اینکه نوبت بیشتر از ۲۴ ساعت تا شروع فاصله داره =====
+const isMoreThan24HoursAway = (appointment) => {
+  const startMoment = getAppointmentMoment(appointment);
+  if (!startMoment.isValid()) return false;
+  const diffHours = startMoment.diff(moment(), "hours", true);
+  return diffHours >= 24;
+};
+
+// ===== چک کردن اینکه نوبت کمتر از ۲۴ ساعت تا شروع فاصله داره =====
+const isLessThan24HoursAway = (appointment) => {
+  const startMoment = getAppointmentMoment(appointment);
+  if (!startMoment.isValid()) return false;
+  const diffHours = startMoment.diff(moment(), "hours", true);
+  return diffHours > 0 && diffHours < 24;
+};
+
 // ===== تبدیل روز هفته به برچسب نسبی (امروز/فردا/...) =====
+// const getRelativeDateLabel = (appointment) => {
+//   const appointmentMoment = getAppointmentMoment(appointment);
+//   if (!appointmentMoment.isValid()) return appointment.date;
+
+//   const now = moment();
+
+//   if (appointmentMoment.isSame(now, "day")) return "امروز";
+//   if (appointmentMoment.isSame(now.clone().add(1, "day"), "day")) return "فردا";
+//   if (appointmentMoment.isSame(now.clone().add(2, "day"), "day"))
+//     return "پس‌فردا";
+
+//   // اگه توی همین هفته بود، اسم روز رو نشون بده
+//   const diffDays = appointmentMoment.diff(now, "days");
+//   if (diffDays > 0 && diffDays < 7) {
+//     return appointmentMoment.format("dddd");
+//   }
+
+//   // در غیر این صورت تاریخ کامل
+//   return appointment.date;
+// };
+
+// ===== نمایش تاریخ نوبت (همیشه تاریخ کامل) =====
+// const getRelativeDateLabel = (appointment) => {
+//   if (!appointment?.date) return "";
+//   return appointment.date;
+// };
+
+// ===== نمایش تاریخ نوبت (همیشه تاریخ کامل) =====
 const getRelativeDateLabel = (appointment) => {
-  const appointmentMoment = getAppointmentMoment(appointment);
-  if (!appointmentMoment.isValid()) return appointment.date;
-
-  const now = moment();
-
-  if (appointmentMoment.isSame(now, "day")) return "امروز";
-  if (appointmentMoment.isSame(now.clone().add(1, "day"), "day")) return "فردا";
-  if (appointmentMoment.isSame(now.clone().add(2, "day"), "day"))
-    return "پس‌فردا";
-
-  // اگه توی همین هفته بود، اسم روز رو نشون بده
-  const diffDays = appointmentMoment.diff(now, "days");
-  if (diffDays > 0 && diffDays < 7) {
-    return appointmentMoment.format("dddd");
-  }
-
-  // در غیر این صورت تاریخ کامل
+  if (!appointment?.date) return "";
   return appointment.date;
 };
 
@@ -746,7 +774,7 @@ function DashboardOverview({ appointments, setAppointments }) {
                 <div className={styles.confirmRow}>
                   <span>ساعت:</span>
                   <span>
-                    {toEnglishDigits(
+                    {toPersianDigits(
                       selectedSession.startTime ||
                         selectedSession.time.split(" - ")[0],
                     )}
@@ -813,7 +841,7 @@ function DashboardOverview({ appointments, setAppointments }) {
                 <div className={styles.confirmRow}>
                   <span>ساعت:</span>
                   <span>
-                    {toEnglishDigits(
+                    {toPersianDigits(
                       selectedSession.startTime ||
                         selectedSession.time.split(" - ")[0],
                     )}
@@ -1793,6 +1821,52 @@ function AppointmentsManagement({ appointments, setAppointments }) {
     }
   };
 
+  // ===== لغو نوبت توسط روانشناس =====
+  // const handleDoctorCancel = (app) => {
+  //   if (
+  //     window.confirm(
+  //       `آیا از لغو جلسه ${app.patient} اطمینان دارید؟ این عمل قابل بازگشت نیست.`,
+  //     )
+  //   ) {
+  //     setAppointments((prev) =>
+  //       prev.map((item) =>
+  //         item.id === app.id
+  //           ? {
+  //               ...item,
+  //               status: "cancelled",
+  //               cancelledBy: "doctor",
+  //               cancelReason: "لغو توسط روانشناس",
+  //             }
+  //           : item,
+  //       ),
+  //     );
+  //     alert(`جلسه ${app.patient} با موفقیت لغو شد.`);
+  //   }
+  // };
+
+  // ===== لغو نوبت توسط روانشناس =====
+  const handleDoctorCancel = (app) => {
+    if (
+      window.confirm(
+        `آیا از لغو جلسه ${app.patient} اطمینان دارید؟ این عمل قابل بازگشت نیست.`,
+      )
+    ) {
+      setAppointments((prev) =>
+        prev.map((item) =>
+          item.id === app.id
+            ? {
+                ...item,
+                status: "cancelled",
+                cancelledBy: "doctor",
+                cancelReason: "لغو توسط روانشناس",
+              }
+            : item,
+        ),
+      );
+      alert(`جلسه ${app.patient} با موفقیت لغو شد.`);
+    }
+  };
+
   // ===== افزودن نوبت جدید =====
   const handleAddAppointment = () => {
     // اعتبارسنجی
@@ -1868,7 +1942,7 @@ function AppointmentsManagement({ appointments, setAppointments }) {
     { id: "confirmed", label: "تأیید شده" },
     { id: "completed", label: "برگزار شده" },
     // { id: "cancelled", label: "لغو شده" },
-    { id: "not-completed", label: "انجام نشده" },
+    { id: "not-completed", label: "برگزار نشده" },
   ];
 
   return (
@@ -2325,8 +2399,7 @@ function AppointmentsManagement({ appointments, setAppointments }) {
                   </div>
 
                   {/* ===== دکمه‌های اکشن ===== */}
-                  <div className={styles.appointmentActions}>
-                    {/* وضعیت pending + آینده */}
+                  {/* <div className={styles.appointmentActions}>
                     {displayStatus === "pending" && (
                       <>
                         <button
@@ -2344,7 +2417,6 @@ function AppointmentsManagement({ appointments, setAppointments }) {
                       </>
                     )}
 
-                    {/* وضعیت confirmed + آینده */}
                     {displayStatus === "confirmed" && (
                       <button
                         className={styles.btnComplete}
@@ -2354,7 +2426,80 @@ function AppointmentsManagement({ appointments, setAppointments }) {
                       </button>
                     )}
 
-                    {/* بازه ۴۸ ساعته */}
+                    {isAwaitingConfirmation && (
+                      <>
+                        <button
+                          className={styles.btnComplete}
+                          onClick={() => handleComplete(app)}
+                        >
+                          ✓ برگزار شد
+                        </button>
+                        <button
+                          className={styles.btnNoShow}
+                          onClick={() => handleMarkNoShow(app)}
+                        >
+                          ✗ برگزار نشد
+                        </button>
+                      </>
+                    )}
+                  </div> */}
+                  {/* ===== دکمه‌های اکشن ===== */}
+                  <div className={styles.appointmentActions}>
+                    {/* ===== وضعیت pending + آینده ===== */}
+                    {displayStatus === "pending" && (
+                      <>
+                        <button
+                          className={styles.btnApprove}
+                          onClick={() => handleConfirm(app)}
+                        >
+                          تأیید
+                        </button>
+                        <button
+                          className={styles.btnReject}
+                          onClick={() => handleReject(app)}
+                        >
+                          رد
+                        </button>
+                      </>
+                    )}
+
+                    {/* ===== وضعیت confirmed + آینده ===== */}
+                    {displayStatus === "confirmed" && (
+                      <>
+                        {/* لغو فعال (>۲۴ ساعت) */}
+                        {isMoreThan24HoursAway(app) && (
+                          <button
+                            className={styles.btnDoctorCancel}
+                            onClick={() => handleDoctorCancel(app)}
+                          >
+                            لغو نوبت{" "}
+                          </button>
+                        )}
+
+                        {/* لغو غیرفعال (<۲۴ ساعت) */}
+                        {isLessThan24HoursAway(app) && (
+                          <button
+                            className={styles.btnCancelDisabled}
+                            disabled
+                            title="کمتر از ۲۴ ساعت تا شروع جلسه باقی مانده"
+                          >
+                            لغو غیرفعال (کمتر از ۲۴ ساعت)
+                          </button>
+                        )}
+                      </>
+                    )}
+
+                    {/* ===== در حال برگزاری ===== */}
+                    {displayStatus === "ongoing" && (
+                      <button
+                        className={styles.btnComplete}
+                        onClick={() => handleComplete(app)}
+                      >
+                        ثبت انجام
+                      </button>
+                    )}
+
+                    {/* ===== بازه ۴۸ ساعته ===== */}
                     {isAwaitingConfirmation && (
                       <>
                         <button
@@ -2415,7 +2560,7 @@ function AppointmentsManagement({ appointments, setAppointments }) {
                 <div className={styles.confirmRow}>
                   <span>ساعت:</span>
                   <span>
-                    {toEnglishDigits(
+                    {toPersianDigits(
                       selectedAppointment.startTime ||
                         selectedAppointment.time.split(" - ")[0],
                     )}
@@ -2479,7 +2624,7 @@ function AppointmentsManagement({ appointments, setAppointments }) {
                 <div className={styles.confirmRow}>
                   <span>ساعت:</span>
                   <span>
-                    {toEnglishDigits(
+                    {toPersianDigits(
                       selectedAppointment.startTime ||
                         selectedAppointment.time.split(" - ")[0],
                     )}
