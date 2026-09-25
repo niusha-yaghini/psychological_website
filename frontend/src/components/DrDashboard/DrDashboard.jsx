@@ -183,7 +183,7 @@ const getStatusInfo = (status) => {
   const map = {
     pending: { label: "در انتظار", className: "statusPending" },
     confirmed: { label: "تأیید شده", className: "statusConfirmed" },
-    completed: { label: "انجام شده", className: "statusCompleted" },
+    completed: { label: "برگزار شده", className: "statusCompleted" },
     cancelled: { label: "لغو شده", className: "statusCancelled" },
   };
   return map[status] || map.pending;
@@ -217,10 +217,145 @@ const getStatusInfo = (status) => {
 
 // ===== محاسبه وضعیت نمایشی نوبت (پنل دکتر) =====
 
+// const getDisplayStatus = (appointment) => {
+//   // اگه لغو یا انجام شده، همون رو برگردون
+//   if (appointment.status === "cancelled") return "cancelled";
+//   if (appointment.status === "completed") return "completed";
+
+//   const startMoment = getAppointmentMoment(appointment);
+//   if (!startMoment.isValid()) return appointment.status;
+
+//   const now = moment();
+//   const durationMinutes = (appointment.duration || 1) * 60;
+//   const endMoment = startMoment.clone().add(durationMinutes, "minutes");
+
+//   // در حال برگزاری
+//   if (now.isAfter(startMoment) && now.isBefore(endMoment)) {
+//     return "ongoing";
+//   }
+
+//   // زمان گذشته
+//   if (now.isAfter(endMoment)) {
+//     if (appointment.status === "confirmed") return "no-show";
+//     if (appointment.status === "pending") return "expired";
+//   }
+
+//   // هنوز نرسیده
+//   return appointment.status;
+// };
+
+// ===== محاسبه وضعیت نمایشی نوبت (پنل دکتر) =====
+// const getDisplayStatus = (appointment) => {
+//   // اگه لغو یا انجام شده، همون رو برگردون
+//   if (appointment.status === "cancelled") return "cancelled";
+//   if (appointment.status === "completed") return "completed";
+
+//   const startMoment = getAppointmentMoment(appointment);
+//   if (!startMoment.isValid()) return appointment.status;
+
+//   const now = moment();
+//   const durationMinutes = (appointment.duration || 1) * 60;
+//   const endMoment = startMoment.clone().add(durationMinutes, "minutes");
+
+//   // در حال برگزاری
+//   if (now.isAfter(startMoment) && now.isBefore(endMoment)) {
+//     return "ongoing";
+//   }
+
+//   // زمان گذشته
+//   if (now.isAfter(endMoment)) {
+//     // ===== بازه ۴۸ ساعته: منتظر تأیید انجام =====
+//     const hoursSinceEnd = now.diff(endMoment, "hours", true);
+//     if (hoursSinceEnd < 48) {
+//       return "awaiting-confirmation";
+//     }
+
+//     // ===== بعد از ۴۸ ساعت =====
+//     if (appointment.status === "confirmed") return "no-show";
+//     if (appointment.status === "pending") return "expired";
+//   }
+
+//   // هنوز نرسیده
+//   return appointment.status;
+// };
+
+// ===== تبدیل وضعیت نمایشی به اطلاعات نمایشی =====
+// const getDisplayStatusInfo = (displayStatus) => {
+//   const map = {
+//     pending: { label: "در انتظار", className: "statusPending" },
+//     confirmed: { label: "تأیید شده", className: "statusConfirmed" },
+//     ongoing: { label: "در حال برگزاری", className: "sessionOngoing" },
+//     completed: { label: "انجام شده", className: "statusCompleted" },
+//     cancelled: { label: "لغو شده", className: "statusCancelled" },
+//     "no-show": { label: "انجام نشده", className: "statusNoShow" },
+//     expired: { label: "از موعد گذشته", className: "statusExpired" },
+//   };
+//   return map[displayStatus] || map.pending;
+// };
+
+// const getDisplayStatusInfo = (displayStatus) => {
+//   const map = {
+//     pending: { label: "در انتظار", className: "statusPending" },
+//     confirmed: { label: "تأیید شده", className: "statusConfirmed" },
+//     ongoing: { label: "در حال برگزاری", className: "sessionOngoing" },
+//     completed: { label: "انجام شده", className: "statusCompleted" },
+//     cancelled: { label: "لغو شده", className: "statusCancelled" },
+//     "no-show": { label: "انجام نشده", className: "statusNoShow" },
+//     expired: { label: "از موعد گذشته", className: "statusExpired" },
+//     "awaiting-confirmation": {
+//       label: "منتظر تأیید انجام",
+//       className: "statusAwaitingConfirmation",
+//     },
+//   };
+//   return map[displayStatus] || map.pending;
+// };
+
+// ===== محاسبه وضعیت نمایشی نوبت (پنل دکتر) =====
+// const getDisplayStatus = (appointment) => {
+//   // ===== حالت‌های پایه =====
+//   if (appointment.status === "cancelled") return "cancelled";
+//   if (appointment.status === "completed") return "completed";
+//   if (appointment.status === "no-show") return "no-show";
+
+//   const startMoment = getAppointmentMoment(appointment);
+//   if (!startMoment.isValid()) return appointment.status;
+
+//   const now = moment();
+//   const durationMinutes = (appointment.duration || 1) * 60;
+//   const endMoment = startMoment.clone().add(durationMinutes, "minutes");
+
+//   // ===== در حال برگزاری =====
+//   if (now.isAfter(startMoment) && now.isBefore(endMoment)) {
+//     return "ongoing";
+//   }
+
+//   // ===== آینده =====
+//   if (now.isBefore(startMoment)) {
+//     return appointment.status; // pending یا confirmed
+//   }
+
+//   // ===== گذشته (بعد از end) =====
+//   if (now.isAfter(endMoment)) {
+//     const hoursSinceEnd = now.diff(endMoment, "hours", true);
+
+//     // بازه ۴۸ ساعته: منتظر تأیید انجام
+//     if (hoursSinceEnd < 48) {
+//       return "awaiting-confirmation";
+//     }
+
+//     // بعد از ۴۸ ساعت: برگزار نشده
+//     return "no-show";
+//   }
+
+//   return appointment.status;
+// };
+
+// ===== محاسبه وضعیت نمایشی نوبت (پنل دکتر) =====
 const getDisplayStatus = (appointment) => {
-  // اگه لغو یا انجام شده، همون رو برگردون
+  // ===== حالت‌های پایه =====
   if (appointment.status === "cancelled") return "cancelled";
   if (appointment.status === "completed") return "completed";
+  if (appointment.status === "no-show") return "no-show";
 
   const startMoment = getAppointmentMoment(appointment);
   if (!startMoment.isValid()) return appointment.status;
@@ -229,18 +364,29 @@ const getDisplayStatus = (appointment) => {
   const durationMinutes = (appointment.duration || 1) * 60;
   const endMoment = startMoment.clone().add(durationMinutes, "minutes");
 
-  // در حال برگزاری
+  // ===== در حال برگزاری =====
   if (now.isAfter(startMoment) && now.isBefore(endMoment)) {
     return "ongoing";
   }
 
-  // زمان گذشته
-  if (now.isAfter(endMoment)) {
-    if (appointment.status === "confirmed") return "no-show";
-    if (appointment.status === "pending") return "expired";
+  // ===== آینده =====
+  if (now.isBefore(startMoment)) {
+    return appointment.status; // pending یا confirmed
   }
 
-  // هنوز نرسیده
+  // ===== گذشته (بعد از end) =====
+  if (now.isAfter(endMoment)) {
+    const hoursSinceEnd = now.diff(endMoment, "hours", true);
+
+    // بازه ۴۸ ساعته: منتظر تأیید انجام
+    if (hoursSinceEnd < 48) {
+      return "awaiting-confirmation";
+    }
+
+    // بعد از ۴۸ ساعت: برگزار نشده
+    return "no-show";
+  }
+
   return appointment.status;
 };
 
@@ -250,22 +396,52 @@ const getDisplayStatusInfo = (displayStatus) => {
     pending: { label: "در انتظار", className: "statusPending" },
     confirmed: { label: "تأیید شده", className: "statusConfirmed" },
     ongoing: { label: "در حال برگزاری", className: "sessionOngoing" },
-    completed: { label: "انجام شده", className: "statusCompleted" },
+    completed: { label: "برگزار شده", className: "statusCompleted" },
     cancelled: { label: "لغو شده", className: "statusCancelled" },
-    "no-show": { label: "انجام نشده", className: "statusNoShow" },
-    expired: { label: "از موعد گذشته", className: "statusExpired" },
+    "no-show": { label: "برگزار نشده", className: "statusNoShow" },
+    "awaiting-confirmation": {
+      label: "منتظر تأیید انجام",
+      className: "statusAwaitingConfirmation",
+    },
   };
   return map[displayStatus] || map.pending;
 };
 
+// const getDisplayStatusInfo = (displayStatus) => {
+//   const map = {
+//     pending: { label: "در انتظار", className: "statusPending" },
+//     confirmed: { label: "تأیید شده", className: "statusConfirmed" },
+//     ongoing: { label: "در حال برگزاری", className: "sessionOngoing" },
+//     completed: { label: "برگزار شده", className: "statusCompleted" },
+//     cancelled: { label: "لغو شده", className: "statusCancelled" },
+//     "no-show": { label: "برگزار نشده", className: "statusNoShow" },
+//     "awaiting-confirmation": {
+//       label: "منتظر تأیید انجام",
+//       className: "statusAwaitingConfirmation",
+//     },
+//   };
+//   return map[displayStatus] || map.pending;
+// };
+
 // ===== چک کردن اینکه جلسه «انجام نشده» است =====
+// const isNotCompleted = (appointment) => {
+//   const displayStatus = getDisplayStatus(appointment);
+//   return (
+//     displayStatus === "cancelled" ||
+//     displayStatus === "expired" ||
+//     displayStatus === "no-show"
+//   );
+// };
+
+// const isNotCompleted = (appointment) => {
+//   const displayStatus = getDisplayStatus(appointment);
+//   return displayStatus === "cancelled" || displayStatus === "no-show";
+// };
+
+// ===== چک کردن اینکه جلسه «برگزار نشده» است =====
 const isNotCompleted = (appointment) => {
   const displayStatus = getDisplayStatus(appointment);
-  return (
-    displayStatus === "cancelled" ||
-    displayStatus === "expired" ||
-    displayStatus === "no-show"
-  );
+  return displayStatus === "cancelled" || displayStatus === "no-show";
 };
 
 // ===== دریافت اطلاعات وضعیت اصلی (badge اول) =====
@@ -273,7 +449,7 @@ const getOriginalStatusInfo = (status) => {
   const map = {
     pending: { label: "در انتظار", className: "statusPending" },
     confirmed: { label: "تأیید شده", className: "statusConfirmed" },
-    completed: { label: "انجام شده", className: "statusCompleted" },
+    completed: { label: "برگزار شده", className: "statusCompleted" },
     cancelled: { label: "لغو شده", className: "statusCancelled" },
   };
   return map[status] || map.pending;
@@ -1565,13 +1741,55 @@ function AppointmentsManagement({ appointments, setAppointments }) {
 
   // ===== ثبت انجام =====
   const handleComplete = (app) => {
-    if (window.confirm(`آیا جلسه ${app.patient} انجام شده است؟`)) {
+    if (window.confirm(`آیا جلسه ${app.patient} برگزار شده است؟`)) {
       setAppointments((prev) =>
         prev.map((item) =>
           item.id === app.id ? { ...item, status: "completed" } : item,
         ),
       );
-      alert(`جلسه ${app.patient} به عنوان انجام شده ثبت شد.`);
+      alert(`جلسه ${app.patient} به عنوان برگزار شده ثبت شد.`);
+    }
+  };
+
+  // ===== ثبت برگزار نشده =====
+  // const handleMarkNoShow = (app) => {
+  //   if (window.confirm(`آیا مطمئنید که جلسه ${app.patient} برگزار نشد؟`)) {
+  //     // ===== status رو به no-show تغییر میدیم =====
+  //     // (چون no-show در واقع یه status مستقل نیست، از confirmed/pending خارج میشه)
+  //     setAppointments((prev) =>
+  //       prev.map((item) =>
+  //         item.id === app.id
+  //           ? {
+  //               ...item,
+  //               status: "no-show",
+  //               markedAsNoShowAt: toPersianDigits(
+  //                 moment().format("jYYYY/jMM/jDD"),
+  //               ),
+  //             }
+  //           : item,
+  //       ),
+  //     );
+  //     alert(`جلسه ${app.patient} به عنوان "برگزار نشده" ثبت شد.`);
+  //   }
+  // };
+
+  // ===== ثبت برگزار نشده =====
+  const handleMarkNoShow = (app) => {
+    if (window.confirm(`آیا مطمئنید که جلسه ${app.patient} برگزار نشد؟`)) {
+      setAppointments((prev) =>
+        prev.map((item) =>
+          item.id === app.id
+            ? {
+                ...item,
+                status: "no-show",
+                markedAsNoShowAt: toPersianDigits(
+                  moment().format("jYYYY/jMM/jDD"),
+                ),
+              }
+            : item,
+        ),
+      );
+      alert(`جلسه ${app.patient} به عنوان "برگزار نشده" ثبت شد.`);
     }
   };
 
@@ -1648,7 +1866,7 @@ function AppointmentsManagement({ appointments, setAppointments }) {
     { id: "all", label: "همه" },
     { id: "pending", label: "در انتظار" },
     { id: "confirmed", label: "تأیید شده" },
-    { id: "completed", label: "انجام شده" },
+    { id: "completed", label: "برگزار شده" },
     // { id: "cancelled", label: "لغو شده" },
     { id: "not-completed", label: "انجام نشده" },
   ];
@@ -1693,7 +1911,7 @@ function AppointmentsManagement({ appointments, setAppointments }) {
 
       {/* ===== لیست نوبت‌ها ===== */}
       <div className={styles.appointmentsList}>
-        {filteredAppointments.length > 0 ? (
+        {/* {filteredAppointments.length > 0 ? (
           filteredAppointments.map((app) => {
             const displayStatus = getDisplayStatus(app);
             const originalStatus = getOriginalStatusInfo(app.status);
@@ -1713,28 +1931,23 @@ function AppointmentsManagement({ appointments, setAppointments }) {
                   isPast ? styles.pastAppointment : ""
                 }`}
               >
-                {/* ===== نوار وضعیت ===== */}
                 <div className={styles.appointmentStatusBar}>
-                  {/* Badge وضعیت اصلی */}
                   <span
                     className={`${styles.statusBadge} ${styles[originalStatus.className]}`}
                   >
                     {originalStatus.label}
                   </span>
 
-                  {/* Badge وضعیت نمایشی (اگه متفاوت بود) */}
                   {hasExtraBadge && (
                     <span className={styles.cancelBadge}>
                       {displayStatusInfo.label}
                     </span>
                   )}
 
-                  {/* Badge آنلاین */}
                   {app.isOnline && (
                     <span className={styles.onlineBadge}>آنلاین</span>
                   )}
 
-                  {/* دلیل لغو */}
                   {app.status === "cancelled" && (
                     <span className={styles.cancelBadge}>
                       {app.cancelledBy === "patient"
@@ -1744,7 +1957,6 @@ function AppointmentsManagement({ appointments, setAppointments }) {
                   )}
                 </div>
 
-                {/* ===== محتوای اصلی ===== */}
                 <div className={styles.appointmentBody}>
                   <div className={styles.appointmentInfo}>
                     <h4>{app.type}</h4>
@@ -1763,14 +1975,12 @@ function AppointmentsManagement({ appointments, setAppointments }) {
                       </span>
                     </div>
 
-                    {/* قیمت */}
                     {app.price && (
                       <div className={styles.appointmentPrice}>
                         {app.price.toLocaleString("fa-IR")} تومان
                       </div>
                     )}
 
-                    {/* دلیل لغو */}
                     {app.status === "cancelled" && app.cancelReason && (
                       <div className={styles.cancelReason}>
                         <span>دلیل لغو:</span>
@@ -1779,7 +1989,6 @@ function AppointmentsManagement({ appointments, setAppointments }) {
                     )}
                   </div>
 
-                  {/* ===== دکمه‌های اکشن ===== */}
                   <div className={styles.appointmentActions}>
                     {displayStatus === "pending" && (
                       <>
@@ -1805,6 +2014,362 @@ function AppointmentsManagement({ appointments, setAppointments }) {
                       >
                         ثبت انجام
                       </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            );
+          })
+        ) : (
+          <div className={styles.emptyState}>
+            <span className={styles.emptyIcon}>📭</span>
+            <h3>هیچ نوبتی در این دسته وجود ندارد</h3>
+            <p>برای افزودن نوبت جدید، روی دکمه "افزودن نوبت جدید" کلیک کنید.</p>
+          </div>
+        )} */}
+        {/* {filteredAppointments.length > 0 ? (
+          filteredAppointments.map((app) => {
+            const displayStatus = getDisplayStatus(app);
+            const originalStatus = getOriginalStatusInfo(app.status);
+            const displayStatusInfo = getDisplayStatusInfo(displayStatus);
+
+            // ===== چک کردن اینکه نوبت گذشته =====
+            const isPast = isAppointmentPast(app);
+
+            // ===== وضعیت‌های خاص که نیاز به badge جدا دارن =====
+            const hasExtraBadge =
+              displayStatus === "expired" || displayStatus === "no-show";
+
+            // ===== بازه ۴۸ ساعته =====
+            const isAwaitingConfirmation =
+              displayStatus === "awaiting-confirmation";
+
+            // ===== محاسبه زمان باقی‌مانده تا پایان ۴۸ ساعت =====
+            let remainingHours = 0;
+            if (isAwaitingConfirmation) {
+              const startMoment = getAppointmentMoment(app);
+              const durationMinutes = (app.duration || 1) * 60;
+              const endMoment = startMoment
+                .clone()
+                .add(durationMinutes, "minutes");
+              remainingHours = Math.max(
+                0,
+                Math.ceil(48 - moment().diff(endMoment, "hours", true)),
+              );
+            }
+
+            return (
+              <div
+                key={app.id}
+                className={`${styles.appointmentCard} ${
+                  isPast ? styles.pastAppointment : ""
+                }`}
+              >
+                <div className={styles.appointmentStatusBar}>
+                  <span
+                    className={`${styles.statusBadge} ${styles[originalStatus.className]}`}
+                  >
+                    {originalStatus.label}
+                  </span>
+
+                  {hasExtraBadge && (
+                    <span className={styles.cancelBadge}>
+                      {displayStatusInfo.label}
+                    </span>
+                  )}
+
+                  {app.isOnline && (
+                    <span className={styles.onlineBadge}>آنلاین</span>
+                  )}
+
+                  {app.status === "cancelled" && (
+                    <span className={styles.cancelBadge}>
+                      {app.cancelledBy === "patient"
+                        ? "لغو توسط بیمار"
+                        : "لغو توسط پزشک"}
+                    </span>
+                  )}
+                </div>
+
+                <div className={styles.appointmentBody}>
+                  <div className={styles.appointmentInfo}>
+                    <h4>{app.type}</h4>
+
+                    <div className={styles.appointmentMeta}>
+                      <span className={styles.metaItem}>👤 {app.patient}</span>
+                      <span className={styles.metaDivider}>•</span>
+                      <span className={styles.metaItem}>
+                        {getRelativeDateLabel(app)}
+                      </span>
+                      <span className={styles.metaDivider}>•</span>
+                      <span className={styles.metaItem}>
+                        {toPersianDigits(
+                          app.startTime || app.time.split(" - ")[0],
+                        )}
+                      </span>
+                    </div>
+
+                    {app.price && (
+                      <div className={styles.appointmentPrice}>
+                        {toPersianDigits(
+                          app.price.toLocaleString("en-US"),
+                        )}{" "}
+                        تومان
+                      </div>
+                    )}
+
+                    {app.status === "cancelled" && app.cancelReason && (
+                      <div className={styles.cancelReason}>
+                        <span>دلیل لغو:</span>
+                        <span>{app.cancelReason}</span>
+                      </div>
+                    )}
+
+                    {isAwaitingConfirmation && (
+                      <div className={styles.awaitingConfirmationBox}>
+                        <span className={styles.awaitingIcon}>⏰</span>
+                        <div className={styles.awaitingText}>
+                          <span className={styles.awaitingTitle}>
+                            آیا این جلسه برگزار شده؟
+                          </span>
+                          <span className={styles.awaitingTime}>
+                            ({toPersianDigits(remainingHours)} ساعت فرصت باقی
+                            مانده)
+                          </span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className={styles.appointmentActions}>
+                    {displayStatus === "pending" && (
+                      <>
+                        <button
+                          className={styles.btnApprove}
+                          onClick={() => handleConfirm(app)}
+                        >
+                          تأیید
+                        </button>
+                        <button
+                          className={styles.btnReject}
+                          onClick={() => handleReject(app)}
+                        >
+                          رد
+                        </button>
+                      </>
+                    )}
+
+                    {displayStatus === "confirmed" && (
+                      <button
+                        className={styles.btnComplete}
+                        onClick={() => handleComplete(app)}
+                      >
+                        ثبت انجام
+                      </button>
+                    )}
+
+                    {isAwaitingConfirmation && (
+                      <>
+                        <button
+                          className={styles.btnComplete}
+                          onClick={() => handleComplete(app)}
+                        >
+                          ✓ برگزار شد
+                        </button>
+                        <button
+                          className={styles.btnReject}
+                          onClick={() => handleReject(app)}
+                        >
+                          ✗ برگزار نشد
+                        </button>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+            );
+          })
+        ) : (
+          <div className={styles.emptyState}>
+            <span className={styles.emptyIcon}>📭</span>
+            <h3>هیچ نوبتی در این دسته وجود ندارد</h3>
+            <p>برای افزودن نوبت جدید، روی دکمه "افزودن نوبت جدید" کلیک کنید.</p>
+          </div>
+        )} */}
+
+        {filteredAppointments.length > 0 ? (
+          filteredAppointments.map((app) => {
+            const displayStatus = getDisplayStatus(app);
+            const originalStatus = getOriginalStatusInfo(app.status);
+            const displayStatusInfo = getDisplayStatusInfo(displayStatus);
+
+            // ===== چک کردن گذشته =====
+            const isPast = isAppointmentPast(app);
+
+            // ===== وضعیت برگزار نشده =====
+            const isNoShow = displayStatus === "no-show";
+
+            // ===== بازه ۴۸ ساعته =====
+            const isAwaitingConfirmation =
+              displayStatus === "awaiting-confirmation";
+
+            // ===== محاسبه زمان باقی‌مانده تا پایان ۴۸ ساعت =====
+            let remainingHours = 0;
+            if (isAwaitingConfirmation) {
+              const startMoment = getAppointmentMoment(app);
+              const durationMinutes = (app.duration || 1) * 60;
+              const endMoment = startMoment
+                .clone()
+                .add(durationMinutes, "minutes");
+              remainingHours = Math.max(
+                0,
+                Math.ceil(48 - moment().diff(endMoment, "hours", true)),
+              );
+            }
+
+            return (
+              <div
+                key={app.id}
+                className={`${styles.appointmentCard} ${
+                  isPast ? styles.pastAppointment : ""
+                }`}
+              >
+                {/* ===== نوار وضعیت ===== */}
+                <div className={styles.appointmentStatusBar}>
+                  {/* Badge وضعیت اصلی */}
+                  <span
+                    className={`${styles.statusBadge} ${
+                      styles[originalStatus.className]
+                    }`}
+                  >
+                    {originalStatus.label}
+                  </span>
+
+                  {/* Badge "برگزار نشده" */}
+                  {isNoShow && (
+                    <span className={styles.noShowBadge}>برگزار نشده</span>
+                  )}
+
+                  {/* Badge "منتظر تأیید انجام" */}
+                  {isAwaitingConfirmation && (
+                    <span className={styles.awaitingBadge}>
+                      منتظر تأیید انجام
+                    </span>
+                  )}
+
+                  {/* Badge آنلاین */}
+                  {app.isOnline && (
+                    <span className={styles.onlineBadge}>آنلاین</span>
+                  )}
+
+                  {/* Badge لغو */}
+                  {app.status === "cancelled" && (
+                    <span className={styles.cancelBadge}>
+                      {app.cancelledBy === "patient"
+                        ? "لغو توسط بیمار"
+                        : "لغو توسط روانشناس"}
+                    </span>
+                  )}
+                </div>
+
+                {/* ===== محتوای اصلی ===== */}
+                <div className={styles.appointmentBody}>
+                  <div className={styles.appointmentInfo}>
+                    <h4>{app.type}</h4>
+
+                    <div className={styles.appointmentMeta}>
+                      <span className={styles.metaItem}>👤 {app.patient}</span>
+                      <span className={styles.metaDivider}>•</span>
+                      <span className={styles.metaItem}>
+                        {getRelativeDateLabel(app)}
+                      </span>
+                      <span className={styles.metaDivider}>•</span>
+                      <span className={styles.metaItem}>
+                        {toPersianDigits(
+                          app.startTime || app.time.split(" - ")[0],
+                        )}
+                      </span>
+                    </div>
+
+                    {/* قیمت */}
+                    {app.price && (
+                      <div className={styles.appointmentPrice}>
+                        {toPersianDigits(app.price.toLocaleString("en-US"))}{" "}
+                        تومان
+                      </div>
+                    )}
+
+                    {/* دلیل لغو */}
+                    {app.status === "cancelled" && app.cancelReason && (
+                      <div className={styles.cancelReason}>
+                        <span>دلیل لغو:</span>
+                        <span>{app.cancelReason}</span>
+                      </div>
+                    )}
+
+                    {/* هشدار ۴۸ ساعته */}
+                    {isAwaitingConfirmation && (
+                      <div className={styles.awaitingConfirmationBox}>
+                        <span className={styles.awaitingIcon}>⏰</span>
+                        <div className={styles.awaitingText}>
+                          <span className={styles.awaitingTitle}>
+                            آیا این جلسه برگزار شده؟
+                          </span>
+                          <span className={styles.awaitingTime}>
+                            ({toPersianDigits(remainingHours)} ساعت فرصت
+                            باقی‌مانده)
+                          </span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* ===== دکمه‌های اکشن ===== */}
+                  <div className={styles.appointmentActions}>
+                    {/* وضعیت pending + آینده */}
+                    {displayStatus === "pending" && (
+                      <>
+                        <button
+                          className={styles.btnApprove}
+                          onClick={() => handleConfirm(app)}
+                        >
+                          تأیید
+                        </button>
+                        <button
+                          className={styles.btnReject}
+                          onClick={() => handleReject(app)}
+                        >
+                          رد
+                        </button>
+                      </>
+                    )}
+
+                    {/* وضعیت confirmed + آینده */}
+                    {displayStatus === "confirmed" && (
+                      <button
+                        className={styles.btnComplete}
+                        onClick={() => handleComplete(app)}
+                      >
+                        ثبت انجام
+                      </button>
+                    )}
+
+                    {/* بازه ۴۸ ساعته */}
+                    {isAwaitingConfirmation && (
+                      <>
+                        <button
+                          className={styles.btnComplete}
+                          onClick={() => handleComplete(app)}
+                        >
+                          ✓ برگزار شد
+                        </button>
+                        <button
+                          className={styles.btnNoShow}
+                          onClick={() => handleMarkNoShow(app)}
+                        >
+                          ✗ برگزار نشد
+                        </button>
+                      </>
                     )}
                   </div>
                 </div>
@@ -2066,7 +2631,7 @@ function AppointmentsManagement({ appointments, setAppointments }) {
                   >
                     <option value="pending">در انتظار</option>
                     <option value="confirmed">تأیید شده</option>
-                    <option value="completed">انجام شده</option>
+                    <option value="completed">برگزار شده</option>
                     <option value="cancelled">لغو شده</option>
                   </select>
                 </div>
@@ -2983,10 +3548,24 @@ function SessionsManagement({ appointments }) {
               </span>
               <h3>{nextSession.type}</h3>
               <p>با {nextSession.patient}</p>
-              <div className={styles.nextSessionTime}>
+              {/* <div className={styles.nextSessionTime}>
                 <span>{nextSession.date}</span>
                 <span>•</span>
                 <span>{nextSession.time}</span>
+                <span>•</span>
+                <span>
+                  {getTypeIcon(nextSession.typeKey)}{" "}
+                  {getTypeLabel(nextSession.typeKey)}
+                </span>
+              </div> */}
+              <div className={styles.nextSessionTime}>
+                <span>{nextSession.date}</span>
+                <span>•</span>
+                <span>
+                  {toPersianDigits(
+                    nextSession.startTime || nextSession.time.split(" - ")[0],
+                  )}
+                </span>
                 <span>•</span>
                 <span>
                   {getTypeIcon(nextSession.typeKey)}{" "}
@@ -3087,8 +3666,15 @@ function SessionsManagement({ appointments }) {
                         <span>{session.date}</span>
                       </div>
                       <span>•</span>
-                      <div className={styles.metaGroup}>
+                      {/* <div className={styles.metaGroup}>
                         <span>{session.time}</span>
+                      </div> */}
+                      <div className={styles.metaGroup}>
+                        <span>
+                          {toPersianDigits(
+                            session.startTime || session.time.split(" - ")[0],
+                          )}
+                        </span>
                       </div>
                       <span>•</span>
                       <div className={styles.metaGroup}>
@@ -3159,7 +3745,7 @@ function SessionsManagement({ appointments }) {
                     className={`${styles.sessionStatus} ${styles.sessionCompleted}`}
                   >
                     <span className={styles.statusDot}></span>
-                    انجام شده
+                    برگزار شده
                   </span>
                 </div>
 
@@ -3170,8 +3756,15 @@ function SessionsManagement({ appointments }) {
                       <span>{session.date}</span>
                     </div>
                     <span>•</span>
-                    <div className={styles.metaGroup}>
+                    {/* <div className={styles.metaGroup}>
                       <span>{session.time}</span>
+                    </div> */}
+                    <div className={styles.metaGroup}>
+                      <span>
+                        {toPersianDigits(
+                          session.startTime || session.time.split(" - ")[0],
+                        )}
+                      </span>
                     </div>
                     <span>•</span>
                     <div className={styles.metaGroup}>
@@ -3197,7 +3790,7 @@ function SessionsManagement({ appointments }) {
             <div className={styles.emptyState}>
               <span className={styles.emptyIcon}>🎥</span>
               <h3>هنوز جلسه برگزار شده‌ای وجود ندارد</h3>
-              <p>جلسات انجام شده شما در اینجا نمایش داده می‌شوند.</p>
+              <p>جلسات برگزار شده شما در اینجا نمایش داده می‌شوند.</p>
             </div>
           ))}
       </div>
