@@ -836,6 +836,7 @@ const seedData = {
       createdAt: "۱۴۰۵/۰۶/۰۳",
       price: 3200000,
       duration: 1,
+      meetingLink: null,
     },
     // {
     //   id: 3,
@@ -887,7 +888,6 @@ const seedData = {
       createdAt: "۱۴۰۵/۰۶/۰۴",
       price: 2800000,
       duration: 1,
-
       meetingLink: null,
     },
     {
@@ -906,7 +906,6 @@ const seedData = {
       createdAt: "۱۴۰۵/۰۶/۰۵",
       price: 3200000,
       duration: 1,
-
       meetingLink: null,
     },
 
@@ -927,7 +926,6 @@ const seedData = {
       createdAt: "۱۴۰۵/۰۶/۰۴",
       price: 3200000,
       duration: 1,
-
       meetingLink: null,
     },
     {
@@ -946,7 +944,6 @@ const seedData = {
       createdAt: "۱۴۰۵/۰۶/۰۵",
       price: 2800000,
       duration: 1,
-
       meetingLink: null,
     },
     {
@@ -965,7 +962,6 @@ const seedData = {
       createdAt: "۱۴۰۵/۰۶/۰۵",
       price: 2500000,
       duration: 1,
-
       meetingLink: null,
     },
 
@@ -987,8 +983,13 @@ const seedData = {
       price: 2800000,
       duration: 1,
       notes: "جلسه انجام شده",
-
       meetingLink: null,
+      sessionNotes: {
+        summary:
+          "پیشرفت خوبی در مدیریت استرس داشته. تکنیک‌های تنفس عمیق رو تمرین کرده.",
+        createdAt: "۱۴۰۵/۰۶/۰۴",
+        updatedAt: "۱۴۰۵/۰۶/۰۴",
+      },
     },
     {
       id: 11,
@@ -1007,7 +1008,6 @@ const seedData = {
       price: 2800000,
       duration: 1,
       notes: "پیشرفت خوب در مدیریت استرس",
-
       meetingLink: null,
     },
 
@@ -1031,7 +1031,6 @@ const seedData = {
       cancelledBy: "patient",
       cancelReason: "مشکل شخصی",
       notes: "لغو توسط بیمار",
-
       meetingLink: null,
     },
     {
@@ -1053,7 +1052,6 @@ const seedData = {
       cancelledBy: "doctor",
       cancelReason: "مشکل شخصی",
       notes: "لغو توسط روانشناس",
-
       meetingLink: null,
     },
   ],

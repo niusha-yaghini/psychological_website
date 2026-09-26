@@ -630,10 +630,15 @@
 
 .sessionType {
   font-size: 12px;
-  color: #dadada;
+  /* color: #dadada; */
   background: rgba(231, 231, 231, 0.812);
   padding: 4px 8px;
   border-radius: 6px;
+    /* font-size: 13px; */
+  color: var(--text-muted);
+  /* margin-top: 180px; */
+  /* padding-top: ; */
+
 }
 
 .sessionDateTime {
@@ -661,7 +666,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 12px;
+  /* margin-bottom: 12px; */
 }
 
 .sessionDate {
@@ -1645,7 +1650,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  /* margin-bottom: 16px; */
 }
 
 .sessionDoctor {
@@ -1669,10 +1674,11 @@
   margin: 0;
 }
 
-.sessionType {
+/* .sessionType {
   font-size: 13px;
   color: var(--text-muted);
-}
+
+} */
 
 /* ===== Session Status ===== */
 .sessionStatus {
@@ -1843,6 +1849,156 @@
   flex-wrap: wrap;
 }
 
+/* ===== نمایش یادداشت جلسه ===== */
+.sessionNoteDisplay {
+  background: linear-gradient(135deg, #f8f9fa 0%, #f0f4f7 100%);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  border-right: 3px solid #2d7d6e;
+}
+
+.sessionNoteHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.sessionNoteIcon {
+  font-size: 16px;
+}
+
+.sessionNoteLabel {
+  font-size: 13px;
+  font-weight: 700;
+  color: #2d7d6e;
+}
+
+.sessionNoteDate {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-right: auto;
+}
+
+.sessionNoteText {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* ===== دکمه یادداشت ===== */
+.btnNote {
+  padding: 8px 20px;
+  background: transparent;
+  color: #2d7d6e;
+  border: 1.5px solid #2d7d6e;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btnNote:hover {
+  background: #2d7d6e;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(45, 125, 110, 0.25);
+}
+
+/* ===== مودال یادداشت ===== */
+.noteModal {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  max-width: 600px;
+  width: 100%;
+  padding: 32px;
+  animation: modalSlideUp 0.3s ease;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.noteSessionInfo {
+  background: var(--gray-light);
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  margin-bottom: 20px;
+}
+
+.noteSessionInfo p {
+  margin: 0 0 4px;
+  font-size: 15px;
+  color: var(--text-dark);
+}
+
+.noteSessionInfo strong {
+  color: #2d7d6e;
+  font-weight: 700;
+}
+
+.noteSessionDate {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.noteTextarea {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid var(--gray-light);
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--text-dark);
+  line-height: 1.8;
+  resize: vertical;
+  min-height: 180px;
+  transition: var(--transition);
+  background: var(--white);
+}
+
+.noteTextarea:focus {
+  border-color: #2d7d6e;
+  box-shadow: 0 0 0 4px rgba(45, 125, 110, 0.08);
+  outline: none;
+}
+
+.noteTextarea::placeholder {
+  color: #b5b0aa;
+  line-height: 1.8;
+}
+
+.noteCharCount {
+  display: block;
+  text-align: left;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
+.noteHint {
+  font-size: 13px;
+  color: var(--text-muted);
+  background: rgba(45, 125, 110, 0.06);
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  margin: 16px 0 0;
+  border-right: 3px solid #2d7d6e;
+  line-height: 1.6;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .noteModal {
+    padding: 24px;
+    margin: 0 16px;
+  }
+}
+
 .btnJoinSession {
   display: inline-flex;
   align-items: center;
@@ -1946,6 +2102,9 @@
 .btnViewRecord:hover {
   background: #0d47a1;
   color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px #0d48a14d;
+
 }
 
 .btnFeedback {

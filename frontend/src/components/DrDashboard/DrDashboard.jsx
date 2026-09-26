@@ -1642,7 +1642,6 @@ function AppointmentsManagement({ appointments, setAppointments }) {
                 {/* ===== هشدار ۴۸ ساعته — تمام عرض زیر کارت ===== */}
                 {isAwaitingConfirmation && (
                   <div className={styles.awaitingConfirmationBox}>
-                    {/* <span className={styles.awaitingIcon}>⏰</span> */}
                     <div className={styles.awaitingText}>
                       <span className={styles.awaitingTitle}>
                         آیا این جلسه برگزار شده؟
@@ -2136,6 +2135,10 @@ function SessionsManagement({ appointments, setAppointments }) {
   const [linkInput, setLinkInput] = useState("");
   const [isEditingLink, setIsEditingLink] = useState(false);
 
+  const [showNoteModal, setShowNoteModal] = useState(false);
+  const [noteInput, setNoteInput] = useState("");
+  const [selectedSessionForNote, setSelectedSessionForNote] = useState(null);
+
   // ==========================================
   // مشتق‌ها
   // ==========================================
@@ -2303,6 +2306,43 @@ function SessionsManagement({ appointments, setAppointments }) {
     setLinkInput("");
     setIsEditingLink(false);
     alert("لینک جلسه با موفقیت ذخیره شد.");
+  };
+
+  // ===== باز کردن مودال یادداشت =====
+  const handleOpenNoteModal = (session) => {
+    setSelectedSessionForNote(session);
+    setNoteInput(session.sessionNotes?.summary || "");
+    setShowNoteModal(true);
+  };
+
+  // ===== ذخیره یادداشت =====
+  const handleSaveNote = () => {
+    if (!noteInput.trim()) {
+      alert("لطفاً متن یادداشت را وارد کنید.");
+      return;
+    }
+
+    setAppointments((prev) =>
+      prev.map((item) =>
+        item.id === selectedSessionForNote.id
+          ? {
+              ...item,
+              sessionNotes: {
+                summary: noteInput.trim(),
+                createdAt:
+                  item.sessionNotes?.createdAt ||
+                  toPersianDigits(moment().format("jYYYY/jMM/jDD")),
+                updatedAt: toPersianDigits(moment().format("jYYYY/jMM/jDD")),
+              },
+            }
+          : item,
+      ),
+    );
+
+    setShowNoteModal(false);
+    setNoteInput("");
+    setSelectedSessionForNote(null);
+    alert("یادداشت با موفقیت ذخیره شد.");
   };
 
   // ==========================================
@@ -2681,12 +2721,46 @@ function SessionsManagement({ appointments, setAppointments }) {
                 </div>
 
                 {/* دکمه‌های اکشن */}
-                <div className={styles.sessionActions}>
+                {/* <div className={styles.sessionActions}>
                   <button className={styles.btnViewRecord}>
                     مشاهده ضبط جلسه
                   </button>
                   <button className={styles.btnViewNotes}>
                     مشاهده یادداشت
+                  </button>
+                </div> */}
+
+                {/* ===== نمایش یادداشت (اگه وجود داشته باشه) ===== */}
+                {session.sessionNotes?.summary && (
+                  <div className={styles.sessionNoteDisplay}>
+                    <div className={styles.sessionNoteHeader}>
+                      {/* <span className={styles.sessionNoteIcon}>📝</span> */}
+                      <span className={styles.sessionNoteLabel}>
+                        خلاصه جلسه
+                      </span>
+                      <span className={styles.sessionNoteDate}>
+                        {session.sessionNotes.updatedAt ||
+                          session.sessionNotes.createdAt}
+                      </span>
+                    </div>
+                    <p className={styles.sessionNoteText}>
+                      {session.sessionNotes.summary}
+                    </p>
+                  </div>
+                )}
+
+                {/* ===== دکمه‌های اکشن ===== */}
+                <div className={styles.sessionActions}>
+                  <button className={styles.btnViewRecord}>
+                    مشاهده ضبط جلسه
+                  </button>
+                  <button
+                    className={styles.btnNote}
+                    onClick={() => handleOpenNoteModal(session)}
+                  >
+                    {session.sessionNotes?.summary
+                      ? "ویرایش یادداشت"
+                      : "ثبت یادداشت"}
                   </button>
                 </div>
               </div>
@@ -2700,6 +2774,77 @@ function SessionsManagement({ appointments, setAppointments }) {
           ))}
       </div>
 
+      {/* ===== مودال یادداشت جلسه ===== */}
+      {showNoteModal && selectedSessionForNote && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.noteModal}>
+            <div className={styles.modalHeader}>
+              <h3>📝 یادداشت جلسه</h3>
+              <button
+                className={styles.modalClose}
+                onClick={() => {
+                  setShowNoteModal(false);
+                  setNoteInput("");
+                  setSelectedSessionForNote(null);
+                }}
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className={styles.modalBody}>
+              <div className={styles.noteSessionInfo}>
+                <p>
+                  جلسه با <strong>{selectedSessionForNote.patient}</strong>
+                </p>
+                <span className={styles.noteSessionDate}>
+                  {selectedSessionForNote.date} • {" "}
+                  {selectedSessionForNote.startTime}
+                </span>
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>خلاصه جلسه:</label>
+                <textarea
+                  className={styles.noteTextarea}
+                  value={noteInput}
+                  onChange={(e) => setNoteInput(e.target.value)}
+                  placeholder="خلاصه‌ای از مباحث مطرح شده، وضعیت بیمار، پیشرفت‌ها و توصیه‌های جلسه..."
+                  rows="8"
+                  maxLength="2000"
+                />
+                <span className={styles.noteCharCount}>
+                  {toPersianDigits(noteInput.length)} / ۲۰۰۰
+                </span>
+              </div>
+
+              <p className={styles.noteHint}>
+                این یادداشت در پرونده‌ی بیمار ذخیره خواهد شد و فقط برای شما
+                قابل مشاهده است.
+              </p>
+            </div>
+
+            <div className={styles.modalFooter}>
+              <button
+                className={styles.btnCancelModal}
+                onClick={() => {
+                  setShowNoteModal(false);
+                  setNoteInput("");
+                  setSelectedSessionForNote(null);
+                }}
+              >
+                انصراف
+              </button>
+              <button
+                className={styles.btnConfirmModal}
+                onClick={handleSaveNote}
+              >
+                ذخیره یادداشت
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       {/* ===== مودال تنظیم لینک جلسه ===== */}
       {/* {showLinkModal && selectedSessionForLink && (
         <div className={styles.modalOverlay}>
