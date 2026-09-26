@@ -2926,11 +2926,23 @@ function CalendarView({ appointments }) {
   // }, [appointments, weekDays]);
 
   // ===== جلسات به تفکیک روز =====
+  // const appointmentsByDay = useMemo(() => {
+  //   const map = {};
+
+  //   weekDays.forEach((day) => {
+  //     // ← از datePersian استفاده کن (چون appointments با اعداد فارسی ذخیره شدن)
+  //     map[day.datePersian] = appointments.filter(
+  //       (a) => toPersianDigits(a.date) === day.datePersian,
+  //     );
+  //   });
+
+  //   return map;
+  // }, [appointments, weekDays]);
+
   const appointmentsByDay = useMemo(() => {
     const map = {};
 
     weekDays.forEach((day) => {
-      // ← از datePersian استفاده کن (چون appointments با اعداد فارسی ذخیره شدن)
       map[day.datePersian] = appointments.filter(
         (a) => toPersianDigits(a.date) === day.datePersian,
       );
@@ -3258,7 +3270,7 @@ function CalendarView({ appointments }) {
 
                   {/* لایه‌ی جلسات */}
                   {/* <div className={styles.calendarDayEvents}> */}
-                    {/* {(appointmentsByDay[day.date] || []).map((appointment) => {
+                  {/* {(appointmentsByDay[day.date] || []).map((appointment) => {
                       const { top, height } = getEventPosition(appointment);
                       if (top === null) return null;
 
@@ -3283,39 +3295,37 @@ function CalendarView({ appointments }) {
                         </div>
                       );
                     })} */}
-                    {/* لایه‌ی جلسات */}
-                    <div className={styles.calendarDayEvents}>
-                      {(appointmentsByDay[day.datePersian] || []).map(
-                        (appointment) => {
-                          const { top, height } = getEventPosition(appointment);
-                          if (top === null) return null;
+                  {/* لایه‌ی جلسات */}
+                  <div className={styles.calendarDayEvents}>
+                    {(appointmentsByDay[day.datePersian] || []).map(
+                      (appointment) => {
+                        const { top, height } = getEventPosition(appointment);
+                        if (top === null) return null;
 
-                          const colorClass = getStatusColorClass(appointment);
+                        const colorClass = getStatusColorClass(appointment);
 
-                          return (
-                            <div
-                              key={appointment.id}
-                              className={`${styles.calendarEvent} ${colorClass}`}
-                              style={{ top: `${top}px`, height: `${height}px` }}
-                              onClick={() =>
-                                setSelectedAppointment(appointment)
-                              }
-                            >
-                              <span className={styles.calendarEventPatient}>
-                                {appointment.patient}
-                              </span>
-                              <span className={styles.calendarEventTime}>
-                                {toPersianDigits(
-                                  appointment.startTime ||
-                                    appointment.time.split(" - ")[0],
-                                )}
-                              </span>
-                            </div>
-                          );
-                        },
-                      )}
-                    </div>
+                        return (
+                          <div
+                            key={appointment.id}
+                            className={`${styles.calendarEvent} ${colorClass}`}
+                            style={{ top: `${top}px`, height: `${height}px` }}
+                            onClick={() => setSelectedAppointment(appointment)}
+                          >
+                            <span className={styles.calendarEventPatient}>
+                              {appointment.patient}
+                            </span>
+                            <span className={styles.calendarEventTime}>
+                              {toPersianDigits(
+                                appointment.startTime ||
+                                  appointment.time.split(" - ")[0],
+                              )}
+                            </span>
+                          </div>
+                        );
+                      },
+                    )}
                   </div>
+                </div>
                 // </div>
               ))}
             </div>
@@ -6335,7 +6345,7 @@ function FinancialView({ appointments, setAppointments }) {
       {/* ===== هدر ===== */}
       <div className={styles.pageHeader}>
         <div className={styles.headerInfo}>
-          <h2>💰 مالی</h2>
+          <h2>مالی</h2>
           <p>گزارش درآمد و وضعیت پرداخت جلسات</p>
         </div>
 
@@ -6360,7 +6370,7 @@ function FinancialView({ appointments, setAppointments }) {
         <div
           className={`${styles.financialStatCard} ${styles.finStatCompleted}`}
         >
-          <div className={styles.finStatIcon}>✅</div>
+          {/* <div className={styles.finStatIcon}>✅</div> */}
           <div className={styles.finStatContent}>
             <span className={styles.finStatNumber}>
               {toPersianDigits(stats.completed)}
@@ -6371,7 +6381,7 @@ function FinancialView({ appointments, setAppointments }) {
 
         {/* برگزار نشده */}
         <div className={`${styles.financialStatCard} ${styles.finStatNoShow}`}>
-          <div className={styles.finStatIcon}>⚠️</div>
+          {/* <div className={styles.finStatIcon}>⚠️</div> */}
           <div className={styles.finStatContent}>
             <span className={styles.finStatNumber}>
               {toPersianDigits(stats.noShow + stats.cancelled)}
@@ -6382,7 +6392,7 @@ function FinancialView({ appointments, setAppointments }) {
 
         {/* در انتظار */}
         <div className={`${styles.financialStatCard} ${styles.finStatPending}`}>
-          <div className={styles.finStatIcon}>⏳</div>
+          {/* <div className={styles.finStatIcon}>⏳</div> */}
           <div className={styles.finStatContent}>
             <span className={styles.finStatNumber}>
               {toPersianDigits(stats.pending)}
@@ -6393,7 +6403,7 @@ function FinancialView({ appointments, setAppointments }) {
 
         {/* درآمد کل */}
         <div className={`${styles.financialStatCard} ${styles.finStatRevenue}`}>
-          <div className={styles.finStatIcon}>💰</div>
+          {/* <div className={styles.finStatIcon}>💰</div> */}
           <div className={styles.finStatContent}>
             <span className={styles.finStatNumber}>
               {toPersianDigits(stats.totalRevenue.toLocaleString("en-US"))}
@@ -6405,7 +6415,7 @@ function FinancialView({ appointments, setAppointments }) {
 
       {/* ===== راهنمای مالی ===== */}
       <div className={styles.financialHint}>
-        <span className={styles.financialHintIcon}>💡</span>
+        {/* <span className={styles.financialHintIcon}>💡</span> */}
         <p>
           درآمد فقط از جلسات <strong>برگزار شده</strong> محاسبه می‌شود. برای هر
           جلسه، وضعیت پرداخت بیمار را تایید کنید.
@@ -6416,7 +6426,7 @@ function FinancialView({ appointments, setAppointments }) {
       <div className={styles.financialTransactionsSection}>
         <div className={styles.financialTransHeader}>
           <div>
-            <h3>📋 تراکنش‌ها</h3>
+            <h3>تراکنش‌ها</h3>
             <p className={styles.financialTransSubtitle}>
               {toPersianDigits(paidCount)} پرداخت شده •{" "}
               {toPersianDigits(unpaidCount)} پرداخت نشده
@@ -6439,7 +6449,7 @@ function FinancialView({ appointments, setAppointments }) {
               }`}
               onClick={() => setPaymentFilter("paid")}
             >
-              ✅ پرداخت شده ({toPersianDigits(paidCount)})
+              پرداخت شده ({toPersianDigits(paidCount)})
             </button>
             <button
               className={`${styles.financialFilterTab} ${
@@ -6449,7 +6459,7 @@ function FinancialView({ appointments, setAppointments }) {
               }`}
               onClick={() => setPaymentFilter("unpaid")}
             >
-              ⏳ پرداخت نشده ({toPersianDigits(unpaidCount)})
+              پرداخت نشده ({toPersianDigits(unpaidCount)})
             </button>
           </div>
         </div>
@@ -6497,12 +6507,12 @@ function FinancialView({ appointments, setAppointments }) {
                   <div className={styles.finTransStatus}>
                     {isCompleted && (
                       <span className={styles.statusCompletedBadge}>
-                        ✅ برگزار شده
+                        برگزار شده
                       </span>
                     )}
                     {isNoShow && (
                       <span className={styles.statusNoShowBadge}>
-                        ⚠️ برگزار نشده
+                        برگزار نشده
                       </span>
                     )}
                   </div>
@@ -6532,8 +6542,8 @@ function FinancialView({ appointments, setAppointments }) {
                         }
                       >
                         {appointment.isPaid
-                          ? "✅ پرداخت شده"
-                          : "⏳ پرداخت نشده"}
+                          ? "پرداخت شده"
+                          : "پرداخت نشده"}
                       </button>
                     ) : (
                       <span className={styles.finTransNoPayment}>—</span>
@@ -6544,7 +6554,7 @@ function FinancialView({ appointments, setAppointments }) {
             })
           ) : (
             <div className={styles.emptyState}>
-              <span className={styles.emptyIcon}>💰</span>
+              {/* <span className={styles.emptyIcon}>💰</span> */}
               <h3>هیچ تراکنشی در این بازه وجود ندارد</h3>
               <p>جلسات برگزار شده یا برگزار نشده در این بازه ثبت نشده است.</p>
             </div>
