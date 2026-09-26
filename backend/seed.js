@@ -1,7 +1,7 @@
 // seed.js
 const seedData = {
   // ============================================
-  // 👨‍⚕️ اطلاعات دکتر (برای Landing)
+  // اطلاعات دکتر (برای Landing)
   // ============================================
   doctor: {
     name: "دکتر لیلا سامع کریمی",
@@ -15,7 +15,7 @@ const seedData = {
   },
 
   // ============================================
-  // 🎓 کارگاه‌ها
+  // کارگاه‌ها
   // ============================================
   workshops: [
     {
@@ -123,7 +123,7 @@ const seedData = {
   ],
 
   // ============================================
-  // 🎙️ پادکست‌ها
+  // پادکست‌ها
   // ============================================
   podcasts: [
     {
@@ -165,7 +165,7 @@ const seedData = {
   ],
 
   // ============================================
-  // 🏥 کلینیک‌ها
+  // کلینیک‌ها
   // ============================================
   clinics: [
     {
@@ -192,7 +192,7 @@ const seedData = {
   ],
 
   // ============================================
-  // 📱 شبکه‌های اجتماعی
+  // شبکه‌های اجتماعی
   // ============================================
   socialMedia: {
     instagram: "https://instagram.com/dr.sara.mohammadi",
@@ -205,7 +205,7 @@ const seedData = {
   },
 
   // ============================================
-  // 👥 لیست روانشناسان (برای Patient Panel)
+  // لیست روانشناسان (برای Patient Panel)
   // ============================================
   doctors: [
     {
@@ -252,7 +252,7 @@ const seedData = {
   ],
 
   // ============================================
-  // 📅 نوبت‌های بیمار (Appointments)
+  // نوبت‌های بیمار (Appointments)
   // ============================================
   appointments: [
     {
@@ -426,7 +426,7 @@ const seedData = {
   // ============================================
   // ===== نظرات =====
   // ============================================
-  // ⭐ نظرات (برای نمایش در لندینگ)
+  // نظرات (برای نمایش در لندینگ)
   // ============================================
   reviews: [
     {
@@ -547,7 +547,7 @@ const seedData = {
   ],
 
   // ============================================
-  // 📊 اطلاعات پیشرفت (Progress)
+  // اطلاعات پیشرفت (Progress)
   // ============================================
   progress: {
     totalSessions: 12,
@@ -607,7 +607,7 @@ const seedData = {
   },
 
   // ============================================
-  // 🧠 تمارین (Exercises)
+  // تمارین (Exercises)
   // ============================================
   exercises: [
     {
@@ -696,7 +696,7 @@ const seedData = {
   ],
 
   // ============================================
-  // 👤 اطلاعات پروفایل (Profile)
+  // اطلاعات پروفایل (Profile)
   // ============================================
   profile: {
     formData: {
@@ -731,7 +731,7 @@ const seedData = {
   },
 
   // ============================================
-  // ⚙️ تنظیمات پیش‌فرض (Settings)
+  // تنظیمات پیش‌فرض (Settings)
   // ============================================
   settings: {
     notificationSettings: {
@@ -770,15 +770,13 @@ const seedData = {
 
   // ===== پروفایل دکتر لاگین‌شده =====
   doctorProfile: {
+    id: 1, // ← جدید (FK)
     name: "دکتر محمد رضایی",
     specialty: "روانشناس بالینی",
     phone: "۰۹۱۲۳۴۵۶۷۸۹",
     email: "dr.rezaei@email.com",
     avatar: "/images/Patient_Panel/usericon.png",
-    stats: {
-      activePatients: 12,
-      completedSessions: 48,
-    },
+    pricePerHour: 2800000, // ← جدید (برای محاسبه‌ی قیمت)
     formData: {
       firstName: "محمد",
       lastName: "رضایی",
@@ -791,20 +789,187 @@ const seedData = {
     },
   },
 
-  // ===== آمار ثابت داشبورد =====
-  // (بقیه آمار مثل pendingSessions از doctorAppointments مشتق میشن)
-  doctorDashboardStats: {
-    activePatients: 12,
-    exercisesSent: 18,
-  },
+  // ===== بیماران دکتر =====
+  doctorPatients: [
+    {
+      id: 101, // ← id جدید (FK در appointments)
+      name: "محمد کریمی",
+      phone: "۹۱۲۳۴۵۶۷۸۹",
+      email: "mohammad.karimi@email.com",
+      gender: "male",
+      birthDate: "۱۳۷۵/۰۳/۱۵",
+      joinDate: "۱۴۰۵/۰۱/۱۰",
+      status: "active", // active | inactive
+      emergencyContact: "۰۹۱۲۳۴۵۶۷۸۹",
+      emergencyRelation: "همسر",
+      address: "تهران، خیابان ولیعصر، پلاک ۱۲۳",
+      // ===== توضیحات کلی پزشک =====
+      doctorNotes: "", // پیش‌فرض خالی
+      doctorNotesUpdatedAt: null,
+      medications: [
+        {
+          id: 1,
+          name: "سرترالین",
+          dosage: "۵۰ میلی‌گرم",
+          frequency: "روزانه یک‌بار - صبح",
+          startDate: "۱۴۰۵/۰۳/۱۰",
+          endDate: null, // ← null یعنی ادامه داره
+          prescribedBy: "دکتر محمد رضایی",
+          notes: "برای اضطراب تجویز شده. بعد از غذا میل شود.",
+          status: "active", // active | stopped | completed
+        },
+        {
+          id: 2,
+          name: "کلونازپام",
+          dosage: "۰.۵ میلی‌گرم",
+          frequency: "در صورت نیاز - حداکثر ۲ بار در روز",
+          startDate: "۱۴۰۵/۰۲/۱۵",
+          endDate: "۱۴۰۵/۰۵/۱۵",
+          prescribedBy: "دکتر محمد رضایی",
+          notes: "به دلیل بهبود وضعیت، قطع شد.",
+          status: "stopped",
+        },
+      ],
+    },
+    {
+      id: 102,
+      name: "زهرا احمدی",
+      phone: "۹۱۳۴۵۶۷۸۹۰",
+      email: "zahra.ahmadi@email.com",
+      gender: "female",
+      birthDate: "۱۳۷۸/۰۸/۲۲",
+      joinDate: "۱۴۰۵/۰۲/۱۵",
+      status: "active",
+      emergencyContact: "۰۹۱۳۴۵۶۷۸۹۰",
+      emergencyRelation: "مادر",
+      address: "تهران، خیابان فرشته، پلاک ۴۵",
+      doctorNotes:
+        "بیمار با سابقه‌ی مشکلات ارتباطی. جلسات زوج درمانی در حال پیگیری است.",
+      doctorNotesUpdatedAt: "۱۴۰۵/۰۶/۲۵",
+      medications: [
+        {
+          id: 1,
+          name: "فلوکستین",
+          dosage: "۲۰ میلی‌گرم",
+          frequency: "روزانه یک‌بار - شب",
+          startDate: "۱۴۰۵/۰۴/۰۵",
+          endDate: null,
+          prescribedBy: "دکتر محمد رضایی",
+          notes: "برای افسردگی خفیف. نیاز به پیگیری ماهانه.",
+          status: "active",
+        },
+        {
+          id: 2,
+          name: "ویتامین D",
+          dosage: "۵۰,۰۰۰ واحد",
+          frequency: "هفتگی یک‌بار",
+          startDate: "۱۴۰۵/۰۳/۱۵",
+          endDate: null,
+          prescribedBy: "دکتر عمومی",
+          notes: "کمبود ویتامین D.",
+          status: "active",
+        },
+      ],
+    },
+    {
+      id: 103,
+      name: "علی رضایی",
+      phone: "۹۱۴۵۶۷۸۹۰۱",
+      email: "ali.rezaei@email.com",
+      gender: "male",
+      birthDate: "۱۳۷۰/۰۵/۱۰",
+      joinDate: "۱۴۰۴/۱۲/۰۱",
+      status: "active",
+      emergencyContact: "۰۹۱۴۵۶۷۸۹۰۱",
+      emergencyRelation: "پدر",
+      address: "تهران، خیابان مطهری، پلاک ۸۹",
+      doctorNotes: "",
+      doctorNotesUpdatedAt: null,
+      medications: [],
+    },
+    {
+      id: 104,
+      name: "رضا حسینی",
+      phone: "۹۱۶۷۸۹۰۱۲۳",
+      email: "reza.hosseini@email.com",
+      gender: "male",
+      birthDate: "۱۳۶۸/۱۱/۰۳",
+      joinDate: "۱۴۰۵/۰۳/۲۰",
+      status: "active",
+      emergencyContact: "۰۹۱۶۷۸۹۰۱۲۳",
+      emergencyRelation: "همسر",
+      address: "تهران، خیابان نیاوران، پلاک ۱۲",
+      doctorNotes: "",
+      doctorNotesUpdatedAt: null,
+      medications: [
+        {
+          id: 1,
+          name: "آلپرازولام",
+          dosage: "۰.۲۵ میلی‌گرم",
+          frequency: "در صورت نیاز",
+          startDate: "۱۴۰۵/۰۲/۱۰",
+          endDate: "۱۴۰۵/۰۴/۱۰",
+          prescribedBy: "دکتر محمد رضایی",
+          notes: "دوره‌ی کوتاه مدت. قطع شد.",
+          status: "stopped",
+        },
+      ],
+    },
+    {
+      id: 105,
+      name: "سارا محمدی",
+      phone: "۹۱۵۶۷۸۹۰۱۲",
+      email: "sara.mohammadi@email.com",
+      gender: "female",
+      birthDate: "۱۳۸۵/۰۲/۱۸",
+      joinDate: "۱۴۰۵/۰۴/۱۰",
+      status: "active",
+      emergencyContact: "۰۹۱۵۶۷۸۹۰۱۲",
+      emergencyRelation: "مادر",
+      address: "تهران، خیابان ونک، پلاک ۳۴",
+      doctorNotes: "",
+      doctorNotesUpdatedAt: null,
+      medications: [],
+    },
+    {
+      id: 106,
+      name: "نگار موسوی",
+      phone: "۹۱۷۸۹۰۱۲۳۴",
+      email: "negar.mousavi@email.com",
+      gender: "female",
+      birthDate: "۱۳۸۰/۰۷/۲۵",
+      joinDate: "۱۴۰۵/۰۵/۰۱",
+      status: "active",
+      emergencyContact: "۰۹۱۷۸۹۰۱۲۳۴",
+      emergencyRelation: "خواهر",
+      address: "تهران، خیابان سعادت‌آباد، پلاک ۷۸",
+      doctorNotes: "",
+      doctorNotesUpdatedAt: null,
+      medications: [
+        {
+          id: 1,
+          name: "ملاکورت",
+          dosage: "۱۰ میلی‌گرم",
+          frequency: "روزانه",
+          startDate: "۱۴۰۵/۰۵/۰۱",
+          endDate: null,
+          prescribedBy: "دکتر محمد رضایی",
+          notes: "همراه با جلسات زوج درمانی.",
+          status: "active",
+        },
+      ],
+    },
+  ],
 
   // ===== نوبت‌های دکتر (منبع اصلی) =====
   // شامل همه‌ی نوبت‌ها با همه‌ی وضعیت‌ها
+  // رابطه با patients از طریق patientId
   doctorAppointments: [
-    // ===== در انتظار تأیید =====
+    // ========== در انتظار تأیید (pending - آینده) ==========
     {
       id: 1,
-      patient: "محمد کریمی",
+      patientId: 101,
+      patient: "محمد کریمی", // denormalized برای نمایش سریع
       patientPhone: "۹۱۲۳۴۵۶۷۸۹",
       type: "جلسه مشاوره فردی",
       typeKey: "individual",
@@ -822,6 +987,7 @@ const seedData = {
     },
     {
       id: 2,
+      patientId: 102,
       patient: "زهرا احمدی",
       patientPhone: "۹۱۳۴۵۶۷۸۹۰",
       type: "جلسه زوج درمانی",
@@ -838,42 +1004,9 @@ const seedData = {
       duration: 1,
       meetingLink: null,
     },
-    // {
-    //   id: 3,
-    //   patient: "علی رضایی",
-    //   patientPhone: "۹۱۴۵۶۷۸۹۰۱",
-    //   type: "جلسه مشاوره فردی",
-    //   typeKey: "individual",
-    //   date: "۱۴۰۵/۰۶/۰۵",
-    //   time: "۱۴:۰۰ - ۱۵:۰۰",
-    //   hours: ["۱۴:۰۰"],
-    //   startTime: "۱۴:۰۰",
-    //   endTime: "۱۵:۰۰",
-    //   status: "pending",
-    //   isOnline: true,
-    //   createdAt: "۱۴۰۵/۰۶/۰۴",
-    //   price: 2800000,
-    //   duration: 1,
-    // },
-    // {
-    //   id: 4,
-    //   patient: "سارا محمدی",
-    //   patientPhone: "۹۱۵۶۷۸۹۰۱۲",
-    //   type: "جلسه مشاوره نوجوان",
-    //   typeKey: "teen",
-    //   date: "۱۴۰۵/۰۶/۰۵",
-    //   time: "۱۶:۰۰ - ۱۷:۰۰",
-    //   hours: ["۱۶:۰۰"],
-    //   startTime: "۱۶:۰۰",
-    //   endTime: "۱۷:۰۰",
-    //   status: "pending",
-    //   isOnline: true,
-    //   createdAt: "۱۴۰۵/۰۶/۰۴",
-    //   price: 2500000,
-    //   duration: 1,
-    // },
     {
-      id: 5,
+      id: 3,
+      patientId: 104,
       patient: "رضا حسینی",
       patientPhone: "۹۱۶۷۸۹۰۱۲۳",
       type: "جلسه مشاوره فردی",
@@ -891,7 +1024,8 @@ const seedData = {
       meetingLink: null,
     },
     {
-      id: 6,
+      id: 4,
+      patientId: 106,
       patient: "نگار موسوی",
       patientPhone: "۹۱۷۸۹۰۱۲۳۴",
       type: "جلسه زوج درمانی",
@@ -909,9 +1043,10 @@ const seedData = {
       meetingLink: null,
     },
 
-    // ===== تأیید شده =====
+    // ========== تأیید شده (confirmed - آینده) ==========
     {
-      id: 7,
+      id: 5,
+      patientId: 102,
       patient: "زهرا احمدی",
       patientPhone: "۹۱۳۴۵۶۷۸۹۰",
       type: "جلسه زوج درمانی",
@@ -929,7 +1064,8 @@ const seedData = {
       meetingLink: null,
     },
     {
-      id: 8,
+      id: 6,
+      patientId: 103,
       patient: "علی رضایی",
       patientPhone: "۹۱۴۵۶۷۸۹۰۱",
       type: "جلسه مشاوره فردی",
@@ -947,7 +1083,8 @@ const seedData = {
       meetingLink: null,
     },
     {
-      id: 9,
+      id: 7,
+      patientId: 105,
       patient: "سارا محمدی",
       patientPhone: "۹۱۵۶۷۸۹۰۱۲",
       type: "جلسه مشاوره نوجوان",
@@ -965,9 +1102,10 @@ const seedData = {
       meetingLink: null,
     },
 
-    // ===== انجام شده =====
+    // ========== انجام شده (completed) ==========
     {
-      id: 10,
+      id: 8,
+      patientId: 104,
       patient: "رضا حسینی",
       patientPhone: "۹۱۶۷۸۹۰۱۲۳",
       type: "جلسه مشاوره فردی",
@@ -982,7 +1120,6 @@ const seedData = {
       createdAt: "۱۴۰۵/۰۶/۰۱",
       price: 2800000,
       duration: 1,
-      notes: "جلسه انجام شده",
       meetingLink: null,
       sessionNotes: {
         summary:
@@ -990,9 +1127,30 @@ const seedData = {
         createdAt: "۱۴۰۵/۰۶/۰۴",
         updatedAt: "۱۴۰۵/۰۶/۰۴",
       },
+      exercises: [
+        {
+          id: 1,
+          title: "تمرین تنفس عمیق",
+          description: "هر شب قبل از خواب، ۱۰ دقیقه تنفس عمیق انجام دهید.",
+          type: "daily", // daily | weekly | one-time
+          icon: "🧘",
+          completed: true, // ← انجام داده یا نه
+          completedAt: "۱۴۰۵/۰۶/۱۰", // ← کِی انجام داده
+        },
+        {
+          id: 2,
+          title: "نوشتن نامه به خود",
+          description: "نامه‌ای به خودتان بنویسید و احساساتتان را بیان کنید.",
+          type: "one-time",
+          icon: "✍️",
+          completed: false,
+          completedAt: null,
+        },
+      ],
     },
     {
-      id: 11,
+      id: 9,
+      patientId: 103,
       patient: "علی رضایی",
       patientPhone: "۹۱۴۵۶۷۸۹۰۱",
       type: "جلسه مشاوره فردی",
@@ -1007,13 +1165,72 @@ const seedData = {
       createdAt: "۱۴۰۵/۰۶/۰۱",
       price: 2800000,
       duration: 1,
-      notes: "پیشرفت خوب در مدیریت استرس",
       meetingLink: null,
+      // بدون sessionNotes (برای تست حالت خالی)
+    },
+    {
+      id: 10,
+      patientId: 101,
+      patient: "محمد کریمی",
+      patientPhone: "۹۱۲۳۴۵۶۷۸۹",
+      type: "جلسه مشاوره فردی",
+      typeKey: "individual",
+      date: "۱۴۰۵/۰۵/۲۰",
+      time: "۱۵:۰۰ - ۱۶:۰۰",
+      hours: ["۱۵:۰۰"],
+      startTime: "۱۵:۰۰",
+      endTime: "۱۶:۰۰",
+      status: "completed",
+      isOnline: true,
+      createdAt: "۱۴۰۵/۰۵/۱۰",
+      price: 2800000,
+      duration: 1,
+      meetingLink: null,
+      sessionNotes: {
+        summary:
+          "اولین جلسه بود. بررسی تاریخچه و تعیین اهداف درمانی. بیمار انگیزه‌ی خوبی برای شروع داره.",
+        createdAt: "۱۴۰۵/۰۵/۲۰",
+        updatedAt: "۱۴۰۵/۰۵/۲۰",
+      },
+      exercises: [
+        {
+          id: 3,
+          title: "تمرین شکرگزاری روزانه",
+          description: "هر روز ۳ مورد که بابت آنها شکرگزار هستید را بنویسید.",
+          type: "daily",
+          icon: "🙏",
+          completed: false,
+          completedAt: null,
+        },
+      ],
     },
 
-    // ===== لغو شده =====
+    // ========== برگزار نشده (no-show) ==========
+    {
+      id: 11,
+      patientId: 101,
+      patient: "محمد کریمی",
+      patientPhone: "۹۱۲۳۴۵۶۷۸۹",
+      type: "جلسه مشاوره فردی",
+      typeKey: "individual",
+      date: "۱۴۰۵/۰۵/۲۵",
+      time: "۱۴:۰۰ - ۱۵:۰۰",
+      hours: ["۱۴:۰۰"],
+      startTime: "۱۴:۰۰",
+      endTime: "۱۵:۰۰",
+      status: "no-show",
+      isOnline: true,
+      createdAt: "۱۴۰۵/۰۵/۱۵",
+      price: 2800000,
+      duration: 1,
+      meetingLink: null,
+      markedAsNoShowAt: "۱۴۰۵/۰۵/۲۷",
+    },
+
+    // ========== لغو شده (cancelled) ==========
     {
       id: 12,
+      patientId: 106,
       patient: "نگار موسوی",
       patientPhone: "۹۱۷۸۹۰۱۲۳۴",
       type: "جلسه زوج درمانی",
@@ -1030,59 +1247,55 @@ const seedData = {
       duration: 1.5,
       cancelledBy: "patient",
       cancelReason: "مشکل شخصی",
-      notes: "لغو توسط بیمار",
       meetingLink: null,
     },
     {
       id: 13,
-      patient: "نگار موسوی",
-      patientPhone: "۹۱۷۸۹۰۱۲۳۴",
+      patientId: 102,
+      patient: "زهرا احمدی",
+      patientPhone: "۹۱۳۴۵۶۷۸۹۰",
       type: "جلسه زوج درمانی",
       typeKey: "couple",
-      date: "۱۴۰۵/۰۶/۰۳",
-      time: "۱۷:۰۰ - ۱۸:۳۰",
-      hours: ["۱۷:۰۰"],
-      startTime: "۱۷:۰۰",
-      endTime: "۱۸:۳۰",
+      date: "۱۴۰۵/۰۵/۲۸",
+      time: "۱۱:۳۰ - ۱۲:۳۰",
+      hours: ["۱۱:۳۰"],
+      startTime: "۱۱:۳۰",
+      endTime: "۱۲:۳۰",
       status: "cancelled",
-      isOnline: false,
-      createdAt: "۱۴۰۵/۰۵/۳۰",
+      isOnline: true,
+      createdAt: "۱۴۰۵/۰۵/۲۰",
       price: 3200000,
-      duration: 1.5,
+      duration: 1,
       cancelledBy: "doctor",
-      cancelReason: "مشکل شخصی",
-      notes: "لغو توسط روانشناس",
+      cancelReason: "هماهنگی با پزشک",
+      meetingLink: null,
+    },
+    {
+      id: 14,
+      patientId: 105,
+      patient: "سارا محمدی",
+      patientPhone: "۹۱۵۶۷۸۹۰۱۲",
+      type: "جلسه مشاوره نوجوان",
+      typeKey: "teen",
+      date: "۱۴۰۵/۰۵/۲۲",
+      time: "۱۶:۰۰ - ۱۷:۰۰",
+      hours: ["۱۶:۰۰"],
+      startTime: "۱۶:۰۰",
+      endTime: "۱۷:۰۰",
+      status: "cancelled",
+      isOnline: true,
+      createdAt: "۱۴۰۵/۰۵/۱۵",
+      price: 2500000,
+      duration: 1,
+      cancelledBy: "patient",
+      cancelReason: "عدم امکان حضور",
       meetingLink: null,
     },
   ],
 
-  // ===== بیماران =====
-  doctorPatients: [
-    {
-      id: 1,
-      name: "محمد کریمی",
-      phone: "۹۱۲۳۴۵۶۷۸۹",
-      sessions: 8,
-      lastVisit: "۱۴۰۵/۰۶/۰۳",
-      avatar: "👤",
-    },
-    {
-      id: 2,
-      name: "زهرا احمدی",
-      phone: "۹۱۳۴۵۶۷۸۹۰",
-      sessions: 5,
-      lastVisit: "۱۴۰۵/۰۵/۲۸",
-      avatar: "👤",
-    },
-    {
-      id: 3,
-      name: "علی رضایی",
-      phone: "۹۱۴۵۶۷۸۹۰۱",
-      sessions: 12,
-      lastVisit: "۱۴۰۵/۰۶/۰۱",
-      avatar: "👤",
-    },
-  ],
+  // ===== نوتیفیکیشن‌های پنل دکتر =====
+  // خالی چون dynamic از appointments مشتق میشن
+  doctorNotifications: [],
 
   // ===== تنظیمات پنل دکتر =====
   doctorSettings: {
@@ -1090,8 +1303,336 @@ const seedData = {
     darkMode: false,
     sessionReminders: true,
     autoConfirmBookings: false,
-    doctorNotifications: [],
   },
+
+  // ============================================
+  // پنل دکتر (Doctor Panel)
+  // ============================================
+
+  // ===== پروفایل دکتر لاگین‌شده =====
+  // doctorProfile: {
+  //   name: "دکتر محمد رضایی",
+  //   specialty: "روانشناس بالینی",
+  //   phone: "۰۹۱۲۳۴۵۶۷۸۹",
+  //   email: "dr.rezaei@email.com",
+  //   avatar: "/images/Patient_Panel/usericon.png",
+  //   stats: {
+  //     activePatients: 12,
+  //     completedSessions: 48,
+  //   },
+  //   formData: {
+  //     firstName: "محمد",
+  //     lastName: "رضایی",
+  //     phone: "۰۹۱۲۳۴۵۶۷۸۹",
+  //     email: "dr.rezaei@email.com",
+  //     specialty: "روانشناس بالینی",
+  //     licenseNumber: "۱۲۳۴۵",
+  //     experience: "۱۲ سال",
+  //     bio: "روانشناس بالینی با تخصص در درمان اضطراب و افسردگی",
+  //   },
+  // },
+
+  // ===== آمار ثابت داشبورد =====
+  // (بقیه آمار مثل pendingSessions از doctorAppointments مشتق میشن)
+  // doctorDashboardStats: {
+  //   activePatients: 12,
+  //   exercisesSent: 18,
+  // },
+
+  // ===== نوبت‌های دکتر (منبع اصلی) =====
+  // شامل همه‌ی نوبت‌ها با همه‌ی وضعیت‌ها
+  // doctorAppointments: [
+  //   // ===== در انتظار تأیید =====
+  //   {
+  //     id: 1,
+  //     patient: "محمد کریمی",
+  //     patientPhone: "۹۱۲۳۴۵۶۷۸۹",
+  //     type: "جلسه مشاوره فردی",
+  //     typeKey: "individual",
+  //     date: "۱۴۰۵/۰۷/۰۵",
+  //     time: "۱۰:۰۰ - ۱۱:۰۰",
+  //     hours: ["۱۰:۰۰"],
+  //     startTime: "۱۰:۰۰",
+  //     endTime: "۱۱:۰۰",
+  //     status: "pending",
+  //     isOnline: true,
+  //     createdAt: "۱۴۰۵/۰۶/۰۳",
+  //     price: 2800000,
+  //     duration: 1,
+  //     meetingLink: null,
+  //   },
+  //   {
+  //     id: 2,
+  //     patient: "زهرا احمدی",
+  //     patientPhone: "۹۱۳۴۵۶۷۸۹۰",
+  //     type: "جلسه زوج درمانی",
+  //     typeKey: "couple",
+  //     date: "۱۴۰۵/۰۷/۰۲",
+  //     time: "۱۱:۳۰ - ۱۲:۳۰",
+  //     hours: ["۱۱:۳۰"],
+  //     startTime: "۱۱:۳۰",
+  //     endTime: "۱۲:۳۰",
+  //     status: "pending",
+  //     isOnline: true,
+  //     createdAt: "۱۴۰۵/۰۶/۰۳",
+  //     price: 3200000,
+  //     duration: 1,
+  //     meetingLink: null,
+  //   },
+  //   // {
+  //   //   id: 3,
+  //   //   patient: "علی رضایی",
+  //   //   patientPhone: "۹۱۴۵۶۷۸۹۰۱",
+  //   //   type: "جلسه مشاوره فردی",
+  //   //   typeKey: "individual",
+  //   //   date: "۱۴۰۵/۰۶/۰۵",
+  //   //   time: "۱۴:۰۰ - ۱۵:۰۰",
+  //   //   hours: ["۱۴:۰۰"],
+  //   //   startTime: "۱۴:۰۰",
+  //   //   endTime: "۱۵:۰۰",
+  //   //   status: "pending",
+  //   //   isOnline: true,
+  //   //   createdAt: "۱۴۰۵/۰۶/۰۴",
+  //   //   price: 2800000,
+  //   //   duration: 1,
+  //   // },
+  //   // {
+  //   //   id: 4,
+  //   //   patient: "سارا محمدی",
+  //   //   patientPhone: "۹۱۵۶۷۸۹۰۱۲",
+  //   //   type: "جلسه مشاوره نوجوان",
+  //   //   typeKey: "teen",
+  //   //   date: "۱۴۰۵/۰۶/۰۵",
+  //   //   time: "۱۶:۰۰ - ۱۷:۰۰",
+  //   //   hours: ["۱۶:۰۰"],
+  //   //   startTime: "۱۶:۰۰",
+  //   //   endTime: "۱۷:۰۰",
+  //   //   status: "pending",
+  //   //   isOnline: true,
+  //   //   createdAt: "۱۴۰۵/۰۶/۰۴",
+  //   //   price: 2500000,
+  //   //   duration: 1,
+  //   // },
+  //   {
+  //     id: 5,
+  //     patient: "رضا حسینی",
+  //     patientPhone: "۹۱۶۷۸۹۰۱۲۳",
+  //     type: "جلسه مشاوره فردی",
+  //     typeKey: "individual",
+  //     date: "۱۴۰۵/۰۶/۰۶",
+  //     time: "۱۰:۳۰ - ۱۱:۳۰",
+  //     hours: ["۱۰:۳۰"],
+  //     startTime: "۱۰:۳۰",
+  //     endTime: "۱۱:۳۰",
+  //     status: "pending",
+  //     isOnline: true,
+  //     createdAt: "۱۴۰۵/۰۶/۰۴",
+  //     price: 2800000,
+  //     duration: 1,
+  //     meetingLink: null,
+  //   },
+  //   {
+  //     id: 6,
+  //     patient: "نگار موسوی",
+  //     patientPhone: "۹۱۷۸۹۰۱۲۳۴",
+  //     type: "جلسه زوج درمانی",
+  //     typeKey: "couple",
+  //     date: "۱۴۰۵/۰۶/۰۷",
+  //     time: "۱۲:۰۰ - ۱۳:۰۰",
+  //     hours: ["۱۲:۰۰"],
+  //     startTime: "۱۲:۰۰",
+  //     endTime: "۱۳:۰۰",
+  //     status: "pending",
+  //     isOnline: true,
+  //     createdAt: "۱۴۰۵/۰۶/۰۵",
+  //     price: 3200000,
+  //     duration: 1,
+  //     meetingLink: null,
+  //   },
+
+  //   // ===== تأیید شده =====
+  //   {
+  //     id: 7,
+  //     patient: "زهرا احمدی",
+  //     patientPhone: "۹۱۳۴۵۶۷۸۹۰",
+  //     type: "جلسه زوج درمانی",
+  //     typeKey: "couple",
+  //     date: "۱۴۰۵/۰۷/۰۴",
+  //     time: "۱۱:۳۰ - ۱۲:۳۰",
+  //     hours: ["۱۱:۳۰"],
+  //     startTime: "۱۱:۳۰",
+  //     endTime: "۱۲:۳۰",
+  //     status: "confirmed",
+  //     isOnline: true,
+  //     createdAt: "۱۴۰۵/۰۶/۰۴",
+  //     price: 3200000,
+  //     duration: 1,
+  //     meetingLink: null,
+  //   },
+  //   {
+  //     id: 8,
+  //     patient: "علی رضایی",
+  //     patientPhone: "۹۱۴۵۶۷۸۹۰۱",
+  //     type: "جلسه مشاوره فردی",
+  //     typeKey: "individual",
+  //     date: "۱۴۰۵/۰۶/۱۰",
+  //     time: "۱۴:۰۰ - ۱۵:۰۰",
+  //     hours: ["۱۴:۰۰"],
+  //     startTime: "۱۴:۰۰",
+  //     endTime: "۱۵:۰۰",
+  //     status: "confirmed",
+  //     isOnline: true,
+  //     createdAt: "۱۴۰۵/۰۶/۰۵",
+  //     price: 2800000,
+  //     duration: 1,
+  //     meetingLink: null,
+  //   },
+  //   {
+  //     id: 9,
+  //     patient: "سارا محمدی",
+  //     patientPhone: "۹۱۵۶۷۸۹۰۱۲",
+  //     type: "جلسه مشاوره نوجوان",
+  //     typeKey: "teen",
+  //     date: "۱۴۰۵/۰۷/۱۱",
+  //     time: "۱۶:۰۰ - ۱۷:۰۰",
+  //     hours: ["۱۶:۰۰"],
+  //     startTime: "۱۶:۰۰",
+  //     endTime: "۱۷:۰۰",
+  //     status: "confirmed",
+  //     isOnline: true,
+  //     createdAt: "۱۴۰۵/۰۶/۰۵",
+  //     price: 2500000,
+  //     duration: 1,
+  //     meetingLink: null,
+  //   },
+
+  //   // ===== انجام شده =====
+  //   {
+  //     id: 10,
+  //     patient: "رضا حسینی",
+  //     patientPhone: "۹۱۶۷۸۹۰۱۲۳",
+  //     type: "جلسه مشاوره فردی",
+  //     typeKey: "individual",
+  //     date: "۱۴۰۵/۰۶/۰۴",
+  //     time: "۱۵:۰۰ - ۱۶:۰۰",
+  //     hours: ["۱۵:۰۰"],
+  //     startTime: "۱۵:۰۰",
+  //     endTime: "۱۶:۰۰",
+  //     status: "completed",
+  //     isOnline: true,
+  //     createdAt: "۱۴۰۵/۰۶/۰۱",
+  //     price: 2800000,
+  //     duration: 1,
+  //     notes: "جلسه انجام شده",
+  //     meetingLink: null,
+  //     sessionNotes: {
+  //       summary:
+  //         "پیشرفت خوبی در مدیریت استرس داشته. تکنیک‌های تنفس عمیق رو تمرین کرده.",
+  //       createdAt: "۱۴۰۵/۰۶/۰۴",
+  //       updatedAt: "۱۴۰۵/۰۶/۰۴",
+  //     },
+  //   },
+  //   {
+  //     id: 11,
+  //     patient: "علی رضایی",
+  //     patientPhone: "۹۱۴۵۶۷۸۹۰۱",
+  //     type: "جلسه مشاوره فردی",
+  //     typeKey: "individual",
+  //     date: "۱۴۰۵/۰۶/۰۴",
+  //     time: "۱۴:۰۰ - ۱۵:۰۰",
+  //     hours: ["۱۴:۰۰"],
+  //     startTime: "۱۴:۰۰",
+  //     endTime: "۱۵:۰۰",
+  //     status: "completed",
+  //     isOnline: true,
+  //     createdAt: "۱۴۰۵/۰۶/۰۱",
+  //     price: 2800000,
+  //     duration: 1,
+  //     notes: "پیشرفت خوب در مدیریت استرس",
+  //     meetingLink: null,
+  //   },
+
+  //   // ===== لغو شده =====
+  //   {
+  //     id: 12,
+  //     patient: "نگار موسوی",
+  //     patientPhone: "۹۱۷۸۹۰۱۲۳۴",
+  //     type: "جلسه زوج درمانی",
+  //     typeKey: "couple",
+  //     date: "۱۴۰۵/۰۶/۰۲",
+  //     time: "۱۷:۰۰ - ۱۸:۳۰",
+  //     hours: ["۱۷:۰۰"],
+  //     startTime: "۱۷:۰۰",
+  //     endTime: "۱۸:۳۰",
+  //     status: "cancelled",
+  //     isOnline: false,
+  //     createdAt: "۱۴۰۵/۰۵/۳۰",
+  //     price: 3200000,
+  //     duration: 1.5,
+  //     cancelledBy: "patient",
+  //     cancelReason: "مشکل شخصی",
+  //     notes: "لغو توسط بیمار",
+  //     meetingLink: null,
+  //   },
+  //   {
+  //     id: 13,
+  //     patient: "نگار موسوی",
+  //     patientPhone: "۹۱۷۸۹۰۱۲۳۴",
+  //     type: "جلسه زوج درمانی",
+  //     typeKey: "couple",
+  //     date: "۱۴۰۵/۰۶/۰۳",
+  //     time: "۱۷:۰۰ - ۱۸:۳۰",
+  //     hours: ["۱۷:۰۰"],
+  //     startTime: "۱۷:۰۰",
+  //     endTime: "۱۸:۳۰",
+  //     status: "cancelled",
+  //     isOnline: false,
+  //     createdAt: "۱۴۰۵/۰۵/۳۰",
+  //     price: 3200000,
+  //     duration: 1.5,
+  //     cancelledBy: "doctor",
+  //     cancelReason: "مشکل شخصی",
+  //     notes: "لغو توسط روانشناس",
+  //     meetingLink: null,
+  //   },
+  // ],
+
+  // ===== بیماران =====
+  // doctorPatients: [
+  //   {
+  //     id: 1,
+  //     name: "محمد کریمی",
+  //     phone: "۹۱۲۳۴۵۶۷۸۹",
+  //     sessions: 8,
+  //     lastVisit: "۱۴۰۵/۰۶/۰۳",
+  //     avatar: "👤",
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "زهرا احمدی",
+  //     phone: "۹۱۳۴۵۶۷۸۹۰",
+  //     sessions: 5,
+  //     lastVisit: "۱۴۰۵/۰۵/۲۸",
+  //     avatar: "👤",
+  //   },
+  //   {
+  //     id: 3,
+  //     name: "علی رضایی",
+  //     phone: "۹۱۴۵۶۷۸۹۰۱",
+  //     sessions: 12,
+  //     lastVisit: "۱۴۰۵/۰۶/۰۱",
+  //     avatar: "👤",
+  //   },
+  // ],
+
+  // ===== تنظیمات پنل دکتر =====
+  // doctorSettings: {
+  //   notificationsEnabled: true,
+  //   darkMode: false,
+  //   sessionReminders: true,
+  //   autoConfirmBookings: false,
+  //   doctorNotifications: [],
+  // },
 };
 
 export default seedData;
