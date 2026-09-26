@@ -1121,6 +1121,9 @@ const seedData = {
       price: 2800000,
       duration: 1,
       meetingLink: null,
+
+      isPaid: true, // ← جدید
+      paidAt: "۱۴۰۵/۰۶/۰۴", // ← جدید
       sessionNotes: {
         summary:
           "پیشرفت خوبی در مدیریت استرس داشته. تکنیک‌های تنفس عمیق رو تمرین کرده.",
@@ -1163,6 +1166,7 @@ const seedData = {
       price: 2800000,
       duration: 1,
       meetingLink: null,
+      isPaid: false,
       // بدون sessionNotes (برای تست حالت خالی)
     },
     {
@@ -1183,6 +1187,8 @@ const seedData = {
       price: 2800000,
       duration: 1,
       meetingLink: null,
+      isPaid: true,
+      paidAt: "۱۴۰۵/۰۵/۲۰",
       sessionNotes: {
         summary:
           "اولین جلسه بود. بررسی تاریخچه و تعیین اهداف درمانی. بیمار انگیزه‌ی خوبی برای شروع داره.",

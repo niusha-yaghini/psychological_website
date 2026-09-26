@@ -3016,6 +3016,646 @@
 }
 
 /* ============================================
+   CALENDAR VIEW
+============================================ */
+
+/* ===== Hint ===== */
+.calendarHint {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  background: linear-gradient(135deg, #e3f2fd 0%, #e8f4f8 100%);
+  border-right: 3px solid #2196f3;
+  border-radius: var(--radius);
+  margin-bottom: 16px;
+}
+
+.calendarHintIcon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.calendarHint p {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.6;
+}
+
+.calendarHint strong {
+  color: #0d47a1;
+}
+
+/* ===== Legend ===== */
+.calendarLegend {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+  padding: 10px 18px;
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  flex-wrap: wrap;
+}
+
+.calendarLegendItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.legendDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.legendConfirmed {
+  background: #4caf84;
+}
+
+.legendPending {
+  background: #ffc107;
+}
+
+.legendCompleted {
+  background: #2196f3;
+}
+
+.legendCancelled {
+  background: #e74c3c;
+}
+
+/* ===== Nav ===== */
+.calendarNav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--white);
+  padding: 6px 12px;
+  border-radius: 30px;
+  box-shadow: var(--shadow-sm);
+}
+
+.calendarNavBtn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: #2d7d6e;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.calendarNavBtn:hover {
+  background: rgba(45, 125, 110, 0.08);
+  transform: scale(1.1);
+}
+
+.calendarWeekLabel {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-dark);
+  min-width: 200px;
+  text-align: center;
+}
+
+.calendarTodayBtn {
+  padding: 6px 14px;
+  background: #2d7d6e;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.calendarTodayBtn:hover {
+  background: #1b5a4e;
+  transform: translateY(-1px);
+}
+
+/* ===== Wrapper ===== */
+.calendarWrapper {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.calendarGrid {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== Header Row ===== */
+.calendarHeaderRow {
+  display: grid;
+  grid-template-columns: 70px repeat(7, 1fr);
+  background: linear-gradient(135deg, #f8f9fa 0%, #f0f4f7 100%);
+  border-bottom: 2px solid var(--gray-light);
+}
+
+.calendarTimeHeader {
+  /* خالی */
+}
+
+.calendarDayHeader {
+  padding: 12px 8px;
+  text-align: center;
+  border-right: 1px solid var(--gray-light);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.calendarDayHeader:last-child {
+  border-right: none;
+}
+
+.calendarDayHeaderToday {
+  background: rgba(45, 125, 110, 0.08);
+}
+
+.calendarDayName {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.calendarDayDate {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-dark);
+}
+
+.calendarDayHeaderToday .calendarDayDate {
+  color: #2d7d6e;
+}
+
+/* ===== Body ===== */
+.calendarBody {
+  display: flex;
+  /* max-height: 600px; */
+  /* overflow-y: auto; */
+}
+
+.calendarBody::-webkit-scrollbar {
+  width: 6px;
+}
+
+.calendarBody::-webkit-scrollbar-thumb {
+  background: var(--gray-light);
+  border-radius: 10px;
+}
+
+/* ===== Time Column ===== */
+/* .calendarTimeColumn {
+  display: flex;
+  flex-direction: column;
+  width: 70px;
+  flex-shrink: 0;
+  border-left: 1px solid var(--gray-light);
+  background: #fafbfc;
+} */
+
+/* .calendarTimeColumn {
+  display: grid;
+  grid-template-rows: repeat(28, 30px);
+  width: 70px;
+  flex-shrink: 0;
+  border-left: 1px solid var(--gray-light);
+  background: #fafbfc;
+} */
+
+/* .calendarTimeCell {
+  height: 30px;
+  font-size: 11px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  padding: 0 4px;
+} */
+
+/* .calendarTimeCell {
+  height: 30px;
+  min-height: 30px;
+  max-height: 30px;
+  box-sizing: border-box;
+  font-size: 11px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  padding: 0 4px;
+} */
+
+/* ===== Days Columns ===== */
+/* .calendarDaysColumns {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  flex: 1;
+}
+
+.calendarDayColumn {
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--gray-light);
+} */
+
+/* .calendarDayColumn {
+  display: grid;
+  grid-template-rows: repeat(28, 30px);
+  border-right: 1px solid var(--gray-light);
+} */
+
+/* .calendarDayColumn:last-child {
+  border-right: none;
+} */
+
+/* ===== Cell ===== */
+/* .calendarCell {
+  height: 30px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  transition: var(--transition);
+  position: relative;
+  cursor: default;
+  overflow: hidden;
+  box-sizing: border-box;
+} */
+
+/* ===== Time Column ===== */
+.calendarTimeColumn {
+  display: grid;
+  grid-template-rows: repeat(28, 30px);
+  width: 70px;
+  flex-shrink: 0;
+  border-left: 1px solid var(--gray-light);
+  background: #fafbfc;
+}
+
+.calendarTimeCell {
+  height: 30px;
+  box-sizing: border-box;
+  font-size: 11px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  padding: 0 4px;
+}
+
+/* ===== Day Column (ستون روز) ===== */
+.calendarDayColumn {
+  position: relative;
+  border-right: 1px solid var(--gray-light);
+}
+
+.calendarDayColumn:last-child {
+  border-right: none;
+}
+
+/* ===== لایه پس‌زمینه ===== */
+.calendarDayBg {
+  display: grid;
+  grid-template-rows: repeat(28, 30px);
+  height: 100%;
+}
+
+.calendarBgCell {
+  height: 30px;
+  box-sizing: border-box;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  transition: var(--transition);
+}
+
+.calendarBgCell:hover {
+  background: rgba(45, 125, 110, 0.03);
+}
+
+/* ===== لایه جلسات ===== */
+.calendarDayEvents {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none; /* ← مهم: نذار کلیک رو بگیره */
+}
+
+.calendarEvent {
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  border-radius: 6px;
+  padding: 4px 6px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  overflow: hidden;
+  pointer-events: auto; /* ← مهم: فعال کردن کلیک */
+  box-sizing: border-box;
+  z-index: 2;
+}
+
+.calendarEvent:hover {
+  transform: scale(1.02);
+  z-index: 10;
+}
+
+/* ===== رنگ‌ها ===== */
+.calendarCellConfirmed {
+  background: linear-gradient(135deg, #4caf84 0%, #3a9c72 100%);
+  border-left: 3px solid #2d7d6e;
+}
+
+.calendarCellPending {
+  background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%);
+  border-left: 3px solid #f57c00;
+}
+
+.calendarCellCompleted {
+  background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+  border-left: 3px solid #0d47a1;
+  opacity: 0.9;
+}
+
+.calendarCellCancelled {
+  background: linear-gradient(135deg, #e74c3c 0%, #c62828 100%);
+  border-left: 3px solid #b71c1c;
+  opacity: 0.8;
+}
+
+/* ===== محتوای داخل جلسه ===== */
+.calendarEventPatient {
+  font-size: 11px;
+  font-weight: 700;
+  color: white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+
+.calendarEventTime {
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+}
+
+/* ===== Days Columns wrapper ===== */
+.calendarDaysColumns {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  flex: 1;
+}
+
+/* ===== Body ===== */
+.calendarBody {
+  display: flex;
+  /* بدون overflow — تمام ۲۸ اسلات توی صفحه */
+}
+
+.calendarCell {
+  height: 30px;
+  min-height: 30px;
+  max-height: 30px;
+  box-sizing: border-box; /* ← مهم */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  transition: var(--transition);
+  position: relative;
+  cursor: default;
+  overflow: hidden;
+}
+
+.calendarCellEmpty {
+  background: transparent;
+}
+
+.calendarCellEmpty:hover {
+  background: rgba(45, 125, 110, 0.03);
+}
+
+/* ===== Confirmed (سبز) ===== */
+.calendarCellConfirmed {
+  background: linear-gradient(135deg, #4caf84 0%, #3a9c72 100%);
+  border: 1px solid #2d7d6e;
+  border-radius: 4px;
+  margin: 1px;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.calendarCellConfirmed:hover {
+  transform: scale(1.01);
+  box-shadow: 0 4px 12px rgba(76, 175, 132, 0.4);
+  z-index: 10;
+}
+
+/* ===== Pending (زرد) ===== */
+.calendarCellPending {
+  background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%);
+  border: 1px solid #f57c00;
+  border-radius: 4px;
+  margin: 1px;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.calendarCellPending:hover {
+  transform: scale(1.01);
+  box-shadow: 0 4px 12px rgba(255, 193, 7, 0.4);
+  z-index: 10;
+}
+
+/* ===== Completed (آبی) ===== */
+.calendarCellCompleted {
+  background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+  border: 1px solid #0d47a1;
+  border-radius: 4px;
+  margin: 1px;
+  cursor: pointer;
+  z-index: 2;
+  opacity: 0.85;
+}
+
+.calendarCellCompleted:hover {
+  transform: scale(1.01);
+  box-shadow: 0 4px 12px rgba(33, 150, 243, 0.4);
+  opacity: 1;
+  z-index: 10;
+}
+
+/* ===== Cancelled / No-show (قرمز) ===== */
+.calendarCellCancelled {
+  background: linear-gradient(135deg, #e74c3c 0%, #c62828 100%);
+  border: 1px solid #b71c1c;
+  border-radius: 4px;
+  margin: 1px;
+  cursor: pointer;
+  z-index: 2;
+  opacity: 0.75;
+}
+
+.calendarCellCancelled:hover {
+  transform: scale(1.01);
+  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+  opacity: 1;
+  z-index: 10;
+}
+
+/* ===== Cell Content ===== */
+.calendarCellContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  height: 100%;
+  padding: 0 6px;
+  gap: 1px;
+  overflow: hidden;
+}
+
+.calendarCellPatient {
+  font-size: 11px;
+  font-weight: 700;
+  color: white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  line-height: 1.2;
+}
+
+.calendarCellTime {
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+}
+
+/* ===== Calendar Appointment Modal ===== */
+.calendarAppointmentModal {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  max-width: 420px;
+  width: 100%;
+  padding: 28px;
+  animation: modalSlideUp 0.3s ease;
+}
+
+.calendarModalRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--gray-light);
+  gap: 12px;
+}
+
+.calendarModalRow:last-child {
+  border-bottom: none;
+}
+
+.calendarModalLabel {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.calendarModalValue {
+  font-size: 14px;
+  color: var(--text-dark);
+  font-weight: 600;
+  text-align: left;
+}
+
+.calendarModalStatus {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 14px;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 992px) {
+  .calendarWrapper {
+    overflow-x: auto;
+  }
+
+  .calendarGrid {
+    min-width: 800px;
+  }
+}
+
+@media (max-width: 768px) {
+  .calendarLegend {
+    gap: 12px;
+    padding: 10px 14px;
+  }
+
+  .calendarLegendItem {
+    font-size: 12px;
+  }
+
+  .calendarNav {
+    gap: 8px;
+    padding: 4px 8px;
+  }
+
+  .calendarWeekLabel {
+    font-size: 12px;
+    min-width: 130px;
+  }
+
+  .calendarDayName {
+    font-size: 11px;
+  }
+
+  .calendarDayDate {
+    font-size: 15px;
+  }
+
+  .calendarTimeColumn {
+    width: 55px;
+  }
+
+  .calendarTimeCell {
+    font-size: 10px;
+  }
+
+  .calendarHeaderRow {
+    grid-template-columns: 55px repeat(7, 1fr);
+  }
+
+  .calendarCellPatient {
+    font-size: 10px;
+  }
+}
+
+/* ============================================
    PATIENTS LIST
 ============================================ */
 /* ============================================
@@ -5135,6 +5775,482 @@
   .exerciseItemHeader {
     flex-direction: column;
     align-items: flex-start;
+  }
+}
+
+/* ============================================
+   FINANCIAL VIEW
+============================================ */
+
+/* ===== Range Filter ===== */
+.financialRangeFilter {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.financialRangeFilter .formSelect {
+  min-width: 160px;
+  padding: 10px 16px;
+  font-size: 14px;
+  background: var(--white);
+  border: 2px solid var(--gray-light);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+/* ===== Hint ===== */
+.financialHint {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  background: linear-gradient(135deg, #e8f4f8 0%, #e3f2fd 100%);
+  border-right: 3px solid #2196f3;
+  border-radius: var(--radius);
+  margin-bottom: 24px;
+}
+
+.financialHintIcon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.financialHint p {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.6;
+}
+
+.financialHint strong {
+  color: #0d47a1;
+}
+
+/* ===== Stats Grid ===== */
+.financialStatsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.financialStatCard {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  border: 1.5px solid transparent;
+}
+
+.financialStatCard:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.finStatIcon {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  flex-shrink: 0;
+}
+
+.finStatContent {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.finStatNumber {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text-dark);
+  line-height: 1.2;
+}
+
+.finStatLabel {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* ===== Stat Variants ===== */
+.finStatCompleted {
+  background: linear-gradient(135deg, #ffffff 0%, #f1f8f4 100%);
+  border-color: #a5d6a7;
+}
+
+.finStatCompleted .finStatIcon {
+  background: #e8f5e9;
+}
+
+.finStatCompleted .finStatNumber {
+  color: #2e7d32;
+}
+
+.finStatNoShow {
+  background: linear-gradient(135deg, #ffffff 0%, #fbe9e7 100%);
+  border-color: #ef9a9a;
+}
+
+.finStatNoShow .finStatIcon {
+  background: #fbe9e7;
+}
+
+.finStatNoShow .finStatNumber {
+  color: #c62828;
+}
+
+.finStatPending {
+  background: linear-gradient(135deg, #ffffff 0%, #fff8e1 100%);
+  border-color: #ffb74d;
+}
+
+.finStatPending .finStatIcon {
+  background: #fff3e0;
+}
+
+.finStatPending .finStatNumber {
+  color: #e65100;
+}
+
+.finStatRevenue {
+  background: linear-gradient(135deg, #ffffff 0%, #e8f5e9 100%);
+  border-color: #66bb6a;
+}
+
+.finStatRevenue .finStatIcon {
+  background: linear-gradient(135deg, #4caf84, #2d7d6e);
+}
+
+.finStatRevenue .finStatNumber {
+  color: #2d7d6e;
+  font-size: 20px;
+}
+
+/* ===== Transactions Section ===== */
+.financialTransactionsSection {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.financialTransHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--gray-light);
+  background: linear-gradient(135deg, #f8f9fa 0%, #f0f4f7 100%);
+  flex-wrap: wrap;
+}
+
+.financialTransHeader h3 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0 0 4px;
+}
+
+.financialTransSubtitle {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* ===== Payment Filter Tabs ===== */
+.financialFilterTabs {
+  display: flex;
+  gap: 6px;
+  padding: 4px;
+  background: var(--white);
+  border-radius: 30px;
+  box-shadow: var(--shadow-sm);
+}
+
+.financialFilterTab {
+  padding: 6px 16px;
+  border: none;
+  border-radius: 30px;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+.financialFilterTab:hover {
+  color: var(--text-dark);
+}
+
+.financialFilterTabActive {
+  background: #2d7d6e;
+  color: white;
+}
+
+/* ===== Transactions List ===== */
+.financialTransList {
+  display: flex;
+  flex-direction: column;
+}
+
+.financialTransItem {
+  display: grid;
+  grid-template-columns: 130px 1fr 150px 140px 160px;
+  gap: 12px;
+  align-items: center;
+  padding: 14px 24px;
+  border-bottom: 1px solid var(--gray-light);
+  transition: var(--transition);
+}
+
+.financialTransItem:last-child {
+  border-bottom: none;
+}
+
+.financialTransItem:hover {
+  background: #fafbfc;
+}
+
+.finTransItemPaid {
+  background: #f9fdfa;
+}
+
+/* ===== Date ===== */
+.finTransDate {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-dark);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.finTransTime {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+/* ===== Patient ===== */
+.finTransPatient {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.finTransAvatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--gray-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.finTransPatient > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.finTransName {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.finTransType {
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ===== Status ===== */
+.finTransStatus {
+  display: flex;
+  align-items: center;
+}
+
+.statusCompletedBadge {
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 30px;
+  background: #e8f5e9;
+  color: #2e7d32;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.statusNoShowBadge {
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 30px;
+  background: #fbe9e7;
+  color: #c62828;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ===== Amount ===== */
+.finTransAmount {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-dark);
+  white-space: nowrap;
+}
+
+.finTransAmountUnit {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+/* ===== Payment Button ===== */
+.finTransPayment {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.finTransPayBtn {
+  padding: 6px 14px;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+  border: 1.5px solid;
+  white-space: nowrap;
+}
+
+.finTransPayBtnPaid {
+  background: #e8f5e9;
+  border-color: #2e7d32;
+  color: #2e7d32;
+}
+
+.finTransPayBtnPaid:hover {
+  background: #2e7d32;
+  color: white;
+}
+
+.finTransPayBtnUnpaid {
+  background: #fff3e0;
+  border-color: #e65100;
+  color: #e65100;
+}
+
+.finTransPayBtnUnpaid:hover {
+  background: #e65100;
+  color: white;
+}
+
+.finTransNoPayment {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 1200px) {
+  .financialStatsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .financialTransItem {
+    grid-template-columns: 110px 1fr 130px 120px 140px;
+    gap: 10px;
+    padding: 14px 18px;
+  }
+}
+
+@media (max-width: 992px) {
+  .financialTransItem {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 14px;
+    border-bottom: 1px solid var(--gray-light);
+  }
+
+  .finTransDate {
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .finTransStatus {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 768px) {
+  .financialStatsGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .financialStatCard {
+    padding: 14px;
+    gap: 10px;
+  }
+
+  .finStatIcon {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+
+  .finStatNumber {
+    font-size: 18px;
+  }
+
+  .finStatLabel {
+    font-size: 11px;
+  }
+
+  .financialTransHeader {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .financialFilterTabs {
+    overflow-x: auto;
+    justify-content: flex-start;
+  }
+
+  .financialFilterTab {
+    flex-shrink: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .financialStatsGrid {
+    grid-template-columns: 1fr;
   }
 }
 
