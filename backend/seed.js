@@ -765,7 +765,7 @@ const seedData = {
   },
 
   // ============================================
-  // 👨‍⚕️👩‍⚕️ پنل دکتر (Doctor Panel)
+  // پنل دکتر (Doctor Panel)
   // ============================================
 
   // ===== پروفایل دکتر لاگین‌شده =====
@@ -1131,20 +1131,17 @@ const seedData = {
         {
           id: 1,
           title: "تمرین تنفس عمیق",
-          description: "هر شب قبل از خواب، ۱۰ دقیقه تنفس عمیق انجام دهید.",
+          description: "هر شب قبل از خواب...",
           type: "daily", // daily | weekly | one-time
+          category: "meditation", // برای آیکون
           icon: "🧘",
-          completed: true, // ← انجام داده یا نه
-          completedAt: "۱۴۰۵/۰۶/۱۰", // ← کِی انجام داده
-        },
-        {
-          id: 2,
-          title: "نوشتن نامه به خود",
-          description: "نامه‌ای به خودتان بنویسید و احساساتتان را بیان کنید.",
-          type: "one-time",
-          icon: "✍️",
-          completed: false,
-          completedAt: null,
+          dueDate: "۱۴۰۵/۰۷/۱۰",
+          priority: "high", // high | medium | low
+          completed: false, // ← بیمار توی پنل خودش تیک می‌زنه
+          progress: 0,
+          instructions: ["در جای آرام بنشینید", "چشم‌ها را ببندید"],
+          assignedBy: "دکتر محمد رضایی",
+          assignedDate: "۱۴۰۵/۰۶/۰۴",
         },
       ],
     },
