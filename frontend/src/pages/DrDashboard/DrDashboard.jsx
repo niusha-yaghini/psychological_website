@@ -615,15 +615,15 @@ function DoctorDashboard() {
             toPersianDigits={toPersianDigits}
           />
         );
-      // case "profile":
-      //   return <DoctorProfile userData={userData} />;
       case "profile":
-  return (
-    <DoctorProfile
-      userData={userData}
-      toPersianDigits={toPersianDigits}
-    />
-  );
+        return (
+          <DoctorProfile
+            profile={seedData.doctorProfile}
+            patients={patients}
+            appointments={appointments}
+            toPersianDigits={toPersianDigits}
+          />
+        );
       case "settings":
         return <DoctorSettings />;
       default:

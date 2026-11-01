@@ -1,17 +1,35 @@
+import React, { useMemo } from "react";
+import styles from "./DoctorProfile.module.css";
+import doctorAvatar from "../../../../../public/images/Patient_Panel/usericon.png";
+
 // ============================================
 // COMPONENT: Doctor Profile
 // ============================================
 // function DoctorProfile({ userData }) {
-function DoctorProfile({ userData, toPersianDigits }) {
-  const profile = seedData.doctorProfile;
+// function DoctorProfile({ userData, toPersianDigits }) {
+function DoctorProfile({ profile, patients, appointments, toPersianDigits }) {
+  // const profile = seedData.doctorProfile;
 
   // ===== محاسبه‌ی آمار =====
-  const stats = useMemo(() => {
-    const activePatients = seedData.doctorPatients.filter(
-      (p) => p.status === "active",
-    ).length;
+  // const stats = useMemo(() => {
+  //   const activePatients = seedData.doctorPatients.filter(
+  //     (p) => p.status === "active",
+  //   ).length;
 
-    const completedSessions = seedData.doctorAppointments.filter(
+  //   const completedSessions = seedData.doctorAppointments.filter(
+  //     (a) => a.status === "completed",
+  //   ).length;
+
+  //   return {
+  //     activePatients,
+  //     completedSessions,
+  //   };
+  // }, []);
+
+  const stats = useMemo(() => {
+    const activePatients = patients.filter((p) => p.status === "active").length;
+
+    const completedSessions = appointments.filter(
       (a) => a.status === "completed",
     ).length;
 
@@ -19,7 +37,7 @@ function DoctorProfile({ userData, toPersianDigits }) {
       activePatients,
       completedSessions,
     };
-  }, []);
+  }, [patients, appointments]);
 
   return (
     <div className={styles.pageContent}>
@@ -28,7 +46,7 @@ function DoctorProfile({ userData, toPersianDigits }) {
           <h2>👤 پروفایل</h2>
           <p>اطلاعات شخصی شما</p>
         </div>
-        <button className={styles.editBtn}>✏️ ویرایش</button>
+        <button className={styles.editBtn}>ویرایش</button>
       </div>
       <div className={styles.profileCard}>
         <div className={styles.profileAvatar}>
