@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { FaPlus } from "react-icons/fa";
-import moment from "moment-jalaali";
+// import moment from "moment-jalaali";
 
 import DatePicker from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
@@ -12,6 +12,23 @@ import styles from "./Appointments.module.css";
 // COMPONENT: Appointments Management
 // ============================================
 // function AppointmentsManagement({ appointments, setAppointments }) {
+// function AppointmentsManagement({
+//   appointments,
+//   setAppointments,
+//   getAppointmentMoment,
+//   getDisplayStatus,
+//   isNotCompleted,
+//   getOriginalStatusInfo,
+//   getDisplayStatusInfo,
+//   isFinalizedStatus,
+//   getRelativeDateLabel,
+//   toPersianDigits,
+//   toEnglishDigits,
+//   getTypeLabel,
+//   isMoreThan24HoursAway,
+//   isLessThan24HoursAway,
+//   pricePerHour,
+// }) {
 function AppointmentsManagement({
   appointments,
   setAppointments,
@@ -28,6 +45,7 @@ function AppointmentsManagement({
   isMoreThan24HoursAway,
   isLessThan24HoursAway,
   pricePerHour,
+  moment,
 }) {
   const [activeFilter, setActiveFilter] = useState("all");
   const [showAddModal, setShowAddModal] = useState(false);
