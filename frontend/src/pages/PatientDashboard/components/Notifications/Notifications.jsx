@@ -4,7 +4,12 @@ import styles from "./Notifications.module.css";
 // ============================================
 // COMPONENT: Messages Content (Notification Center)
 // ============================================
-function PatientNotifications({ notifications, setNotifications }) {
+// function PatientNotifications({ notifications, setNotifications }) {
+function PatientNotifications({
+  notifications,
+  setNotifications,
+  formatNotificationTime,
+}) {
   const [filter, setFilter] = useState("all"); // all | unread | read
 
   // ===== علامت‌گذاری به عنوان خوانده شده =====
@@ -56,9 +61,9 @@ function PatientNotifications({ notifications, setNotifications }) {
   };
 
   // ===== دریافت متن زمان =====
-  const getTimeAgo = (time) => {
-    return time;
-  };
+  // const getTimeAgo = (time) => {
+  //   return time;
+  // };
 
   return (
     <div className={styles.pageContent}>
@@ -136,7 +141,8 @@ function PatientNotifications({ notifications, setNotifications }) {
                       {notification.title}
                     </h4>
                     <span className={styles.notificationTime}>
-                      {notification.time}
+                      {/* {notification.time} */}
+                      {formatNotificationTime(notification)}
                     </span>
                   </div>
                   <p className={styles.notificationMessage}>
