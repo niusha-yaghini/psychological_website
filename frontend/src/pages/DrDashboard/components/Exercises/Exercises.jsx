@@ -492,19 +492,6 @@ function ExercisesManagement({
 
       {/* ===== مودال طراحی تمرین ===== */}
       {showExerciseModal && editingExercise && (
-        // <ExerciseDesignModal
-        //   mode={modalMode}
-        //   appointmentInfo={editingExercise.appointmentInfo}
-        //   existingExercise={editingExercise.exercise}
-        //   appointmentId={editingExercise.appointmentId}
-        //   appointments={appointments}
-        //   setAppointments={setAppointments}
-        //   onClose={() => {
-        //     setShowExerciseModal(false);
-        //     setEditingExercise(null);
-        //   }}
-        //   doctorName={seedData.doctorProfile.name}
-        // />
         <ExerciseDesignModal
           mode={modalMode}
           appointmentInfo={editingExercise.appointmentInfo}

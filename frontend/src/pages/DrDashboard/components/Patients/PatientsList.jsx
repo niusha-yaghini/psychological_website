@@ -71,7 +71,6 @@ function PatientsList({
   const filteredPatients = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
 
-    // return seedData.doctorPatients.filter((p) => {
     return patients.filter((p) => {
       if (!query) return true;
       return (
@@ -83,11 +82,6 @@ function PatientsList({
   }, [patients, searchQuery]);
 
   // ===== بیمار انتخاب‌شده =====
-  // const selectedPatient = useMemo(() => {
-  //   if (!selectedPatientId) return null;
-  //   return seedData.doctorPatients.find((p) => p.id === selectedPatientId);
-  // }, [selectedPatientId]);
-
   const selectedPatient = useMemo(() => {
     if (!selectedPatientId) return null;
     return patients.find((p) => p.id === selectedPatientId);

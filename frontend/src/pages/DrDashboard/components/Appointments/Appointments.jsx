@@ -11,24 +11,6 @@ import styles from "./Appointments.module.css";
 // ============================================
 // COMPONENT: Appointments Management
 // ============================================
-// function AppointmentsManagement({ appointments, setAppointments }) {
-// function AppointmentsManagement({
-//   appointments,
-//   setAppointments,
-//   getAppointmentMoment,
-//   getDisplayStatus,
-//   isNotCompleted,
-//   getOriginalStatusInfo,
-//   getDisplayStatusInfo,
-//   isFinalizedStatus,
-//   getRelativeDateLabel,
-//   toPersianDigits,
-//   toEnglishDigits,
-//   getTypeLabel,
-//   isMoreThan24HoursAway,
-//   isLessThan24HoursAway,
-//   pricePerHour,
-// }) {
 function AppointmentsManagement({
   appointments,
   setAppointments,
@@ -270,8 +252,7 @@ function AppointmentsManagement({
     const newId = Math.max(...appointments.map((a) => a.id), 0) + 1;
 
     // ===== محاسبه قیمت بر اساس pricePerHour =====
-    // const pricePerHour = seedData.doctorProfile.pricePerHour || 0;
-    // const finalPrice = pricePerHour * durationHours;
+  
     const finalPrice = pricePerHour * durationHours;
 
     setAppointments((prev) => [
