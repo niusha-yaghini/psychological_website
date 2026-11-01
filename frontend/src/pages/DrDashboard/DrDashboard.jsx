@@ -3,6 +3,8 @@ import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./DrDashboard.module.css";
 
+import Sidebar from "./components/Sidebar/Sidebar";
+
 import {
   FaHome,
   FaCalendarAlt,
@@ -10,13 +12,13 @@ import {
   FaVideo,
   FaUsers,
   FaClipboardList,
-  FaStickyNote,
+  // FaStickyNote,
   FaCommentDots,
   FaUserCircle,
   FaCog,
-  FaSignOutAlt,
-  FaChevronLeft,
-  FaChevronRight,
+  // FaSignOutAlt,
+  // FaChevronLeft,
+  // FaChevronRight,
   FaBell,
   FaPlus,
   FaMoneyBillWave,
@@ -291,17 +293,6 @@ function DashboardOverview({ appointments, setAppointments }) {
   // ==========================================
   // مشتق‌ها (Derived State)
   // ==========================================
-
-  // ===== نوبت‌های در انتظار تأیید =====
-  // const pendingSessions = useMemo(() => {
-  //   return appointments
-  //     .filter((a) => a.status === "pending")
-  //     .sort((a, b) => {
-  //       const momentA = getAppointmentMoment(a);
-  //       const momentB = getAppointmentMoment(b);
-  //       return momentA - momentB; // نزدیک‌ترین اول
-  //     });
-  // }, [appointments]);
 
   // ===== نوبت‌های در انتظار تأیید (فقط pending با تاریخ آینده) =====
   const pendingSessions = useMemo(() => {
@@ -860,7 +851,7 @@ function DoctorDashboard() {
     }
 
     // ==========================================
-    // 📌 نوتیفیکیشن ۳: جلسات گذشته که نیاز به ثبت وضعیت دارند
+    // نوتیفیکیشن ۳: جلسات گذشته که نیاز به ثبت وضعیت دارند
     // ==========================================
     const awaitingConfirm = appointments.filter(
       (a) => getDisplayStatus(a) === "awaiting-confirmation",
@@ -1040,7 +1031,7 @@ function DoctorDashboard() {
   return (
     <div className={styles.dashboardContainer}>
       {/* ===== SIDEBAR ===== */}
-      <aside
+      {/* <aside
         className={`${styles.sidebar} ${isCollapsed ? styles.collapsed : ""}`}
       >
         <div className={styles.sidebarHeader}>
@@ -1110,7 +1101,18 @@ function DoctorDashboard() {
             </li>
           </ul>
         </div>
-      </aside>
+      </aside> */}
+
+      <Sidebar
+        logo={logo}
+        isCollapsed={isCollapsed}
+        onToggle={() => setIsCollapsed((prev) => !prev)}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        menuItems={menuItems}
+        bottomMenuItems={bottomMenuItems}
+        onLogout={handleLogout}
+      />
 
       {/* ===== MAIN CONTENT ===== */}
       <main className={styles.mainContent}>
@@ -1402,28 +1404,6 @@ function AppointmentsManagement({ appointments, setAppointments }) {
         meetingLink: null,
       },
     ]);
-
-    // setAppointments((prev) => [
-    //   ...prev,
-    //   {
-    //     id: newId,
-    //     patient: newAppointment.patient,
-    //     patientPhone: "",
-    //     type: getTypeLabel(newAppointment.typeKey),
-    //     typeKey: newAppointment.typeKey,
-    //     date: toPersianDigits(persianDate),
-    //     time: toPersianDigits(timeString),
-    //     hours: hours.map(toPersianDigits),
-    //     startTime: toPersianDigits(newAppointment.startTime.trim()),
-    //     endTime: toPersianDigits(newAppointment.endTime.trim()),
-    //     status: newAppointment.status,
-    //     isOnline: true,
-    //     createdAt: toPersianDigits(moment().format("jYYYY/jMM/jDD")),
-    //     price: 0,
-    //     duration: durationHours,
-    //     meetingLink: null,
-    //   },
-    // ]);
 
     // ===== ریست فرم =====
     setNewAppointment({
@@ -6541,9 +6521,7 @@ function FinancialView({ appointments, setAppointments }) {
                             : "تایید پرداخت"
                         }
                       >
-                        {appointment.isPaid
-                          ? "پرداخت شده"
-                          : "پرداخت نشده"}
+                        {appointment.isPaid ? "پرداخت شده" : "پرداخت نشده"}
                       </button>
                     ) : (
                       <span className={styles.finTransNoPayment}>—</span>

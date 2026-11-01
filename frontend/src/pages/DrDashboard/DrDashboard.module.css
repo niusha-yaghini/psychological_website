@@ -33,7 +33,7 @@
 }
 
 /* ===== Sidebar ===== */
-.sidebar {
+/* .sidebar {
   width: var(--sidebar-width);
   height: 100vh;
   background: var(--white);
@@ -108,12 +108,11 @@
 
 .sidebar.collapsed .collapseBtn {
   transform: rotate(180deg);
-}
+}*/
 
 /* ===== Navigation ===== */
-.sidebarNav {
+/* .sidebarNav {
   flex: 1;
-  /* padding: 16px 0; */
   overflow-y: auto;
 }
 
@@ -229,7 +228,7 @@
 
 .sidebarFooter .navItem:hover {
   color: #e74c3c;
-}
+} */
 
 /* ===== Main Content ===== */
 .mainContent {
