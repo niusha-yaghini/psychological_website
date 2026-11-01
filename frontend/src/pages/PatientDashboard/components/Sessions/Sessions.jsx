@@ -1,7 +1,19 @@
+import React, { useState, useEffect, useRef, useMemo } from "react";
+import styles from "./Sessions.module.css";
+
 // ============================================
 // COMPONENT: Sessions Content
 // ============================================
-function SessionsManagement({ appointments, setAppointments }) {
+// function SessionsContent({ appointments, setAppointments }) {
+function SessionsManagement({
+  appointments,
+  setAppointments,
+  getDisplayStatus,
+  getAppointmentMoment,
+  isSessionOngoing,
+  toPersianDigits,
+}) {
+
   const [activeTab, setActiveTab] = useState("upcoming");
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [selectedAppointmentId, setSelectedAppointmentId] = useState(null);
@@ -585,15 +597,7 @@ function SessionsManagement({ appointments, setAppointments }) {
                     ★
                   </button>
                 ))}
-                {/* {rating > 0 && (
-                  <span className={styles.ratingText}>
-                    {rating === 1 && "خیلی ضعیف"}
-                    {rating === 2 && "ضعیف"}
-                    {rating === 3 && "متوسط"}
-                    {rating === 4 && "خوب"}
-                    {rating === 5 && "عالی"}
-                  </span>
-                )} */}
+          
               </div>
 
               {/* کامنت */}
@@ -654,4 +658,3 @@ function SessionsManagement({ appointments, setAppointments }) {
 }
 
 export default SessionsManagement;
-

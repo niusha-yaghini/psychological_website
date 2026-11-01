@@ -1,0 +1,1058 @@
+/* ============================================
+   SESSIONS PAGE
+============================================ */
+
+.pageContent {
+  animation: sessionsFadeIn 0.4s ease;
+}
+
+.pageContent h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0 0 4px;
+}
+
+.pageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.headerInfo h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0 0 4px;
+}
+
+.headerInfo p {
+  font-size: 15px;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* ===== Session Stats ===== */
+
+.sessionStats {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--gray-light);
+  padding: 8px 20px;
+  border-radius: 30px;
+}
+
+.statItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.statNumber {
+  font-size: 18px;
+  font-weight: 700;
+  color: #2d7d6e;
+}
+
+.statLabel {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.statDivider {
+  color: #d5d0ca;
+}
+
+/* ===== Filter Tabs ===== */
+
+.filterTabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  padding: 4px;
+  background: var(--gray-light);
+  border-radius: 30px;
+  width: fit-content;
+}
+
+.filterTab {
+  padding: 8px 20px;
+  border: none;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: transparent;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.filterTab:hover {
+  color: var(--text-dark);
+}
+
+.filterTab.active {
+  background: var(--white);
+  color: #2d7d6e;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.filterCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  background: rgba(45, 125, 110, 0.1);
+  color: #2d7d6e;
+  border-radius: 30px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.filterTab.active .filterCount {
+  background: rgba(45, 125, 110, 0.15);
+}
+
+/* ===== Sessions List ===== */
+
+.sessionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+/* ===== Session Card ===== */
+
+.sessionCard {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.sessionCard:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(45, 125, 110, 0.08);
+}
+
+.sessionCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.sessionDoctor {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sessionDoctor h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0;
+}
+
+.sessionType {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* ===== Session Status ===== */
+
+.sessionStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 14px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.statusDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.sessionUpcoming {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.sessionUpcoming .statusDot {
+  background: #2e7d32;
+}
+
+.sessionCompleted {
+  background: #e3f2fd;
+  color: #0d47a1;
+}
+
+.sessionCompleted .statusDot {
+  background: #0d47a1;
+}
+
+/* ===== Session Details ===== */
+
+.sessionDetails {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-top: 1px solid var(--gray-light);
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.sessionMeta {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.metaGroup {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+/* ===== Session Actions ===== */
+
+.sessionActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btnViewRecord {
+  padding: 8px 20px;
+  background: transparent;
+  color: #0d47a1;
+  border: 1.5px solid #0d47a1;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btnViewRecord:hover {
+  background: #0d47a1;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.btnCancelSession {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 20px;
+  background: #fdfcfc;
+  color: #c62828;
+  border: 1.5px solid #c62828;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btnCancelSession:hover {
+  background: #c62828;
+  color: white;
+  transform: scale(1.03);
+  box-shadow: 0 4px 16px rgba(198, 40, 40, 0.2);
+}
+
+.btnCancelDisabled {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 20px;
+  background: var(--gray-light);
+  color: var(--text-muted);
+  border: none;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: not-allowed;
+  font-family: inherit;
+  opacity: 0.6;
+}
+
+/* ===== Next Session Banner ===== */
+
+.nextSessionBanner {
+  background: linear-gradient(135deg, #1b3a5ccf, #2d7d6ed4);
+  border-radius: var(--radius-lg);
+  padding: 28px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  box-shadow: var(--shadow-md);
+}
+
+.nextSessionContent {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nextSessionLabel {
+  font-size: 13px;
+  opacity: 0.7;
+}
+
+.nextSessionContent h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.nextSessionContent p {
+  font-size: 15px;
+  opacity: 0.8;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.887);
+}
+
+.nextSessionTime {
+  display: flex;
+  gap: 16px;
+  font-size: 14px;
+  opacity: 0.7;
+  margin-top: 4px;
+}
+
+.nextSessionTimerEnterContainer {
+  text-align: left;
+}
+
+.btnNextSession {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 32px;
+  background: var(--white);
+  color: #1b3a5c;
+  border: none;
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+  flex-shrink: 0;
+  text-decoration: none;
+}
+
+.btnNextSession:hover {
+  transform: scale(1.05) translateX(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.btnNextSession span {
+  transition: transform 0.3s ease;
+}
+
+.btnNextSession:hover span {
+  transform: translateX(4px);
+}
+
+.btnNextSessionDisabled {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 32px;
+  background: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.6);
+  border: none;
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: not-allowed;
+  font-family: inherit;
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+.btnNextSessionDisabled span {
+  opacity: 0.5;
+}
+
+.btnNextSessionOngoing {
+  background: white !important;
+  color: #c62828 !important;
+  font-weight: 800 !important;
+  animation: sessionsPulseButton 1.5s ease-in-out infinite;
+}
+
+/* ===== Next Session Timer ===== */
+
+.nextSessionTimer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius);
+  backdrop-filter: blur(10px);
+}
+
+.timerLabel {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.timerDigits {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.timerDigit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4px 8px;
+  background: #1b3a5c;
+  color: white;
+  border-radius: 8px;
+  font-size: 20px;
+  font-weight: 700;
+  min-width: 36px;
+}
+
+.timerUnit {
+  font-size: 9px;
+  font-weight: 400;
+  opacity: 0.7;
+}
+
+.timerSeparator {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.nextSessionTimer .timerLabel {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.nextSessionTimer .timerDigit {
+  padding: 4px 10px;
+  background: rgba(0, 0, 0, 0.3);
+  color: white;
+  min-width: 40px;
+}
+
+.nextSessionTimer .timerSeparator {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.nextSessionOngoing {
+  background: linear-gradient(135deg, #ce2525dd, #c82a27ca) !important;
+  animation: sessionsPulseOngoing 2s ease-in-out infinite;
+}
+
+.nextSessionOngoing .timerDigit {
+  background: rgba(0, 0, 0, 0.4) !important;
+}
+
+.nextSessionOngoing .timerLabel {
+  color: #fff !important;
+  font-weight: 700;
+  font-size: 14px !important;
+}
+
+/* ===== Empty State ===== */
+
+.emptyState {
+  text-align: center;
+  padding: 60px 24px;
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.emptyIcon {
+  font-size: 64px;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.emptyState h3 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0 0 8px;
+}
+
+.emptyState p {
+  font-size: 15px;
+  color: var(--text-muted);
+  margin: 0 0 24px;
+}
+
+/* ============================================
+   MODALS
+============================================ */
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  animation: sessionsModalFadeIn 0.3s ease;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.modalHeader h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0;
+}
+
+.modalClose {
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background: var(--gray-light);
+  color: var(--text-muted);
+  font-size: 20px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modalClose:hover {
+  background: #e74c3c;
+  color: white;
+  transform: rotate(90deg);
+}
+
+.cancelModal {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 32px 36px;
+  max-width: 440px;
+  width: 100%;
+  animation: sessionsModalSlideUp 0.3s ease;
+}
+
+.cancelModalBody {
+  margin: 16px 0 20px;
+}
+
+.cancelWarning {
+  font-size: 16px;
+  font-weight: 600;
+  color: #c62828;
+  margin: 0 0 8px;
+}
+
+.cancelHint {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin: 0 0 12px;
+}
+
+.cancelTextarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid var(--gray-light);
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--text-dark);
+  resize: vertical;
+  transition: var(--transition);
+  background: var(--white);
+}
+
+.cancelTextarea:focus {
+  border-color: #2d7d6e;
+  box-shadow: 0 0 0 4px rgba(45, 125, 110, 0.08);
+  outline: none;
+}
+
+.cancelTextarea::placeholder {
+  color: #b5b0aa;
+}
+
+.modalFooter {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 18px;
+  padding-top: 24px;
+  border-top: 1px solid var(--gray-light);
+}
+
+.btnCancelModalPrimary {
+  padding: 10px 28px;
+  background: #c62828;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btnCancelModalPrimary:hover {
+  background: #b71c1c;
+  transform: scale(1.03);
+}
+
+.btnCancelModalSecondary {
+  padding: 10px 28px;
+  background: transparent;
+  color: var(--text-muted);
+  border: 1.5px solid var(--gray-light);
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btnCancelModalSecondary:hover {
+  border-color: var(--text-muted);
+  color: var(--text-dark);
+}
+
+/* ===== Review Modal ===== */
+
+.reviewModal {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  max-width: 500px;
+  width: 100%;
+  padding: 32px;
+  animation: sessionsModalSlideUp 0.3s ease;
+}
+
+.reviewModalBody {
+  margin: 20px 0;
+}
+
+.reviewSessionInfo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  background: var(--gray-light);
+  border-radius: var(--radius);
+  margin-bottom: 20px;
+}
+
+.reviewSessionIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.reviewSessionInfo h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0;
+}
+
+.reviewSessionInfo p {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 2px 0 0;
+}
+
+.reviewSessionDate {
+  font-size: 12px !important;
+  color: #2d7d6e !important;
+}
+
+.reviewQuestion {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-dark);
+  text-align: center;
+  margin: 0 0 16px;
+}
+
+.starsContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.starBtn {
+  background: transparent;
+  border: none;
+  font-size: 40px;
+  color: #d5d0ca;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+  line-height: 1;
+}
+
+.starBtn:hover {
+  transform: scale(1.15);
+}
+
+.starBtn.starActive {
+  color: #ffc107;
+  text-shadow: 0 2px 8px rgba(255, 193, 7, 0.3);
+}
+
+.reviewInputGroup {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.reviewLabel {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.optionalTag {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.reviewTextarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid var(--gray-light);
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--text-dark);
+  resize: vertical;
+  transition: var(--transition);
+  background: var(--white);
+  min-height: 100px;
+  line-height: 1.6;
+}
+
+.reviewTextarea:focus {
+  border-color: #2d7d6e;
+  box-shadow: 0 0 0 4px rgba(45, 125, 110, 0.08);
+  outline: none;
+}
+
+.reviewTextarea::placeholder {
+  color: #b5b0aa;
+}
+
+.charCount {
+  display: block;
+  text-align: left;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.reviewNote {
+  font-size: 13px;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 10px 16px;
+  background: rgba(45, 125, 110, 0.06);
+  border-radius: var(--radius);
+  margin: 0;
+  border-right: 3px solid #2d7d6e;
+}
+
+.btnSubmitReview {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 32px;
+  background: linear-gradient(135deg, #2d7d6e, #4caf84);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+  box-shadow: 0 4px 20px rgba(45, 125, 110, 0.2);
+}
+
+.btnSubmitReview:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(45, 125, 110, 0.3);
+}
+
+.btnSubmitReview:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btnReview {
+  padding: 8px 20px;
+  background: transparent;
+  color: #db9732;
+  border: 1.5px solid #ac7b32;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btnReview:hover {
+  background: #e3941d;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(255, 152, 0, 0.3);
+}
+
+.reviewSubmitted {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  background: #e8f5e9;
+  color: #2e7d32;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ===== Loading Spinner ===== */
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: sessionsSpin 0.7s linear infinite;
+  display: inline-block;
+}
+
+/* ============================================
+   ANIMATIONS
+============================================ */
+
+@keyframes sessionsFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes sessionsModalFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes sessionsModalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes sessionsPulseOngoing {
+  0%,
+  100% {
+    box-shadow: 0 8px 30px rgba(198, 40, 40, 0.3);
+  }
+  50% {
+    box-shadow: 0 8px 40px rgba(198, 40, 40, 0.5);
+  }
+}
+
+@keyframes sessionsPulseButton {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes sessionsSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============================================
+   RESPONSIVE
+============================================ */
+
+@media (max-width: 992px) {
+  .sessionDetails {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .sessionMeta {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .sessionCard {
+    padding: 16px;
+  }
+
+  .sessionCardHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .sessionDoctor {
+    width: 100%;
+  }
+
+  .sessionActions {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .sessionActions button {
+    flex: 1;
+    justify-content: center;
+    min-width: 120px;
+  }
+
+  .nextSessionBanner {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+    padding: 24px;
+  }
+
+  .btnNextSession {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .nextSessionTime {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .sessionStats {
+    padding: 6px 16px;
+    gap: 12px;
+  }
+
+  .statNumber {
+    font-size: 16px;
+  }
+
+  .statLabel {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sessionMeta {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .sessionActions button {
+    min-width: 100%;
+  }
+
+  .nextSessionContent h3 {
+    font-size: 17px;
+  }
+
+  .reviewModal {
+    padding: 24px 20px;
+  }
+
+  .starBtn {
+    font-size: 32px;
+  }
+
+  .modalFooter {
+    flex-direction: column;
+  }
+
+  .btnCancelModalSecondary,
+  .btnSubmitReview {
+    width: 100%;
+    justify-content: center;
+  }
+}
