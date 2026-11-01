@@ -17,3 +17,15 @@
 
 
 برای همه وقت های رزرو یه فیلد meetingLink داریم، که بعدا باید خالی شه؟
+
+---------------------------
+
+The logic governing meeting statuses is quite detailed; for instance, statuses such as 'pending', 'confirmed', 'ongoing', 'completed', 'cancelled', and 'no-show' have been defined. Additionally, for completed meetings, there is a 48-hour window for confirming that the meeting took place. Furthermore, meetings cannot be cancelled if there is less than 24 hours remaining until the scheduled time.
+
+--------------------------
+
+The appointment booking logic in the patient panel includes the following:
+- Time slots that have already been booked cannot be selected.
+- There must be at least one hour remaining before the scheduled session.
+- A maximum of three consecutive hours can be selected.
+- The terms for canceling an appointment vary depending on the time remaining before the session.
