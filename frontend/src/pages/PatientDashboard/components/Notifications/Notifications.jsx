@@ -1,3 +1,6 @@
+import { useState } from "react";
+import styles from "./Notifications.module.css";
+
 // ============================================
 // COMPONENT: Messages Content (Notification Center)
 // ============================================

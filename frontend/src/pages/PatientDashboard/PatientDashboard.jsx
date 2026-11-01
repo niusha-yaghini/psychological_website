@@ -27,6 +27,7 @@ import Sidebar from "./components/Sidebar/Sidebar";
 import DashboardOverview from "./components/DashboardOverview/DashboardOverview";
 import AppointmentsManagement from "./components/Appointments/Appointments";
 import SessionsManagement from "./components/Sessions/Sessions";
+import PatientNotifications from "./components/Notifications/Notifications";
 
 // ============================================
 // ثابت‌های گلوبال (Global Constants)
@@ -546,20 +547,20 @@ function PatientDashboard() {
             helpers={appointmentsHelpers}
           />
         );
-case "sessions":
-  return (
-    <SessionsManagement
-      appointments={appointments}
-      setAppointments={setAppointments}
-      getDisplayStatus={getDisplayStatus}
-      getAppointmentMoment={getAppointmentMoment}
-      isSessionOngoing={isSessionOngoing}
-      toPersianDigits={toPersianDigits}
-    />
-  );
+      case "sessions":
+        return (
+          <SessionsManagement
+            appointments={appointments}
+            setAppointments={setAppointments}
+            getDisplayStatus={getDisplayStatus}
+            getAppointmentMoment={getAppointmentMoment}
+            isSessionOngoing={isSessionOngoing}
+            toPersianDigits={toPersianDigits}
+          />
+        );
       case "messages":
         return (
-          <MessagesContent
+          <PatientNotifications
             notifications={notifications}
             setNotifications={setNotifications}
           />
@@ -584,79 +585,6 @@ case "sessions":
 
   return (
     <div className={styles.dashboardContainer}>
-      {/* ===== SIDEBAR ===== */}
-      {/* <aside
-        className={`${styles.sidebar} ${isCollapsed ? styles.collapsed : ""}`}
-      >
-        <div className={styles.sidebarHeader}>
-          <div className={styles.logoWrapper}>
-            <img src={logo} alt="روان کوک" className={styles.logoImage} />
-          </div>
-          <button
-            className={styles.collapseBtn}
-            onClick={() => setIsCollapsed(!isCollapsed)}
-          >
-            {isCollapsed ? <FaChevronRight /> : <FaChevronLeft />}
-          </button>
-        </div>
-
-        <nav className={styles.sidebarNav}>
-          <ul className={styles.navList}>
-            {menuItems.map((item) => (
-              <li key={item.id}>
-                <button
-                  className={`${styles.navItem} ${
-                    activeTab === item.id ? styles.active : ""
-                  }`}
-                  onClick={() => setActiveTab(item.id)}
-                >
-                  <span className={styles.navIcon}>{item.icon}</span>
-                  {!isCollapsed && (
-                    <>
-                      <span className={styles.navLabel}>{item.label}</span>
-                      {item.badge && (
-                        <span className={styles.navBadge}>{item.badge}</span>
-                      )}
-                    </>
-                  )}
-                  {isCollapsed && item.badge && (
-                    <span className={styles.navBadgeMini}>{item.badge}</span>
-                  )}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </nav>
-
-        <div className={styles.sidebarFooter}>
-          <ul className={styles.navList}>
-            {bottomMenuItems.map((item) => (
-              <li key={item.id}>
-                <button
-                  className={`${styles.navItem} ${
-                    activeTab === item.id ? styles.active : ""
-                  }`}
-                  onClick={() => setActiveTab(item.id)}
-                >
-                  <span className={styles.navIcon}>{item.icon}</span>
-                  {!isCollapsed && (
-                    <span className={styles.navLabel}>{item.label}</span>
-                  )}
-                </button>
-              </li>
-            ))}
-            <li>
-              <button className={styles.navItem} onClick={handleLogout}>
-                <span className={styles.navIcon}>
-                  <FaSignOutAlt />
-                </span>
-                {!isCollapsed && <span className={styles.navLabel}>خروج</span>}
-              </button>
-            </li>
-          </ul>
-        </div>
-      </aside> */}
-
       {/* ===== SIDEBAR ===== */}
       <Sidebar
         logo={logo}
