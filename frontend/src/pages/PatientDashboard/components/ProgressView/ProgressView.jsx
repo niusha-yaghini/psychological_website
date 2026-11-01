@@ -1,9 +1,10 @@
+import { useState } from "react";
+import styles from "./ProgressView.module.css";
+
 // ============================================
 // COMPONENT: Progress Content
 // ============================================
-function ProgressView() {
-  const progressData = seedData.progress;
-
+function ProgressView({ progressData }) {
   const [activeMilestone, setActiveMilestone] = useState(null);
 
   // ===== محاسبه درصد =====

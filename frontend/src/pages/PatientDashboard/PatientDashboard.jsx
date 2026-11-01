@@ -36,6 +36,7 @@ import AppointmentsManagement from "./components/Appointments/Appointments";
 import SessionsManagement from "./components/Sessions/Sessions";
 import PatientNotifications from "./components/Notifications/Notifications";
 import NotificationDropdown from "./components/NotificationDropdown/NotificationDropdown";
+import ProgressView from "./components/ProgressView/ProgressView";
 
 // ============================================
 // ثابت‌های گلوبال (Global Constants)
@@ -587,10 +588,6 @@ function PatientDashboard() {
   // ===== رندر محتوای هر بخش =====
   const renderContent = () => {
     switch (activeTab) {
-      // case "dashboard":
-      //   return (
-      //     <DashboardContent userData={userData} appointments={appointments} />
-      //   );
       case "dashboard":
         return (
           <DashboardOverview
@@ -598,13 +595,6 @@ function PatientDashboard() {
             getDisplayStatus={getDisplayStatus}
           />
         );
-      // case "appointments":
-      //   return (
-      //     <AppointmentsContent
-      //       appointments={appointments}
-      //       setAppointments={setAppointments}
-      //     />
-      //   );
       case "appointments":
         return (
           <AppointmentsManagement
@@ -634,7 +624,7 @@ function PatientDashboard() {
           />
         );
       case "progress":
-        return <ProgressContent />;
+        return <ProgressView progressData={seedData.progress} />;
       case "exercise":
         return <ExerciseContent />;
       case "profile":
@@ -693,400 +683,286 @@ function PatientDashboard() {
   );
 }
 
-// // ============================================
-// // COMPONENT: Notification Dropdown
-// // ============================================
-// function NotificationDropdown({
-//   notifications,
-//   onMarkAsRead,
-//   onMarkAllAsRead,
-// }) {
-//   const [isOpen, setIsOpen] = useState(false);
-//   const dropdownRef = useRef(null);
-
-//   // ===== بستن دراپ‌داون با کلیک خارج =====
-//   useEffect(() => {
-//     const handleClickOutside = (event) => {
-//       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-//         setIsOpen(false);
-//       }
-//     };
-//     document.addEventListener("mousedown", handleClickOutside);
-//     return () => document.removeEventListener("mousedown", handleClickOutside);
-//   }, []);
-
-//   // ===== گرفتن آخرین ۵ اعلان نخوانده =====
-//   const unreadNotifications = notifications
-//     .filter((n) => !n.isRead)
-//     .slice(0, 5);
-
-//   const unreadCount = notifications.filter((n) => !n.isRead).length;
-
-//   return (
-//     <div className={styles.dropdownWrapper} ref={dropdownRef}>
-//       {/* ===== دکمه زنگوله ===== */}
-//       <button
-//         className={styles.notificationBtn}
-//         onClick={() => setIsOpen(!isOpen)}
-//       >
-//         <FaBell />
-//         {unreadCount > 0 && (
-//           <span className={styles.notificationDot}>{unreadCount}</span>
-//         )}
-//       </button>
-
-//       {/* ===== دراپ‌داون ===== */}
-
-//       {isOpen && (
-//         <div className={styles.dropdownMenu}>
-//           <div className={styles.dropdownHeader}>
-//             <span className={styles.dropdownTitle}>اعلان‌ها</span>
-//             {unreadCount > 0 && (
-//               <button
-//                 className={styles.dropdownMarkAll}
-//                 onClick={() => {
-//                   onMarkAllAsRead();
-//                 }}
-//               >
-//                 همه پیام ها خوانده شدند.
-//               </button>
-//             )}
-//           </div>
-
-//           <div className={styles.dropdownList}>
-//             {unreadNotifications.length > 0 ? (
-//               unreadNotifications.map((notification) => (
-//                 <div
-//                   key={notification.id}
-//                   className={styles.dropdownItem}
-//                   onClick={() => {
-//                     onMarkAsRead(notification.id);
-//                   }}
-//                 >
-//                   <div className={styles.dropdownContent}>
-//                     <div className={styles.dropdownText}>
-//                       <span className={styles.dropdownTitleText}>
-//                         {notification.title}
-//                       </span>
-//                       <span className={styles.dropdownTime}>
-//                         {notification.time}
-//                       </span>
-//                     </div>
-//                     <p className={styles.dropdownMessage}>
-//                       {notification.message}
-//                     </p>
-//                   </div>
-//                 </div>
-//               ))
-//             ) : (
-//               <div className={styles.dropdownEmpty}>
-//                 <p>همه اعلان‌ها را خوانده‌اید!</p>
-//                 <span className={styles.dropdownEmptySub}>
-//                   هیچ اعلان جدیدی وجود ندارد
-//                 </span>
-//               </div>
-//             )}
-//           </div>
-
-//           {unreadCount > 5 && (
-//             <div className={styles.dropdownFooter}>
-//               <button
-//                 className={styles.dropdownViewAll}
-//                 onClick={() => {
-//                   setIsOpen(false);
-//                   // ← setActiveTab حذف شد
-//                 }}
-//               >
-//                 مشاهده همه اعلان‌ها ({unreadCount})
-//               </button>
-//             </div>
-//           )}
-//         </div>
-//       )}
-//     </div>
-//   );
-// }
-
 // ============================================
 // COMPONENT: Progress Content
 // ============================================
-function ProgressContent() {
-  const progressData = seedData.progress;
+// function ProgressContent() {
+//   const progressData = seedData.progress;
 
-  const [activeMilestone, setActiveMilestone] = useState(null);
+//   const [activeMilestone, setActiveMilestone] = useState(null);
 
-  // ===== محاسبه درصد =====
-  const percentage = Math.round(
-    (progressData.completedSessions / progressData.totalSessions) * 100,
-  );
+//   // ===== محاسبه درصد =====
+//   const percentage = Math.round(
+//     (progressData.completedSessions / progressData.totalSessions) * 100,
+//   );
 
-  // ===== محاسبه محیط دایره =====
-  const radius = 54;
-  const circumference = 2 * Math.PI * radius;
-  const offset = circumference - (percentage / 100) * circumference;
+//   // ===== محاسبه محیط دایره =====
+//   const radius = 54;
+//   const circumference = 2 * Math.PI * radius;
+//   const offset = circumference - (percentage / 100) * circumference;
 
-  return (
-    <div className={styles.pageContent}>
-      {/* هدر بخش */}
-      <div className={styles.pageHeader}>
-        <div className={styles.headerInfo}>
-          <h2>پیشرفت من</h2>
-          <p>مسیر درمانی و پیشرفت شما</p>
-        </div>
-        <div className={styles.progressPeriod}>
-          <span>از {progressData.startDate}</span>
-          <span className={styles.periodDivider}>|</span>
-          <span>تا {progressData.estimatedEndDate}</span>
-        </div>
-      </div>
+//   return (
+//     <div className={styles.pageContent}>
+//       {/* هدر بخش */}
+//       <div className={styles.pageHeader}>
+//         <div className={styles.headerInfo}>
+//           <h2>پیشرفت من</h2>
+//           <p>مسیر درمانی و پیشرفت شما</p>
+//         </div>
+//         <div className={styles.progressPeriod}>
+//           <span>از {progressData.startDate}</span>
+//           <span className={styles.periodDivider}>|</span>
+//           <span>تا {progressData.estimatedEndDate}</span>
+//         </div>
+//       </div>
 
-      {/* آمار کلی */}
-      <div className={styles.statsGrid}>
-        <div className={styles.statCard}>
-          <div className={styles.statIcon} style={{ background: "#4CAF84" }}>
-            📅
-          </div>
-          <div className={styles.statInfo}>
-            <span className={styles.statValue}>
-              {progressData.completedSessions}
-            </span>
-            <span className={styles.statLabel}>جلسات انجام شده</span>
-          </div>
-        </div>
-        <div className={styles.statCard}>
-          <div className={styles.statIcon} style={{ background: "#FF9800" }}>
-            ⏳
-          </div>
-          <div className={styles.statInfo}>
-            <span className={styles.statValue}>
-              {progressData.upcomingSessions}
-            </span>
-            <span className={styles.statLabel}>جلسات پیش‌رو</span>
-          </div>
-        </div>
-        <div className={styles.statCard}>
-          <div className={styles.statIcon} style={{ background: "#E91E63" }}>
-            ❌
-          </div>
-          <div className={styles.statInfo}>
-            <span className={styles.statValue}>
-              {progressData.cancelledSessions}
-            </span>
-            <span className={styles.statLabel}>لغو شده</span>
-          </div>
-        </div>
-        <div className={styles.statCard}>
-          <div className={styles.statIcon} style={{ background: "#2196F3" }}>
-            🎯
-          </div>
-          <div className={styles.statInfo}>
-            <span className={styles.statValue}>
-              {progressData.totalSessions}
-            </span>
-            <span className={styles.statLabel}>کل جلسات برنامه</span>
-          </div>
-        </div>
-      </div>
+//       {/* آمار کلی */}
+//       <div className={styles.statsGrid}>
+//         <div className={styles.statCard}>
+//           <div className={styles.statIcon} style={{ background: "#4CAF84" }}>
+//             📅
+//           </div>
+//           <div className={styles.statInfo}>
+//             <span className={styles.statValue}>
+//               {progressData.completedSessions}
+//             </span>
+//             <span className={styles.statLabel}>جلسات انجام شده</span>
+//           </div>
+//         </div>
+//         <div className={styles.statCard}>
+//           <div className={styles.statIcon} style={{ background: "#FF9800" }}>
+//             ⏳
+//           </div>
+//           <div className={styles.statInfo}>
+//             <span className={styles.statValue}>
+//               {progressData.upcomingSessions}
+//             </span>
+//             <span className={styles.statLabel}>جلسات پیش‌رو</span>
+//           </div>
+//         </div>
+//         <div className={styles.statCard}>
+//           <div className={styles.statIcon} style={{ background: "#E91E63" }}>
+//             ❌
+//           </div>
+//           <div className={styles.statInfo}>
+//             <span className={styles.statValue}>
+//               {progressData.cancelledSessions}
+//             </span>
+//             <span className={styles.statLabel}>لغو شده</span>
+//           </div>
+//         </div>
+//         <div className={styles.statCard}>
+//           <div className={styles.statIcon} style={{ background: "#2196F3" }}>
+//             🎯
+//           </div>
+//           <div className={styles.statInfo}>
+//             <span className={styles.statValue}>
+//               {progressData.totalSessions}
+//             </span>
+//             <span className={styles.statLabel}>کل جلسات برنامه</span>
+//           </div>
+//         </div>
+//       </div>
 
-      {/* بخش اصلی: دایره و جزئیات */}
-      <div className={styles.progressMainSection}>
-        {/* دایره پیشرفت */}
-        <div className={styles.progressCircleWrapper}>
-          <div className={styles.progressCircle}>
-            <svg viewBox="0 0 120 120">
-              <circle
-                cx="60"
-                cy="60"
-                r={radius}
-                fill="none"
-                stroke="#e8e0d8"
-                strokeWidth="10"
-              />
-              <circle
-                cx="60"
-                cy="60"
-                r={radius}
-                fill="none"
-                stroke="url(#progressGradient)"
-                strokeWidth="10"
-                strokeDasharray={circumference}
-                strokeDashoffset={offset}
-                strokeLinecap="round"
-                transform="rotate(-90 60 60)"
-              />
-              <defs>
-                <linearGradient
-                  id="progressGradient"
-                  x1="0%"
-                  y1="0%"
-                  x2="100%"
-                  y2="0%"
-                >
-                  <stop offset="0%" stopColor="#2d7d6e" />
-                  <stop offset="100%" stopColor="#4caf84" />
-                </linearGradient>
-              </defs>
-            </svg>
-            <div className={styles.progressCenter}>
-              <span className={styles.progressPercent}>{percentage}%</span>
-              <span className={styles.progressLabel}>پیشرفت کلی</span>
-            </div>
-          </div>
+//       {/* بخش اصلی: دایره و جزئیات */}
+//       <div className={styles.progressMainSection}>
+//         {/* دایره پیشرفت */}
+//         <div className={styles.progressCircleWrapper}>
+//           <div className={styles.progressCircle}>
+//             <svg viewBox="0 0 120 120">
+//               <circle
+//                 cx="60"
+//                 cy="60"
+//                 r={radius}
+//                 fill="none"
+//                 stroke="#e8e0d8"
+//                 strokeWidth="10"
+//               />
+//               <circle
+//                 cx="60"
+//                 cy="60"
+//                 r={radius}
+//                 fill="none"
+//                 stroke="url(#progressGradient)"
+//                 strokeWidth="10"
+//                 strokeDasharray={circumference}
+//                 strokeDashoffset={offset}
+//                 strokeLinecap="round"
+//                 transform="rotate(-90 60 60)"
+//               />
+//               <defs>
+//                 <linearGradient
+//                   id="progressGradient"
+//                   x1="0%"
+//                   y1="0%"
+//                   x2="100%"
+//                   y2="0%"
+//                 >
+//                   <stop offset="0%" stopColor="#2d7d6e" />
+//                   <stop offset="100%" stopColor="#4caf84" />
+//                 </linearGradient>
+//               </defs>
+//             </svg>
+//             <div className={styles.progressCenter}>
+//               <span className={styles.progressPercent}>{percentage}%</span>
+//               <span className={styles.progressLabel}>پیشرفت کلی</span>
+//             </div>
+//           </div>
 
-          <div className={styles.progressStatus}>
-            <div className={styles.statusBadge}>
-              <span className={styles.statusDot}></span>
-              {progressData.status}
-            </div>
-            <p className={styles.statusDescription}>
-              {percentage < 30 &&
-                "شما در ابتدای مسیر درمانی هستید. قدم‌های اولیه را محکم بردارید."}
-              {percentage >= 30 &&
-                percentage < 60 &&
-                "پیشرفت خوبی دارید! نیمه راه را پشت سر گذاشته‌اید."}
-              {percentage >= 60 &&
-                percentage < 85 &&
-                "پیشرفت عالی! به اهداف خود نزدیک می‌شوید."}
-              {percentage >= 85 &&
-                "تقریباً به پایان مسیر رسیده‌اید! تبریک می‌گوییم."}
-            </p>
-          </div>
-        </div>
+//           <div className={styles.progressStatus}>
+//             <div className={styles.statusBadge}>
+//               <span className={styles.statusDot}></span>
+//               {progressData.status}
+//             </div>
+//             <p className={styles.statusDescription}>
+//               {percentage < 30 &&
+//                 "شما در ابتدای مسیر درمانی هستید. قدم‌های اولیه را محکم بردارید."}
+//               {percentage >= 30 &&
+//                 percentage < 60 &&
+//                 "پیشرفت خوبی دارید! نیمه راه را پشت سر گذاشته‌اید."}
+//               {percentage >= 60 &&
+//                 percentage < 85 &&
+//                 "پیشرفت عالی! به اهداف خود نزدیک می‌شوید."}
+//               {percentage >= 85 &&
+//                 "تقریباً به پایان مسیر رسیده‌اید! تبریک می‌گوییم."}
+//             </p>
+//           </div>
+//         </div>
 
-        {/* جزئیات جلسات */}
-        <div className={styles.progressDetails}>
-          <div className={styles.detailItem}>
-            <span className={styles.detailLabel}>جلسات انجام شده</span>
-            <div className={styles.detailBar}>
-              <div
-                className={styles.detailBarFill}
-                style={{
-                  width: `${
-                    (progressData.completedSessions /
-                      progressData.totalSessions) *
-                    100
-                  }%`,
-                  background: "#4CAF84",
-                }}
-              />
-            </div>
-            <span className={styles.detailValue}>
-              {progressData.completedSessions} / {progressData.totalSessions}
-            </span>
-          </div>
-          <div className={styles.detailItem}>
-            <span className={styles.detailLabel}>جلسات باقی‌مانده</span>
-            <div className={styles.detailBar}>
-              <div
-                className={styles.detailBarFill}
-                style={{
-                  width: `${
-                    ((progressData.totalSessions -
-                      progressData.completedSessions) /
-                      progressData.totalSessions) *
-                    100
-                  }%`,
-                  background: "#FF9800",
-                }}
-              />
-            </div>
-            <span className={styles.detailValue}>
-              {progressData.totalSessions - progressData.completedSessions} جلسه
-            </span>
-          </div>
-        </div>
-      </div>
+//         {/* جزئیات جلسات */}
+//         <div className={styles.progressDetails}>
+//           <div className={styles.detailItem}>
+//             <span className={styles.detailLabel}>جلسات انجام شده</span>
+//             <div className={styles.detailBar}>
+//               <div
+//                 className={styles.detailBarFill}
+//                 style={{
+//                   width: `${
+//                     (progressData.completedSessions /
+//                       progressData.totalSessions) *
+//                     100
+//                   }%`,
+//                   background: "#4CAF84",
+//                 }}
+//               />
+//             </div>
+//             <span className={styles.detailValue}>
+//               {progressData.completedSessions} / {progressData.totalSessions}
+//             </span>
+//           </div>
+//           <div className={styles.detailItem}>
+//             <span className={styles.detailLabel}>جلسات باقی‌مانده</span>
+//             <div className={styles.detailBar}>
+//               <div
+//                 className={styles.detailBarFill}
+//                 style={{
+//                   width: `${
+//                     ((progressData.totalSessions -
+//                       progressData.completedSessions) /
+//                       progressData.totalSessions) *
+//                     100
+//                   }%`,
+//                   background: "#FF9800",
+//                 }}
+//               />
+//             </div>
+//             <span className={styles.detailValue}>
+//               {progressData.totalSessions - progressData.completedSessions} جلسه
+//             </span>
+//           </div>
+//         </div>
+//       </div>
 
-      {/* نمودار ماهانه */}
-      <div className={styles.monthlyChart}>
-        <h3>📊 پیشرفت ماهانه</h3>
-        <div className={styles.chartBars}>
-          {progressData.monthlyProgress.map((item, index) => (
-            <div key={index} className={styles.chartBarWrapper}>
-              <div
-                className={styles.chartBar}
-                style={{
-                  height: `${(item.sessions / 4) * 100}%`,
-                }}
-              >
-                <span className={styles.chartBarValue}>{item.sessions}</span>
-              </div>
-              <span className={styles.chartBarLabel}>{item.month}</span>
-            </div>
-          ))}
-        </div>
-      </div>
+//       {/* نمودار ماهانه */}
+//       <div className={styles.monthlyChart}>
+//         <h3>📊 پیشرفت ماهانه</h3>
+//         <div className={styles.chartBars}>
+//           {progressData.monthlyProgress.map((item, index) => (
+//             <div key={index} className={styles.chartBarWrapper}>
+//               <div
+//                 className={styles.chartBar}
+//                 style={{
+//                   height: `${(item.sessions / 4) * 100}%`,
+//                 }}
+//               >
+//                 <span className={styles.chartBarValue}>{item.sessions}</span>
+//               </div>
+//               <span className={styles.chartBarLabel}>{item.month}</span>
+//             </div>
+//           ))}
+//         </div>
+//       </div>
 
-      {/* حوزه‌های بهبود */}
-      <div className={styles.improvementSection}>
-        <h3>🎯 حوزه‌های بهبود</h3>
-        <div className={styles.improvementGrid}>
-          {progressData.improvementAreas.map((area, index) => (
-            <div key={index} className={styles.improvementCard}>
-              <div className={styles.improvementHeader}>
-                <span className={styles.improvementLabel}>{area.label}</span>
-                <span className={styles.improvementScore}>{area.score}%</span>
-              </div>
-              <div className={styles.improvementBar}>
-                <div
-                  className={styles.improvementBarFill}
-                  style={{
-                    width: `${area.score}%`,
-                    background: area.color,
-                  }}
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+//       {/* حوزه‌های بهبود */}
+//       <div className={styles.improvementSection}>
+//         <h3>🎯 حوزه‌های بهبود</h3>
+//         <div className={styles.improvementGrid}>
+//           {progressData.improvementAreas.map((area, index) => (
+//             <div key={index} className={styles.improvementCard}>
+//               <div className={styles.improvementHeader}>
+//                 <span className={styles.improvementLabel}>{area.label}</span>
+//                 <span className={styles.improvementScore}>{area.score}%</span>
+//               </div>
+//               <div className={styles.improvementBar}>
+//                 <div
+//                   className={styles.improvementBarFill}
+//                   style={{
+//                     width: `${area.score}%`,
+//                     background: area.color,
+//                   }}
+//                 />
+//               </div>
+//             </div>
+//           ))}
+//         </div>
+//       </div>
 
-      {/* نقاط عطف */}
-      <div className={styles.milestoneSection}>
-        <h3>🏆 نقاط عطف درمانی</h3>
-        <div className={styles.milestoneList}>
-          {progressData.milestones.map((milestone) => (
-            <div
-              key={milestone.id}
-              className={`${styles.milestoneItem} ${
-                milestone.completed ? styles.completed : ""
-              }`}
-              onMouseEnter={() => setActiveMilestone(milestone.id)}
-              onMouseLeave={() => setActiveMilestone(null)}
-            >
-              <div className={styles.milestoneIcon}>
-                {milestone.completed ? "✅" : "⏳"}
-              </div>
-              <div className={styles.milestoneContent}>
-                <div className={styles.milestoneHeader}>
-                  <span className={styles.milestoneTitle}>
-                    {milestone.title}
-                  </span>
-                  <span className={styles.milestoneDate}>{milestone.date}</span>
-                </div>
-                <p className={styles.milestoneDescription}>
-                  {milestone.description}
-                </p>
-                {activeMilestone === milestone.id && !milestone.completed && (
-                  <button className={styles.milestoneAction}>
-                    مشاهده جزئیات
-                  </button>
-                )}
-              </div>
-              <div className={styles.milestoneLine} />
-            </div>
-          ))}
-        </div>
-      </div>
+//       {/* نقاط عطف */}
+//       <div className={styles.milestoneSection}>
+//         <h3>🏆 نقاط عطف درمانی</h3>
+//         <div className={styles.milestoneList}>
+//           {progressData.milestones.map((milestone) => (
+//             <div
+//               key={milestone.id}
+//               className={`${styles.milestoneItem} ${
+//                 milestone.completed ? styles.completed : ""
+//               }`}
+//               onMouseEnter={() => setActiveMilestone(milestone.id)}
+//               onMouseLeave={() => setActiveMilestone(null)}
+//             >
+//               <div className={styles.milestoneIcon}>
+//                 {milestone.completed ? "✅" : "⏳"}
+//               </div>
+//               <div className={styles.milestoneContent}>
+//                 <div className={styles.milestoneHeader}>
+//                   <span className={styles.milestoneTitle}>
+//                     {milestone.title}
+//                   </span>
+//                   <span className={styles.milestoneDate}>{milestone.date}</span>
+//                 </div>
+//                 <p className={styles.milestoneDescription}>
+//                   {milestone.description}
+//                 </p>
+//                 {activeMilestone === milestone.id && !milestone.completed && (
+//                   <button className={styles.milestoneAction}>
+//                     مشاهده جزئیات
+//                   </button>
+//                 )}
+//               </div>
+//               <div className={styles.milestoneLine} />
+//             </div>
+//           ))}
+//         </div>
+//       </div>
 
-      {/* دکمه‌های اقدام */}
-      <div className={styles.progressActions}>
-        <button className={styles.btnReport}>دریافت گزارش کامل</button>
-        <button className={styles.btnShare}>اشتراک‌گذاری پیشرفت</button>
-      </div>
-    </div>
-  );
-}
+//       {/* دکمه‌های اقدام */}
+//       <div className={styles.progressActions}>
+//         <button className={styles.btnReport}>دریافت گزارش کامل</button>
+//         <button className={styles.btnShare}>اشتراک‌گذاری پیشرفت</button>
+//       </div>
+//     </div>
+//   );
+// }
 
 // ============================================
 // COMPONENT: Exercise Content
