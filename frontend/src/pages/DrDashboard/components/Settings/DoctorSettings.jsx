@@ -1,3 +1,6 @@
+import React from "react";
+import styles from "./DoctorSettings.module.css";
+
 // ============================================
 // COMPONENT: Doctor Settings
 // ============================================

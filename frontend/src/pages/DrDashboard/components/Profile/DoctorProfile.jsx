@@ -5,26 +5,7 @@ import doctorAvatar from "../../../../../public/images/Patient_Panel/usericon.pn
 // ============================================
 // COMPONENT: Doctor Profile
 // ============================================
-// function DoctorProfile({ userData }) {
-// function DoctorProfile({ userData, toPersianDigits }) {
 function DoctorProfile({ profile, patients, appointments, toPersianDigits }) {
-  // const profile = seedData.doctorProfile;
-
-  // ===== محاسبه‌ی آمار =====
-  // const stats = useMemo(() => {
-  //   const activePatients = seedData.doctorPatients.filter(
-  //     (p) => p.status === "active",
-  //   ).length;
-
-  //   const completedSessions = seedData.doctorAppointments.filter(
-  //     (a) => a.status === "completed",
-  //   ).length;
-
-  //   return {
-  //     activePatients,
-  //     completedSessions,
-  //   };
-  // }, []);
 
   const stats = useMemo(() => {
     const activePatients = patients.filter((p) => p.status === "active").length;
