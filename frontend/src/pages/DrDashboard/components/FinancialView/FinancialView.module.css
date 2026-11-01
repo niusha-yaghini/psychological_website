@@ -1,0 +1,535 @@
+/* ============================================
+   FINANCIAL VIEW
+============================================ */
+
+/* ===== Animation ===== */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== Common Styles ===== */
+
+.pageContent {
+  animation: fadeIn 0.4s ease;
+}
+
+.pageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.headerInfo h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0;
+}
+
+.headerInfo p {
+  font-size: 15px;
+  color: var(--text-muted);
+  margin: 4px 0 0;
+}
+
+/* ===== Form Select ===== */
+
+.formSelect {
+  width: 100%;
+  padding: 10px 14px;
+  border: 2px solid var(--gray-light);
+  border-radius: var(--radius);
+  font-size: 15px;
+  font-family: inherit;
+  color: var(--text-dark);
+  transition: var(--transition);
+  background: var(--white);
+}
+
+.formSelect:focus {
+  border-color: #2d7d6e;
+  box-shadow: 0 0 0 4px rgba(45, 125, 110, 0.08);
+  outline: none;
+}
+
+/* ===== Range Filter ===== */
+
+.financialRangeFilter {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.financialRangeFilter .formSelect {
+  min-width: 160px;
+  padding: 10px 16px;
+  font-size: 14px;
+  background: var(--white);
+  border: 2px solid var(--gray-light);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+/* ===== Financial Hint ===== */
+
+.financialHint {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  background: linear-gradient(135deg, #e8f4f8 0%, #e3f2fd 100%);
+  border-right: 3px solid #2196f3;
+  border-radius: var(--radius);
+  margin-bottom: 24px;
+}
+
+.financialHint p {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.6;
+}
+
+.financialHint strong {
+  color: #0d47a1;
+}
+
+/* ===== Stats Grid ===== */
+
+.financialStatsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.financialStatCard {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  border: 1.5px solid transparent;
+}
+
+.financialStatCard:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.finStatContent {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.finStatNumber {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text-dark);
+  line-height: 1.2;
+}
+
+.finStatLabel {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* ===== Stat Variants ===== */
+
+.finStatCompleted {
+  background: linear-gradient(135deg, #ffffff 0%, #f1f8f4 100%);
+  border-color: #a5d6a7;
+}
+
+.finStatCompleted .finStatNumber {
+  color: #2e7d32;
+}
+
+.finStatNoShow {
+  background: linear-gradient(135deg, #ffffff 0%, #fbe9e7 100%);
+  border-color: #ef9a9a;
+}
+
+.finStatNoShow .finStatNumber {
+  color: #c62828;
+}
+
+.finStatPending {
+  background: linear-gradient(135deg, #ffffff 0%, #fff8e1 100%);
+  border-color: #ffb74d;
+}
+
+.finStatPending .finStatNumber {
+  color: #e65100;
+}
+
+.finStatRevenue {
+  background: linear-gradient(135deg, #ffffff 0%, #e8f5e9 100%);
+  border-color: #66bb6a;
+}
+
+.finStatRevenue .finStatNumber {
+  color: #2d7d6e;
+  font-size: 20px;
+}
+
+/* ===== Transactions Section ===== */
+
+.financialTransactionsSection {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.financialTransHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--gray-light);
+  background: linear-gradient(135deg, #f8f9fa 0%, #f0f4f7 100%);
+  flex-wrap: wrap;
+}
+
+.financialTransHeader h3 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0 0 4px;
+}
+
+.financialTransSubtitle {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* ===== Payment Filter Tabs ===== */
+
+.financialFilterTabs {
+  display: flex;
+  gap: 6px;
+  padding: 4px;
+  background: var(--white);
+  border-radius: 30px;
+  box-shadow: var(--shadow-sm);
+}
+
+.financialFilterTab {
+  padding: 6px 16px;
+  border: none;
+  border-radius: 30px;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+.financialFilterTab:hover {
+  color: var(--text-dark);
+}
+
+.financialFilterTabActive {
+  background: #2d7d6e;
+  color: white;
+}
+
+/* ===== Transactions List ===== */
+
+.financialTransList {
+  display: flex;
+  flex-direction: column;
+}
+
+.financialTransItem {
+  display: grid;
+  grid-template-columns: 130px 1fr 150px 140px 160px;
+  gap: 12px;
+  align-items: center;
+  padding: 14px 24px;
+  border-bottom: 1px solid var(--gray-light);
+  transition: var(--transition);
+}
+
+.financialTransItem:last-child {
+  border-bottom: none;
+}
+
+.financialTransItem:hover {
+  background: #fafbfc;
+}
+
+.finTransItemPaid {
+  background: #f9fdfa;
+}
+
+/* ===== Date ===== */
+
+.finTransDate {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-dark);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.finTransTime {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+/* ===== Patient ===== */
+
+.finTransPatient {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.finTransAvatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--gray-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.finTransPatient > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.finTransName {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.finTransType {
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ===== Status ===== */
+
+.finTransStatus {
+  display: flex;
+  align-items: center;
+}
+
+.statusCompletedBadge {
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 30px;
+  background: #e8f5e9;
+  color: #2e7d32;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.statusNoShowBadge {
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 30px;
+  background: #fbe9e7;
+  color: #c62828;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ===== Amount ===== */
+
+.finTransAmount {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-dark);
+  white-space: nowrap;
+}
+
+.finTransAmountUnit {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+/* ===== Payment Button ===== */
+
+.finTransPayment {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.finTransPayBtn {
+  padding: 6px 14px;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+  border: 1.5px solid;
+  white-space: nowrap;
+}
+
+.finTransPayBtnPaid {
+  background: #e8f5e9;
+  border-color: #2e7d32;
+  color: #2e7d32;
+}
+
+.finTransPayBtnPaid:hover {
+  background: #2e7d32;
+  color: white;
+}
+
+.finTransPayBtnUnpaid {
+  background: #fff3e0;
+  border-color: #e65100;
+  color: #e65100;
+}
+
+.finTransPayBtnUnpaid:hover {
+  background: #e65100;
+  color: white;
+}
+
+.finTransNoPayment {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+/* ===== Empty State ===== */
+
+.emptyState {
+  text-align: center;
+  padding: 60px 24px;
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.emptyState h3 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0;
+}
+
+.emptyState p {
+  font-size: 15px;
+  color: var(--text-muted);
+  margin: 8px 0 0;
+}
+
+/* ===== Responsive ===== */
+
+@media (max-width: 1200px) {
+  .financialStatsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .financialTransItem {
+    grid-template-columns: 110px 1fr 130px 120px 140px;
+    gap: 10px;
+    padding: 14px 18px;
+  }
+}
+
+@media (max-width: 992px) {
+  .financialTransItem {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 14px;
+    border-bottom: 1px solid var(--gray-light);
+  }
+
+  .finTransDate {
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .finTransStatus {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 768px) {
+  .financialStatsGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .financialStatCard {
+    padding: 14px;
+    gap: 10px;
+  }
+
+  .finStatNumber {
+    font-size: 18px;
+  }
+
+  .finStatLabel {
+    font-size: 11px;
+  }
+
+  .financialTransHeader {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .financialFilterTabs {
+    overflow-x: auto;
+    justify-content: flex-start;
+  }
+
+  .financialFilterTab {
+    flex-shrink: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .financialStatsGrid {
+    grid-template-columns: 1fr;
+  }
+}
