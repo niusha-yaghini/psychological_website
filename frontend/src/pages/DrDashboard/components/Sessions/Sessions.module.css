@@ -1,0 +1,1057 @@
+/* ============================================
+   SESSIONS MANAGEMENT
+============================================ */
+
+/* ===== Animations ===== */
+
+@keyframes sessionsFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes sessionsModalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* ===== Common Page Styles ===== */
+
+.pageContent {
+  animation: sessionsFadeIn 0.4s ease;
+}
+
+.pageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.headerInfo h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0;
+}
+
+.headerInfo p {
+  font-size: 15px;
+  color: var(--text-muted);
+  margin: 4px 0 0;
+}
+
+/* ===== Session Stats ===== */
+
+.sessionStats {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--gray-light);
+  padding: 8px 20px;
+  border-radius: 30px;
+}
+
+.statItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.statNumber {
+  font-size: 18px;
+  font-weight: 700;
+  color: #2d7d6e;
+}
+
+.statLabel {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.statDivider {
+  color: #d5d0ca;
+}
+
+/* ===== Filter Tabs ===== */
+
+.filterTabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  padding: 4px;
+  background: var(--gray-light);
+  border-radius: 30px;
+  width: fit-content;
+}
+
+.filterTab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: transparent;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.filterTab:hover {
+  color: var(--text-dark);
+}
+
+.filterTab.active {
+  background: var(--white);
+  color: #2d7d6e;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.filterCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  background: rgba(45, 125, 110, 0.1);
+  color: #2d7d6e;
+  border-radius: 30px;
+  font-size: 11px;
+  font-weight: 700;
+  margin-right: 4px;
+}
+
+.filterTab.active .filterCount {
+  background: rgba(45, 125, 110, 0.15);
+}
+
+/* ===== Sessions List ===== */
+
+.sessionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+/* ===== Next Session Banner ===== */
+
+.nextSessionBanner {
+  background: linear-gradient(135deg, #1b3a5ccf, #2d7d6ed4);
+  border-radius: var(--radius-lg);
+  padding: 28px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  box-shadow: var(--shadow-md);
+}
+
+.nextSessionOngoing {
+  background: linear-gradient(135deg, #8e2424, #c62828);
+}
+
+.nextSessionContent {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nextSessionLabel {
+  font-size: 13px;
+  opacity: 0.7;
+}
+
+.nextSessionContent h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.nextSessionContent p {
+  font-size: 15px;
+  opacity: 0.8;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.887);
+}
+
+.nextSessionTime {
+  display: flex;
+  gap: 16px;
+  font-size: 14px;
+  opacity: 0.7;
+  margin-top: 4px;
+}
+
+/* ===== Next Session Actions ===== */
+
+.nextSessionActions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+/* ===== Meeting Link Display ===== */
+
+.meetingLinkDisplay {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 30px;
+  width: 350px;
+}
+
+.meetingLinkIcon {
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.meetingLinkText {
+  color: rgba(255, 255, 255, 0.95);
+  direction: ltr;
+  font-family: monospace;
+  font-size: 12px;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.btnEditLink {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.btnEditLink:hover {
+  background: rgba(255, 255, 255, 0.35);
+  transform: scale(1.1);
+}
+
+/* ===== No Link Warning ===== */
+
+.noLinkWarning {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: rgba(255, 193, 7, 0.15);
+  border: 1px dashed rgba(255, 193, 7, 0.5);
+  border-radius: 30px;
+  font-size: 13px;
+  color: #ffecb3;
+  font-weight: 500;
+}
+
+/* ===== Add Link Button ===== */
+
+.btnAddLink {
+  padding: 10px 24px;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  border: 1.5px dashed rgba(255, 255, 255, 0.5);
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btnAddLink:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.8);
+  transform: translateY(-2px);
+}
+
+/* ===== Inline Link Form ===== */
+
+.inlineLinkForm {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 30px;
+  border: 1.5px dashed rgba(255, 255, 255, 0.4);
+  width: 350px;
+}
+
+.inlineLinkInput {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: white;
+  font-family: monospace;
+  font-size: 12px;
+  direction: ltr;
+  padding: 4px 8px;
+  min-width: 0;
+}
+
+.inlineLinkInput::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+  font-family: inherit;
+}
+
+.btnSaveLink {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  background: #4caf84;
+  color: white;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.btnSaveLink:hover {
+  background: #2d7d6e;
+  transform: scale(1.1);
+}
+
+.btnCancelLink {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.btnCancelLink:hover {
+  background: rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+/* ===== Next Session Timer ===== */
+
+.nextSessionTimer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius);
+  backdrop-filter: blur(10px);
+}
+
+.nextSessionTimer .timerLabel {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.timerLabel {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.timerDigits {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.nextSessionTimer .timerDigit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4px 10px;
+  background: rgba(0, 0, 0, 0.3);
+  color: white;
+  border-radius: 8px;
+  font-size: 20px;
+  font-weight: 700;
+  min-width: 40px;
+}
+
+.timerDigit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4px 8px;
+  background: #1b3a5c;
+  color: white;
+  border-radius: 8px;
+  font-size: 20px;
+  font-weight: 700;
+  min-width: 36px;
+}
+
+.timerUnit {
+  font-size: 9px;
+  font-weight: 400;
+  opacity: 0.7;
+}
+
+.timerSeparator {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.nextSessionTimer .timerSeparator {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ===== Session Card ===== */
+
+.sessionCard {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.sessionCard:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(45, 125, 110, 0.08);
+}
+
+/* ===== Card Header ===== */
+
+.sessionCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sessionDoctor {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sessionDoctor h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0;
+}
+
+.sessionType {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* ===== Session Status ===== */
+
+.sessionStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 14px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.statusDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.sessionUpcoming {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.sessionUpcoming .statusDot {
+  background: #2e7d32;
+}
+
+.sessionOngoing {
+  background: #fce4ec;
+  color: #c62828;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.sessionOngoing .statusDot {
+  background: #c62828;
+}
+
+.sessionCompleted {
+  background: #e3f2fd;
+  color: #0d47a1;
+}
+
+.sessionCompleted .statusDot {
+  background: #0d47a1;
+}
+
+.sessionCancelled {
+  background: #fbe9e7;
+  color: #c62828;
+}
+
+.sessionCancelled .statusDot {
+  background: #c62828;
+}
+
+/* ===== Session Details ===== */
+
+.sessionFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-top: 12px;
+  border-top: 1px solid var(--gray-light);
+  margin-top: 4px;
+}
+
+.sessionDetails {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.sessionMeta {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.metaGroup {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+/* ===== Session Actions ===== */
+
+.sessionActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* ===== Join Session Button ===== */
+
+.btnJoinSession {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 24px;
+  background: linear-gradient(135deg, #2d7d6ee7, #4caf84df);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btnJoinSession:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 16px rgba(45, 125, 110, 0.3);
+}
+
+/* ===== Cancel Session Button ===== */
+
+.btnCancelSession {
+  padding: 8px 20px;
+  background: #fdfcfc;
+  color: #c62828;
+  border: 1.5px solid #c62828;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btnCancelSession:hover {
+  background: #c62828;
+  color: white;
+  transform: scale(1.03);
+  box-shadow: 0 4px 16px rgba(198, 40, 40, 0.2);
+}
+
+/* ===== Session Notes ===== */
+
+.sessionNoteDisplay {
+  background: linear-gradient(135deg, #f8f9fa 0%, #f0f4f7 100%);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  border-right: 3px solid #2d7d6e;
+}
+
+.sessionNoteHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.sessionNoteLabel {
+  font-size: 13px;
+  font-weight: 700;
+  color: #2d7d6e;
+}
+
+.sessionNoteDate {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-right: auto;
+}
+
+.sessionNoteText {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.btnNote {
+  padding: 8px 20px;
+  background: transparent;
+  color: #2d7d6e;
+  border: 1.5px solid #2d7d6e;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btnNote:hover {
+  background: #2d7d6e;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(45, 125, 110, 0.25);
+}
+
+.btnViewRecord {
+  padding: 8px 20px;
+  background: transparent;
+  color: #0d47a1;
+  border: 1.5px solid #0d47a1;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btnViewRecord:hover {
+  background: #0d47a1;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px #0d48a14d;
+}
+
+/* ===== Empty State ===== */
+
+.emptyState {
+  text-align: center;
+  padding: 60px 24px;
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.emptyIcon {
+  font-size: 64px;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.emptyState h3 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0;
+}
+
+.emptyState p {
+  font-size: 15px;
+  color: var(--text-muted);
+  margin: 8px 0 0;
+}
+
+/* ===== Modal ===== */
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.noteModal {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  max-width: 600px;
+  width: 100%;
+  padding: 32px;
+  animation: sessionsModalSlideUp 0.3s ease;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.modalHeader h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0;
+}
+
+.modalClose {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background: var(--gray-light);
+  color: var(--text-muted);
+  font-size: 16px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modalClose:hover {
+  background: #e74c3c;
+  color: white;
+  transform: rotate(90deg);
+}
+
+.modalBody {
+  margin-bottom: 24px;
+}
+
+.modalFooter {
+  display: flex;
+  gap: 12px;
+}
+
+.btnCancelModal {
+  flex: 1;
+  padding: 12px;
+  background: transparent;
+  color: var(--text-muted);
+  border: 1.5px solid var(--gray-light);
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btnCancelModal:hover {
+  border-color: #e74c3c;
+  color: #e74c3c;
+}
+
+.btnConfirmModal {
+  flex: 1;
+  padding: 12px;
+  background: linear-gradient(135deg, #2d7d6e, #4caf84);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btnConfirmModal:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(45, 125, 110, 0.3);
+}
+
+/* ===== Note Modal Content ===== */
+
+.noteSessionInfo {
+  background: var(--gray-light);
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  margin-bottom: 20px;
+}
+
+.noteSessionInfo p {
+  margin: 0 0 4px;
+  font-size: 15px;
+  color: var(--text-dark);
+}
+
+.noteSessionInfo strong {
+  color: #2d7d6e;
+  font-weight: 700;
+}
+
+.noteSessionInfo .noteSessionDate {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.formGroup {
+  margin-bottom: 16px;
+}
+
+.formGroup label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.noteTextarea {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid var(--gray-light);
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--text-dark);
+  line-height: 1.8;
+  resize: vertical;
+  min-height: 180px;
+  transition: var(--transition);
+  background: var(--white);
+  box-sizing: border-box;
+}
+
+.noteTextarea:focus {
+  border-color: #2d7d6e;
+  box-shadow: 0 0 0 4px rgba(45, 125, 110, 0.08);
+  outline: none;
+}
+
+.noteTextarea::placeholder {
+  color: #b5b0aa;
+  line-height: 1.8;
+}
+
+.noteCharCount {
+  display: block;
+  text-align: left;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
+.noteHint {
+  font-size: 13px;
+  color: var(--text-muted);
+  background: rgba(45, 125, 110, 0.06);
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  margin: 16px 0 0;
+  border-right: 3px solid #2d7d6e;
+  line-height: 1.6;
+}
+
+/* ============================================
+   RESPONSIVE
+============================================ */
+
+@media (max-width: 768px) {
+  .pageHeader {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .nextSessionBanner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 24px;
+    padding: 24px;
+  }
+
+  .nextSessionActions {
+    align-items: center;
+    width: 100%;
+  }
+
+  .meetingLinkDisplay,
+  .inlineLinkForm {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .btnAddLink {
+    width: 100%;
+  }
+
+  .sessionCard {
+    padding: 16px;
+  }
+
+  .sessionCardHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .sessionDoctor {
+    width: 100%;
+  }
+
+  .sessionActions {
+    width: 100%;
+  }
+
+  .sessionActions button {
+    flex: 1;
+    justify-content: center;
+    min-width: 120px;
+  }
+
+  .sessionStats {
+    padding: 6px 16px;
+    gap: 12px;
+  }
+
+  .statNumber {
+    font-size: 16px;
+  }
+
+  .statLabel {
+    font-size: 12px;
+  }
+
+  .noteModal {
+    padding: 24px;
+    margin: 0 16px;
+  }
+
+  .filterTabs {
+    width: 100%;
+    overflow-x: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .sessionMeta {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .nextSessionTime {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .timerDigits {
+    gap: 2px;
+  }
+
+  .timerDigit,
+  .nextSessionTimer .timerDigit {
+    min-width: 30px;
+    padding: 4px 6px;
+    font-size: 16px;
+  }
+
+  .nextSessionTimer {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .sessionStats {
+    width: fit-content;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .noteModal {
+    padding: 20px;
+  }
+
+  .modalFooter {
+    flex-direction: column;
+  }
+}
