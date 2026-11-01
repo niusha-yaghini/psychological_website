@@ -8,13 +8,13 @@ import {
   FaVideo,
   FaCommentDots,
   FaChartLine,
-  FaBookOpen,
+  // FaBookOpen,
   FaFileAlt,
   FaUserCircle,
   FaCog,
-  FaSignOutAlt,
-  FaChevronLeft,
-  FaChevronRight,
+  // FaSignOutAlt,
+  // FaChevronLeft,
+  // FaChevronRight,
   FaBell,
 } from "react-icons/fa";
 
@@ -26,6 +26,8 @@ moment.loadPersian({ usePersianDigits: false, dialect: "persian" });
 import logo from "../../../public/images/logo/logo2.png";
 import userAvatar from "../../../public/images/Patient_Panel/usericon.png";
 import confirmIcon from "../../../public/images/Patient_Panel/confirm_icon.png";
+
+import Sidebar from "./components/Sidebar/Sidebar";
 
 // ============================================
 // ثابت‌های گلوبال (Global Constants)
@@ -543,7 +545,7 @@ function PatientDashboard() {
   return (
     <div className={styles.dashboardContainer}>
       {/* ===== SIDEBAR ===== */}
-      <aside
+      {/* <aside
         className={`${styles.sidebar} ${isCollapsed ? styles.collapsed : ""}`}
       >
         <div className={styles.sidebarHeader}>
@@ -558,7 +560,6 @@ function PatientDashboard() {
           </button>
         </div>
 
-        {/* منوهای اصلی */}
         <nav className={styles.sidebarNav}>
           <ul className={styles.navList}>
             {menuItems.map((item) => (
@@ -587,7 +588,6 @@ function PatientDashboard() {
           </ul>
         </nav>
 
-        {/* منوهای پایینی */}
         <div className={styles.sidebarFooter}>
           <ul className={styles.navList}>
             {bottomMenuItems.map((item) => (
@@ -615,7 +615,19 @@ function PatientDashboard() {
             </li>
           </ul>
         </div>
-      </aside>
+      </aside> */}
+
+      {/* ===== SIDEBAR ===== */}
+      <Sidebar
+        logo={logo}
+        isCollapsed={isCollapsed}
+        onToggle={() => setIsCollapsed((prev) => !prev)}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        menuItems={menuItems}
+        bottomMenuItems={bottomMenuItems}
+        onLogout={handleLogout}
+      />
 
       {/* ===== MAIN CONTENT ===== */}
       <main className={styles.mainContent}>
