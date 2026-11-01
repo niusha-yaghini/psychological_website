@@ -10,6 +10,7 @@ import CalendarView from "./components/CalendarView/CalendarView";
 import PatientsList from "./components/Patients/PatientsList";
 import ExercisesManagement from "./components/Exercises/Exercises";
 import NotificationDropdown from "./components/NotificationDropdown/NotificationDropdown";
+import Notifications from "./components/Notifications/Notifications";
 
 import {
   FaHome,
@@ -287,14 +288,18 @@ function DoctorDashboard() {
     seedData.doctorNotifications || [],
   );
 
+  const [notificationCreatedAt, setNotificationCreatedAt] = useState(() => {
+    try {
+      return JSON.parse(
+        localStorage.getItem("doctorNotificationCreatedAt") || "{}",
+      );
+    } catch {
+      return {};
+    }
+  });
+
   // ===== وضعیت موقت خوانده شدن اعلان‌ها =====
   const [readNotificationIds, setReadNotificationIds] = useState([]);
-
-  // // ===== وضعیت Dropdown اعلان‌ها =====
-  // const [isNotificationDropdownOpen, setIsNotificationDropdownOpen] =
-  //   useState(false);
-
-  // const notificationDropdownRef = useRef(null);
 
   // ===== زمان فعلی (برای محاسبه‌ی نوتیفیکیشن‌های dynamic) =====
   const [currentTime, setCurrentTime] = useState(moment());
@@ -325,13 +330,6 @@ function DoctorDashboard() {
     navigate("/");
   };
 
-  // ===== علامت‌گذاری به عنوان خوانده شده =====
-  // const markNotificationAsRead = (id) => {
-  //   setNotifications((prev) =>
-  //     prev.map((n) => (n.id === id ? { ...n, isRead: true } : n)),
-  //   );
-  // };
-
   // ===== علامت‌گذاری اعلان به عنوان خوانده شده =====
   const markNotificationAsRead = (id) => {
     // اعلان‌های ذخیره‌شده
@@ -348,11 +346,6 @@ function DoctorDashboard() {
       prev.includes(id) ? prev : [...prev, id],
     );
   };
-
-  // ===== علامت‌گذاری همه =====
-  // const markAllNotificationsAsRead = () => {
-  //   setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
-  // };
 
   // ===== علامت‌گذاری همه اعلان‌ها به عنوان خوانده شده =====
   const markAllNotificationsAsRead = () => {
@@ -406,7 +399,8 @@ function DoctorDashboard() {
           type: "reminder",
           title: "لینک جلسه تنظیم نشده",
           message: `جلسه با ${nextSession.patient} کمتر از ${toPersianDigits(Math.ceil(diffMinutes))} دقیقه دیگر شروع می‌شود. لطفاً لینک را وارد کنید.`,
-          time: "الان",
+          // time: "الان",
+          time: currentTime.format("jYYYY/jMM/jDD - HH:mm"),
           isRead: false,
         });
       }
@@ -428,7 +422,8 @@ function DoctorDashboard() {
         type: "warning",
         title: `${toPersianDigits(stalePending.length)} نوبت در انتظار تأیید`,
         message: `${toPersianDigits(stalePending.length)} نوبت بیش از ۲۴ ساعت است که در انتظار تأیید شما هستند.`,
-        time: "الان",
+        // time: "الان",
+        time: currentTime.format("jYYYY/jMM/jDD - HH:mm"),
         isRead: false,
       });
     }
@@ -446,56 +441,66 @@ function DoctorDashboard() {
         type: "reminder",
         title: `${toPersianDigits(awaitingConfirm.length)} جلسه در انتظار ثبت وضعیت`,
         message: `لطفاً وضعیت ${toPersianDigits(awaitingConfirm.length)} جلسه‌ی گذشته را مشخص کنید (برگزار شد / برگزار نشد).`,
-        time: "الان",
+        // time: "الان",
+        time: currentTime.format("jYYYY/jMM/jDD - HH:mm"),
         isRead: false,
       });
     }
 
-    //   return result;
-    // }, [appointments, notifications, currentTime]);
-    return result.map((notification) =>
-      readNotificationIds.includes(notification.id)
-        ? { ...notification, isRead: true }
-        : notification,
+    // return result.map((notification) =>
+    //   readNotificationIds.includes(notification.id)
+    //     ? { ...notification, isRead: true }
+    //     : notification,
+    // );
+    return result.map((notification) => {
+      const createdAt = notificationCreatedAt[notification.id];
+
+      return {
+        ...notification,
+        time: createdAt
+          ? toPersianDigits(moment(createdAt).format("jYYYY/jMM/jDD - HH:mm"))
+          : toPersianDigits(currentTime.format("jYYYY/jMM/jDD - HH:mm")),
+
+        isRead:
+          notification.isRead || readNotificationIds.includes(notification.id),
+      };
+    });
+  }, [
+    appointments,
+    notifications,
+    currentTime,
+    readNotificationIds,
+    notificationCreatedAt,
+  ]);
+  // }, [appointments, notifications, currentTime, readNotificationIds]);
+
+  // ===== ثبت زمان ایجاد اعلان‌های جدید =====
+  useEffect(() => {
+    const missingNotifications = derivedNotifications.filter(
+      (notification) => !notificationCreatedAt[notification.id],
     );
-  }, [appointments, notifications, currentTime, readNotificationIds]);
 
-  // ===== ریست وضعیت موقت اعلان‌های Dynamic با تغییر داده‌های مبنا =====
-  // useEffect(() => {
-  //   setReadNotificationIds([]);
-  // }, [appointments, currentTime]);
+    if (missingNotifications.length === 0) return;
 
-  // ===== بستن Dropdown با کلیک خارج از آن =====
-  // useEffect(() => {
-  //   if (!isNotificationDropdownOpen) return;
+    const now = Date.now();
+    const updatedTimestamps = { ...notificationCreatedAt };
 
-  //   const handleClickOutside = (event) => {
-  //     if (
-  //       notificationDropdownRef.current &&
-  //       !notificationDropdownRef.current.contains(event.target)
-  //     ) {
-  //       setIsNotificationDropdownOpen(false);
-  //     }
-  //   };
+    missingNotifications.forEach((notification) => {
+      updatedTimestamps[notification.id] = now;
+    });
 
-  //   document.addEventListener("mousedown", handleClickOutside);
+    localStorage.setItem(
+      "doctorNotificationCreatedAt",
+      JSON.stringify(updatedTimestamps),
+    );
 
-  //   return () => {
-  //     document.removeEventListener("mousedown", handleClickOutside);
-  //   };
-  // }, [isNotificationDropdownOpen]);
+    setNotificationCreatedAt(updatedTimestamps);
+  }, [derivedNotifications, notificationCreatedAt]);
 
   // ===== تعداد اعلان‌های خوانده نشده =====
   const unreadNotificationsCount = useMemo(() => {
     return derivedNotifications.filter((n) => !n.isRead).length;
   }, [derivedNotifications]);
-
-  // ===== آخرین ۵ اعلان خوانده‌نشده =====
-  // const unreadNotifications = useMemo(() => {
-  //   return derivedNotifications
-  //     .filter((notification) => !notification.isRead)
-  //     .slice(0, 5);
-  // }, [derivedNotifications]);
 
   const menuItems = [
     {
@@ -677,15 +682,24 @@ function DoctorDashboard() {
       //       toPersianDigits2={toPersianDigits2}
       //     />
       //   );
+      // case "messages":
+      //   return (
+      //     <DoctorMessages
+      //       notifications={derivedNotifications}
+      //       onMarkAsRead={markNotificationAsRead}
+      //       onMarkAllAsRead={markAllNotificationsAsRead}
+      //       toPersianDigits={toPersianDigits}
+      //     />
+      //   );
       case "messages":
-  return (
-    <DoctorMessages
-      notifications={derivedNotifications}
-      onMarkAsRead={markNotificationAsRead}
-      onMarkAllAsRead={markAllNotificationsAsRead}
-      toPersianDigits={toPersianDigits}
-    />
-  );
+        return (
+          <Notifications
+            notifications={derivedNotifications}
+            onMarkAsRead={markNotificationAsRead}
+            onMarkAllAsRead={markAllNotificationsAsRead}
+            toPersianDigits={toPersianDigits}
+          />
+        );
       case "financial":
         return (
           <FinancialView
@@ -857,165 +871,152 @@ function DoctorDashboard() {
   );
 }
 
-// ============================================
-// COMPONENT: Doctor Messages (Notifications)
-// ============================================
-// function DoctorMessages({ notifications, onMarkAsRead, onMarkAllAsRead }) {
+// // ============================================
+// // COMPONENT: Doctor Messages (Notifications)
+// // ============================================
 // function DoctorMessages({
 //   notifications,
 //   onMarkAsRead,
 //   onMarkAllAsRead,
 //   toPersianDigits,
 // }) {
-// function DoctorMessages({
-//   notifications,
-//   onMarkAsRead,
-//   onMarkAllAsRead,
-//   toPersianDigits2,
-// }) {
-function DoctorMessages({
-  notifications,
-  onMarkAsRead,
-  onMarkAllAsRead,
-  toPersianDigits,
-}) {
-  const [filter, setFilter] = useState("all"); // all | unread | read
+//   const [filter, setFilter] = useState("all"); // all | unread | read
 
-  const unreadCount = notifications.filter((n) => !n.isRead).length;
+//   const unreadCount = notifications.filter((n) => !n.isRead).length;
 
-  // ===== فیلتر =====
-  const filteredNotifications = useMemo(() => {
-    if (filter === "unread") return notifications.filter((n) => !n.isRead);
-    if (filter === "read") return notifications.filter((n) => n.isRead);
-    return notifications;
-  }, [notifications, filter]);
+//   // ===== فیلتر =====
+//   const filteredNotifications = useMemo(() => {
+//     if (filter === "unread") return notifications.filter((n) => !n.isRead);
+//     if (filter === "read") return notifications.filter((n) => n.isRead);
+//     return notifications;
+//   }, [notifications, filter]);
 
-  // ===== استایل بر اساس نوع =====
-  const getTypeStyle = (type) => {
-    const map = {
-      reminder: { bg: "#e3f2fd", color: "#0d47a1", icon: "⏰" },
-      warning: { bg: "#fff3e0", color: "#e65100", icon: "⚠️" },
-      confirmed: { bg: "#e8f5e9", color: "#2e7d32", icon: "✅" },
-      cancelled: { bg: "#fbe9e7", color: "#c62828", icon: "❌" },
-      note: { bg: "#f3e5f5", color: "#6a1b9a", icon: "📝" },
-    };
-    return map[type] || map.reminder;
-  };
+//   // ===== استایل بر اساس نوع =====
+//   const getTypeStyle = (type) => {
+//     const map = {
+//       reminder: { bg: "#e3f2fd", color: "#0d47a1", icon: "⏰" },
+//       warning: { bg: "#fff3e0", color: "#e65100", icon: "⚠️" },
+//       confirmed: { bg: "#e8f5e9", color: "#2e7d32", icon: "✅" },
+//       cancelled: { bg: "#fbe9e7", color: "#c62828", icon: "❌" },
+//       note: { bg: "#f3e5f5", color: "#6a1b9a", icon: "📝" },
+//     };
+//     return map[type] || map.reminder;
+//   };
 
-  return (
-    <div className={styles.pageContent}>
-      {/* ===== هدر ===== */}
-      <div className={styles.pageHeader}>
-        <div className={styles.headerInfo}>
-          <h2>🔔 اعلان‌ها</h2>
-          <p>رویدادها و یادآوری‌های مهم شما</p>
-        </div>
-        <div className={styles.notificationActions}>
-          {unreadCount > 0 && (
-            <span className={styles.unreadBadge}>
-              {toPersianDigits(unreadCount)} جدید
-            </span>
-          )}
-          {unreadCount > 0 && (
-            <button className={styles.markAllBtn} onClick={onMarkAllAsRead}>
-              ✓ همه خوانده شدند
-            </button>
-          )}
-        </div>
-      </div>
+//   return (
+//     <div className={styles.pageContent}>
+//       {/* ===== هدر ===== */}
+//       <div className={styles.pageHeader}>
+//         <div className={styles.headerInfo}>
+//           <h2>🔔 اعلان‌ها</h2>
+//           <p>رویدادها و یادآوری‌های مهم شما</p>
+//         </div>
+//         <div className={styles.notificationActions}>
+//           {unreadCount > 0 && (
+//             <span className={styles.unreadBadge}>
+//               {toPersianDigits(unreadCount)} جدید
+//             </span>
+//           )}
+//           {unreadCount > 0 && (
+//             <button className={styles.markAllBtn} onClick={onMarkAllAsRead}>
+//               ✓ همه خوانده شدند
+//             </button>
+//           )}
+//         </div>
+//       </div>
 
-      {/* ===== فیلترها ===== */}
-      <div className={styles.filterTabs}>
-        <button
-          className={`${styles.filterTab} ${
-            filter === "all" ? styles.active : ""
-          }`}
-          onClick={() => setFilter("all")}
-        >
-          همه
-          <span className={styles.filterCount}>
-            {toPersianDigits(notifications.length)}
-          </span>
-        </button>
-        <button
-          className={`${styles.filterTab} ${
-            filter === "unread" ? styles.active : ""
-          }`}
-          onClick={() => setFilter("unread")}
-        >
-          خوانده نشده
-          {unreadCount > 0 && (
-            <span className={styles.filterCount}>
-              {toPersianDigits(unreadCount)}
-            </span>
-          )}
-        </button>
-        <button
-          className={`${styles.filterTab} ${
-            filter === "read" ? styles.active : ""
-          }`}
-          onClick={() => setFilter("read")}
-        >
-          خوانده شده
-          <span className={styles.filterCount}>
-            {toPersianDigits(notifications.filter((n) => n.isRead).length)}
-          </span>
-        </button>
-      </div>
+//       {/* ===== فیلترها ===== */}
+//       <div className={styles.filterTabs}>
+//         <button
+//           className={`${styles.filterTab} ${
+//             filter === "all" ? styles.active : ""
+//           }`}
+//           onClick={() => setFilter("all")}
+//         >
+//           همه
+//           <span className={styles.filterCount}>
+//             {toPersianDigits(notifications.length)}
+//           </span>
+//         </button>
+//         <button
+//           className={`${styles.filterTab} ${
+//             filter === "unread" ? styles.active : ""
+//           }`}
+//           onClick={() => setFilter("unread")}
+//         >
+//           خوانده نشده
+//           {unreadCount > 0 && (
+//             <span className={styles.filterCount}>
+//               {toPersianDigits(unreadCount)}
+//             </span>
+//           )}
+//         </button>
+//         <button
+//           className={`${styles.filterTab} ${
+//             filter === "read" ? styles.active : ""
+//           }`}
+//           onClick={() => setFilter("read")}
+//         >
+//           خوانده شده
+//           <span className={styles.filterCount}>
+//             {toPersianDigits(notifications.filter((n) => n.isRead).length)}
+//           </span>
+//         </button>
+//       </div>
 
-      {/* ===== لیست اعلان‌ها ===== */}
-      <div className={styles.notificationsList}>
-        {filteredNotifications.length > 0 ? (
-          filteredNotifications.map((notification) => {
-            const typeStyle = getTypeStyle(notification.type);
-            return (
-              <div
-                key={notification.id}
-                className={`${styles.notificationCard} ${
-                  !notification.isRead ? styles.unread : ""
-                }`}
-                onClick={() => onMarkAsRead(notification.id)}
-              >
-                <div className={styles.notificationContent}>
-                  <div className={styles.notificationHeader}>
-                    <h4 className={styles.notificationTitle}>
-                      {!notification.isRead && (
-                        <span className={styles.unreadDot}></span>
-                      )}
-                      {notification.title}
-                    </h4>
-                    <span className={styles.notificationTime}>
-                      {notification.time}
-                    </span>
-                  </div>
-                  <p className={styles.notificationMessage}>
-                    {notification.message}
-                  </p>
-                </div>
+//       {/* ===== لیست اعلان‌ها ===== */}
+//       <div className={styles.notificationsList}>
+//         {filteredNotifications.length > 0 ? (
+//           filteredNotifications.map((notification) => {
+//             const typeStyle = getTypeStyle(notification.type);
+//             return (
+//               <div
+//                 key={notification.id}
+//                 className={`${styles.notificationCard} ${
+//                   !notification.isRead ? styles.unread : ""
+//                 }`}
+//                 onClick={() => onMarkAsRead(notification.id)}
+//               >
+//                 <div className={styles.notificationContent}>
+//                   <div className={styles.notificationHeader}>
+//                     <h4 className={styles.notificationTitle}>
+//                       {!notification.isRead && (
+//                         <span className={styles.unreadDot}></span>
+//                       )}
+//                       {notification.title}
+//                     </h4>
+//                     <span className={styles.notificationTime}>
+//                       {notification.time}
+//                     </span>
+//                   </div>
+//                   <p className={styles.notificationMessage}>
+//                     {notification.message}
+//                   </p>
+//                 </div>
 
-                {!notification.isRead && (
-                  <div className={styles.unreadIndicator}></div>
-                )}
-              </div>
-            );
-          })
-        ) : (
-          <div className={styles.emptyState}>
-            <span className={styles.emptyIcon}>🔔</span>
-            <h3>هیچ اعلانی وجود ندارد</h3>
-            <p>
-              {filter === "unread"
-                ? "همه اعلان‌ها را خوانده‌اید."
-                : filter === "read"
-                  ? "هنوز اعلان خوانده شده‌ای وجود ندارد."
-                  : "هنوز اعلانی دریافت نکرده‌اید."}
-            </p>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
+//                 {!notification.isRead && (
+//                   <div className={styles.unreadIndicator}></div>
+//                 )}
+//               </div>
+//             );
+//           })
+//         ) : (
+//           <div className={styles.emptyState}>
+//             <span className={styles.emptyIcon}>🔔</span>
+//             <h3>هیچ اعلانی وجود ندارد</h3>
+//             <p>
+//               {filter === "unread"
+//                 ? "همه اعلان‌ها را خوانده‌اید."
+//                 : filter === "read"
+//                   ? "هنوز اعلان خوانده شده‌ای وجود ندارد."
+//                   : "هنوز اعلانی دریافت نکرده‌اید."}
+//             </p>
+//           </div>
+//         )}
+//       </div>
+//     </div>
+//   );
+// }
 
 // ============================================
 // COMPONENT: Financial View
