@@ -1,11 +1,16 @@
+import { useState } from "react";
+import styles from "./Exercises.module.css";
+
 // ============================================
 // COMPONENT: Exercise Content
 // ============================================
-function ExerciseManagement() {
-  const [exercises, setExercises] = useState(seedData.exercises);
+// function ExerciseManagement() {
+//   const [exercises, setExercises] = useState(seedData.exercises);
+function ExerciseManagement({ initialExercises }) {
+  const [exercises, setExercises] = useState(initialExercises);
 
   const [selectedExercise, setSelectedExercise] = useState(null);
-  const [filter, setFilter] = useState("all"); // all | daily | weekly | one-time
+  const [filter, setFilter] = useState("all"); // all | daily | weekly | one_time
   const [showCompleted, setShowCompleted] = useState(true);
 
   // ===== تابع تیک زدن تمرین =====
@@ -135,13 +140,15 @@ function ExerciseManagement() {
           </button>
           <button
             className={`${styles.filterTab} ${
-              filter === "one-time" ? styles.active : ""
+              // filter === "one-time" ? styles.active : ""
+              filter === "one_time" ? styles.active : ""
             }`}
-            onClick={() => setFilter("one-time")}
+            // onClick={() => setFilter("one-time")}
+            onClick={() => setFilter("one_time")}
           >
             ⭐ یک‌باره &nbsp;
             <span className={styles.filterCount}>
-              {exercises.filter((ex) => ex.type === "one-time").length}
+              {exercises.filter((ex) => ex.type === "one_time").length}
             </span>
           </button>
         </div>
