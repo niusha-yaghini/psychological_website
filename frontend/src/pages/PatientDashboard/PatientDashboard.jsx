@@ -38,6 +38,7 @@ import PatientNotifications from "./components/Notifications/Notifications";
 import NotificationDropdown from "./components/NotificationDropdown/NotificationDropdown";
 import ProgressView from "./components/ProgressView/ProgressView";
 import ExerciseManagement from "./components/Exercises/Exercises";
+import PatientProfile from "./components/Profile/PatientProfile";
 
 // ============================================
 // ثابت‌های گلوبال (Global Constants)
@@ -603,6 +604,7 @@ function PatientDashboard() {
             setAppointments={setAppointments}
             doctors={seedData.doctors}
             helpers={appointmentsHelpers}
+            confirmIcon={confirmIcon}
           />
         );
       case "sessions":
@@ -630,8 +632,15 @@ function PatientDashboard() {
       //   return <ExerciseContent />;
       case "exercise":
         return <ExerciseManagement initialExercises={seedData.exercises} />;
+      // case "profile":
+      //   return <ProfileContent userData={userData} />;
       case "profile":
-        return <ProfileContent userData={userData} />;
+        return (
+          <PatientProfile
+            profileData={seedData.profile}
+            userAvatar={userAvatar}
+          />
+        );
       case "settings":
         return <SettingsContent />;
       default:
@@ -687,76 +696,28 @@ function PatientDashboard() {
 }
 
 // ============================================
-// COMPONENT: Exercise Content
+// COMPONENT: Profile Content
 // ============================================
-// function ExerciseContent() {
-//   const [exercises, setExercises] = useState(seedData.exercises);
+// function ProfileContent({ userData }) {
+//   const [isEditing, setIsEditing] = useState(false);
+//   const [formData, setFormData] = useState(seedData.profile.formData);
+//   const [activeTab, setActiveTab] = useState("info");
 
-//   const [selectedExercise, setSelectedExercise] = useState(null);
-//   const [filter, setFilter] = useState("all"); // all | daily | weekly | one-time
-//   const [showCompleted, setShowCompleted] = useState(true);
+//   const userStats = seedData.profile.userStats;
+//   const medicalInfo = seedData.profile.medicalInfo;
 
-//   // ===== تابع تیک زدن تمرین =====
-//   const toggleComplete = (id) => {
-//     setExercises((prev) =>
-//       prev.map((ex) =>
-//         ex.id === id
-//           ? {
-//               ...ex,
-//               completed: !ex.completed,
-//               progress: ex.completed ? 0 : 100,
-//             }
-//           : ex,
-//       ),
-//     );
+//   // ===== تغییرات فرم =====
+//   const handleInputChange = (e) => {
+//     const { name, value } = e.target;
+//     setFormData((prev) => ({ ...prev, [name]: value }));
 //   };
 
-//   // ===== فیلتر کردن =====
-//   const getFilteredExercises = () => {
-//     let filtered = exercises;
-
-//     if (filter !== "all") {
-//       filtered = filtered.filter((ex) => ex.type === filter);
-//     }
-
-//     if (!showCompleted) {
-//       filtered = filtered.filter((ex) => !ex.completed);
-//     }
-
-//     return filtered;
-//   };
-
-//   const filteredExercises = getFilteredExercises();
-//   const completedCount = exercises.filter((ex) => ex.completed).length;
-//   const totalCount = exercises.length;
-
-//   // ===== دریافت اطلاعات بر اساس نوع =====
-//   const getTypeInfo = (type) => {
-//     const types = {
-//       daily: { label: "روزانه", className: styles.typeDaily, icon: "🌙" },
-//       weekly: { label: "هفتگی", className: styles.typeWeekly, icon: "📅" },
-//       one_time: { label: "یک‌باره", className: styles.typeOneTime, icon: "⭐" },
-//     };
-//     return types[type] || types.one_time;
-//   };
-
-//   const getPriorityInfo = (priority) => {
-//     const priorities = {
-//       high: { label: "اولویت بالا", className: styles.priorityHigh },
-//       medium: { label: "اولویت متوسط", className: styles.priorityMedium },
-//       low: { label: "اولویت کم", className: styles.priorityLow },
-//     };
-//     return priorities[priority] || priorities.medium;
-//   };
-
-//   const getCategoryIcon = (category) => {
-//     const icons = {
-//       meditation: "🧘",
-//       writing: "✍️",
-//       test: "📊",
-//       activity: "🏃",
-//     };
-//     return icons[category] || "📋";
+//   // ===== ذخیره تغییرات =====
+//   const handleSave = () => {
+//     // ذخیره اطلاعات
+//     console.log("اطلاعات ذخیره شد:", formData);
+//     setIsEditing(false);
+//     alert("اطلاعات با موفقیت ذخیره شد.");
 //   };
 
 //   return (
@@ -764,631 +725,358 @@ function PatientDashboard() {
 //       {/* هدر بخش */}
 //       <div className={styles.pageHeader}>
 //         <div className={styles.headerInfo}>
-//           <h2>تمارین من</h2>
-//           <p>تمارین تعیین شده توسط روانشناس برای شما</p>
+//           <h2>پروفایل</h2>
+//           <p>اطلاعات شخصی و تنظیمات حساب کاربری</p>
 //         </div>
-//         <div className={styles.exerciseStats}>
-//           <span className={styles.statItem}>
-//             <span className={styles.statNumber}>{completedCount}</span>
-//             <span className={styles.statLabel}>انجام شده</span>
-//           </span>
-//           <span className={styles.statDivider}>|</span>
-//           <span className={styles.statItem}>
-//             <span className={styles.statNumber}>
-//               {totalCount - completedCount}
-//             </span>
-//             <span className={styles.statLabel}>انجام نشده</span>
-//           </span>
-//           <span className={styles.statDivider}>|</span>
-//           <span className={styles.statItem}>
-//             <span className={styles.statNumber}>{totalCount}</span>
-//             <span className={styles.statLabel}>مجموع</span>
-//           </span>
-//         </div>
+//         <button
+//           className={styles.editProfileBtn}
+//           onClick={() => setIsEditing(!isEditing)}
+//         >
+//           {isEditing ? "✕ لغو" : "ویرایش پروفایل"}
+//         </button>
 //       </div>
 
-//       {/* فیلترها */}
-//       <div className={styles.filterSection}>
-//         <div className={styles.filterTabs}>
-//           <button
-//             className={`${styles.filterTab} ${
-//               filter === "all" ? styles.active : ""
-//             }`}
-//             onClick={() => setFilter("all")}
-//           >
-//             همه &nbsp;
-//             <span className={styles.filterCount}>{exercises.length}</span>
-//           </button>
-//           <button
-//             className={`${styles.filterTab} ${
-//               filter === "daily" ? styles.active : ""
-//             }`}
-//             onClick={() => setFilter("daily")}
-//           >
-//             🌙 روزانه &nbsp;
-//             <span className={styles.filterCount}>
-//               {exercises.filter((ex) => ex.type === "daily").length}
-//             </span>
-//           </button>
-//           <button
-//             className={`${styles.filterTab} ${
-//               filter === "weekly" ? styles.active : ""
-//             }`}
-//             onClick={() => setFilter("weekly")}
-//           >
-//             📅 هفتگی &nbsp;
-//             <span className={styles.filterCount}>
-//               {exercises.filter((ex) => ex.type === "weekly").length}
-//             </span>
-//           </button>
-//           <button
-//             className={`${styles.filterTab} ${
-//               filter === "one-time" ? styles.active : ""
-//             }`}
-//             onClick={() => setFilter("one-time")}
-//           >
-//             ⭐ یک‌باره &nbsp;
-//             <span className={styles.filterCount}>
-//               {exercises.filter((ex) => ex.type === "one-time").length}
-//             </span>
-//           </button>
-//         </div>
-
-//         <label className={styles.showCompletedToggle}>
-//           <input
-//             type="checkbox"
-//             checked={showCompleted}
-//             onChange={() => setShowCompleted(!showCompleted)}
-//           />
-//           <span className={styles.toggleSlider}></span>
-//           نمایش انجام شده‌ها
-//         </label>
-//       </div>
-
-//       {/* لیست تمارین */}
-//       <div className={styles.exerciseList}>
-//         {filteredExercises.length > 0 ? (
-//           filteredExercises.map((exercise) => {
-//             const typeInfo = getTypeInfo(exercise.type);
-//             const priorityInfo = getPriorityInfo(exercise.priority);
-//             const isCompleted = exercise.completed;
-
-//             return (
-//               <div
-//                 key={exercise.id}
-//                 className={`${styles.exerciseCard} ${
-//                   isCompleted ? styles.completed : ""
-//                 }`}
-//               >
-//                 <button
-//                   className={`${styles.checkCircle} ${
-//                     isCompleted ? styles.checked : ""
-//                   }`}
-//                   onClick={(e) => {
-//                     e.stopPropagation();
-//                     toggleComplete(exercise.id);
-//                   }}
-//                 >
-//                   {isCompleted ? (
-//                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-//                       <path
-//                         d="M5 12L10 17L20 7"
-//                         stroke="white"
-//                         strokeWidth="3"
-//                         strokeLinecap="round"
-//                         strokeLinejoin="round"
-//                       />
-//                     </svg>
-//                   ) : (
-//                     <span className={styles.checkPlaceholder}></span>
-//                   )}
+//       {/* کارت اصلی پروفایل */}
+//       <div className={styles.profileMainCard}>
+//         {/* آواتار و اطلاعات اصلی */}
+//         <div className={styles.profileHeader}>
+//           <div className={styles.profileAvatarSection}>
+//             <div className={styles.profileAvatar}>
+//               <img src={userAvatar} alt="پروفایل" />
+//               {isEditing && (
+//                 <button className={styles.changeAvatarBtn}>
+//                   {/* <span>📷</span> */}
 //                 </button>
+//               )}
+//             </div>
+//             <div className={styles.profileBadge}>
+//               <span className={styles.badgeDot}></span>
+//               فعال
+//             </div>
+//           </div>
 
-//                 {/* محتوای اصلی */}
-//                 <div className={styles.exerciseContent}>
-//                   <div className={styles.exerciseHeader}>
-//                     <div className={styles.exerciseMainInfo}>
-//                       <div className={styles.exerciseTitleRow}>
-//                         <h4 className={styles.exerciseTitle}>
-//                           {exercise.icon || getCategoryIcon(exercise.category)}
-//                           <span>{exercise.title}</span>
-//                         </h4>
-//                         <div className={styles.exerciseMeta}>
-//                           <span
-//                             className={`${styles.typeBadge} ${typeInfo.className}`}
-//                           >
-//                             {typeInfo.icon} {typeInfo.label}
-//                           </span>
-//                           <span
-//                             className={`${styles.priorityBadge} ${priorityInfo.className}`}
-//                           >
-//                             {priorityInfo.label}
-//                           </span>
-//                         </div>
-//                       </div>
-//                       <p className={styles.exerciseDescription}>
-//                         {exercise.description}
-//                       </p>
-//                     </div>
-//                   </div>
+//           <div className={styles.profileMainInfo}>
+//             <h2>
+//               {isEditing ? (
+//                 <div className={styles.editNameRow}>
+//                   <input
+//                     type="text"
+//                     name="firstName"
+//                     value={formData.firstName}
+//                     onChange={handleInputChange}
+//                     placeholder="نام"
+//                     className={styles.editInput}
+//                   />
+//                   <input
+//                     type="text"
+//                     name="lastName"
+//                     value={formData.lastName}
+//                     onChange={handleInputChange}
+//                     placeholder="نام خانوادگی"
+//                     className={styles.editInput}
+//                   />
+//                 </div>
+//               ) : (
+//                 `${formData.firstName} ${formData.lastName}`
+//               )}
+//             </h2>
+//             <div className={styles.profileMeta}>
+//               <span>{formData.phone}</span>
+//               <span className={styles.metaDivider}>•</span>
+//               <span>{formData.email}</span>
+//               <span className={styles.metaDivider}>•</span>
+//               <span>عضویت: {userStats.joinDate}</span>
+//             </div>
+//             <div className={styles.profileQuickStats}>
+//               <div className={styles.quickStat}>
+//                 <span className={styles.quickStatNumber}>
+//                   {userStats.totalSessions}
+//                 </span>
+//                 <span className={styles.quickStatLabel}>جلسات</span>
+//               </div>
+//               <div className={styles.quickStatDivider}></div>
+//               <div className={styles.quickStat}>
+//                 <span className={styles.quickStatNumber}>
+//                   {userStats.completedExercises}/{userStats.totalExercises}
+//                 </span>
+//                 <span className={styles.quickStatLabel}>تمارین</span>
+//               </div>
+//               <div className={styles.quickStatDivider}></div>
+//               <div className={styles.quickStat}>
+//                 <span className={styles.quickStatNumber}>
+//                   {userStats.upcomingAppointment}
+//                 </span>
+//                 <span className={styles.quickStatLabel}>نوبت بعدی</span>
+//               </div>
+//             </div>
+//           </div>
+//         </div>
 
-//                   {/* دکمه گسترش */}
-//                   <button
-//                     className={styles.expandBtn}
-//                     onClick={(e) => {
-//                       e.stopPropagation();
-//                       setSelectedExercise(
-//                         selectedExercise === exercise.id ? null : exercise.id,
-//                       );
-//                     }}
-//                   >
-//                     {selectedExercise === exercise.id ? "▲" : "▼"}
-//                     <span className={styles.expandLabel}>
-//                       {selectedExercise === exercise.id
-//                         ? "بستن"
-//                         : "مشاهده دستورالعمل"}
-//                     </span>
-//                   </button>
+//         {/* تب‌ها */}
+//         <div className={styles.profileTabs}>
+//           <button
+//             className={`${styles.profileTab} ${
+//               activeTab === "info" ? styles.active : ""
+//             }`}
+//             onClick={() => setActiveTab("info")}
+//           >
+//             اطلاعات شخصی
+//           </button>
+//           <button
+//             className={`${styles.profileTab} ${
+//               activeTab === "medical" ? styles.active : ""
+//             }`}
+//             onClick={() => setActiveTab("medical")}
+//           >
+//             اطلاعات درمانی
+//           </button>
+//         </div>
 
-//                   {/* جزئیات */}
-//                   {selectedExercise === exercise.id && (
-//                     <div className={styles.exerciseDetails}>
-//                       <div className={styles.instructionsSection}>
-//                         <h5>📋 دستورالعمل:</h5>
-//                         <ul>
-//                           {exercise.instructions.map((step, index) => (
-//                             <li key={index}>{step}</li>
-//                           ))}
-//                         </ul>
-//                       </div>
-//                       <div className={styles.exerciseFooter}>
-//                         <div className={styles.exerciseAssignInfo}>
-//                           <span>👤 {exercise.assignedBy}</span>
-//                           <span>📅 تاریخ تعیین: {exercise.assignedDate}</span>
-//                           <span>⏳ مهلت: {exercise.dueDate}</span>
-//                         </div>
-//                       </div>
-//                     </div>
+//         {/* محتوای تب‌ها */}
+//         <div className={styles.profileTabContent}>
+//           {/* ===== تب اطلاعات شخصی ===== */}
+//           {activeTab === "info" && (
+//             <div className={styles.infoTab}>
+//               <div className={styles.infoGrid}>
+//                 <div className={styles.infoItem}>
+//                   <label>نام</label>
+//                   {isEditing ? (
+//                     <input
+//                       type="text"
+//                       name="firstName"
+//                       value={formData.firstName}
+//                       onChange={handleInputChange}
+//                       className={styles.editInput}
+//                     />
+//                   ) : (
+//                     <p>{formData.firstName}</p>
+//                   )}
+//                 </div>
+//                 <div className={styles.infoItem}>
+//                   <label>نام خانوادگی</label>
+//                   {isEditing ? (
+//                     <input
+//                       type="text"
+//                       name="lastName"
+//                       value={formData.lastName}
+//                       onChange={handleInputChange}
+//                       className={styles.editInput}
+//                     />
+//                   ) : (
+//                     <p>{formData.lastName}</p>
+//                   )}
+//                 </div>
+//                 <div className={styles.infoItem}>
+//                   <label>شماره موبایل</label>
+//                   {isEditing ? (
+//                     <input
+//                       type="text"
+//                       name="phone"
+//                       value={formData.phone}
+//                       onChange={handleInputChange}
+//                       className={styles.editInput}
+//                     />
+//                   ) : (
+//                     <p>{formData.phone}</p>
+//                   )}
+//                 </div>
+//                 <div className={styles.infoItem}>
+//                   <label>ایمیل</label>
+//                   {isEditing ? (
+//                     <input
+//                       type="email"
+//                       name="email"
+//                       value={formData.email}
+//                       onChange={handleInputChange}
+//                       className={styles.editInput}
+//                     />
+//                   ) : (
+//                     <p>{formData.email}</p>
+//                   )}
+//                 </div>
+//                 <div className={styles.infoItem}>
+//                   <label>جنسیت</label>
+//                   {isEditing ? (
+//                     <select
+//                       name="gender"
+//                       value={formData.gender}
+//                       onChange={handleInputChange}
+//                       className={styles.editSelect}
+//                     >
+//                       <option value="male">آقا</option>
+//                       <option value="female">خانم</option>
+//                     </select>
+//                   ) : (
+//                     <p>{formData.gender === "male" ? "آقا" : "خانم"}</p>
+//                   )}
+//                 </div>
+//                 <div className={styles.infoItem}>
+//                   <label>تاریخ تولد</label>
+//                   {isEditing ? (
+//                     <input
+//                       type="text"
+//                       name="birthDate"
+//                       value={formData.birthDate}
+//                       onChange={handleInputChange}
+//                       className={styles.editInput}
+//                       placeholder="۱۳۷۵/۰۳/۱۵"
+//                     />
+//                   ) : (
+//                     <p>{formData.birthDate}</p>
+//                   )}
+//                 </div>
+//                 <div className={styles.infoItem}>
+//                   <label>شغل</label>
+//                   {isEditing ? (
+//                     <input
+//                       type="text"
+//                       name="occupation"
+//                       value={formData.occupation}
+//                       onChange={handleInputChange}
+//                       className={styles.editInput}
+//                     />
+//                   ) : (
+//                     <p>{formData.occupation}</p>
+//                   )}
+//                 </div>
+//                 <div className={styles.infoItem}>
+//                   <label>تحصیلات</label>
+//                   {isEditing ? (
+//                     <input
+//                       type="text"
+//                       name="education"
+//                       value={formData.education}
+//                       onChange={handleInputChange}
+//                       className={styles.editInput}
+//                     />
+//                   ) : (
+//                     <p>{formData.education}</p>
+//                   )}
+//                 </div>
+//                 <div className={styles.infoItemFull}>
+//                   <label>آدرس</label>
+//                   {isEditing ? (
+//                     <textarea
+//                       name="address"
+//                       value={formData.address}
+//                       onChange={handleInputChange}
+//                       className={styles.editTextarea}
+//                       rows="2"
+//                     />
+//                   ) : (
+//                     <p>{formData.address}</p>
 //                   )}
 //                 </div>
 //               </div>
-//             );
-//           })
-//         ) : (
-//           <div className={styles.emptyState}>
-//             <span className={styles.emptyIcon}>🎯</span>
-//             <h3>هیچ تمرینی موجود نیست</h3>
-//             <p>
-//               {showCompleted
-//                 ? "هنوز تمرینی برای شما تعیین نشده است."
-//                 : "همه تمرین‌ها را انجام داده‌اید! 🎉"}
-//             </p>
-//           </div>
-//         )}
-//       </div>
 
-//       {/* کارت پیشرفت کلی */}
-//       <div className={styles.overallProgress}>
-//         <div className={styles.progressInfo}>
-//           <span className={styles.progressTitle}>پیشرفت کلی تمارین</span>
-//           <span className={styles.progressPercentage}>
-//             {totalCount > 0
-//               ? Math.round((completedCount / totalCount) * 100)
-//               : 0}
-//             %
-//           </span>
-//         </div>
-//         <div className={styles.overallProgressBar}>
-//           <div
-//             className={styles.overallProgressFill}
-//             style={{
-//               width: `${
-//                 totalCount > 0 ? (completedCount / totalCount) * 100 : 0
-//               }%`,
-//             }}
-//           />
-//         </div>
-//         <div className={styles.progressStats}>
-//           <span>✅ {completedCount} انجام شده</span>
-//           <span>⏳ {totalCount - completedCount} باقی‌مانده</span>
-//         </div>
-//       </div>
+//               {/* اطلاعات اضطراری */}
+//               <div className={styles.emergencySection}>
+//                 <h4>تماس اضطراری</h4>
+//                 <div className={styles.emergencyGrid}>
+//                   <div className={styles.infoItem}>
+//                     <label>شماره تماس</label>
+//                     {isEditing ? (
+//                       <input
+//                         type="text"
+//                         name="emergencyContact"
+//                         value={formData.emergencyContact}
+//                         onChange={handleInputChange}
+//                         className={styles.editInput}
+//                       />
+//                     ) : (
+//                       <p>{formData.emergencyContact}</p>
+//                     )}
+//                   </div>
+//                   <div className={styles.infoItem}>
+//                     <label>نسبت</label>
+//                     {isEditing ? (
+//                       <input
+//                         type="text"
+//                         name="emergencyRelation"
+//                         value={formData.emergencyRelation}
+//                         onChange={handleInputChange}
+//                         className={styles.editInput}
+//                       />
+//                     ) : (
+//                       <p>{formData.emergencyRelation}</p>
+//                     )}
+//                   </div>
+//                 </div>
+//               </div>
 
-//       {/* دکمه گزارش */}
-//       <div className={styles.exerciseActions}>
-//         <button className={styles.btnReportProgress}>
-//           📊 گزارش پیشرفت تمارین
-//         </button>
-//         <button className={styles.btnShareProgress}>
-//           📤 اشتراک‌گذاری با روانشناس
-//         </button>
+//               {isEditing && (
+//                 <div className={styles.editActions}>
+//                   <button className={styles.saveBtn} onClick={handleSave}>
+//                     ذخیره تغییرات
+//                   </button>
+//                   <button
+//                     className={styles.cancelBtn}
+//                     onClick={() => setIsEditing(false)}
+//                   >
+//                     ✕ انصراف
+//                   </button>
+//                 </div>
+//               )}
+//             </div>
+//           )}
+
+//           {/* ===== تب اطلاعات درمانی ===== */}
+//           {activeTab === "medical" && (
+//             <div className={styles.medicalTab}>
+//               <div className={styles.medicalCard}>
+//                 <div className={styles.medicalItem}>
+//                   <span className={styles.medicalLabel}>روانشناس معالج</span>
+//                   <span className={styles.medicalValue}>
+//                     {medicalInfo.therapist}
+//                   </span>
+//                 </div>
+//                 <div className={styles.medicalItem}>
+//                   <span className={styles.medicalLabel}>تشخیص</span>
+//                   <span className={styles.medicalValue}>
+//                     {medicalInfo.diagnosis}
+//                   </span>
+//                 </div>
+//                 <div className={styles.medicalItem}>
+//                   <span className={styles.medicalLabel}>روش درمانی</span>
+//                   <span className={styles.medicalValue}>
+//                     {medicalInfo.treatmentPlan}
+//                   </span>
+//                 </div>
+//                 <div className={styles.medicalItem}>
+//                   <span className={styles.medicalLabel}>داروها</span>
+//                   <span className={styles.medicalValue}>
+//                     {medicalInfo.medications}
+//                   </span>
+//                 </div>
+//                 <div className={styles.medicalItem}>
+//                   <span className={styles.medicalLabel}>حساسیت‌ها</span>
+//                   <span className={styles.medicalValue}>
+//                     {medicalInfo.allergies}
+//                   </span>
+//                 </div>
+//                 <div className={styles.medicalItem}>
+//                   <span className={styles.medicalLabel}>یادداشت‌های ویژه</span>
+//                   <span className={styles.medicalValue}>
+//                     {medicalInfo.specialNotes}
+//                   </span>
+//                 </div>
+//               </div>
+
+//               <div className={styles.medicalActions}>
+//                 <button className={styles.btnMedical}>
+//                   درخواست گزارش درمانی
+//                 </button>
+//                 <button className={styles.btnMedicalSecondary}>
+//                   اشتراک‌گذاری با پزشک
+//                 </button>
+//               </div>
+//             </div>
+//           )}
+//         </div>
 //       </div>
 //     </div>
 //   );
 // }
-
-// ============================================
-// COMPONENT: Profile Content
-// ============================================
-function ProfileContent({ userData }) {
-  const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState(seedData.profile.formData);
-  const [activeTab, setActiveTab] = useState("info");
-
-  const userStats = seedData.profile.userStats;
-  const medicalInfo = seedData.profile.medicalInfo;
-
-  // ===== تغییرات فرم =====
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  // ===== ذخیره تغییرات =====
-  const handleSave = () => {
-    // ذخیره اطلاعات
-    console.log("اطلاعات ذخیره شد:", formData);
-    setIsEditing(false);
-    alert("اطلاعات با موفقیت ذخیره شد.");
-  };
-
-  return (
-    <div className={styles.pageContent}>
-      {/* هدر بخش */}
-      <div className={styles.pageHeader}>
-        <div className={styles.headerInfo}>
-          <h2>پروفایل</h2>
-          <p>اطلاعات شخصی و تنظیمات حساب کاربری</p>
-        </div>
-        <button
-          className={styles.editProfileBtn}
-          onClick={() => setIsEditing(!isEditing)}
-        >
-          {isEditing ? "✕ لغو" : "ویرایش پروفایل"}
-        </button>
-      </div>
-
-      {/* کارت اصلی پروفایل */}
-      <div className={styles.profileMainCard}>
-        {/* آواتار و اطلاعات اصلی */}
-        <div className={styles.profileHeader}>
-          <div className={styles.profileAvatarSection}>
-            <div className={styles.profileAvatar}>
-              <img src={userAvatar} alt="پروفایل" />
-              {isEditing && (
-                <button className={styles.changeAvatarBtn}>
-                  {/* <span>📷</span> */}
-                </button>
-              )}
-            </div>
-            <div className={styles.profileBadge}>
-              <span className={styles.badgeDot}></span>
-              فعال
-            </div>
-          </div>
-
-          <div className={styles.profileMainInfo}>
-            <h2>
-              {isEditing ? (
-                <div className={styles.editNameRow}>
-                  <input
-                    type="text"
-                    name="firstName"
-                    value={formData.firstName}
-                    onChange={handleInputChange}
-                    placeholder="نام"
-                    className={styles.editInput}
-                  />
-                  <input
-                    type="text"
-                    name="lastName"
-                    value={formData.lastName}
-                    onChange={handleInputChange}
-                    placeholder="نام خانوادگی"
-                    className={styles.editInput}
-                  />
-                </div>
-              ) : (
-                `${formData.firstName} ${formData.lastName}`
-              )}
-            </h2>
-            <div className={styles.profileMeta}>
-              <span>{formData.phone}</span>
-              <span className={styles.metaDivider}>•</span>
-              <span>{formData.email}</span>
-              <span className={styles.metaDivider}>•</span>
-              <span>عضویت: {userStats.joinDate}</span>
-            </div>
-            <div className={styles.profileQuickStats}>
-              <div className={styles.quickStat}>
-                <span className={styles.quickStatNumber}>
-                  {userStats.totalSessions}
-                </span>
-                <span className={styles.quickStatLabel}>جلسات</span>
-              </div>
-              <div className={styles.quickStatDivider}></div>
-              <div className={styles.quickStat}>
-                <span className={styles.quickStatNumber}>
-                  {userStats.completedExercises}/{userStats.totalExercises}
-                </span>
-                <span className={styles.quickStatLabel}>تمارین</span>
-              </div>
-              <div className={styles.quickStatDivider}></div>
-              <div className={styles.quickStat}>
-                <span className={styles.quickStatNumber}>
-                  {userStats.upcomingAppointment}
-                </span>
-                <span className={styles.quickStatLabel}>نوبت بعدی</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* تب‌ها */}
-        <div className={styles.profileTabs}>
-          <button
-            className={`${styles.profileTab} ${
-              activeTab === "info" ? styles.active : ""
-            }`}
-            onClick={() => setActiveTab("info")}
-          >
-            اطلاعات شخصی
-          </button>
-          <button
-            className={`${styles.profileTab} ${
-              activeTab === "medical" ? styles.active : ""
-            }`}
-            onClick={() => setActiveTab("medical")}
-          >
-            اطلاعات درمانی
-          </button>
-        </div>
-
-        {/* محتوای تب‌ها */}
-        <div className={styles.profileTabContent}>
-          {/* ===== تب اطلاعات شخصی ===== */}
-          {activeTab === "info" && (
-            <div className={styles.infoTab}>
-              <div className={styles.infoGrid}>
-                <div className={styles.infoItem}>
-                  <label>نام</label>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      name="firstName"
-                      value={formData.firstName}
-                      onChange={handleInputChange}
-                      className={styles.editInput}
-                    />
-                  ) : (
-                    <p>{formData.firstName}</p>
-                  )}
-                </div>
-                <div className={styles.infoItem}>
-                  <label>نام خانوادگی</label>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      name="lastName"
-                      value={formData.lastName}
-                      onChange={handleInputChange}
-                      className={styles.editInput}
-                    />
-                  ) : (
-                    <p>{formData.lastName}</p>
-                  )}
-                </div>
-                <div className={styles.infoItem}>
-                  <label>شماره موبایل</label>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleInputChange}
-                      className={styles.editInput}
-                    />
-                  ) : (
-                    <p>{formData.phone}</p>
-                  )}
-                </div>
-                <div className={styles.infoItem}>
-                  <label>ایمیل</label>
-                  {isEditing ? (
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      className={styles.editInput}
-                    />
-                  ) : (
-                    <p>{formData.email}</p>
-                  )}
-                </div>
-                <div className={styles.infoItem}>
-                  <label>جنسیت</label>
-                  {isEditing ? (
-                    <select
-                      name="gender"
-                      value={formData.gender}
-                      onChange={handleInputChange}
-                      className={styles.editSelect}
-                    >
-                      <option value="male">آقا</option>
-                      <option value="female">خانم</option>
-                    </select>
-                  ) : (
-                    <p>{formData.gender === "male" ? "آقا" : "خانم"}</p>
-                  )}
-                </div>
-                <div className={styles.infoItem}>
-                  <label>تاریخ تولد</label>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      name="birthDate"
-                      value={formData.birthDate}
-                      onChange={handleInputChange}
-                      className={styles.editInput}
-                      placeholder="۱۳۷۵/۰۳/۱۵"
-                    />
-                  ) : (
-                    <p>{formData.birthDate}</p>
-                  )}
-                </div>
-                <div className={styles.infoItem}>
-                  <label>شغل</label>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      name="occupation"
-                      value={formData.occupation}
-                      onChange={handleInputChange}
-                      className={styles.editInput}
-                    />
-                  ) : (
-                    <p>{formData.occupation}</p>
-                  )}
-                </div>
-                <div className={styles.infoItem}>
-                  <label>تحصیلات</label>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      name="education"
-                      value={formData.education}
-                      onChange={handleInputChange}
-                      className={styles.editInput}
-                    />
-                  ) : (
-                    <p>{formData.education}</p>
-                  )}
-                </div>
-                <div className={styles.infoItemFull}>
-                  <label>آدرس</label>
-                  {isEditing ? (
-                    <textarea
-                      name="address"
-                      value={formData.address}
-                      onChange={handleInputChange}
-                      className={styles.editTextarea}
-                      rows="2"
-                    />
-                  ) : (
-                    <p>{formData.address}</p>
-                  )}
-                </div>
-              </div>
-
-              {/* اطلاعات اضطراری */}
-              <div className={styles.emergencySection}>
-                <h4>تماس اضطراری</h4>
-                <div className={styles.emergencyGrid}>
-                  <div className={styles.infoItem}>
-                    <label>شماره تماس</label>
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        name="emergencyContact"
-                        value={formData.emergencyContact}
-                        onChange={handleInputChange}
-                        className={styles.editInput}
-                      />
-                    ) : (
-                      <p>{formData.emergencyContact}</p>
-                    )}
-                  </div>
-                  <div className={styles.infoItem}>
-                    <label>نسبت</label>
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        name="emergencyRelation"
-                        value={formData.emergencyRelation}
-                        onChange={handleInputChange}
-                        className={styles.editInput}
-                      />
-                    ) : (
-                      <p>{formData.emergencyRelation}</p>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {isEditing && (
-                <div className={styles.editActions}>
-                  <button className={styles.saveBtn} onClick={handleSave}>
-                    ذخیره تغییرات
-                  </button>
-                  <button
-                    className={styles.cancelBtn}
-                    onClick={() => setIsEditing(false)}
-                  >
-                    ✕ انصراف
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* ===== تب اطلاعات درمانی ===== */}
-          {activeTab === "medical" && (
-            <div className={styles.medicalTab}>
-              <div className={styles.medicalCard}>
-                <div className={styles.medicalItem}>
-                  <span className={styles.medicalLabel}>روانشناس معالج</span>
-                  <span className={styles.medicalValue}>
-                    {medicalInfo.therapist}
-                  </span>
-                </div>
-                <div className={styles.medicalItem}>
-                  <span className={styles.medicalLabel}>تشخیص</span>
-                  <span className={styles.medicalValue}>
-                    {medicalInfo.diagnosis}
-                  </span>
-                </div>
-                <div className={styles.medicalItem}>
-                  <span className={styles.medicalLabel}>روش درمانی</span>
-                  <span className={styles.medicalValue}>
-                    {medicalInfo.treatmentPlan}
-                  </span>
-                </div>
-                <div className={styles.medicalItem}>
-                  <span className={styles.medicalLabel}>داروها</span>
-                  <span className={styles.medicalValue}>
-                    {medicalInfo.medications}
-                  </span>
-                </div>
-                <div className={styles.medicalItem}>
-                  <span className={styles.medicalLabel}>حساسیت‌ها</span>
-                  <span className={styles.medicalValue}>
-                    {medicalInfo.allergies}
-                  </span>
-                </div>
-                <div className={styles.medicalItem}>
-                  <span className={styles.medicalLabel}>یادداشت‌های ویژه</span>
-                  <span className={styles.medicalValue}>
-                    {medicalInfo.specialNotes}
-                  </span>
-                </div>
-              </div>
-
-              <div className={styles.medicalActions}>
-                <button className={styles.btnMedical}>
-                  درخواست گزارش درمانی
-                </button>
-                <button className={styles.btnMedicalSecondary}>
-                  اشتراک‌گذاری با پزشک
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
 
 // ============================================
 // COMPONENT: Setting Content

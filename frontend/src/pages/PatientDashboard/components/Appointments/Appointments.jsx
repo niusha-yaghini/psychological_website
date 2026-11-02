@@ -7,7 +7,7 @@ moment.loadPersian({
   dialect: "persian",
 });
 
-import confirmIcon from "../../../../../public/images/Patient_Panel/confirm_icon.png";
+// import confirmIcon from "../../../../../public/images/Patient_Panel/confirm_icon.png";
 
 // ============================================
 // COMPONENT: Appointments Content
@@ -35,9 +35,8 @@ function AppointmentsManagement({
     isTimeAlreadyBooked,
     formatPrice,
     WEEK_DAYS_ORDER,
-    // toPersianDigits,
-    // getDisplayStatus,
     toEnglishDigits,
+    confirmIcon,
   } = helpers;
 
   const [activeFilter, setActiveFilter] = useState("all");

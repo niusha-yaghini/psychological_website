@@ -78,9 +78,6 @@ function NotificationDropdown({
                       <span className={styles.dropdownTitleText}>
                         {notification.title}
                       </span>
-                      {/* <span className={styles.dropdownTime}>
-                        {notification.time}
-                      </span> */}
                       <span className={styles.dropdownTime}>
                         {formatNotificationTime(notification)}
                       </span>
@@ -107,7 +104,6 @@ function NotificationDropdown({
                 className={styles.dropdownViewAll}
                 onClick={() => {
                   setIsOpen(false);
-                  // ← setActiveTab حذف شد
                 }}
               >
                 مشاهده همه اعلان‌ها ({unreadCount})

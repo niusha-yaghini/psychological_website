@@ -4,8 +4,6 @@ import styles from "./Exercises.module.css";
 // ============================================
 // COMPONENT: Exercise Content
 // ============================================
-// function ExerciseManagement() {
-//   const [exercises, setExercises] = useState(seedData.exercises);
 function ExerciseManagement({ initialExercises }) {
   const [exercises, setExercises] = useState(initialExercises);
 

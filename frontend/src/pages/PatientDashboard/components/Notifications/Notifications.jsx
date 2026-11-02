@@ -4,7 +4,6 @@ import styles from "./Notifications.module.css";
 // ============================================
 // COMPONENT: Messages Content (Notification Center)
 // ============================================
-// function PatientNotifications({ notifications, setNotifications }) {
 function PatientNotifications({
   notifications,
   setNotifications,
@@ -141,7 +140,6 @@ function PatientNotifications({
                       {notification.title}
                     </h4>
                     <span className={styles.notificationTime}>
-                      {/* {notification.time} */}
                       {formatNotificationTime(notification)}
                     </span>
                   </div>
@@ -150,7 +148,6 @@ function PatientNotifications({
                   </p>
                 </div>
 
-                {/* وضعیت خوانده/نخوانده */}
                 {!notification.isRead && (
                   <div className={styles.unreadIndicator}></div>
                 )}

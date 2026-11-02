@@ -1,14 +1,19 @@
+import React, { useState } from "react";
+import styles from "./PatientProfile.module.css";
+
 // ============================================
-// COMPONENT: Profile Content
+// COMPONENT: Patient Profile
 // ============================================
-function PatientProfile({ userData }) {
+
+function PatientProfile({ profileData, userAvatar }) {
   const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState(seedData.profile.formData);
+
+  const [formData, setFormData] = useState(profileData.formData);
+
   const [activeTab, setActiveTab] = useState("info");
 
-  const userStats = seedData.profile.userStats;
-  const medicalInfo = seedData.profile.medicalInfo;
-
+  const userStats = profileData.userStats;
+  const medicalInfo = profileData.medicalInfo;
   // ===== تغییرات فرم =====
   const handleInputChange = (e) => {
     const { name, value } = e.target;
