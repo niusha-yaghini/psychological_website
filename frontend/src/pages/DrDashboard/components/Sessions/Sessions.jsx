@@ -192,7 +192,7 @@ function SessionsManagement({
       {/* هدر بخش */}
       <div className={styles.pageHeader}>
         <div className={styles.headerInfo}>
-          <h2>🎥 جلسات آنلاین</h2>
+          <h2>جلسات آنلاین</h2>
           <p>مدیریت و برگزاری جلسات مجازی</p>
         </div>
         <div className={styles.sessionStats}>

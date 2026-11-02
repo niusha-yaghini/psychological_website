@@ -48,9 +48,9 @@ function ExerciseManagement({ initialExercises }) {
   // ===== دریافت اطلاعات بر اساس نوع =====
   const getTypeInfo = (type) => {
     const types = {
-      daily: { label: "روزانه", className: styles.typeDaily, icon: "🌙" },
-      weekly: { label: "هفتگی", className: styles.typeWeekly, icon: "📅" },
-      one_time: { label: "یک‌باره", className: styles.typeOneTime, icon: "⭐" },
+      daily: { label: "روزانه", className: styles.typeDaily},
+      weekly: { label: "هفتگی", className: styles.typeWeekly},
+      one_time: { label: "یک‌باره", className: styles.typeOneTime},
     };
     return types[type] || types.one_time;
   };
@@ -64,15 +64,15 @@ function ExerciseManagement({ initialExercises }) {
     return priorities[priority] || priorities.medium;
   };
 
-  const getCategoryIcon = (category) => {
-    const icons = {
-      meditation: "🧘",
-      writing: "✍️",
-      test: "📊",
-      activity: "🏃",
-    };
-    return icons[category] || "📋";
-  };
+  // const getCategoryIcon = (category) => {
+  //   const icons = {
+  //     meditation: "🧘",
+  //     writing: "✍️",
+  //     test: "📊",
+  //     activity: "🏃",
+  //   };
+  //   return icons[category] || "📋";
+  // };
 
   return (
     <div className={styles.pageContent}>
@@ -120,7 +120,7 @@ function ExerciseManagement({ initialExercises }) {
             }`}
             onClick={() => setFilter("daily")}
           >
-            🌙 روزانه &nbsp;
+            روزانه &nbsp;
             <span className={styles.filterCount}>
               {exercises.filter((ex) => ex.type === "daily").length}
             </span>
@@ -131,7 +131,7 @@ function ExerciseManagement({ initialExercises }) {
             }`}
             onClick={() => setFilter("weekly")}
           >
-            📅 هفتگی &nbsp;
+            هفتگی &nbsp;
             <span className={styles.filterCount}>
               {exercises.filter((ex) => ex.type === "weekly").length}
             </span>
@@ -144,7 +144,7 @@ function ExerciseManagement({ initialExercises }) {
             // onClick={() => setFilter("one-time")}
             onClick={() => setFilter("one_time")}
           >
-            ⭐ یک‌باره &nbsp;
+            یک‌باره &nbsp;
             <span className={styles.filterCount}>
               {exercises.filter((ex) => ex.type === "one_time").length}
             </span>
@@ -207,14 +207,15 @@ function ExerciseManagement({ initialExercises }) {
                     <div className={styles.exerciseMainInfo}>
                       <div className={styles.exerciseTitleRow}>
                         <h4 className={styles.exerciseTitle}>
-                          {exercise.icon || getCategoryIcon(exercise.category)}
+                          {/* {exercise.icon || getCategoryIcon(exercise.category)} */}
                           <span>{exercise.title}</span>
                         </h4>
                         <div className={styles.exerciseMeta}>
                           <span
                             className={`${styles.typeBadge} ${typeInfo.className}`}
                           >
-                            {typeInfo.icon} {typeInfo.label}
+                            {/* {typeInfo.icon}  */}
+                            {typeInfo.label}
                           </span>
                           <span
                             className={`${styles.priorityBadge} ${priorityInfo.className}`}
@@ -273,7 +274,7 @@ function ExerciseManagement({ initialExercises }) {
           })
         ) : (
           <div className={styles.emptyState}>
-            <span className={styles.emptyIcon}>🎯</span>
+            {/* <span className={styles.emptyIcon}>🎯</span> */}
             <h3>هیچ تمرینی موجود نیست</h3>
             <p>
               {showCompleted
@@ -306,18 +307,18 @@ function ExerciseManagement({ initialExercises }) {
           />
         </div>
         <div className={styles.progressStats}>
-          <span>✅ {completedCount} انجام شده</span>
-          <span>⏳ {totalCount - completedCount} باقی‌مانده</span>
+          <span>{completedCount} انجام شده</span>
+          <span>{totalCount - completedCount} باقی‌مانده</span>
         </div>
       </div>
 
       {/* دکمه گزارش */}
       <div className={styles.exerciseActions}>
         <button className={styles.btnReportProgress}>
-          📊 گزارش پیشرفت تمارین
+          گزارش پیشرفت تمارین
         </button>
         <button className={styles.btnShareProgress}>
-          📤 اشتراک‌گذاری با روانشناس
+          اشتراک‌گذاری با روانشناس
         </button>
       </div>
     </div>

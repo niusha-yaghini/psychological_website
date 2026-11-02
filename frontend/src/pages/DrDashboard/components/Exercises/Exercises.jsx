@@ -95,7 +95,6 @@ function ExercisesManagement({
       completed,
       overdue,
     };
-    // }, [allExercises]);
   }, [allExercises, moment, toEnglishDigits]);
 
   // ===== لیست بیمارانی که تمرین دارن =====
@@ -255,7 +254,7 @@ function ExercisesManagement({
 
       {/* ===== راهنمای بالا ===== */}
       <div className={styles.exercisesHint}>
-        <span className={styles.exercisesHintIcon}>💡</span>
+        {/* <span className={styles.exercisesHintIcon}>💡</span> */}
         <p>
           تمرین‌ها همیشه به یک <strong>جلسه‌ی برگزار شده</strong> متصل هستند.
           برای طراحی تمرین، ابتدا بیمار و جلسه را انتخاب کنید. بیمار می‌تواند
@@ -264,7 +263,7 @@ function ExercisesManagement({
       </div>
 
       {/* ===== آمار ===== */}
-      <div className={styles.exercisesStatsGrid}>
+      {/* <div className={styles.exercisesStatsGrid}>
         <div className={styles.exerciseStatBox}>
           <span className={styles.exerciseStatIcon}>📊</span>
           <span className={styles.exerciseStatNumber}>
@@ -293,7 +292,7 @@ function ExercisesManagement({
           </span>
           <span className={styles.exerciseStatLabel}>مهلت گذشته</span>
         </div>
-      </div>
+      </div> */}
 
       {/* ===== فیلترها ===== */}
       <div className={styles.exercisesFilters}>
@@ -313,7 +312,7 @@ function ExercisesManagement({
           </select>
         </div>
 
-        <div className={styles.exerciseFilterGroup}>
+        {/* <div className={styles.exerciseFilterGroup}>
           <label>وضعیت:</label>
           <select
             className={styles.formSelect}
@@ -325,7 +324,7 @@ function ExercisesManagement({
             <option value="completed">انجام شده</option>
             <option value="overdue">مهلت گذشته</option>
           </select>
-        </div>
+        </div> */}
 
         <div className={styles.exerciseFilterGroup}>
           <label>نوع:</label>
@@ -390,24 +389,24 @@ function ExercisesManagement({
                           {/* بج‌ها */}
                           <div className={styles.exerciseItemBadges}>
                             <span className={styles.exerciseTypeBadge}>
-                              {exercise.type === "daily" && "🌙 روزانه"}
-                              {exercise.type === "weekly" && "📅 هفتگی"}
-                              {exercise.type === "one-time" && "⭐ یک‌باره"}
+                              {exercise.type === "daily" && "روزانه"}
+                              {exercise.type === "weekly" && "هفتگی"}
+                              {exercise.type === "one-time" && "یک‌باره"}
                             </span>
 
-                            {exercise.completed ? (
+                            {/* {exercise.completed ? (
                               <span className={styles.exerciseBadgeDone}>
-                                ✅ انجام شده
+                                انجام شده
                               </span>
                             ) : isOverdue ? (
                               <span className={styles.exerciseBadgeOverdue}>
-                                ⚠️ مهلت گذشته
+                                مهلت گذشته
                               </span>
                             ) : (
                               <span className={styles.exerciseBadgePending}>
-                                ⏳ در انتظار
+                                در انتظار
                               </span>
-                            )}
+                            )} */}
                           </div>
                         </div>
 
@@ -417,10 +416,10 @@ function ExercisesManagement({
 
                         {/* اطلاعات متا */}
                         <div className={styles.exerciseItemMeta}>
-                          <span>📅 جلسه: {exercise.appointmentDate}</span>
+                          <span>جلسه: {exercise.appointmentDate}</span>
                           <span>•</span>
-                          <span>⏰ مهلت: {exercise.dueDate}</span>
-                          <span>•</span>
+                          {/* <span>مهلت: {exercise.dueDate}</span>
+                          <span>•</span> */}
                           <span>{exercise.appointmentType}</span>
                         </div>
                       </div>
@@ -450,7 +449,7 @@ function ExercisesManagement({
           ))
         ) : (
           <div className={styles.emptyState}>
-            <span className={styles.emptyIcon}>🎯</span>
+            {/* <span className={styles.emptyIcon}>🎯</span> */}
             <h3>هیچ تمرینی ثبت نشده</h3>
             <p>برای طراحی تمرین، روی دکمه «طراحی تمرین جدید» کلیک کنید.</p>
             <button className={styles.emptyBtn} onClick={handleOpenCreateModal}>
@@ -745,23 +744,23 @@ function ExerciseDesignModal({
       alert("لطفاً عنوان تمرین را وارد کنید.");
       return;
     }
-    if (!form.description.trim()) {
-      alert("لطفاً توضیحات تمرین را وارد کنید.");
-      return;
-    }
-    if (!form.dueDate) {
-      alert("لطفاً مهلت انجام را انتخاب کنید.");
-      return;
-    }
+    // if (!form.description.trim()) {
+    //   alert("لطفاً توضیحات تمرین را وارد کنید.");
+    //   return;
+    // }
+    // if (!form.dueDate) {
+    //   alert("لطفاً مهلت انجام را انتخاب کنید.");
+    //   return;
+    // }
 
     const cleanInstructions = form.instructions
       .map((i) => i.trim())
       .filter((i) => i.length > 0);
 
-    if (cleanInstructions.length === 0) {
-      alert("لطفاً حداقل یک مرحله دستورالعمل وارد کنید.");
-      return;
-    }
+    // if (cleanInstructions.length === 0) {
+    //   alert("لطفاً حداقل یک مرحله دستورالعمل وارد کنید.");
+    //   return;
+    // }
 
     const dueDateStr = toPersianDigits(form.dueDate.format("YYYY/MM/DD"));
 
@@ -826,7 +825,7 @@ function ExerciseDesignModal({
     <div className={styles.modalOverlay}>
       <div className={styles.exerciseDesignModal}>
         <div className={styles.modalHeader}>
-          <h3>{mode === "edit" ? "✏️ ویرایش تمرین" : "🎯 طراحی تمرین جدید"}</h3>
+          <h3>{mode === "edit" ? " ویرایش تمرین" : "طراحی تمرین جدید"}</h3>
           <button className={styles.modalClose} onClick={onClose}>
             ✕
           </button>
@@ -839,7 +838,7 @@ function ExerciseDesignModal({
               <strong>{appointmentInfo.patientName}</strong>
             </p>
             <span className={styles.exerciseSessionDate}>
-              📅 {appointmentInfo.appointmentDate} •{" "}
+              {appointmentInfo.appointmentDate} •{" "}
               {appointmentInfo.appointmentType}
             </span>
           </div>
@@ -858,7 +857,7 @@ function ExerciseDesignModal({
 
           {/* ===== توضیحات ===== */}
           <div className={styles.formGroup}>
-            <label>توضیحات *</label>
+            <label>توضیحات</label>
             <textarea
               className={styles.formInput}
               placeholder="توضیح کوتاهی از تمرین..."
@@ -877,9 +876,9 @@ function ExerciseDesignModal({
                 value={form.type}
                 onChange={(e) => updateField("type", e.target.value)}
               >
-                <option value="daily">🌙 روزانه</option>
-                <option value="weekly">📅 هفتگی</option>
-                <option value="one-time">⭐ یک‌باره</option>
+                <option value="daily">روزانه</option>
+                <option value="weekly">هفتگی</option>
+                <option value="one-time">یک‌باره</option>
               </select>
             </div>
             <div className={styles.formGroup}>
@@ -916,7 +915,7 @@ function ExerciseDesignModal({
           </div>
 
           {/* ===== مهلت انجام ===== */}
-          <div className={styles.formGroup}>
+          {/* <div className={styles.formGroup}>
             <label>مهلت انجام *</label>
             <DatePicker
               value={form.dueDate}
@@ -929,11 +928,11 @@ function ExerciseDesignModal({
               format="YYYY/MM/DD"
               editable={false}
             />
-          </div>
+          </div> */}
 
           {/* ===== دستورالعمل‌ها ===== */}
           <div className={styles.formGroup}>
-            <label>دستورالعمل‌ها *</label>
+            <label>دستورالعمل‌ها</label>
             <div className={styles.instructionsList}>
               {form.instructions.map((instruction, index) => (
                 <div key={index} className={styles.instructionRow}>

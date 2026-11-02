@@ -33,7 +33,7 @@ import AppointmentsManagement from "./components/Appointments/Appointments";
 import SessionsManagement from "./components/Sessions/Sessions";
 import PatientNotifications from "./components/Notifications/Notifications";
 import NotificationDropdown from "./components/NotificationDropdown/NotificationDropdown";
-import ProgressView from "./components/ProgressView/ProgressView";
+// import ProgressView from "./components/ProgressView/ProgressView";
 import ExerciseManagement from "./components/Exercises/Exercises";
 import PatientProfile from "./components/Profile/PatientProfile";
 import PatientSettings from "./components/Settings/PatientSettings";
@@ -551,12 +551,12 @@ function PatientDashboard() {
       path: "/messages",
       badge: unreadMessagesCount > 0 ? unreadMessagesCount : undefined,
     },
-    {
-      id: "progress",
-      label: "پیشرفت من",
-      icon: <FaChartLine />,
-      path: "/progress",
-    },
+    // {
+    //   id: "progress",
+    //   label: "پیشرفت من",
+    //   icon: <FaChartLine />,
+    //   path: "/progress",
+    // },
     {
       id: "exercise",
       label: "تمارین",
@@ -619,8 +619,8 @@ function PatientDashboard() {
             formatNotificationTime={formatNotificationTime}
           />
         );
-      case "progress":
-        return <ProgressView progressData={seedData.progress} />;
+      // case "progress":
+      //   return <ProgressView progressData={seedData.progress} />;
       case "exercise":
         return <ExerciseManagement initialExercises={seedData.exercises} />;
       case "profile":

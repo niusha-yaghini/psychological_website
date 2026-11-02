@@ -150,7 +150,7 @@ function CalendarView({
       {/* ===== هدر ===== */}
       <div className={styles.pageHeader}>
         <div className={styles.headerInfo}>
-          <h2>📅 تقویم من</h2>
+          <h2>تقویم من</h2>
           <p>نمای کلی جلسات هفتگی</p>
         </div>
 
@@ -161,7 +161,7 @@ function CalendarView({
             onClick={() => setWeekOffset(weekOffset - 1)}
             title="هفته قبل"
           >
-            ›
+            ‹
           </button>
 
           <span className={styles.calendarWeekLabel}>{weekRangeLabel}</span>
@@ -171,7 +171,7 @@ function CalendarView({
             onClick={() => setWeekOffset(weekOffset + 1)}
             title="هفته بعد"
           >
-            ‹
+            ›
           </button>
 
           {weekOffset !== 0 && (
@@ -187,7 +187,7 @@ function CalendarView({
 
       {/* ===== راهنما ===== */}
       <div className={styles.calendarHint}>
-        <span className={styles.calendarHintIcon}>💡</span>
+        {/* <span className={styles.calendarHintIcon}>💡</span> */}
         <p>
           برای مدیریت نوبت‌ها (تأیید، لغو، افزودن) به بخش{" "}
           <strong>«نوبت‌ها»</strong> بروید.

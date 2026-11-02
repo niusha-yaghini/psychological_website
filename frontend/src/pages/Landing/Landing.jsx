@@ -364,11 +364,6 @@ function Landing() {
                   بلوغ و کشف هویت واقعی‌شان.
                 </p>
                 <div className={styles.areaTags}>
-                  {/* <span>🔥 مدیریت خشم</span>
-                  <span>⭐ اعتماد به نفس</span>
-                  <span>📚 مشکلات تحصیلی</span>
-                  <span>🔍 هویت‌یابی</span> */}
-                  {/* <span>مدیریت خشم</span> */}
                   <span>اعتماد به نفس</span>
                   <span>مشکلات تحصیلی</span>
                   <span>هویت‌یابی</span>
