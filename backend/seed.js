@@ -973,7 +973,7 @@ const seedData = {
       patientPhone: "۹۱۲۳۴۵۶۷۸۹",
       type: "جلسه مشاوره فردی",
       typeKey: "individual",
-      date: "۱۴۰۵/۰۷/۰۵",
+      date: "۱۴۰۵/۰۸/۱۵",
       time: "۱۰:۰۰ - ۱۱:۰۰",
       hours: ["۱۰:۰۰"],
       startTime: "۱۰:۰۰",

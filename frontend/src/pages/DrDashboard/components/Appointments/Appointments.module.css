@@ -1,0 +1,908 @@
+/* ============================================
+   APPOINTMENTS MANAGEMENT
+============================================ */
+
+/* ===== Animations ===== */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes pulseAwaiting {
+  0%,
+  100% {
+    background: #fff8e1;
+    border-color: #ffb74d;
+  }
+
+  50% {
+    background: #ffecb3;
+    border-color: #f57c00;
+  }
+}
+
+/* ============================================
+   COMMON STYLES
+============================================ */
+
+.pageContent {
+  animation: fadeIn 0.4s ease;
+}
+
+.pageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.headerInfo h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0;
+}
+
+.headerInfo p {
+  font-size: 15px;
+  color: var(--text-muted);
+  margin: 4px 0 0;
+}
+
+.newBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 24px;
+  background: linear-gradient(135deg, #2d7d6ed7, #4caf84de);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.newBtn:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #2d7d6e, #4caf84);
+  box-shadow: 0 4px 20px rgba(45, 125, 110, 0.3);
+}
+
+/* ============================================
+   FILTER TABS
+============================================ */
+
+.filterTabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  padding: 4px;
+  background: var(--gray-light);
+  border-radius: 30px;
+  width: fit-content;
+}
+
+.filterTab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: transparent;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.filterTab:hover {
+  color: var(--text-dark);
+}
+
+.filterTab.active {
+  background: var(--white);
+  color: #2d7d6e;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.filterCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  background: rgba(45, 125, 110, 0.1);
+  color: #2d7d6e;
+  border-radius: 30px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.filterTab.active .filterCount {
+  background: rgba(45, 125, 110, 0.15);
+}
+
+/* ============================================
+   EMPTY STATE
+============================================ */
+
+.emptyState {
+  text-align: center;
+  padding: 60px 24px;
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.emptyIcon {
+  font-size: 64px;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.emptyState h3 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0;
+}
+
+.emptyState p {
+  font-size: 15px;
+  color: var(--text-muted);
+  margin: 8px 0 0;
+}
+
+/* ============================================
+   APPOINTMENTS LIST
+============================================ */
+
+.appointmentsList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.appointmentCard {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.appointmentCard:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(45, 125, 110, 0.08);
+}
+
+/* ===== Past Appointments ===== */
+
+.pastAppointment {
+  opacity: 0.6;
+  background: #fafafa;
+  filter: grayscale(0.3);
+}
+
+.pastAppointment:hover {
+  opacity: 0.85;
+  filter: grayscale(0);
+  transform: translateY(-3px);
+}
+
+.pastAppointment h4,
+.pastAppointment .metaItem {
+  color: var(--text-muted);
+}
+
+.pastAppointment .statusBadge {
+  opacity: 0.7;
+}
+
+/* ===== Appointment Information ===== */
+
+.appointmentInfo {
+  flex: 1;
+  min-width: 200px;
+}
+
+.appointmentInfo h4 {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0 0 8px;
+}
+
+.appointmentInfo p {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin: 4px 0 0;
+}
+
+/* ============================================
+   STATUS BADGES
+============================================ */
+
+.statusBadge {
+  padding: 4px 14px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.statusPending {
+  background: #fff3e0;
+  color: #e65100;
+}
+
+.statusConfirmed {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.statusCompleted {
+  background: #e3f2fd;
+  color: #0d47a1;
+}
+
+.statusCancelled {
+  background: #fbe9e7;
+  color: #c62828;
+}
+
+.statusExpired {
+  background: #f5f5f5;
+  color: #757575;
+}
+
+.statusAwaitingConfirmation {
+  background: #fff8e1;
+  color: #f57c00;
+}
+
+.statusNoShow {
+  background: #f5f5f5;
+  color: #616161;
+}
+
+/* ===== Appointment Status Bar ===== */
+
+.appointmentStatusBar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+/* ===== No Show Badge ===== */
+
+.noShowBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  background: #f5f5f5;
+  color: #616161;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid #e0e0e0;
+}
+
+/* ===== Awaiting Confirmation Badge ===== */
+
+.awaitingBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  background: #fff8e1;
+  color: #f57c00;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid #ffb74d;
+}
+
+/* ===== Online Badge ===== */
+
+.onlineBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  background: rgba(45, 125, 110, 0.08);
+  color: #2d7d6e;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* ===== Cancel Badge ===== */
+
+.cancelBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  background: #fbe9e7;
+  color: #c62828;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* ============================================
+   APPOINTMENT META
+============================================ */
+
+.appointmentMeta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.metaItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.metaDivider {
+  color: #d5d0ca;
+  font-size: 12px;
+}
+
+/* ===== Appointment Price ===== */
+
+.appointmentPrice {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 4px 12px;
+  background: rgba(45, 125, 110, 0.08);
+  color: #2d7d6e;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ===== Cancel Reason ===== */
+
+.cancelReason {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: #fbe9e7;
+  border-radius: var(--radius);
+  font-size: 13px;
+  color: #c62828;
+  flex-wrap: wrap;
+}
+
+.cancelReason span:first-child {
+  font-weight: 600;
+}
+
+/* ============================================
+   APPOINTMENT BODY & ACTIONS
+============================================ */
+
+.appointmentBody {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.appointmentActions {
+  display: flex;
+  gap: 8px;
+}
+
+/* ===== Approve Button ===== */
+
+.btnApprove {
+  padding: 6px 16px;
+  background: #fdfffd;
+  color: #2e7d32;
+  border: 1.5px solid #2e7d32;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btnApprove:hover {
+  background: #2e7d32;
+  color: white;
+  transform: scale(1.03);
+  box-shadow: 0 4px 16px rgba(45, 198, 40, 0.2);
+}
+
+/* ===== Reject Button ===== */
+
+.btnReject {
+  padding: 6px 16px;
+  background: #fffefd;
+  color: #c62828;
+  border: 1.5px solid #c62828;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btnReject:hover {
+  background: #c62828;
+  color: white;
+  transform: scale(1.03);
+  box-shadow: 0 4px 16px rgba(198, 40, 40, 0.2);
+}
+
+/* ===== Complete Button ===== */
+
+.btnComplete {
+  padding: 6px 16px;
+  background: #e3f2fd;
+  color: #0d47a1;
+  border: none;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btnComplete:hover {
+  background: #0d47a1;
+  color: white;
+}
+
+/* ===== No Show Button ===== */
+
+.btnNoShow {
+  padding: 6px 16px;
+  background: #f5f5f5;
+  color: #616161;
+  border: 1.5px solid #9e9e9e;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btnNoShow:hover {
+  background: #616161;
+  color: white;
+  transform: scale(1.03);
+}
+
+/* ===== Doctor Cancel Button ===== */
+
+.btnDoctorCancel {
+  padding: 8px 20px;
+  background: #fdfcfc;
+  color: #c62828;
+  border: 1.5px solid #c62828;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btnDoctorCancel:hover {
+  background: #c62828;
+  color: white;
+  transform: scale(1.03);
+  box-shadow: 0 4px 16px rgba(198, 40, 40, 0.2);
+}
+
+/* ===== Disabled Cancel Button ===== */
+
+.btnCancelDisabled {
+  padding: 6px 16px;
+  background: #f5f5f5;
+  color: #9e9e9e;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: not-allowed;
+  font-family: inherit;
+  opacity: 0.7;
+}
+
+.btnCancelDisabled:hover {
+  background: #f5f5f5;
+  color: #9e9e9e;
+}
+
+/* ============================================
+   AWAITING CONFIRMATION BOX
+============================================ */
+
+.awaitingConfirmationBox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 10px 14px;
+  background: #fff8e1;
+  border: 1px dashed #ffb74d;
+  border-radius: var(--radius);
+  animation: pulseAwaiting 2s ease-in-out infinite;
+}
+
+.awaitingText {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.awaitingTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: #e65100;
+}
+
+.awaitingTime {
+  font-size: 12px;
+  color: #bf360c;
+  opacity: 0.8;
+}
+
+/* ============================================
+   MODALS - COMMON
+============================================ */
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.confirmModal,
+.addModal {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  padding: 32px;
+  animation: modalSlideUp 0.3s ease;
+}
+
+.confirmModal {
+  max-width: 440px;
+}
+
+.addModal {
+  max-width: 520px;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.modalHeader h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0;
+}
+
+.modalClose {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background: var(--gray-light);
+  color: var(--text-muted);
+  font-size: 16px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modalClose:hover {
+  background: #e74c3c;
+  color: white;
+  transform: rotate(90deg);
+}
+
+.modalBody {
+  margin-bottom: 24px;
+}
+
+/* ============================================
+   CONFIRM MODAL
+============================================ */
+
+.confirmText {
+  font-size: 16px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0 0 16px;
+}
+
+.confirmText strong {
+  color: var(--text-dark);
+}
+
+.confirmDetails {
+  background: var(--gray-light);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+
+.confirmRow {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.confirmRow span:last-child {
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+/* ============================================
+   MODAL FOOTER & BUTTONS
+============================================ */
+
+.modalFooter {
+  display: flex;
+  gap: 12px;
+}
+
+.btnCancelModal,
+.btnConfirmModal,
+.btnRejectModal,
+.btnAddModal {
+  flex: 1;
+  padding: 12px;
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btnCancelModal {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1.5px solid var(--gray-light);
+}
+
+.btnCancelModal:hover {
+  border-color: #e74c3c;
+  color: #e74c3c;
+}
+
+.btnConfirmModal,
+.btnAddModal {
+  background: linear-gradient(135deg, #2d7d6e, #4caf84);
+  color: white;
+  border: none;
+}
+
+.btnConfirmModal:hover,
+.btnAddModal:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(45, 125, 110, 0.3);
+}
+
+.btnRejectModal {
+  background: linear-gradient(135deg, #c62828, #e74c3c);
+  color: white;
+  border: none;
+}
+
+.btnRejectModal:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(198, 40, 40, 0.3);
+}
+
+/* ============================================
+   REJECT MODAL
+============================================ */
+
+.rejectText {
+  font-size: 16px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0 0 16px;
+}
+
+.rejectText strong {
+  color: #c62828;
+}
+
+.rejectReasonContainer {
+  margin-top: 16px;
+}
+
+.rejectLabel {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.rejectTextarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 2px solid var(--gray-light);
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--text-dark);
+  resize: vertical;
+  transition: var(--transition);
+  background: var(--white);
+}
+
+.rejectTextarea:focus {
+  border-color: #e74c3c;
+  box-shadow: 0 0 0 4px rgba(231, 76, 60, 0.08);
+  outline: none;
+}
+
+.rejectTextarea::placeholder {
+  color: #b5b0aa;
+}
+
+/* ============================================
+   ADD APPOINTMENT FORM
+============================================ */
+
+.formGroup {
+  margin-bottom: 16px;
+}
+
+.formGroup label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.formInput,
+.formSelect {
+  width: 100%;
+  padding: 10px 14px;
+  border: 2px solid var(--gray-light);
+  border-radius: var(--radius);
+  font-size: 15px;
+  font-family: inherit;
+  color: var(--text-dark);
+  transition: var(--transition);
+  background: var(--white);
+}
+
+.formInput:focus,
+.formSelect:focus {
+  border-color: #2d7d6e;
+  box-shadow: 0 0 0 4px rgba(45, 125, 110, 0.08);
+  outline: none;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.formHint {
+  font-size: 12px;
+  color: var(--text-muted);
+  background: rgba(45, 125, 110, 0.06);
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  margin: -8px 0 16px;
+  border-right: 3px solid #2d7d6e;
+  line-height: 1.6;
+}
+
+/* ============================================
+   DATE PICKER
+============================================ */
+
+:global(.rmdp-input) {
+  width: 100% !important;
+  padding: 10px 14px !important;
+  border: 2px solid var(--gray-light) !important;
+  border-radius: var(--radius) !important;
+  font-size: 15px !important;
+  font-family: inherit !important;
+  color: var(--text-dark) !important;
+  background: var(--white) !important;
+  transition: var(--transition) !important;
+}
+
+:global(.rmdp-input:focus) {
+  border-color: #2d7d6e !important;
+  box-shadow: 0 0 0 4px rgba(45, 125, 110, 0.08) !important;
+  outline: none !important;
+}
+
+/* ============================================
+   RESPONSIVE
+============================================ */
+
+@media (max-width: 768px) {
+  .formRow {
+    grid-template-columns: 1fr;
+  }
+
+  .addModal {
+    padding: 24px;
+    margin: 0 16px;
+  }
+}

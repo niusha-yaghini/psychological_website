@@ -1,0 +1,441 @@
+/* ============================================
+   DASHBOARD OVERVIEW
+============================================ */
+
+.dashboardContent {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+  gap: 24px;
+  width: 100%;
+  direction: rtl;
+  animation: fadeIn 0.4s ease;
+  align-items: stretch;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.dashboardContent * {
+  box-sizing: border-box;
+}
+
+/* ============================================
+   ANIMATION
+============================================ */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   MAIN COLUMN
+============================================ */
+
+.mainColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+.sideColumn {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* ============================================
+   WELCOME BANNER
+============================================ */
+
+.welcomeBanner {
+  min-height: 200px;
+
+  background:
+    linear-gradient(135deg, rgba(27, 58, 92, 0.28), rgba(45, 125, 110, 0.38)),
+    url("/images/Patient_Panel/welcome_box_background3.png");
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  border-radius: var(--radius-lg);
+  padding: 32px 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  color: #fff;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.welcomeText {
+  padding-right: 30%;
+  text-align: right;
+}
+
+.welcomeText h2 {
+  font-size: 30px;
+  font-weight: 700;
+  margin: 0 0 15px;
+  color: #fff;
+}
+
+.welcomeText p {
+  font-size: 16px;
+  line-height: 1.8;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* ============================================
+   STATISTICS GRID
+============================================ */
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+
+.statCard {
+  min-width: 0;
+  min-height: 115px;
+
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 20px 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(0, 0, 0, 0.025);
+
+  transition: var(--transition);
+}
+
+.statCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.statInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
+}
+
+.statValue {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--text-dark);
+}
+
+.statLabel {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.7;
+  color: var(--text-muted);
+}
+
+/* ============================================
+   SECTION CARD
+============================================ */
+
+.sectionCard {
+  width: 100%;
+  min-width: 0;
+
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 24px;
+
+  box-shadow: var(--shadow-sm);
+  height: 100%;
+}
+
+.sectionCard h3 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0 0 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--gray-light);
+}
+
+/* ============================================
+   NEXT SESSION
+============================================ */
+
+.nextSession {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+
+  padding: 18px;
+  background: #fcfbf8;
+  border-radius: var(--radius);
+
+  border-right: 4px solid #2d7d6e;
+}
+
+.sessionDate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 75px;
+  padding: 12px;
+
+  background: rgba(45, 125, 110, 0.08);
+  border-radius: var(--radius);
+  color: #2d7d6e;
+}
+
+.dateDay {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.dateNumber {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.dateMonth {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.sessionInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+}
+
+.sessionInfo h4 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0;
+}
+
+.sessionInfo p {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.7;
+}
+
+.sessionBtn {
+  width: 100%;
+  padding: 11px 18px;
+
+  border: none;
+  border-radius: 30px;
+
+  background: linear-gradient(135deg, #2d7d6e, #4caf84);
+  color: #fff;
+
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.sessionBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ============================================
+   RECENT ACTIVITIES
+============================================ */
+
+.activityList {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.activityItem {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  padding: 16px 0;
+  border-bottom: 1px solid var(--gray-light);
+}
+
+.activityItem:first-child {
+  padding-top: 4px;
+}
+
+.activityItem:last-child {
+  border-bottom: none;
+  padding-bottom: 4px;
+}
+
+.activityIcon {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(45, 125, 110, 0.08);
+  border-radius: 12px;
+
+  font-size: 20px;
+}
+
+.activityInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.activityInfo p {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0;
+  line-height: 1.7;
+}
+
+.activityInfo span {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ============================================
+   RESPONSIVE - TABLET
+============================================ */
+
+@media screen and (max-width: 1200px) {
+  .dashboardContent {
+    grid-template-columns: minmax(0, 1.6fr) minmax(250px, 1fr);
+    gap: 18px;
+  }
+
+  .statsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .welcomeText {
+    padding-right: 15%;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - MOBILE
+============================================ */
+
+@media screen and (max-width: 768px) {
+  .dashboardContent {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .mainColumn {
+    gap: 16px;
+  }
+
+  .welcomeBanner {
+    min-height: 160px;
+    padding: 24px 20px;
+    background-position: center;
+  }
+
+  .welcomeText {
+    padding-right: 0;
+    max-width: 100%;
+  }
+
+  .welcomeText h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+
+  .welcomeText p {
+    font-size: 13px;
+  }
+
+  .statsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .statCard {
+    min-height: 100px;
+    padding: 16px 10px;
+  }
+
+  .statValue {
+    font-size: 24px;
+  }
+
+  .statLabel {
+    font-size: 12px;
+  }
+
+  .sectionCard {
+    padding: 18px;
+  }
+
+  .nextSession {
+    padding: 14px;
+  }
+}
+
+/* ============================================
+   SMALL MOBILE
+============================================ */
+
+@media screen and (max-width: 380px) {
+  .welcomeBanner {
+    min-height: 140px;
+    padding: 18px;
+  }
+
+  .welcomeText h2 {
+    font-size: 21px;
+  }
+
+  .statCard {
+    min-height: 90px;
+  }
+
+  .statValue {
+    font-size: 21px;
+  }
+
+  .sectionCard {
+    padding: 14px;
+  }
+}

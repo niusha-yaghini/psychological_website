@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import Landing from "./components/Landing/Landing";
-import Login from "./components/Auth/Login/Login";
-import Signup from "./components/Auth/Signup/Signup";
-import PatientDashboard from "./components/PatientDashboard/PatientDashboard";
-import DoctorDashboard from "./components/DrDashboard/DrDashboard";
+import Landing from "./pages/Landing/Landing";
+import Login from "./pages/Auth/Login/Login";
+import Signup from "./pages/Auth/Signup/Signup";
+import PatientDashboard from "./pages/PatientDashboard/PatientDashboard";
+import DoctorDashboard from "./pages/DrDashboard/DrDashboard";
 
 import "./App.css";
 

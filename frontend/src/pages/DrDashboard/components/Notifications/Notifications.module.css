@@ -1,0 +1,279 @@
+/* ============================================
+   NOTIFICATIONS - COMMON STYLES
+============================================ */
+
+.pageContent {
+  animation: fadeIn 0.4s ease;
+}
+
+/* ===== Page Header ===== */
+.pageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.headerInfo h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0;
+}
+
+.headerInfo p {
+  font-size: 15px;
+  color: var(--text-muted);
+  margin: 4px 0 0;
+}
+
+/* ===== Notification Actions ===== */
+
+.notificationActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.unreadBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 14px;
+  background: #e74c3c;
+  color: white;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.markAllBtn {
+  padding: 8px 20px;
+  background: transparent;
+  color: #2d7d6e;
+  border: 1.5px solid #2d7d6e;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.markAllBtn:hover {
+  background: #2d7d6e;
+  color: white;
+}
+
+/* ============================================
+   FILTER TABS
+============================================ */
+
+.filterTabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  padding: 4px;
+  background: var(--gray-light);
+  border-radius: 30px;
+  width: fit-content;
+}
+
+.filterTab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: transparent;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.filterTab:hover {
+  color: var(--text-dark);
+}
+
+.filterTab.active {
+  background: var(--white);
+  color: #2d7d6e;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.filterCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  background: rgba(45, 125, 110, 0.1);
+  color: #2d7d6e;
+  border-radius: 30px;
+  font-size: 11px;
+  font-weight: 700;
+  margin-right: 4px;
+}
+
+.filterTab.active .filterCount {
+  background: rgba(45, 125, 110, 0.15);
+}
+
+/* ============================================
+   NOTIFICATIONS LIST
+============================================ */
+
+.notificationsList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.notificationCard {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 20px;
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  cursor: pointer;
+  position: relative;
+}
+
+.notificationCard:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(45, 125, 110, 0.08);
+}
+
+.notificationCard.unread {
+  background: #f8f9fa;
+  border-color: rgba(45, 125, 110, 0.12);
+}
+
+.notificationContent {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ===== Notification Header ===== */
+
+.notificationHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.notificationTitle {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.unreadDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #2d7d6e;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.notificationTime {
+  font-size: 12px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.notificationMessage {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 4px 0 0;
+}
+
+/* ===== Unread Indicator ===== */
+
+.unreadIndicator {
+  width: 4px;
+  height: 40px;
+  background: #2d7d6e;
+  border-radius: 0 4px 4px 0;
+  flex-shrink: 0;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* ===== Read Notification ===== */
+
+.notificationCard:not(.unread) .notificationTitle {
+  color: var(--text-muted);
+}
+
+.notificationCard:not(.unread) .notificationMessage {
+  color: var(--text-muted);
+}
+
+/* ============================================
+   EMPTY STATE
+============================================ */
+
+.emptyState {
+  text-align: center;
+  padding: 60px 24px;
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.emptyIcon {
+  font-size: 64px;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.emptyState h3 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0;
+}
+
+.emptyState p {
+  font-size: 15px;
+  color: var(--text-muted);
+  margin: 8px 0 0;
+}
+
+/* ============================================
+   RESPONSIVE
+============================================ */
+
+@media (max-width: 768px) {
+  .filterTabs {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .filterTab {
+    white-space: nowrap;
+  }
+}

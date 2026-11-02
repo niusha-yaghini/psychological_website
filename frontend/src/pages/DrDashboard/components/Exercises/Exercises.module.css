@@ -1,0 +1,1065 @@
+/* ============================================
+   EXERCISES MANAGEMENT
+============================================ */
+
+/* ===== Animations ===== */
+@keyframes exercisesFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes exercisesModalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ===== Page Layout ===== */
+
+.pageContent {
+  animation: exercisesFadeIn 0.4s ease;
+}
+
+.pageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.headerInfo h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0;
+}
+
+.headerInfo p {
+  font-size: 15px;
+  color: var(--text-muted);
+  margin: 4px 0 0;
+}
+
+.newBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 24px;
+  background: linear-gradient(135deg, #2d7d6ed7, #4caf84de);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.newBtn:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #2d7d6e, #4caf84);
+  box-shadow: 0 4px 20px rgba(45, 125, 110, 0.3);
+}
+
+/* ===== Hint Box ===== */
+
+.exercisesHint {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 18px;
+  background: linear-gradient(135deg, #e3f2fd 0%, #e8f4f8 100%);
+  border-right: 3px solid #2196f3;
+  border-radius: var(--radius);
+  margin-bottom: 20px;
+}
+
+.exercisesHintIcon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.exercisesHint p {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin: 0;
+}
+
+.exercisesHint strong {
+  color: #0d47a1;
+}
+
+/* ===== Statistics ===== */
+
+.exercisesStatsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.exerciseStatBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 16px;
+  background: var(--white);
+  border-radius: var(--radius);
+  border: 1.5px solid var(--gray-light);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+.exerciseStatBox:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.exerciseStatIcon {
+  font-size: 22px;
+}
+
+.exerciseStatNumber {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text-dark);
+}
+
+.exerciseStatLabel {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.statPending {
+  background: linear-gradient(135deg, #ffffff 0%, #fff8e1 100%);
+  border-color: #ffb74d;
+}
+
+.statPending .exerciseStatNumber {
+  color: #e65100;
+}
+
+.statCompleted {
+  background: linear-gradient(135deg, #ffffff 0%, #f1f8f4 100%);
+  border-color: #a5d6a7;
+}
+
+.statCompleted .exerciseStatNumber {
+  color: #2e7d32;
+}
+
+.statOverdue {
+  background: linear-gradient(135deg, #ffffff 0%, #fbe9e7 100%);
+  border-color: #ef9a9a;
+}
+
+.statOverdue .exerciseStatNumber {
+  color: #c62828;
+}
+
+/* ===== Filters ===== */
+
+.exercisesFilters {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  padding: 14px 18px;
+  background: var(--gray-light);
+  border-radius: var(--radius);
+}
+
+.exerciseFilterGroup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.exerciseFilterGroup label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.exerciseFilterGroup .formSelect {
+  min-width: 150px;
+  padding: 8px 12px;
+  font-size: 13px;
+  background: var(--white);
+}
+
+/* ===== Form Elements ===== */
+
+.formGroup {
+  margin-bottom: 18px;
+}
+
+.formGroup label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.formInput,
+.formSelect {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid var(--gray-light);
+  border-radius: var(--radius);
+  background: var(--white);
+  color: var(--text-dark);
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  transition: var(--transition);
+  box-sizing: border-box;
+}
+
+.formInput:focus,
+.formSelect:focus {
+  border-color: #2d7d6e;
+  box-shadow: 0 0 0 3px rgba(45, 125, 110, 0.1);
+}
+
+.formInput::placeholder {
+  color: #b5b0aa;
+}
+
+textarea.formInput {
+  resize: vertical;
+  min-height: 90px;
+}
+
+.formSelect {
+  cursor: pointer;
+}
+
+.formRow {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.formRow .formGroup {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ===== Exercises List ===== */
+
+.exercisesList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.patientExercisesGroup {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--gray-light);
+  overflow: hidden;
+}
+
+.patientExercisesHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #f0f4f7 100%);
+  border-bottom: 1px solid var(--gray-light);
+}
+
+.patientExercisesAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+.patientExercisesName {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.patientExercisesCount {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-right: auto;
+  background: var(--white);
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+.patientExercisesItems {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ===== Exercise Item ===== */
+
+.exerciseItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--white);
+  border: 1px solid var(--gray-light);
+  border-radius: var(--radius);
+  transition: var(--transition);
+}
+
+.exerciseItem:hover {
+  border-color: rgba(45, 125, 110, 0.2);
+  box-shadow: var(--shadow-sm);
+}
+
+.exerciseItemDone {
+  background: #fafcfb;
+  opacity: 0.85;
+}
+
+.exerciseItemIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--gray-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.exerciseItemDone .exerciseItemIcon {
+  background: #e8f5e9;
+}
+
+.exerciseItemContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.exerciseItemHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+
+.exerciseItemTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.exerciseItemDone .exerciseItemTitle {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+.exerciseItemBadges {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.exerciseTypeBadge {
+  font-size: 11px;
+  padding: 2px 10px;
+  background: var(--gray-light);
+  color: var(--text-muted);
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+.exerciseBadgeDone {
+  font-size: 11px;
+  padding: 2px 10px;
+  background: #e8f5e9;
+  color: #2e7d32;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+.exerciseBadgePending {
+  font-size: 11px;
+  padding: 2px 10px;
+  background: #fff3e0;
+  color: #e65100;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+.exerciseBadgeOverdue {
+  font-size: 11px;
+  padding: 2px 10px;
+  background: #fbe9e7;
+  color: #c62828;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+.exerciseItemDesc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0 0 8px;
+}
+
+.exerciseItemMeta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-muted);
+  flex-wrap: wrap;
+}
+
+.exerciseItemActions {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.exerciseBtnEdit,
+.exerciseBtnDelete {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.exerciseBtnEdit:hover {
+  background: #e3f2fd;
+}
+
+.exerciseBtnDelete:hover {
+  background: #fbe9e7;
+}
+
+/* ===== Empty State ===== */
+
+.emptyState {
+  text-align: center;
+  padding: 60px 24px;
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  color: var(--text-muted);
+}
+
+.emptyIcon {
+  font-size: 64px;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.emptyState h3 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0;
+}
+
+.emptyState p {
+  font-size: 15px;
+  color: var(--text-muted);
+  margin: 8px 0 16px;
+}
+
+.emptyBtn {
+  padding: 11px 22px;
+  background: linear-gradient(135deg, #2d7d6e, #4caf84);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.emptyBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(45, 125, 110, 0.25);
+}
+
+/* ============================================
+   PATIENT APPOINTMENT SELECT MODAL
+============================================ */
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.patientSelectModal {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  max-width: 600px;
+  width: 100%;
+  padding: 28px;
+  animation: exercisesModalSlideUp 0.3s ease;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.modalHeader h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0;
+}
+
+.modalClose {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background: var(--gray-light);
+  color: var(--text-muted);
+  font-size: 16px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.modalClose:hover {
+  background: #e74c3c;
+  color: white;
+  transform: rotate(90deg);
+}
+
+.modalBody {
+  margin-bottom: 24px;
+  min-height: 0;
+}
+
+.modalFooter {
+  display: flex;
+  gap: 12px;
+}
+
+.btnCancelModal,
+.btnConfirmModal {
+  flex: 1;
+  padding: 12px;
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btnCancelModal {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1.5px solid var(--gray-light);
+}
+
+.btnCancelModal:hover {
+  border-color: #e74c3c;
+  color: #e74c3c;
+}
+
+.btnConfirmModal {
+  background: linear-gradient(135deg, #2d7d6e, #4caf84);
+  color: white;
+  border: none;
+}
+
+.btnConfirmModal:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(45, 125, 110, 0.3);
+}
+
+/* ===== Patient Select Hint ===== */
+
+.patientSelectHint {
+  font-size: 13px;
+  color: var(--text-muted);
+  background: rgba(45, 125, 110, 0.06);
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  margin: 0 0 16px;
+  border-right: 3px solid #2d7d6e;
+  line-height: 1.6;
+}
+
+/* ===== Patient Search ===== */
+
+.patientSearchBox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: var(--gray-light);
+  border-radius: var(--radius);
+  transition: var(--transition);
+}
+
+.patientSearchBox:focus-within {
+  background: var(--white);
+  box-shadow: 0 0 0 2px rgba(45, 125, 110, 0.2);
+}
+
+.patientSearchIcon {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.patientSearchInput {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--text-dark);
+}
+
+.patientSearchInput::placeholder {
+  color: var(--text-muted);
+}
+
+/* ===== Patient Select List ===== */
+
+.patientSelectList {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 400px;
+  margin-top: 14px;
+}
+
+.patientSelectGroup {
+  background: var(--white);
+  border: 1px solid var(--gray-light);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.patientSelectGroupHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: transparent;
+  border: none;
+  width: 100%;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+  text-align: right;
+}
+
+.patientSelectGroupHeader:hover {
+  background: var(--gray-light);
+}
+
+.patientSelectAvatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--gray-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.patientSelectName {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.patientSelectCount {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-right: auto;
+}
+
+.expandIcon {
+  font-size: 11px;
+  color: var(--text-muted);
+  transition: transform 0.3s;
+}
+
+.patientSelectAppointments {
+  background: #fafbfc;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border-top: 1px solid var(--gray-light);
+}
+
+.patientSelectAppointment {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: var(--white);
+  border: 1px solid var(--gray-light);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+  text-align: right;
+  width: 100%;
+}
+
+.patientSelectAppointment:hover {
+  border-color: #2d7d6e;
+  background: linear-gradient(135deg, #ffffff 0%, #f1f8f4 100%);
+}
+
+.appointmentSelectInfo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.appointmentSelectDate {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.appointmentSelectTime {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.appointmentSelectType {
+  font-size: 11px;
+  color: #2d7d6e;
+  background: rgba(45, 125, 110, 0.08);
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+
+.appointmentSelectArrow {
+  color: #2d7d6e;
+  font-size: 14px;
+}
+
+/* ============================================
+   EXERCISE DESIGN MODAL
+============================================ */
+
+.exerciseDesignModal {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  max-width: 640px;
+  width: 100%;
+  padding: 28px;
+  animation: exercisesModalSlideUp 0.3s ease;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.exerciseSessionInfo {
+  padding: 14px 16px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #f0f4f7 100%);
+  border-radius: var(--radius);
+  margin-bottom: 20px;
+  border-right: 3px solid #2d7d6e;
+}
+
+.exerciseSessionInfo p {
+  font-size: 14px;
+  color: var(--text-dark);
+  margin: 0 0 4px;
+}
+
+.exerciseSessionInfo strong {
+  color: #2d7d6e;
+  font-weight: 700;
+}
+
+.exerciseSessionDate {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ===== Icon Picker ===== */
+
+.iconPicker {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.iconOption {
+  width: 44px;
+  height: 44px;
+  border: 2px solid var(--gray-light);
+  border-radius: 50%;
+  background: var(--white);
+  font-size: 22px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconOption:hover {
+  border-color: #2d7d6e;
+  transform: scale(1.05);
+}
+
+.iconOptionActive {
+  border-color: #2d7d6e;
+  background: rgba(45, 125, 110, 0.08);
+  box-shadow: 0 0 0 3px rgba(45, 125, 110, 0.15);
+}
+
+/* ===== Instructions ===== */
+
+.instructionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.instructionRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.instructionNumber {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #2d7d6e;
+  color: white;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.instructionRow .formInput {
+  flex: 1;
+}
+
+.btnRemoveInstruction {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  background: #fbe9e7;
+  color: #c62828;
+  font-size: 12px;
+  cursor: pointer;
+  transition: var(--transition);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btnRemoveInstruction:hover {
+  background: #c62828;
+  color: white;
+}
+
+.btnAddInstruction {
+  padding: 8px 16px;
+  background: transparent;
+  color: #2d7d6e;
+  border: 1.5px dashed #2d7d6e;
+  border-radius: var(--radius);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+  width: 100%;
+}
+
+.btnAddInstruction:hover {
+  background: rgba(45, 125, 110, 0.06);
+  border-style: solid;
+}
+
+/* ============================================
+   RESPONSIVE
+============================================ */
+
+@media (max-width: 768px) {
+  .pageHeader {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .newBtn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .exercisesStatsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .exercisesFilters {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .exerciseFilterGroup {
+    width: 100%;
+  }
+
+  .exerciseFilterGroup .formSelect {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .exerciseItem {
+    flex-wrap: wrap;
+  }
+
+  .exerciseItemActions {
+    width: 100%;
+    justify-content: flex-end;
+    margin-top: 8px;
+  }
+
+  .exerciseItemHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .formRow {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .patientSelectModal,
+  .exerciseDesignModal {
+    padding: 20px;
+    max-height: 92vh;
+  }
+
+  .appointmentSelectInfo {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+}
+
+@media (max-width: 480px) {
+  .exercisesHint {
+    padding: 12px;
+  }
+
+  .exercisesStatsGrid {
+    gap: 8px;
+  }
+
+  .exerciseStatBox {
+    padding: 12px 8px;
+  }
+
+  .exerciseStatNumber {
+    font-size: 20px;
+  }
+
+  .patientExercisesItems {
+    padding: 10px;
+  }
+
+  .exerciseItem {
+    padding: 12px;
+    gap: 8px;
+  }
+
+  .exerciseItemMeta {
+    font-size: 11px;
+  }
+
+  .patientSelectModal,
+  .exerciseDesignModal {
+    padding: 16px;
+  }
+
+  .modalOverlay {
+    padding: 10px;
+  }
+}

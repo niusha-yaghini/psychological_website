@@ -188,13 +188,13 @@ function Signup() {
           answers: updatedAnswers,
           timestamp: Date.now(),
           completedAt: new Date().toISOString(),
-        })
+        }),
       );
 
       // ذخیره در localStorage (دائمی)
       localStorage.setItem(
         "userOnboardingAnswers",
-        JSON.stringify(updatedAnswers)
+        JSON.stringify(updatedAnswers),
       );
       localStorage.setItem("userOnboardingComplete", "true");
       localStorage.setItem("userPhone", userPhone);
@@ -295,7 +295,7 @@ function Signup() {
                   onClick={() => {
                     if (selectedMulti.includes(opt.id)) {
                       setSelectedMulti(
-                        selectedMulti.filter((id) => id !== opt.id)
+                        selectedMulti.filter((id) => id !== opt.id),
                       );
                     } else {
                       setSelectedMulti([...selectedMulti, opt.id]);

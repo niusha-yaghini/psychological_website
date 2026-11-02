@@ -1,0 +1,1594 @@
+/* ============================================
+   PATIENTS LIST - COMMON STYLES
+============================================ */
+
+.pageContent {
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.headerInfo h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0;
+}
+
+.headerInfo p {
+  font-size: 15px;
+  color: var(--text-muted);
+  margin: 4px 0 0;
+}
+
+.newBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 24px;
+  background: linear-gradient(135deg, #2d7d6ed7, #4caf84de);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.newBtn:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #2d7d6e, #4caf84);
+  box-shadow: 0 4px 20px rgba(45, 125, 110, 0.3);
+}
+
+.emptyState {
+  text-align: center;
+  padding: 60px 24px;
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.emptyState h3 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0;
+}
+
+.emptyState p {
+  font-size: 15px;
+  color: var(--text-muted);
+  margin: 8px 0 0;
+}
+
+.emptyIcon {
+  font-size: 64px;
+  display: block;
+  margin-bottom: 16px;
+}
+
+/* ============================================
+   PATIENTS LIST - SPLIT VIEW
+============================================ */
+
+/* ===== Layout ===== */
+
+.patientsLayout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+/* ===== Sidebar ===== */
+
+.patientSidebar {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: calc(100vh - 180px);
+  max-height: calc(100vh - 180px);
+  min-height: 660px;
+  position: sticky;
+  top: 20px;
+}
+
+/* ===== Search Box ===== */
+
+.patientSearchBox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: var(--gray-light);
+  border-radius: var(--radius);
+  transition: var(--transition);
+}
+
+.patientSearchBox:focus-within {
+  background: var(--white);
+  box-shadow: 0 0 0 2px rgba(45, 125, 110, 0.2);
+}
+
+.patientSearchInput {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--text-dark);
+}
+
+.patientSearchInput::placeholder {
+  color: var(--text-muted);
+}
+
+.patientSearchClear {
+  width: 20px;
+  height: 20px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.patientSearchClear:hover {
+  background: #e74c3c;
+  color: white;
+}
+
+/* ===== Patient Count ===== */
+
+.patientCount {
+  font-size: 13px;
+  color: var(--text-muted);
+  padding: 0 4px;
+  font-weight: 500;
+}
+
+/* ===== Patient List ===== */
+
+.patientList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow-y: auto;
+  flex: 1;
+  padding-right: 4px;
+}
+
+.patientList::-webkit-scrollbar {
+  width: 4px;
+}
+
+.patientList::-webkit-scrollbar-thumb {
+  background: var(--gray-light);
+  border-radius: 10px;
+}
+
+.patientListEmpty {
+  text-align: center;
+  padding: 24px 16px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+/* ===== Patient List Item ===== */
+
+.patientListItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: transparent;
+  border: 1.5px solid transparent;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: right;
+  font-family: inherit;
+  width: 100%;
+}
+
+.patientListItem:hover {
+  background: var(--gray-light);
+}
+
+.patientListItemActive {
+  background: linear-gradient(
+    135deg,
+    rgba(45, 125, 110, 0.08),
+    rgba(76, 175, 132, 0.08)
+  );
+  border-color: rgba(45, 125, 110, 0.2);
+}
+
+.patientListAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--gray-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.patientListItemActive .patientListAvatar {
+  background: rgba(45, 125, 110, 0.15);
+}
+
+.patientListInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.patientListName {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.patientListMeta {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.patientListItemActive .patientListName {
+  color: #2d7d6e;
+}
+
+/* ============================================
+   PATIENT RECORD PANEL
+============================================ */
+
+.patientRecordPanel {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 180px);
+  max-height: calc(100vh - 180px);
+  min-height: 660px;
+  overflow: hidden;
+}
+
+/* ===== Record Header ===== */
+
+.patientRecordHeader {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--gray-light);
+  background: linear-gradient(135deg, #f8f9fa 0%, #f0f4f7 100%);
+}
+
+.patientRecordCloseBtn {
+  display: none;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: var(--white);
+  color: var(--text-dark);
+  font-size: 18px;
+  cursor: pointer;
+  transition: var(--transition);
+  flex-shrink: 0;
+  box-shadow: var(--shadow-sm);
+}
+
+.patientRecordCloseBtn:hover {
+  background: #2d7d6e;
+  color: white;
+}
+
+.patientRecordAvatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-sm);
+}
+
+.patientRecordHeaderInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.patientRecordHeaderInfo h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0 0 4px;
+}
+
+.patientRecordMeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-muted);
+  flex-wrap: wrap;
+}
+
+/* ===== Tabs ===== */
+
+.patientRecordTabs {
+  display: flex;
+  gap: 4px;
+  padding: 16px 24px 0;
+  border-bottom: 1px solid var(--gray-light);
+  background: var(--white);
+  overflow-x: auto;
+}
+
+.patientRecordTabs::-webkit-scrollbar {
+  height: 3px;
+}
+
+.patientRecordTabs::-webkit-scrollbar-thumb {
+  background: var(--gray-light);
+  border-radius: 10px;
+}
+
+.patientRecordTab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 18px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  font-family: inherit;
+}
+
+.patientRecordTab:hover {
+  color: var(--text-dark);
+}
+
+.patientRecordTabActive {
+  color: #2d7d6e;
+  border-bottom-color: #2d7d6e;
+}
+
+.patientRecordTabIcon {
+  font-size: 14px;
+}
+
+/* ===== Content ===== */
+
+.patientRecordContent {
+  padding: 24px;
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.patientRecordContent::-webkit-scrollbar {
+  width: 6px;
+}
+
+.patientRecordContent::-webkit-scrollbar-thumb {
+  background: var(--gray-light);
+  border-radius: 10px;
+}
+
+.patientRecordContent::-webkit-scrollbar-thumb:hover {
+  background: #b5b0aa;
+}
+
+/* ============================================
+   PATIENT INFO TAB
+============================================ */
+
+.patientInfoTab {
+  display: block;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.infoItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.infoItemFull {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.infoItemFull p {
+  font-size: 15px;
+}
+
+.infoItem label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.infoItem p {
+  font-size: 14px;
+  color: var(--text-dark);
+  margin: 0;
+  padding: 10px 14px;
+  background: var(--gray-light);
+  border-radius: var(--radius);
+  line-height: 1.5;
+}
+
+/* ===== Emergency Contact ===== */
+
+.emergencySection {
+  margin-top: 24px;
+  padding: 20px;
+  background: #fff8e1;
+  border-radius: var(--radius);
+  border-right: 3px solid #ff9800;
+}
+
+.emergencySection h4 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #e65100;
+  margin: 0 0 12px;
+}
+
+.emergencyGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.emergencyGrid .infoItem p {
+  background: var(--white);
+}
+
+/* ============================================
+   PATIENT SESSIONS TAB
+============================================ */
+
+.patientSessionsTab {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.patientStatsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.patientStatBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 16px;
+  background: var(--gray-light);
+  border-radius: var(--radius);
+  border: 1.5px solid transparent;
+}
+
+.patientStatSuccess {
+  background: #e8f5e9;
+  border-color: #a5d6a7;
+}
+
+.patientStatDanger {
+  background: #fbe9e7;
+  border-color: #ef9a9a;
+}
+
+.patientStatWarning {
+  background: #fff3e0;
+  border-color: #ffcc80;
+}
+
+.patientStatNumber {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text-dark);
+}
+
+.patientStatSuccess .patientStatNumber {
+  color: #2e7d32;
+}
+
+.patientStatDanger .patientStatNumber {
+  color: #c62828;
+}
+
+.patientStatWarning .patientStatNumber {
+  color: #e65100;
+}
+
+.patientStatLabel {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.patientSessionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.patientSessionItem {
+  padding: 16px;
+  background: var(--white);
+  border: 1px solid var(--gray-light);
+  border-radius: var(--radius);
+  transition: var(--transition);
+}
+
+.patientSessionItem:hover {
+  border-color: rgba(45, 125, 110, 0.15);
+  box-shadow: var(--shadow-sm);
+}
+
+.patientSessionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.patientSessionDateBox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.patientSessionDate {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.patientSessionTime {
+  font-size: 13px;
+  color: var(--text-muted);
+  padding: 2px 10px;
+  background: var(--gray-light);
+  border-radius: 20px;
+}
+
+.patientSessionStatus {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 14px;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.statusSuccess {
+  background: #e3f2fd;
+  color: #0d47a1;
+}
+
+.statusDanger {
+  background: #fbe9e7;
+  color: #c62828;
+}
+
+.statusWarning {
+  background: #fff3e0;
+  color: #e65100;
+}
+
+.statusInfo {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.patientSessionMeta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  flex-wrap: wrap;
+}
+
+.cancelReasonText {
+  color: #c62828;
+  font-weight: 500;
+}
+
+.patientSessionNote {
+  margin-top: 12px;
+  padding: 12px 14px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #f0f4f7 100%);
+  border-radius: var(--radius);
+  border-right: 3px solid #2d7d6e;
+}
+
+.patientSessionNoteHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #2d7d6e;
+}
+
+.patientSessionNoteDate {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.patientSessionNote p {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.patientSessionNoteBtn {
+  margin-top: 10px;
+  padding: 6px 16px;
+  background: transparent;
+  color: #2d7d6e;
+  border: 1.5px solid #2d7d6e;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.patientSessionNoteBtn:hover {
+  background: #2d7d6e;
+  color: white;
+}
+
+/* ============================================
+   PATIENT MEDICATIONS TAB
+============================================ */
+
+.patientMedicationsTab {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.medicationsStats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.medStatBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px;
+  background: var(--gray-light);
+  border-radius: var(--radius);
+  border: 1.5px solid transparent;
+}
+
+.medStatActive {
+  background: #e8f5e9;
+  border-color: #a5d6a7;
+}
+
+.medStatStopped {
+  background: #f5f5f5;
+  border-color: #e0e0e0;
+}
+
+.medStatNumber {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text-dark);
+}
+
+.medStatActive .medStatNumber {
+  color: #2e7d32;
+}
+
+.medStatStopped .medStatNumber {
+  color: #616161;
+}
+
+.medStatLabel {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.medicationsList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.medicationCard {
+  background: var(--white);
+  border: 1px solid var(--gray-light);
+  border-radius: var(--radius);
+  padding: 16px;
+  border-right: 3px solid transparent;
+  transition: var(--transition);
+}
+
+.medicationCard:hover {
+  box-shadow: var(--shadow-sm);
+}
+
+.medicationActive {
+  border-right-color: #2e7d32;
+  background: linear-gradient(135deg, #ffffff 0%, #f9fffb 100%);
+}
+
+.medicationStopped {
+  border-right-color: #9e9e9e;
+  opacity: 0.85;
+}
+
+.medicationCompleted {
+  border-right-color: #0d47a1;
+  background: linear-gradient(135deg, #ffffff 0%, #f5f9ff 100%);
+}
+
+.medicationHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.medicationName {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.medicationStatusBadge {
+  padding: 4px 14px;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.statusMedActive {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.statusMedStopped {
+  background: #f5f5f5;
+  color: #616161;
+}
+
+.statusMedCompleted {
+  background: #e3f2fd;
+  color: #0d47a1;
+}
+
+.medicationGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.medicationItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.medicationItemFull {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.medicationItemFull label,
+.medicationItemFull p {
+  font-size: 15px;
+}
+
+.medicationItem label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.medicationItem p {
+  font-size: 13px;
+  color: var(--text-dark);
+  margin: 0;
+  padding: 8px 12px;
+  background: var(--gray-light);
+  border-radius: var(--radius);
+  line-height: 1.5;
+}
+
+.btnAddMedication {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 24px;
+  background: linear-gradient(135deg, #2d7d6e, #4caf84);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+  align-self: flex-start;
+}
+
+.btnAddMedication:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(45, 125, 110, 0.3);
+}
+
+/* ============================================
+   PATIENT NOTES TAB
+============================================ */
+
+.patientNotesTab {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.patientNoteCard {
+  background: var(--white);
+  border: 1px solid var(--gray-light);
+  border-radius: var(--radius);
+  border-right: 3px solid #2d7d6e;
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+.patientNoteCardExpanded {
+  box-shadow: var(--shadow-sm);
+  border-color: rgba(45, 125, 110, 0.3);
+}
+
+.patientNoteHeaderBtn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  background: transparent;
+  border: none;
+  width: 100%;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+  text-align: right;
+}
+
+.patientNoteHeaderBtn:hover {
+  background: var(--gray-light);
+}
+
+.patientNoteHeaderInfo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.patientNoteHeaderRight {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.patientNoteDate {
+  font-size: 13px;
+  font-weight: 700;
+  color: #2d7d6e;
+}
+
+.patientNoteSessionType {
+  font-size: 12px;
+  color: var(--text-muted);
+  padding: 2px 10px;
+  background: var(--gray-light);
+  border-radius: 20px;
+}
+
+.patientNoteExercisesCount {
+  font-size: 12px;
+  color: #e65100;
+  background: #fff3e0;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+.expandIcon {
+  font-size: 11px;
+  color: var(--text-muted);
+  transition: transform 0.3s;
+}
+
+.patientNoteExpandedContent {
+  padding: 16px;
+  background: #fafbfc;
+  border-top: 1px solid var(--gray-light);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 1000px;
+  }
+}
+
+.patientNoteSection {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.patientNoteSectionTitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #2d7d6e;
+  padding-bottom: 6px;
+  border-bottom: 1px dashed var(--gray-light);
+}
+
+.patientNoteFullText {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.9;
+  margin: 0;
+  padding: 12px 14px;
+  background: var(--white);
+  border-radius: var(--radius);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.patientNoteEmpty {
+  text-align: center;
+  padding: 20px;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-style: italic;
+}
+
+.patientNoteEditBtn {
+  padding: 4px 14px;
+  background: transparent;
+  color: #2d7d6e;
+  border: 1.5px solid #2d7d6e;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.patientNoteEditBtn:hover {
+  background: #2d7d6e;
+  color: white;
+}
+
+/* ===== Exercises ===== */
+
+.patientExercisesList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.patientExerciseItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--white);
+  border: 1px solid var(--gray-light);
+  border-radius: var(--radius);
+  transition: var(--transition);
+}
+
+.patientExerciseItem:hover {
+  border-color: rgba(45, 125, 110, 0.2);
+}
+
+.patientExerciseIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--gray-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.patientExerciseContent {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.patientExerciseTitle {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.patientExerciseDesc {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ============================================
+   GENERAL NOTES TAB
+============================================ */
+
+.patientGeneralTab {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.generalTabHint {
+  font-size: 13px;
+  color: var(--text-muted);
+  background: rgba(45, 125, 110, 0.06);
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  margin: 0;
+  border-right: 3px solid #2d7d6e;
+  line-height: 1.6;
+}
+
+.generalNotesTextarea {
+  width: 100%;
+  padding: 16px;
+  border: 2px solid var(--gray-light);
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--text-dark);
+  line-height: 1.8;
+  resize: vertical;
+  min-height: 240px;
+  transition: var(--transition);
+  background: var(--white);
+}
+
+.generalNotesTextarea:focus {
+  border-color: #2d7d6e;
+  box-shadow: 0 0 0 4px rgba(45, 125, 110, 0.08);
+  outline: none;
+}
+
+.generalNotesTextarea::placeholder {
+  color: #b5b0aa;
+  line-height: 1.8;
+}
+
+.generalTabFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.generalTabDate {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.btnSaveGeneral {
+  padding: 10px 24px;
+  background: linear-gradient(135deg, #2d7d6e, #4caf84);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btnSaveGeneral:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(45, 125, 110, 0.3);
+}
+
+/* ============================================
+   MODALS
+============================================ */
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.noteModal {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  max-width: 600px;
+  width: 100%;
+  padding: 32px;
+  animation: modalSlideUp 0.3s ease;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.addModal {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  max-width: 520px;
+  width: 100%;
+  padding: 32px;
+  animation: modalSlideUp 0.3s ease;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.modalHeader h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0;
+}
+
+.modalClose {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background: var(--gray-light);
+  color: var(--text-muted);
+  font-size: 16px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modalClose:hover {
+  background: #e74c3c;
+  color: white;
+  transform: rotate(90deg);
+}
+
+.modalBody {
+  margin-bottom: 24px;
+}
+
+.modalFooter {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.noteSessionInfo {
+  background: var(--gray-light);
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  margin-bottom: 20px;
+}
+
+.noteSessionInfo p {
+  margin: 0 0 4px;
+  font-size: 15px;
+  color: var(--text-dark);
+}
+
+.noteSessionInfo strong {
+  color: #2d7d6e;
+  font-weight: 700;
+}
+
+.noteSessionDate {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.noteTextarea {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid var(--gray-light);
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--text-dark);
+  line-height: 1.8;
+  resize: vertical;
+  min-height: 180px;
+  transition: var(--transition);
+  background: var(--white);
+}
+
+.noteTextarea:focus {
+  border-color: #2d7d6e;
+  box-shadow: 0 0 0 4px rgba(45, 125, 110, 0.08);
+  outline: none;
+}
+
+.noteTextarea::placeholder {
+  color: #b5b0aa;
+  line-height: 1.8;
+}
+
+.noteCharCount {
+  display: block;
+  text-align: left;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
+.noteHint {
+  font-size: 13px;
+  color: var(--text-muted);
+  background: rgba(45, 125, 110, 0.06);
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  margin: 16px 0 0;
+  border-right: 3px solid #2d7d6e;
+  line-height: 1.6;
+}
+
+/* ============================================
+   MODAL FORMS
+============================================ */
+
+.formGroup {
+  margin-bottom: 16px;
+}
+
+.formGroup label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.formInput,
+.formSelect {
+  width: 100%;
+  padding: 10px 14px;
+  border: 2px solid var(--gray-light);
+  border-radius: var(--radius);
+  font-size: 15px;
+  font-family: inherit;
+  color: var(--text-dark);
+  transition: var(--transition);
+  background: var(--white);
+}
+
+.formInput:focus,
+.formSelect:focus {
+  border-color: #2d7d6e;
+  box-shadow: 0 0 0 4px rgba(45, 125, 110, 0.08);
+  outline: none;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.btnCancelModal,
+.btnConfirmModal {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btnCancelModal {
+  background: var(--gray-light);
+  color: var(--text-secondary);
+}
+
+.btnCancelModal:hover {
+  background: #e0e0e0;
+}
+
+.btnConfirmModal {
+  background: linear-gradient(135deg, #2d7d6e, #4caf84);
+  color: white;
+}
+
+.btnConfirmModal:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(45, 125, 110, 0.25);
+}
+
+/* ============================================
+   PATIENT RECORD EMPTY STATE
+============================================ */
+
+.patientRecordEmpty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 24px;
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  min-height: 660px;
+}
+
+.patientRecordEmpty h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0 0 8px;
+}
+
+.patientRecordEmpty p {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* ============================================
+   RESPONSIVE - PATIENTS
+============================================ */
+
+@media (max-width: 1024px) {
+  .patientsLayout {
+    grid-template-columns: 280px 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .patientsLayout {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebarHiddenMobile {
+    display: none;
+  }
+
+  .patientRecordPanel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+    border-radius: 0;
+    height: 100vh;
+    max-height: 100vh;
+  }
+
+  .patientRecordContent {
+    padding: 16px;
+  }
+
+  .patientSidebar {
+    height: auto;
+    max-height: none;
+    position: static;
+  }
+
+  .patientList {
+    max-height: none;
+  }
+
+  .patientRecordCloseBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .patientRecordHeader {
+    padding: 16px;
+  }
+
+  .patientRecordTabs {
+    padding: 12px 16px 0;
+  }
+
+  .patientRecordTab {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
+  .patientRecordTabLabel {
+    display: none;
+  }
+
+  .patientRecordTabIcon {
+    font-size: 18px;
+  }
+
+  .infoGrid,
+  .emergencyGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .patientStatsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .patientRecordEmpty {
+    min-height: 300px;
+  }
+
+  .medicationsStats {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .medStatBox {
+    padding: 10px 6px;
+  }
+
+  .medStatNumber {
+    font-size: 18px;
+  }
+
+  .medStatLabel {
+    font-size: 11px;
+  }
+
+  .medicationGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .noteModal,
+  .addModal {
+    padding: 24px;
+    margin: 0 16px;
+  }
+
+  .formRow {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}
