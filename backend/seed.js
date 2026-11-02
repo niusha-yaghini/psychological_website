@@ -690,36 +690,128 @@ const seedData = {
   //   },
   // ],
 
+  //   patientExercises: [
+  //   {
+  //     id: 1,
+  //     patientId: 101,
+  //     appointmentId: 3,
+
+  //     title: "تمرین تنفس عمیق",
+  //     description:
+  //       "هر شب قبل از خواب، ۱۰ دقیقه تنفس عمیق انجام دهید.",
+
+  //     type: "daily",
+  //     category: "meditation",
+  //     icon: "🧘",
+
+  //     dueDate: "۱۴۰۵/۰۶/۳۰",
+  //     completed: false,
+
+  //     priority: "high",
+  //     progress: 0,
+
+  //     instructions: [
+  //       "در جای آرام بنشینید",
+  //       "چشم‌ها را ببندید",
+  //       "روی تنفس خود تمرکز کنید",
+  //     ],
+
+  //     assignedBy: "دکتر محمد رضایی",
+  //     assignedDate: "۱۴۰۵/۰۵/۲۰",
+  //   },
+  // ],
+
   patientExercises: [
-  {
-    id: 1,
-    patientId: 101,
-    appointmentId: 3,
+    {
+      patientId: 101,
+      appointmentId: 3,
 
-    title: "تمرین تنفس عمیق",
-    description:
-      "هر شب قبل از خواب، ۱۰ دقیقه تنفس عمیق انجام دهید.",
+      exercises: [
+        {
+          id: 1,
+          title: "تمرین تنفس عمیق",
+          description: "هر شب قبل از خواب، ۱۰ دقیقه تنفس عمیق انجام دهید.",
 
-    type: "daily",
-    category: "meditation",
-    icon: "🧘",
+          type: "daily",
+          category: "meditation",
+          icon: "🧘",
 
-    dueDate: "۱۴۰۵/۰۶/۳۰",
-    completed: false,
+          dueDate: "۱۴۰۵/۰۶/۳۰",
+          completed: false,
 
-    priority: "high",
-    progress: 0,
+          priority: "high",
+          progress: 0,
 
-    instructions: [
-      "در جای آرام بنشینید",
-      "چشم‌ها را ببندید",
-      "روی تنفس خود تمرکز کنید",
-    ],
+          instructions: [
+            "در جای آرام بنشینید",
+            "چشم‌ها را ببندید",
+            "روی تنفس خود تمرکز کنید",
+          ],
 
-    assignedBy: "دکتر محمد رضایی",
-    assignedDate: "۱۴۰۵/۰۵/۲۰",
-  },
-],
+          assignedBy: "دکتر محمد رضایی",
+          assignedDate: "۱۴۰۵/۰۵/۲۰",
+        },
+
+        {
+          id: 2,
+          title: "ثبت افکار روزانه",
+          description: "افکار و احساسات خود را در طول روز یادداشت کنید.",
+
+          type: "daily",
+          category: "writing",
+          icon: "✍️",
+
+          dueDate: "۱۴۰۵/۰۶/۳۰",
+          completed: false,
+
+          priority: "medium",
+          progress: 0,
+
+          instructions: [
+            "یک دفترچه مشخص انتخاب کنید",
+            "افکار خود را بدون قضاوت بنویسید",
+            "احساسات خود را ثبت کنید",
+          ],
+
+          assignedBy: "دکتر محمد رضایی",
+          assignedDate: "۱۴۰۵/۰۵/۲۰",
+        },
+      ],
+    },
+
+    {
+      patientId: 101,
+      appointmentId: 8,
+
+      exercises: [
+        {
+          id: 1,
+          title: "تمرین شناسایی محرک‌های استرس",
+          description:
+            "موقعیت‌هایی را که باعث افزایش استرس شما می‌شوند شناسایی کنید.",
+
+          type: "weekly",
+          category: "writing",
+          icon: "📝",
+
+          dueDate: "۱۴۰۵/۰۷/۱۰",
+          completed: false,
+
+          priority: "high",
+          progress: 0,
+
+          instructions: [
+            "موقعیت‌های استرس‌زا را یادداشت کنید",
+            "احساس خود را در هر موقعیت ثبت کنید",
+            "الگوهای تکرارشونده را مشخص کنید",
+          ],
+
+          assignedBy: "دکتر محمد رضایی",
+          assignedDate: "۱۴۰۵/۰۶/۲۰",
+        },
+      ],
+    },
+  ],
 
   // ============================================
   // اطلاعات پروفایل (Profile)
@@ -1333,7 +1425,6 @@ const seedData = {
     sessionReminders: true,
     autoConfirmBookings: false,
   },
-
 };
 
 export default seedData;

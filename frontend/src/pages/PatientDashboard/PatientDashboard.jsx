@@ -420,12 +420,17 @@ function PatientDashboard() {
   // ==========================================
 
   // ===== داده‌های نوبت‌ها =====
-  const [appointments, setAppointments] = useState(
+  const [patientAppointments, setPatientAppointments] = useState(
     seedData.patientAppointments,
   );
 
+  // ===== داده‌های تمرین ها =====
+  const [patientExercises, setPatientExercises] = useState(
+    seedData.patientExercises,
+  );
+
   // ===== داده‌های نوتیفیکیشن =====
-  const [notifications, setNotifications] = useState(
+  const [patientNotifications, setPatientNotifications] = useState(
     seedData.patientNotifications,
   );
 
@@ -459,21 +464,47 @@ function PatientDashboard() {
   );
 
   // ===== محاسبه تعداد جلسات پیش‌رو =====
+  // const upcomingAppointmentsCount = useMemo(() => {
+  //   return appointments.filter((app) => {
+  //     const displayStatus = getDisplayStatus(app);
+  //     return displayStatus === "confirmed" || displayStatus === "pending";
+  //   }).length;
+  // }, [appointments]);
+
   const upcomingAppointmentsCount = useMemo(() => {
-    return appointments.filter((app) => {
+    return patientAppointments.filter((app) => {
       const displayStatus = getDisplayStatus(app);
+
       return displayStatus === "confirmed" || displayStatus === "pending";
     }).length;
-  }, [appointments]);
+  }, [patientAppointments]);
 
   // ===== محاسبه تعداد پیام‌های خوانده نشده =====
+  // const unreadMessagesCount = useMemo(() => {
+  //   return notifications.filter((n) => !n.isRead).length;
+  // }, [notifications]);
+
   const unreadMessagesCount = useMemo(() => {
-    return notifications.filter((n) => !n.isRead).length;
-  }, [notifications]);
+    return patientNotifications.filter((n) => !n.isRead).length;
+  }, [patientNotifications]);
 
   // ===== توابع =====
+  // const markAsRead = (id) => {
+  //   setNotifications((prev) =>
+  //     prev.map((notif) =>
+  //       notif.id === id ? { ...notif, isRead: true } : notif,
+  //     ),
+  //   );
+  // };
+
+  // const markAllAsRead = () => {
+  //   setNotifications((prev) =>
+  //     prev.map((notif) => ({ ...notif, isRead: true })),
+  //   );
+  // };
+
   const markAsRead = (id) => {
-    setNotifications((prev) =>
+    setPatientNotifications((prev) =>
       prev.map((notif) =>
         notif.id === id ? { ...notif, isRead: true } : notif,
       ),
@@ -481,14 +512,36 @@ function PatientDashboard() {
   };
 
   const markAllAsRead = () => {
-    setNotifications((prev) =>
+    setPatientNotifications((prev) =>
       prev.map((notif) => ({ ...notif, isRead: true })),
     );
   };
 
   // ===== ثبت زمان ایجاد اعلان‌های جدید =====
+  // useEffect(() => {
+  //   const missingNotifications = notifications.filter(
+  //     (notification) => !notificationCreatedAt[notification.id],
+  //   );
+
+  //   if (missingNotifications.length === 0) return;
+
+  //   const now = Date.now();
+  //   const updatedTimestamps = { ...notificationCreatedAt };
+
+  //   missingNotifications.forEach((notification) => {
+  //     updatedTimestamps[notification.id] = now;
+  //   });
+
+  //   localStorage.setItem(
+  //     "patientNotificationCreatedAt",
+  //     JSON.stringify(updatedTimestamps),
+  //   );
+
+  //   setNotificationCreatedAt(updatedTimestamps);
+  // }, [notifications, notificationCreatedAt]);
+
   useEffect(() => {
-    const missingNotifications = notifications.filter(
+    const missingNotifications = patientNotifications.filter(
       (notification) => !notificationCreatedAt[notification.id],
     );
 
@@ -507,7 +560,7 @@ function PatientDashboard() {
     );
 
     setNotificationCreatedAt(updatedTimestamps);
-  }, [notifications, notificationCreatedAt]);
+  }, [patientNotifications, notificationCreatedAt]);
 
   // ===== دریافت اطلاعات کاربر =====
   useEffect(() => {
@@ -590,15 +643,15 @@ function PatientDashboard() {
       case "dashboard":
         return (
           <DashboardOverview
-            appointments={appointments}
+            appointments={patientAppointments}
             getDisplayStatus={getDisplayStatus}
           />
         );
       case "appointments":
         return (
           <AppointmentsManagement
-            appointments={appointments}
-            setAppointments={setAppointments}
+            appointments={patientAppointments}
+            setAppointments={setPatientAppointments}
             doctors={seedData.doctors}
             helpers={appointmentsHelpers}
             confirmIcon={confirmIcon}
@@ -607,8 +660,8 @@ function PatientDashboard() {
       case "sessions":
         return (
           <SessionsManagement
-            appointments={appointments}
-            setAppointments={setAppointments}
+            appointments={patientAppointments}
+            setAppointments={setPatientAppointments}
             getDisplayStatus={getDisplayStatus}
             getAppointmentMoment={getAppointmentMoment}
             isSessionOngoing={isSessionOngoing}
@@ -618,8 +671,8 @@ function PatientDashboard() {
       case "messages":
         return (
           <PatientNotifications
-            notifications={notifications}
-            setNotifications={setNotifications}
+            notifications={patientNotifications}
+            setNotifications={setPatientNotifications}
             formatNotificationTime={formatNotificationTime}
           />
         );
@@ -630,8 +683,8 @@ function PatientDashboard() {
       case "exercise":
         return (
           <ExerciseManagement
-            appointments={appointments}
-            exercises={patientExercises}
+            appointments={patientAppointments}
+            exerciseGroups={patientExercises}
             setExercises={setPatientExercises}
           />
         );
@@ -654,7 +707,7 @@ function PatientDashboard() {
       default:
         return (
           <DashboardOverview
-            appointments={appointments}
+            appointments={patientAppointments}
             getDisplayStatus={getDisplayStatus}
           />
         );
@@ -688,7 +741,7 @@ function PatientDashboard() {
 
           <div className={styles.headerRight}>
             <NotificationDropdown
-              notifications={notifications}
+              notifications={patientNotifications}
               onMarkAsRead={markAsRead}
               onMarkAllAsRead={markAllAsRead}
               formatNotificationTime={formatNotificationTime}
