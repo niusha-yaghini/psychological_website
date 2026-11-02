@@ -1,0 +1,729 @@
+/* ============================================
+   EXERCISES MANAGEMENT
+============================================ */
+
+/* ===== Page Content ===== */
+
+.pageContent {
+  animation: exerciseFadeIn 0.4s ease;
+}
+
+.pageContent h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0 0 4px;
+}
+
+@keyframes exerciseFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== Page Header ===== */
+
+.pageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.headerInfo h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0 0 4px;
+}
+
+.headerInfo p {
+  font-size: 15px;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* ===== Exercise Stats ===== */
+
+.exerciseStats {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--gray-light);
+  padding: 8px 20px;
+  border-radius: 30px;
+}
+
+.statItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.statNumber {
+  font-size: 18px;
+  font-weight: 700;
+  color: #2d7d6e;
+}
+
+.statLabel {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.statDivider {
+  color: #d5d0ca;
+}
+
+/* ===== Filter Section ===== */
+
+.filterSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.filterTabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  padding: 4px;
+  background: var(--gray-light);
+  border-radius: 30px;
+  width: fit-content;
+}
+
+.filterTab {
+  padding: 8px 20px;
+  border: none;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: transparent;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.filterTab:hover {
+  color: var(--text-dark);
+}
+
+.filterTab.active {
+  background: var(--white);
+  color: #2d7d6e;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.filterCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  background: rgba(45, 125, 110, 0.1);
+  color: #2d7d6e;
+  border-radius: 30px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.filterTab.active .filterCount {
+  background: rgba(45, 125, 110, 0.15);
+}
+
+/* ===== Show Completed Toggle ===== */
+
+.showCompletedToggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  user-select: none;
+}
+
+.showCompletedToggle input {
+  display: none;
+}
+
+.toggleSlider {
+  width: 40px;
+  height: 22px;
+  background: var(--gray-light);
+  border-radius: 30px;
+  transition: var(--transition);
+  position: relative;
+}
+
+.toggleSlider::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 18px;
+  height: 18px;
+  background: white;
+  border-radius: 50%;
+  transition: var(--transition);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.showCompletedToggle input:checked + .toggleSlider {
+  background: #2d7d6e;
+}
+
+.showCompletedToggle input:checked + .toggleSlider::after {
+  transform: translateX(-18px);
+}
+
+/* ===== Exercise List ===== */
+
+.exerciseList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+/* ===== Exercise Card ===== */
+
+.exerciseCard {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  transition: var(--transition);
+  position: relative;
+}
+
+.exerciseCard:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.exerciseCard.completed {
+  opacity: 0.75;
+  border-color: #4caf84;
+}
+
+.exerciseCard.completed .exerciseTitle span {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+/* ===== Check Circle ===== */
+
+.checkCircle {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid #d5d0ca;
+  background: transparent;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin-top: 4px;
+  position: relative;
+}
+
+.checkCircle:hover {
+  border-color: #2d7d6e;
+  transform: scale(1.05);
+}
+
+.checkCircle.checked {
+  background: linear-gradient(135deg, #2d7d6e, #4caf84);
+  border-color: #2d7d6e;
+  animation: checkPop 0.3s ease;
+}
+
+@keyframes checkPop {
+  0% {
+    transform: scale(0.8);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.checkPlaceholder {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #e8e0d8;
+  opacity: 0.3;
+  transition: var(--transition);
+}
+
+.checkCircle:hover .checkPlaceholder {
+  opacity: 0.6;
+  background: #2d7d6e;
+}
+
+.checkCircle.checked svg {
+  animation: checkDraw 0.3s ease;
+}
+
+@keyframes checkDraw {
+  0% {
+    stroke-dashoffset: 30;
+    opacity: 0;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+/* ===== Exercise Content ===== */
+
+.exerciseContent {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ===== Exercise Header ===== */
+
+.exerciseHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.exerciseMainInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.exerciseTitleRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+
+.exerciseTitle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0;
+}
+
+.exerciseTitle span {
+  font-weight: 600;
+}
+
+.exerciseMeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ===== Type Badges ===== */
+
+.typeBadge {
+  padding: 2px 12px;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.typeDaily {
+  background: #e3f2fd;
+  color: #0d47a1;
+}
+
+.typeWeekly {
+  background: #fff3e0;
+  color: #e65100;
+}
+
+.typeOneTime {
+  background: #f3e5f5;
+  color: #6a1b9a;
+}
+
+/* ===== Priority Badges ===== */
+
+.priorityBadge {
+  padding: 2px 12px;
+  border-radius: 30px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.priorityHigh {
+  background: #fbe9e7;
+  color: #c62828;
+}
+
+.priorityMedium {
+  background: #fff3e0;
+  color: #e65100;
+}
+
+.priorityLow {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+/* ===== Exercise Description ===== */
+
+.exerciseDescription {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0;
+  padding-left: 0;
+}
+
+/* ===== Expand Button ===== */
+
+.expandBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border: none;
+  border-radius: 30px;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 12px;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+  margin-top: 8px;
+}
+
+.expandBtn:hover {
+  background: var(--gray-light);
+  color: var(--text-dark);
+}
+
+.expandLabel {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* ===== Exercise Details ===== */
+
+.exerciseDetails {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--gray-light);
+}
+
+.instructionsSection h5 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0 0 8px;
+}
+
+.instructionsSection ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.instructionsSection li {
+  padding: 4px 0;
+  padding-right: 20px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  position: relative;
+  line-height: 1.5;
+}
+
+.instructionsSection li::before {
+  content: "•";
+  position: absolute;
+  right: 0;
+  color: #2d7d6e;
+  font-weight: 700;
+}
+
+/* ===== Exercise Footer ===== */
+
+.exerciseFooter {
+  margin-top: 12px;
+}
+
+.exerciseAssignInfo {
+  display: flex;
+  gap: 16px;
+  font-size: 13px;
+  color: var(--text-muted);
+  flex-wrap: wrap;
+}
+
+/* ===== Empty State ===== */
+
+.emptyState {
+  text-align: center;
+  padding: 60px 24px;
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.emptyIcon {
+  font-size: 64px;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.emptyState h3 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0 0 8px;
+}
+
+.emptyState p {
+  font-size: 15px;
+  color: var(--text-muted);
+  margin: 0 0 24px;
+}
+
+/* ===== Overall Progress ===== */
+
+.overallProgress {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 24px;
+}
+
+.progressInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.progressTitle {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.progressPercentage {
+  font-size: 18px;
+  font-weight: 700;
+  color: #2d7d6e;
+}
+
+.overallProgressBar {
+  height: 8px;
+  background: var(--gray-light);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.overallProgressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #2d7d6e, #4caf84);
+  border-radius: 10px;
+  transition: width 1s ease;
+}
+
+.progressStats {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* ===== Exercise Actions ===== */
+
+.exerciseActions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.btnReportProgress {
+  padding: 12px 28px;
+  background: linear-gradient(135deg, #2d7d6e, #4caf84);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btnReportProgress:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(45, 125, 110, 0.3);
+}
+
+.btnShareProgress {
+  padding: 12px 28px;
+  background: transparent;
+  color: var(--text-dark);
+  border: 1.5px solid var(--gray-light);
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btnShareProgress:hover {
+  border-color: #2d7d6e;
+  color: #2d7d6e;
+}
+
+/* ============================================
+   RESPONSIVE
+============================================ */
+
+@media (max-width: 768px) {
+  .pageHeader {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filterTabs {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 16px;
+  }
+
+  .filterTab {
+    padding: 8px 16px;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  .exerciseCard {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .checkCircle {
+    width: 28px;
+    height: 28px;
+    margin-top: 2px;
+  }
+
+  .checkCircle svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .exerciseTitle {
+    font-size: 15px;
+  }
+
+  .exerciseTitleRow {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .exerciseMeta {
+    margin-top: 4px;
+  }
+
+  .exerciseDescription {
+    font-size: 13px;
+  }
+
+  .exerciseAssignInfo {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .expandBtn {
+    padding: 2px 10px;
+    font-size: 11px;
+  }
+
+  .expandLabel {
+    font-size: 11px;
+  }
+
+  .exerciseActions {
+    flex-direction: column;
+  }
+
+  .btnReportProgress,
+  .btnShareProgress {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .exerciseCard {
+    padding: 14px;
+  }
+
+  .checkCircle {
+    width: 24px;
+    height: 24px;
+  }
+
+  .checkCircle svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .checkPlaceholder {
+    width: 8px;
+    height: 8px;
+  }
+
+  .exerciseTitle {
+    font-size: 14px;
+    gap: 6px;
+  }
+
+  .typeBadge,
+  .priorityBadge {
+    font-size: 10px;
+    padding: 1px 10px;
+  }
+
+  .expandBtn {
+    margin-top: 6px;
+  }
+}

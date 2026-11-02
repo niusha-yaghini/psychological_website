@@ -4,10 +4,12 @@ import styles from "./Exercises.module.css";
 // ============================================
 // COMPONENT: Exercise Content
 // ============================================
-function ExerciseManagement({ initialExercises }) {
-  const [exercises, setExercises] = useState(initialExercises);
+// function ExerciseManagement({ initialExercises }) {
+//   const [exercises, setExercises] = useState(initialExercises);
 
+function ExerciseManagement({ appointments, exercises, setExercises }) {
   const [selectedExercise, setSelectedExercise] = useState(null);
+
   const [filter, setFilter] = useState("all"); // all | daily | weekly | one_time
   const [showCompleted, setShowCompleted] = useState(true);
 
@@ -48,9 +50,9 @@ function ExerciseManagement({ initialExercises }) {
   // ===== دریافت اطلاعات بر اساس نوع =====
   const getTypeInfo = (type) => {
     const types = {
-      daily: { label: "روزانه", className: styles.typeDaily},
-      weekly: { label: "هفتگی", className: styles.typeWeekly},
-      one_time: { label: "یک‌باره", className: styles.typeOneTime},
+      daily: { label: "روزانه", className: styles.typeDaily },
+      weekly: { label: "هفتگی", className: styles.typeWeekly },
+      one_time: { label: "یک‌باره", className: styles.typeOneTime },
     };
     return types[type] || types.one_time;
   };

@@ -226,7 +226,7 @@ function DoctorDashboard() {
   const [appointments, setAppointments] = useState(seedData.doctorAppointments);
 
   // ===== state بیماران =====
-  const [patients, setPatients] = useState(seedData.doctorPatients);
+  const [patients, setPatients] = useState(seedData.doctorPatientsList);
 
   // ===== state نوتیفیکیشن‌ها (از seed اولیه میاد، بعداً از بک‌اند) =====
   const [notifications, setNotifications] = useState(
@@ -516,7 +516,7 @@ function DoctorDashboard() {
             getTypeLabel={getTypeLabel}
             getRelativeDateLabel={getRelativeDateLabel}
             activePatientsCount={
-              seedData.doctorPatients.filter((p) => p.status === "active")
+              seedData.doctorPatientsList.filter((p) => p.status === "active")
                 .length
             }
             exercisesSentCount={seedData.exercises?.length || 0}

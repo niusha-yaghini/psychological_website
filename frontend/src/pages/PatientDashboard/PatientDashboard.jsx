@@ -420,10 +420,14 @@ function PatientDashboard() {
   // ==========================================
 
   // ===== داده‌های نوبت‌ها =====
-  const [appointments, setAppointments] = useState(seedData.appointments);
+  const [appointments, setAppointments] = useState(
+    seedData.patientAppointments,
+  );
 
   // ===== داده‌های نوتیفیکیشن =====
-  const [notifications, setNotifications] = useState(seedData.notifications);
+  const [notifications, setNotifications] = useState(
+    seedData.patientNotifications,
+  );
 
   // ===== زمان ثابت ایجاد هر اعلان =====
   const [notificationCreatedAt, setNotificationCreatedAt] = useState(() => {
@@ -447,11 +451,11 @@ function PatientDashboard() {
 
   // ===== Settings State =====
   const [notificationSettings, setNotificationSettings] = useState(
-    seedData.settings.notificationSettings,
+    seedData.patientSettings.notificationSettings,
   );
 
   const [displaySettings, setDisplaySettings] = useState(
-    seedData.settings.displaySettings,
+    seedData.patientSettings.displaySettings,
   );
 
   // ===== محاسبه تعداد جلسات پیش‌رو =====
@@ -621,12 +625,20 @@ function PatientDashboard() {
         );
       // case "progress":
       //   return <ProgressView progressData={seedData.progress} />;
+      // case "exercise":
+      //   return <ExerciseManagement initialExercises={seedData.exercises} />;
       case "exercise":
-        return <ExerciseManagement initialExercises={seedData.exercises} />;
+        return (
+          <ExerciseManagement
+            appointments={appointments}
+            exercises={patientExercises}
+            setExercises={setPatientExercises}
+          />
+        );
       case "profile":
         return (
           <PatientProfile
-            profileData={seedData.profile}
+            profileData={seedData.patientProfile}
             userAvatar={userAvatar}
           />
         );
