@@ -4,7 +4,6 @@ import styles from "./DashboardOverview.module.css";
 // ============================================
 // COMPONENT: DashboardOverview Content
 // ============================================
-// function DashboardOverview({ appointments, setAppointments }) {
 function DashboardOverview({
   appointments,
   setAppointments,

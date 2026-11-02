@@ -3,7 +3,6 @@
 ============================================ */
 
 /* ===== Animation ===== */
-
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -17,7 +16,6 @@
 }
 
 /* ===== Common Styles ===== */
-
 .pageContent {
   animation: fadeIn 0.4s ease;
 }

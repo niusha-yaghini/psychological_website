@@ -11,18 +11,6 @@ import persian_fa from "react-date-object/locales/persian_fa";
 // ============================================
 // COMPONENT: Exercises Management (Doctor Panel)
 // ============================================
-// function ExercisesManagement({ patients, appointments, setAppointments }) {
-// function ExercisesManagement({
-//   patients,
-//   appointments,
-//   setAppointments,
-//   moment,
-//   toEnglishDigits,
-//   toPersianDigits,
-//   getDisplayStatus,
-//   getAppointmentMoment,
-//   doctorName,
-// }) {
 function ExercisesManagement({
   appointments,
   setAppointments,
@@ -474,12 +462,6 @@ function ExercisesManagement({
 
       {/* ===== مودال انتخاب بیمار و جلسه ===== */}
       {showPatientSelectModal && (
-        // <PatientAppointmentSelectModal
-        //   patients={patients}
-        //   appointments={appointments}
-        //   onClose={() => setShowPatientSelectModal(false)}
-        //   onSelect={handleSelectAppointment}
-        // />
         <PatientAppointmentSelectModal
           appointments={appointments}
           onClose={() => setShowPatientSelectModal(false)}
@@ -515,12 +497,6 @@ function ExercisesManagement({
 // ============================================
 // COMPONENT: Patient Appointment Select Modal
 // ============================================
-// function PatientAppointmentSelectModal({
-//   patients,
-//   appointments,
-//   onClose,
-//   onSelect,
-// }) {
 function PatientAppointmentSelectModal({
   patients,
   appointments,

@@ -4,7 +4,6 @@ import styles from "./FinancialView.module.css";
 // ============================================
 // COMPONENT: Financial View
 // ============================================
-// function FinancialView({ appointments, setAppointments }) {
 function FinancialView({
   appointments,
   setAppointments,
@@ -16,7 +15,6 @@ function FinancialView({
   // ===== State =====
   const [dateRange, setDateRange] = useState("all"); // all | thisYear | thisMonth | thisWeek
   const [paymentFilter, setPaymentFilter] = useState("all"); // all | paid | unpaid
-  // const [selectedAppointment, setSelectedAppointment] = useState(null);
 
   // ===== محاسبه‌ی بازه =====
   const getRangeStartDate = () => {

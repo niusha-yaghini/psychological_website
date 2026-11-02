@@ -1,6 +1,5 @@
 import React, { useState, useMemo } from "react";
 import { FaPlus } from "react-icons/fa";
-// import moment from "moment-jalaali";
 
 import DatePicker from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
@@ -252,7 +251,7 @@ function AppointmentsManagement({
     const newId = Math.max(...appointments.map((a) => a.id), 0) + 1;
 
     // ===== محاسبه قیمت بر اساس pricePerHour =====
-  
+
     const finalPrice = pricePerHour * durationHours;
 
     setAppointments((prev) => [

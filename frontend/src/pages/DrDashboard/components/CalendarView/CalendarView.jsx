@@ -4,7 +4,6 @@ import styles from "./CalendarView.module.css";
 // ============================================
 // COMPONENT: Calendar View (Weekly)
 // ============================================
-// function CalendarView({ appointments }) {
 function CalendarView({
   appointments,
   moment,
@@ -26,51 +25,6 @@ function CalendarView({
     }
     return hours;
   }, []);
-
-  // ===== روزهای هفته =====
-  // const weekDays = useMemo(() => {
-  //   const todayJalali = moment().format("jYYYY/jMM/jDD");
-  //   const [y, m, d] = toEnglishDigits(todayJalali).split("/").map(Number);
-
-  //   const todayDate = moment(`${y}/${m}/${d}`, "jYYYY/jMM/jDD");
-
-  //   // ===== تبدیل روز هفته میلادی به ترتیب ایرانی =====
-  //   const gregorianDayOfWeek = todayDate.day();
-  //   const persianDayOfWeek =
-  //     gregorianDayOfWeek === 6 ? 0 : gregorianDayOfWeek + 1;
-
-  //   // ===== پیدا کردن شنبه این هفته =====
-  //   const saturday = todayDate.clone().subtract(persianDayOfWeek, "days");
-
-  //   // ===== اعمال weekOffset =====
-  //   const targetSaturday = saturday.clone().add(weekOffset, "weeks");
-
-  //   // ===== ساخت ۷ روز =====
-  //   const days = [];
-  //   const dayNames = [
-  //     "شنبه",
-  //     "یکشنبه",
-  //     "دوشنبه",
-  //     "سه‌شنبه",
-  //     "چهارشنبه",
-  //     "پنجشنبه",
-  //     "جمعه",
-  //   ];
-
-  //   for (let i = 0; i < 7; i++) {
-  //     const date = targetSaturday.clone().add(i, "days");
-  //     days.push({
-  //       dayName: dayNames[i],
-  //       date: date.format("jYYYY/jMM/jDD"),
-  //       dayOfMonth: toPersianDigits(date.format("jDD")),
-  //       month: toPersianDigits(date.format("jMM")),
-  //       dateObject: date,
-  //       isToday: date.isSame(todayDate, "day"),
-  //     });
-  //   }
-
-  //   return days;
-  // }, [weekOffset]);
 
   // ===== روزهای هفته =====
   const weekDays = useMemo(() => {
@@ -119,45 +73,12 @@ function CalendarView({
   }, [weekOffset]);
 
   // ===== بازه‌ی نمایش هفته =====
-  // const weekRangeLabel = useMemo(() => {
-  //   if (weekDays.length === 0) return "";
-  //   const first = weekDays[0];
-  //   const last = weekDays[6];
-  //   return `${first.dayOfMonth} ${moment(first.date, "jYYYY/jMM/jDD").format("jMMMM")} تا ${last.dayOfMonth} ${moment(last.date, "jYYYY/jMM/jDD").format("jMMMM")} ${moment(first.date, "jYYYY/jMM/jDD").format("jYYYY")}`;
-  // }, [weekDays]);
-
-  // ===== بازه‌ی نمایش هفته =====
   const weekRangeLabel = useMemo(() => {
     if (weekDays.length === 0) return "";
     const first = weekDays[0];
     const last = weekDays[6];
     return `${first.dayOfMonth} ${first.dateObject.format("jMMMM")} تا ${last.dayOfMonth} ${last.dateObject.format("jMMMM")} ${first.dateObject.format("jYYYY")}`;
   }, [weekDays]);
-
-  // ===== جلسات به تفکیک روز =====
-  // const appointmentsByDay = useMemo(() => {
-  //   const map = {};
-
-  //   weekDays.forEach((day) => {
-  //     map[day.date] = appointments.filter((a) => a.date === day.date);
-  //   });
-
-  //   return map;
-  // }, [appointments, weekDays]);
-
-  // ===== جلسات به تفکیک روز =====
-  // const appointmentsByDay = useMemo(() => {
-  //   const map = {};
-
-  //   weekDays.forEach((day) => {
-  //     // ← از datePersian استفاده کن (چون appointments با اعداد فارسی ذخیره شدن)
-  //     map[day.datePersian] = appointments.filter(
-  //       (a) => toPersianDigits(a.date) === day.datePersian,
-  //     );
-  //   });
-
-  //   return map;
-  // }, [appointments, weekDays]);
 
   const appointmentsByDay = useMemo(() => {
     const map = {};
@@ -187,63 +108,6 @@ function CalendarView({
     // confirmed یا ongoing یا awaiting-confirmation
     return styles.calendarCellConfirmed;
   };
-
-  // ===== گرفتن جلسه‌ی یه سلول خاص =====
-  // const getCellAppointment = (date, hour) => {
-  //   const dayAppointments = appointmentsByDay[date] || [];
-
-  //   // ===== تبدیل hour به دقیقه =====
-  //   const [h, m] = toEnglishDigits(hour).split(":").map(Number);
-  //   const cellMinutes = h * 60 + m;
-
-  //   return dayAppointments.find((app) => {
-  //     const startTime = toEnglishDigits(
-  //       app.startTime || app.time.split(" - ")[0],
-  //     );
-  //     const endTime = toEnglishDigits(app.endTime || app.time.split(" - ")[1]);
-
-  //     const [startH, startM] = startTime.split(":").map(Number);
-  //     const [endH, endM] = endTime.split(":").map(Number);
-
-  //     const startMinutes = startH * 60 + startM;
-  //     const endMinutes = endH * 60 + endM;
-
-  //     return cellMinutes >= startMinutes && cellMinutes < endMinutes;
-  //   });
-  // };
-
-  // ===== چک کردن اینکه این سلول شروع یه جلسه‌ست =====
-  // const isCellStart = (appointment, hour) => {
-  //   if (!appointment) return false;
-  //   const startTime = toEnglishDigits(
-  //     appointment.startTime || appointment.time.split(" - ")[0],
-  //   );
-  //   const [h, m] = toEnglishDigits(hour).split(":").map(Number);
-  //   const cellMinutes = h * 60 + m;
-  //   const [startH, startM] = startTime.split(":").map(Number);
-  //   const startMinutes = startH * 60 + startM;
-  //   return cellMinutes === startMinutes;
-  // };
-
-  // ===== چک کردن اینکه جلسه چند سلول طول می‌کشه =====
-  // const getAppointmentSpan = (appointment) => {
-  //   if (!appointment) return 1;
-
-  //   const startTime = toEnglishDigits(
-  //     appointment.startTime || appointment.time.split(" - ")[0],
-  //   );
-  //   const endTime = toEnglishDigits(
-  //     appointment.endTime || appointment.time.split(" - ")[1],
-  //   );
-
-  //   const [startH, startM] = startTime.split(":").map(Number);
-  //   const [endH, endM] = endTime.split(":").map(Number);
-
-  //   const startMinutes = startH * 60 + startM;
-  //   const endMinutes = endH * 60 + endM;
-
-  //   return (endMinutes - startMinutes) / 30; // هر سلول ۳۰ دقیقه
-  // };
 
   // ===== محاسبه‌ی position جلسه در ستون روز =====
   const getEventPosition = (appointment) => {
@@ -359,95 +223,6 @@ function CalendarView({
       </div>
 
       {/* ===== گرید تقویم ===== */}
-      {/* <div className={styles.calendarWrapper}>
-        <div className={styles.calendarGrid}>
-          <div className={styles.calendarHeaderRow}>
-            <div className={styles.calendarTimeHeader}></div>
-
-            {weekDays.map((day) => (
-              <div
-                key={day.date}
-                className={`${styles.calendarDayHeader} ${
-                  day.isToday ? styles.calendarDayHeaderToday : ""
-                }`}
-              >
-                <span className={styles.calendarDayName}>{day.dayName}</span>
-                <span className={styles.calendarDayDate}>{day.dayOfMonth}</span>
-              </div>
-            ))}
-          </div>
-
-          <div className={styles.calendarBody}>
-            <div className={styles.calendarTimeColumn}>
-              {CALENDAR_HOURS.map((hour) => (
-                <div key={hour} className={styles.calendarTimeCell}>
-                  {hour.endsWith(":۰۰") ? hour : ""}
-                </div>
-              ))}
-            </div>
-
-            <div className={styles.calendarDaysColumns}>
-              {weekDays.map((day) => (
-                <div key={day.date} className={styles.calendarDayColumn}>
-                  {CALENDAR_HOURS.map((hour, hourIndex) => {
-                    const appointment = getCellAppointment(day.date, hour);
-                    const isStart = isCellStart(appointment, hour);
-                    const span = getAppointmentSpan(appointment);
-                    const colorClass = appointment
-                      ? getStatusColorClass(appointment)
-                      : "";
-
-                    if (appointment && !isStart) {
-                      const prevHour =
-                        hourIndex > 0 ? CALENDAR_HOURS[hourIndex - 1] : null;
-                      const prevAppointment = prevHour
-                        ? getCellAppointment(day.date, prevHour)
-                        : null;
-
-                      if (prevAppointment?.id === appointment.id) {
-                        return null; // این سلول جزئی از جلسه‌ی بالاییه
-                      }
-                    }
-
-                    return (
-                      <div
-                        key={hour}
-                        className={`${styles.calendarCell} ${
-                          appointment ? colorClass : styles.calendarCellEmpty
-                        }`}
-                        style={
-                          appointment && isStart
-                            ? { gridRow: `span ${span}` }
-                            : {}
-                        }
-                        onClick={() =>
-                          appointment && setSelectedAppointment(appointment)
-                        }
-                      >
-                        {appointment && isStart && (
-                          <div className={styles.calendarCellContent}>
-                            <span className={styles.calendarCellPatient}>
-                              {appointment.patient}
-                            </span>
-                            <span className={styles.calendarCellTime}>
-                              {toPersianDigits(
-                                appointment.startTime ||
-                                  appointment.time.split(" - ")[0],
-                              )}
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div> */}
-
-      {/* ===== گرید تقویم ===== */}
       <div className={styles.calendarWrapper}>
         <div className={styles.calendarGrid}>
           {/* ===== ردیف هدر (روزها) ===== */}
@@ -489,33 +264,6 @@ function CalendarView({
                   </div>
 
                   {/* لایه‌ی جلسات */}
-                  {/* <div className={styles.calendarDayEvents}> */}
-                  {/* {(appointmentsByDay[day.date] || []).map((appointment) => {
-                      const { top, height } = getEventPosition(appointment);
-                      if (top === null) return null;
-
-                      const colorClass = getStatusColorClass(appointment);
-
-                      return (
-                        <div
-                          key={appointment.id}
-                          className={`${styles.calendarEvent} ${colorClass}`}
-                          style={{ top: `${top}px`, height: `${height}px` }}
-                          onClick={() => setSelectedAppointment(appointment)}
-                        >
-                          <span className={styles.calendarEventPatient}>
-                            {appointment.patient}
-                          </span>
-                          <span className={styles.calendarEventTime}>
-                            {toPersianDigits(
-                              appointment.startTime ||
-                                appointment.time.split(" - ")[0],
-                            )}
-                          </span>
-                        </div>
-                      );
-                    })} */}
-                  {/* لایه‌ی جلسات */}
                   <div className={styles.calendarDayEvents}>
                     {(appointmentsByDay[day.datePersian] || []).map(
                       (appointment) => {
@@ -546,7 +294,6 @@ function CalendarView({
                     )}
                   </div>
                 </div>
-                // </div>
               ))}
             </div>
           </div>
@@ -554,12 +301,6 @@ function CalendarView({
       </div>
 
       {/* ===== مودال جزئیات جلسه ===== */}
-      {/* {selectedAppointment && (
-        <CalendarAppointmentModal
-          appointment={selectedAppointment}
-          onClose={() => setSelectedAppointment(null)}
-        />
-      )} */}
       {selectedAppointment && (
         <CalendarAppointmentModal
           appointment={selectedAppointment}
@@ -576,7 +317,6 @@ function CalendarView({
 // ============================================
 // COMPONENT: Calendar Appointment Modal
 // ============================================
-// function CalendarAppointmentModal({ appointment, onClose }) {
 function CalendarAppointmentModal({
   appointment,
   onClose,

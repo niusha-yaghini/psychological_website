@@ -16,9 +16,6 @@ import {
 
 import seedData from "../../../../backend/seed";
 
-// import moment from "moment-jalaali";
-// moment.loadPersian({ usePersianDigits: false, dialect: "persian" });
-
 import moment from "moment-jalaali";
 
 moment.loadPersian({
@@ -39,6 +36,7 @@ import NotificationDropdown from "./components/NotificationDropdown/Notification
 import ProgressView from "./components/ProgressView/ProgressView";
 import ExerciseManagement from "./components/Exercises/Exercises";
 import PatientProfile from "./components/Profile/PatientProfile";
+import PatientSettings from "./components/Settings/PatientSettings";
 
 // ============================================
 // ثابت‌های گلوبال (Global Constants)
@@ -69,17 +67,6 @@ const toEnglishDigits = (str) => {
     (d) => englishDigits[persianDigits.indexOf(d)],
   );
 };
-
-// ===== تبدیل اعداد انگلیسی به فارسی =====
-// const toPersianDigits = (str) => {
-//   if (str === null || str === undefined) return str;
-//   const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
-//   const englishDigits = "0123456789";
-//   return String(str).replace(
-//     /[0-9]/g,
-//     (d) => persianDigits[englishDigits.indexOf(d)],
-//   );
-// };
 
 // ===== تبدیل اعداد انگلیسی به فارسی =====
 const toPersianDigits = (str) => {
@@ -436,9 +423,6 @@ function PatientDashboard() {
   const [appointments, setAppointments] = useState(seedData.appointments);
 
   // ===== داده‌های نوتیفیکیشن =====
-  // const [notifications, setNotifications] = useState(seedData.notifications);
-
-  // ===== داده‌های نوتیفیکیشن =====
   const [notifications, setNotifications] = useState(seedData.notifications);
 
   // ===== زمان ثابت ایجاد هر اعلان =====
@@ -460,6 +444,15 @@ function PatientDashboard() {
 
     return toPersianDigits(moment(createdAt).format("jYYYY/jMM/jDD - HH:mm"));
   };
+
+  // ===== Settings State =====
+  const [notificationSettings, setNotificationSettings] = useState(
+    seedData.settings.notificationSettings,
+  );
+
+  const [displaySettings, setDisplaySettings] = useState(
+    seedData.settings.displaySettings,
+  );
 
   // ===== محاسبه تعداد جلسات پیش‌رو =====
   const upcomingAppointmentsCount = useMemo(() => {
@@ -628,12 +621,8 @@ function PatientDashboard() {
         );
       case "progress":
         return <ProgressView progressData={seedData.progress} />;
-      // case "exercise":
-      //   return <ExerciseContent />;
       case "exercise":
         return <ExerciseManagement initialExercises={seedData.exercises} />;
-      // case "profile":
-      //   return <ProfileContent userData={userData} />;
       case "profile":
         return (
           <PatientProfile
@@ -642,7 +631,14 @@ function PatientDashboard() {
           />
         );
       case "settings":
-        return <SettingsContent />;
+        return (
+          <PatientSettings
+            notificationSettings={notificationSettings}
+            setNotificationSettings={setNotificationSettings}
+            displaySettings={displaySettings}
+            setDisplaySettings={setDisplaySettings}
+          />
+        );
       default:
         return (
           <DashboardOverview
@@ -696,28 +692,57 @@ function PatientDashboard() {
 }
 
 // ============================================
-// COMPONENT: Profile Content
+// COMPONENT: Setting Content
 // ============================================
-// function ProfileContent({ userData }) {
-//   const [isEditing, setIsEditing] = useState(false);
-//   const [formData, setFormData] = useState(seedData.profile.formData);
-//   const [activeTab, setActiveTab] = useState("info");
+// function SettingsContent() {
+//   const [notificationSettings, setNotificationSettings] = useState(
+//     seedData.settings.notificationSettings,
+//   );
+//   const [displaySettings, setDisplaySettings] = useState(
+//     seedData.settings.displaySettings,
+//   );
 
-//   const userStats = seedData.profile.userStats;
-//   const medicalInfo = seedData.profile.medicalInfo;
-
-//   // ===== تغییرات فرم =====
-//   const handleInputChange = (e) => {
-//     const { name, value } = e.target;
-//     setFormData((prev) => ({ ...prev, [name]: value }));
+//   // ===== تابع تغییر تنظیمات =====
+//   const toggleSetting = (category, key, subKey = null) => {
+//     if (subKey) {
+//       setNotificationSettings((prev) => ({
+//         ...prev,
+//         [category]: {
+//           ...prev[category],
+//           [subKey]: !prev[category][subKey],
+//         },
+//       }));
+//     } else {
+//       setNotificationSettings((prev) => ({
+//         ...prev,
+//         [category]: {
+//           ...prev[category],
+//           [key]: !prev[category][key],
+//         },
+//       }));
+//     }
 //   };
 
-//   // ===== ذخیره تغییرات =====
-//   const handleSave = () => {
-//     // ذخیره اطلاعات
-//     console.log("اطلاعات ذخیره شد:", formData);
-//     setIsEditing(false);
-//     alert("اطلاعات با موفقیت ذخیره شد.");
+//   // ===== تابع تغییر روش =====
+//   const changeMethod = (category, method) => {
+//     setNotificationSettings((prev) => ({
+//       ...prev,
+//       [category]: {
+//         ...prev[category],
+//         method: method,
+//       },
+//     }));
+//   };
+
+//   // ===== تابع تغییر زمان یادآوری =====
+//   const changeTiming = (category, hours) => {
+//     setNotificationSettings((prev) => ({
+//       ...prev,
+//       [category]: {
+//         ...prev[category],
+//         timing: hours,
+//       },
+//     }));
 //   };
 
 //   return (
@@ -725,716 +750,304 @@ function PatientDashboard() {
 //       {/* هدر بخش */}
 //       <div className={styles.pageHeader}>
 //         <div className={styles.headerInfo}>
-//           <h2>پروفایل</h2>
-//           <p>اطلاعات شخصی و تنظیمات حساب کاربری</p>
+//           <h2>تنظیمات</h2>
+//           <p>مدیریت تنظیمات حساب کاربری و اعلان‌ها</p>
 //         </div>
-//         <button
-//           className={styles.editProfileBtn}
-//           onClick={() => setIsEditing(!isEditing)}
-//         >
-//           {isEditing ? "✕ لغو" : "ویرایش پروفایل"}
-//         </button>
 //       </div>
 
-//       {/* کارت اصلی پروفایل */}
-//       <div className={styles.profileMainCard}>
-//         {/* آواتار و اطلاعات اصلی */}
-//         <div className={styles.profileHeader}>
-//           <div className={styles.profileAvatarSection}>
-//             <div className={styles.profileAvatar}>
-//               <img src={userAvatar} alt="پروفایل" />
-//               {isEditing && (
-//                 <button className={styles.changeAvatarBtn}>
-//                   {/* <span>📷</span> */}
-//                 </button>
-//               )}
+//       {/* ===== بخش اعلان‌ها ===== */}
+//       <div className={styles.settingsSection}>
+//         <h3>اعلان‌ها و یادآوری‌ها</h3>
+//         <p className={styles.sectionDescription}>
+//           تنظیمات مربوط به یادآوری جلسات، تمارین و پیام‌ها
+//         </p>
+
+//         {/* یادآوری جلسات */}
+//         <div className={styles.settingCard}>
+//           <div className={styles.settingHeader}>
+//             <div className={styles.settingInfo}>
+//               <div>
+//                 <h4>یادآوری جلسات</h4>
+//                 <p>ارسال پیامک یادآوری قبل از جلسات</p>
+//               </div>
 //             </div>
-//             <div className={styles.profileBadge}>
-//               <span className={styles.badgeDot}></span>
-//               فعال
-//             </div>
+//             <label className={styles.switch}>
+//               <input
+//                 type="checkbox"
+//                 checked={notificationSettings.sessionReminder.enabled}
+//                 onChange={() => toggleSetting("sessionReminder", "enabled")}
+//               />
+//               <span className={styles.switchSlider}></span>
+//             </label>
 //           </div>
 
-//           <div className={styles.profileMainInfo}>
-//             <h2>
-//               {isEditing ? (
-//                 <div className={styles.editNameRow}>
-//                   <input
-//                     type="text"
-//                     name="firstName"
-//                     value={formData.firstName}
-//                     onChange={handleInputChange}
-//                     placeholder="نام"
-//                     className={styles.editInput}
-//                   />
-//                   <input
-//                     type="text"
-//                     name="lastName"
-//                     value={formData.lastName}
-//                     onChange={handleInputChange}
-//                     placeholder="نام خانوادگی"
-//                     className={styles.editInput}
-//                   />
+//           {notificationSettings.sessionReminder.enabled && (
+//             <div className={styles.settingOptions}>
+//               <div className={styles.optionGroup}>
+//                 <span className={styles.optionLabel}>روش ارسال:</span>
+//                 <div className={styles.methodButtons}>
+//                   <button
+//                     className={`${styles.methodBtn} ${
+//                       notificationSettings.sessionReminder.method === "sms"
+//                         ? styles.active
+//                         : ""
+//                     }`}
+//                     onClick={() => changeMethod("sessionReminder", "sms")}
+//                   >
+//                     پیامک
+//                   </button>
 //                 </div>
-//               ) : (
-//                 `${formData.firstName} ${formData.lastName}`
-//               )}
-//             </h2>
-//             <div className={styles.profileMeta}>
-//               <span>{formData.phone}</span>
-//               <span className={styles.metaDivider}>•</span>
-//               <span>{formData.email}</span>
-//               <span className={styles.metaDivider}>•</span>
-//               <span>عضویت: {userStats.joinDate}</span>
-//             </div>
-//             <div className={styles.profileQuickStats}>
-//               <div className={styles.quickStat}>
-//                 <span className={styles.quickStatNumber}>
-//                   {userStats.totalSessions}
-//                 </span>
-//                 <span className={styles.quickStatLabel}>جلسات</span>
 //               </div>
-//               <div className={styles.quickStatDivider}></div>
-//               <div className={styles.quickStat}>
-//                 <span className={styles.quickStatNumber}>
-//                   {userStats.completedExercises}/{userStats.totalExercises}
-//                 </span>
-//                 <span className={styles.quickStatLabel}>تمارین</span>
-//               </div>
-//               <div className={styles.quickStatDivider}></div>
-//               <div className={styles.quickStat}>
-//                 <span className={styles.quickStatNumber}>
-//                   {userStats.upcomingAppointment}
-//                 </span>
-//                 <span className={styles.quickStatLabel}>نوبت بعدی</span>
-//               </div>
-//             </div>
-//           </div>
-//         </div>
 
-//         {/* تب‌ها */}
-//         <div className={styles.profileTabs}>
-//           <button
-//             className={`${styles.profileTab} ${
-//               activeTab === "info" ? styles.active : ""
-//             }`}
-//             onClick={() => setActiveTab("info")}
-//           >
-//             اطلاعات شخصی
-//           </button>
-//           <button
-//             className={`${styles.profileTab} ${
-//               activeTab === "medical" ? styles.active : ""
-//             }`}
-//             onClick={() => setActiveTab("medical")}
-//           >
-//             اطلاعات درمانی
-//           </button>
-//         </div>
-
-//         {/* محتوای تب‌ها */}
-//         <div className={styles.profileTabContent}>
-//           {/* ===== تب اطلاعات شخصی ===== */}
-//           {activeTab === "info" && (
-//             <div className={styles.infoTab}>
-//               <div className={styles.infoGrid}>
-//                 <div className={styles.infoItem}>
-//                   <label>نام</label>
-//                   {isEditing ? (
-//                     <input
-//                       type="text"
-//                       name="firstName"
-//                       value={formData.firstName}
-//                       onChange={handleInputChange}
-//                       className={styles.editInput}
-//                     />
-//                   ) : (
-//                     <p>{formData.firstName}</p>
-//                   )}
-//                 </div>
-//                 <div className={styles.infoItem}>
-//                   <label>نام خانوادگی</label>
-//                   {isEditing ? (
-//                     <input
-//                       type="text"
-//                       name="lastName"
-//                       value={formData.lastName}
-//                       onChange={handleInputChange}
-//                       className={styles.editInput}
-//                     />
-//                   ) : (
-//                     <p>{formData.lastName}</p>
-//                   )}
-//                 </div>
-//                 <div className={styles.infoItem}>
-//                   <label>شماره موبایل</label>
-//                   {isEditing ? (
-//                     <input
-//                       type="text"
-//                       name="phone"
-//                       value={formData.phone}
-//                       onChange={handleInputChange}
-//                       className={styles.editInput}
-//                     />
-//                   ) : (
-//                     <p>{formData.phone}</p>
-//                   )}
-//                 </div>
-//                 <div className={styles.infoItem}>
-//                   <label>ایمیل</label>
-//                   {isEditing ? (
-//                     <input
-//                       type="email"
-//                       name="email"
-//                       value={formData.email}
-//                       onChange={handleInputChange}
-//                       className={styles.editInput}
-//                     />
-//                   ) : (
-//                     <p>{formData.email}</p>
-//                   )}
-//                 </div>
-//                 <div className={styles.infoItem}>
-//                   <label>جنسیت</label>
-//                   {isEditing ? (
-//                     <select
-//                       name="gender"
-//                       value={formData.gender}
-//                       onChange={handleInputChange}
-//                       className={styles.editSelect}
+//               <div className={styles.optionGroup}>
+//                 <span className={styles.optionLabel}>زمان یادآوری:</span>
+//                 <div className={styles.timingButtons}>
+//                   {[1, 2, 4, 12, 24].map((hours) => (
+//                     <button
+//                       key={hours}
+//                       className={`${styles.timingBtn} ${
+//                         notificationSettings.sessionReminder.timing === hours
+//                           ? styles.active
+//                           : ""
+//                       }`}
+//                       onClick={() => changeTiming("sessionReminder", hours)}
 //                     >
-//                       <option value="male">آقا</option>
-//                       <option value="female">خانم</option>
-//                     </select>
-//                   ) : (
-//                     <p>{formData.gender === "male" ? "آقا" : "خانم"}</p>
-//                   )}
-//                 </div>
-//                 <div className={styles.infoItem}>
-//                   <label>تاریخ تولد</label>
-//                   {isEditing ? (
-//                     <input
-//                       type="text"
-//                       name="birthDate"
-//                       value={formData.birthDate}
-//                       onChange={handleInputChange}
-//                       className={styles.editInput}
-//                       placeholder="۱۳۷۵/۰۳/۱۵"
-//                     />
-//                   ) : (
-//                     <p>{formData.birthDate}</p>
-//                   )}
-//                 </div>
-//                 <div className={styles.infoItem}>
-//                   <label>شغل</label>
-//                   {isEditing ? (
-//                     <input
-//                       type="text"
-//                       name="occupation"
-//                       value={formData.occupation}
-//                       onChange={handleInputChange}
-//                       className={styles.editInput}
-//                     />
-//                   ) : (
-//                     <p>{formData.occupation}</p>
-//                   )}
-//                 </div>
-//                 <div className={styles.infoItem}>
-//                   <label>تحصیلات</label>
-//                   {isEditing ? (
-//                     <input
-//                       type="text"
-//                       name="education"
-//                       value={formData.education}
-//                       onChange={handleInputChange}
-//                       className={styles.editInput}
-//                     />
-//                   ) : (
-//                     <p>{formData.education}</p>
-//                   )}
-//                 </div>
-//                 <div className={styles.infoItemFull}>
-//                   <label>آدرس</label>
-//                   {isEditing ? (
-//                     <textarea
-//                       name="address"
-//                       value={formData.address}
-//                       onChange={handleInputChange}
-//                       className={styles.editTextarea}
-//                       rows="2"
-//                     />
-//                   ) : (
-//                     <p>{formData.address}</p>
-//                   )}
+//                       {hours} ساعت قبل
+//                     </button>
+//                   ))}
 //                 </div>
 //               </div>
+//             </div>
+//           )}
+//         </div>
 
-//               {/* اطلاعات اضطراری */}
-//               <div className={styles.emergencySection}>
-//                 <h4>تماس اضطراری</h4>
-//                 <div className={styles.emergencyGrid}>
-//                   <div className={styles.infoItem}>
-//                     <label>شماره تماس</label>
-//                     {isEditing ? (
-//                       <input
-//                         type="text"
-//                         name="emergencyContact"
-//                         value={formData.emergencyContact}
-//                         onChange={handleInputChange}
-//                         className={styles.editInput}
-//                       />
-//                     ) : (
-//                       <p>{formData.emergencyContact}</p>
-//                     )}
-//                   </div>
-//                   <div className={styles.infoItem}>
-//                     <label>نسبت</label>
-//                     {isEditing ? (
-//                       <input
-//                         type="text"
-//                         name="emergencyRelation"
-//                         value={formData.emergencyRelation}
-//                         onChange={handleInputChange}
-//                         className={styles.editInput}
-//                       />
-//                     ) : (
-//                       <p>{formData.emergencyRelation}</p>
-//                     )}
-//                   </div>
+//         {/* یادآوری تمارین */}
+//         <div className={styles.settingCard}>
+//           <div className={styles.settingHeader}>
+//             <div className={styles.settingInfo}>
+//               <div>
+//                 <h4>یادآوری تمارین</h4>
+//                 <p>یادآوری برای انجام تمارین روزانه</p>
+//               </div>
+//             </div>
+//             <label className={styles.switch}>
+//               <input
+//                 type="checkbox"
+//                 checked={notificationSettings.exerciseReminder.enabled}
+//                 onChange={() => toggleSetting("exerciseReminder", "enabled")}
+//               />
+//               <span className={styles.switchSlider}></span>
+//             </label>
+//           </div>
+
+//           {notificationSettings.exerciseReminder.enabled && (
+//             <div className={styles.settingOptions}>
+//               <div className={styles.optionGroup}>
+//                 <span className={styles.optionLabel}>روش ارسال:</span>
+//                 <div className={styles.methodButtons}>
+//                   <button
+//                     className={`${styles.methodBtn} ${
+//                       notificationSettings.exerciseReminder.method === "sms"
+//                         ? styles.active
+//                         : ""
+//                     }`}
+//                     onClick={() => changeMethod("exerciseReminder", "sms")}
+//                   >
+//                     پیامک
+//                   </button>
 //                 </div>
 //               </div>
+//             </div>
+//           )}
+//         </div>
 
-//               {isEditing && (
-//                 <div className={styles.editActions}>
-//                   <button className={styles.saveBtn} onClick={handleSave}>
-//                     ذخیره تغییرات
+//         {/* پیام‌های روانشناس */}
+//         <div className={styles.settingCard}>
+//           <div className={styles.settingHeader}>
+//             <div className={styles.settingInfo}>
+//               {/* <span className={styles.settingIcon}>💬</span> */}
+//               <div>
+//                 <h4>پیام‌های روانشناس</h4>
+//                 <p>دریافت پیام‌های جدید از روانشناس</p>
+//               </div>
+//             </div>
+//             <label className={styles.switch}>
+//               <input
+//                 type="checkbox"
+//                 checked={notificationSettings.therapistMessages.enabled}
+//                 onChange={() => toggleSetting("therapistMessages", "enabled")}
+//               />
+//               <span className={styles.switchSlider}></span>
+//             </label>
+//           </div>
+
+//           {notificationSettings.therapistMessages.enabled && (
+//             <div className={styles.settingOptions}>
+//               <div className={styles.optionGroup}>
+//                 <span className={styles.optionLabel}>روش ارسال:</span>
+//                 <div className={styles.methodButtons}>
+//                   <button
+//                     className={`${styles.methodBtn} ${
+//                       notificationSettings.therapistMessages.method === "sms"
+//                         ? styles.active
+//                         : ""
+//                     }`}
+//                     onClick={() => changeMethod("therapistMessages", "sms")}
+//                   >
+//                     پیامک
 //                   </button>
 //                   <button
-//                     className={styles.cancelBtn}
-//                     onClick={() => setIsEditing(false)}
+//                     className={`${styles.methodBtn} ${
+//                       notificationSettings.therapistMessages.method === "email"
+//                         ? styles.active
+//                         : ""
+//                     }`}
+//                     onClick={() => changeMethod("therapistMessages", "email")}
 //                   >
-//                     ✕ انصراف
+//                     ایمیل
 //                   </button>
 //                 </div>
-//               )}
-//             </div>
-//           )}
-
-//           {/* ===== تب اطلاعات درمانی ===== */}
-//           {activeTab === "medical" && (
-//             <div className={styles.medicalTab}>
-//               <div className={styles.medicalCard}>
-//                 <div className={styles.medicalItem}>
-//                   <span className={styles.medicalLabel}>روانشناس معالج</span>
-//                   <span className={styles.medicalValue}>
-//                     {medicalInfo.therapist}
-//                   </span>
-//                 </div>
-//                 <div className={styles.medicalItem}>
-//                   <span className={styles.medicalLabel}>تشخیص</span>
-//                   <span className={styles.medicalValue}>
-//                     {medicalInfo.diagnosis}
-//                   </span>
-//                 </div>
-//                 <div className={styles.medicalItem}>
-//                   <span className={styles.medicalLabel}>روش درمانی</span>
-//                   <span className={styles.medicalValue}>
-//                     {medicalInfo.treatmentPlan}
-//                   </span>
-//                 </div>
-//                 <div className={styles.medicalItem}>
-//                   <span className={styles.medicalLabel}>داروها</span>
-//                   <span className={styles.medicalValue}>
-//                     {medicalInfo.medications}
-//                   </span>
-//                 </div>
-//                 <div className={styles.medicalItem}>
-//                   <span className={styles.medicalLabel}>حساسیت‌ها</span>
-//                   <span className={styles.medicalValue}>
-//                     {medicalInfo.allergies}
-//                   </span>
-//                 </div>
-//                 <div className={styles.medicalItem}>
-//                   <span className={styles.medicalLabel}>یادداشت‌های ویژه</span>
-//                   <span className={styles.medicalValue}>
-//                     {medicalInfo.specialNotes}
-//                   </span>
-//                 </div>
-//               </div>
-
-//               <div className={styles.medicalActions}>
-//                 <button className={styles.btnMedical}>
-//                   درخواست گزارش درمانی
-//                 </button>
-//                 <button className={styles.btnMedicalSecondary}>
-//                   اشتراک‌گذاری با پزشک
-//                 </button>
 //               </div>
 //             </div>
 //           )}
 //         </div>
+
+//         {/* گزارش هفتگی */}
+//         <div className={styles.settingCard}>
+//           <div className={styles.settingHeader}>
+//             <div className={styles.settingInfo}>
+//               <div>
+//                 <h4>گزارش هفتگی</h4>
+//                 <p>دریافت گزارش پیشرفت هفتگی</p>
+//               </div>
+//             </div>
+//             <label className={styles.switch}>
+//               <input
+//                 type="checkbox"
+//                 checked={notificationSettings.weeklyReport.enabled}
+//                 onChange={() => toggleSetting("weeklyReport", "enabled")}
+//               />
+//               <span className={styles.switchSlider}></span>
+//             </label>
+//           </div>
+
+//           {notificationSettings.weeklyReport.enabled && (
+//             <div className={styles.settingOptions}>
+//               <div className={styles.optionGroup}>
+//                 <span className={styles.optionLabel}>روش ارسال:</span>
+//                 <div className={styles.methodButtons}>
+//                   <button
+//                     className={`${styles.methodBtn} ${
+//                       notificationSettings.weeklyReport.method === "email"
+//                         ? styles.active
+//                         : ""
+//                     }`}
+//                     onClick={() => changeMethod("weeklyReport", "email")}
+//                   >
+//                     ایمیل
+//                   </button>
+//                 </div>
+//               </div>
+//             </div>
+//           )}
+//         </div>
+//       </div>
+
+//       {/* ===== بخش نمایش ===== */}
+//       <div className={styles.settingsSection}>
+//         <h3>نمایش</h3>
+//         <p className={styles.sectionDescription}>
+//           تنظیمات ظاهری و نمایشی برنامه
+//         </p>
+
+//         <div className={styles.settingCard}>
+//           <div className={styles.settingHeader}>
+//             <div className={styles.settingInfo}>
+//               <span className={styles.settingIcon}>🌓</span>
+//               <div>
+//                 <h4>حالت شب</h4>
+//                 <p>تغییر تم برنامه به حالت تاریک</p>
+//               </div>
+//             </div>
+//             <label className={styles.switch}>
+//               <input
+//                 type="checkbox"
+//                 checked={displaySettings.darkMode}
+//                 onChange={() =>
+//                   setDisplaySettings((prev) => ({
+//                     ...prev,
+//                     darkMode: !prev.darkMode,
+//                   }))
+//                 }
+//               />
+//               <span className={styles.switchSlider}></span>
+//             </label>
+//           </div>
+//         </div>
+
+//         <div className={styles.settingCard}>
+//           <div className={styles.settingHeader}>
+//             <div className={styles.settingInfo}>
+//               <div>
+//                 <h4>زبان برنامه</h4>
+//                 <p>انتخاب زبان نمایشی</p>
+//               </div>
+//             </div>
+//             <div className={styles.languageButtons}>
+//               <button
+//                 className={`${styles.langBtn} ${
+//                   displaySettings.language === "fa" ? styles.active : ""
+//                 }`}
+//                 onClick={() =>
+//                   setDisplaySettings((prev) => ({ ...prev, language: "fa" }))
+//                 }
+//               >
+//                 فارسی
+//               </button>
+//               <button
+//                 className={`${styles.langBtn} ${
+//                   displaySettings.language === "en" ? styles.active : ""
+//                 }`}
+//                 onClick={() =>
+//                   setDisplaySettings((prev) => ({ ...prev, language: "en" }))
+//                 }
+//               >
+//                 English
+//               </button>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+
+//       {/* ===== بخش امنیت ===== */}
+//       <div className={styles.settingsSection}>
+//         <h3>امنیت</h3>
+//         <p className={styles.sectionDescription}>مدیریت رمز عبور و دسترسی‌ها</p>
+
+//         <div className={styles.settingCard}>
+//           <div className={styles.settingHeader}>
+//             <div className={styles.settingInfo}>
+//               <div>
+//                 <h4>تغییر شماره موبایل</h4>
+//                 <p>شماره موبایل خود را تغییر دهید</p>
+//               </div>
+//             </div>
+//             <button className={styles.actionBtn}>تغییر</button>
+//           </div>
+//         </div>
+//       </div>
+
+//       {/* ===== بخش خطرناک ===== */}
+//       <div className={styles.dangerSection}>
+//         <h4>⚠️ هشدار</h4>
+//         <p>
+//           با حذف حساب کاربری، تمام اطلاعات شما به صورت دائمی پاک خواهد شد و قابل
+//           بازیابی نیست.
+//         </p>
+//         <button className={styles.deleteAccountBtn}>🗑️ حذف حساب کاربری</button>
 //       </div>
 //     </div>
 //   );
 // }
-
-// ============================================
-// COMPONENT: Setting Content
-// ============================================
-function SettingsContent() {
-  const [notificationSettings, setNotificationSettings] = useState(
-    seedData.settings.notificationSettings,
-  );
-  const [displaySettings, setDisplaySettings] = useState(
-    seedData.settings.displaySettings,
-  );
-
-  // ===== تابع تغییر تنظیمات =====
-  const toggleSetting = (category, key, subKey = null) => {
-    if (subKey) {
-      setNotificationSettings((prev) => ({
-        ...prev,
-        [category]: {
-          ...prev[category],
-          [subKey]: !prev[category][subKey],
-        },
-      }));
-    } else {
-      setNotificationSettings((prev) => ({
-        ...prev,
-        [category]: {
-          ...prev[category],
-          [key]: !prev[category][key],
-        },
-      }));
-    }
-  };
-
-  // ===== تابع تغییر روش =====
-  const changeMethod = (category, method) => {
-    setNotificationSettings((prev) => ({
-      ...prev,
-      [category]: {
-        ...prev[category],
-        method: method,
-      },
-    }));
-  };
-
-  // ===== تابع تغییر زمان یادآوری =====
-  const changeTiming = (category, hours) => {
-    setNotificationSettings((prev) => ({
-      ...prev,
-      [category]: {
-        ...prev[category],
-        timing: hours,
-      },
-    }));
-  };
-
-  return (
-    <div className={styles.pageContent}>
-      {/* هدر بخش */}
-      <div className={styles.pageHeader}>
-        <div className={styles.headerInfo}>
-          <h2>تنظیمات</h2>
-          <p>مدیریت تنظیمات حساب کاربری و اعلان‌ها</p>
-        </div>
-      </div>
-
-      {/* ===== بخش اعلان‌ها ===== */}
-      <div className={styles.settingsSection}>
-        <h3>اعلان‌ها و یادآوری‌ها</h3>
-        <p className={styles.sectionDescription}>
-          تنظیمات مربوط به یادآوری جلسات، تمارین و پیام‌ها
-        </p>
-
-        {/* یادآوری جلسات */}
-        <div className={styles.settingCard}>
-          <div className={styles.settingHeader}>
-            <div className={styles.settingInfo}>
-              <div>
-                <h4>یادآوری جلسات</h4>
-                <p>ارسال پیامک یادآوری قبل از جلسات</p>
-              </div>
-            </div>
-            <label className={styles.switch}>
-              <input
-                type="checkbox"
-                checked={notificationSettings.sessionReminder.enabled}
-                onChange={() => toggleSetting("sessionReminder", "enabled")}
-              />
-              <span className={styles.switchSlider}></span>
-            </label>
-          </div>
-
-          {notificationSettings.sessionReminder.enabled && (
-            <div className={styles.settingOptions}>
-              <div className={styles.optionGroup}>
-                <span className={styles.optionLabel}>روش ارسال:</span>
-                <div className={styles.methodButtons}>
-                  <button
-                    className={`${styles.methodBtn} ${
-                      notificationSettings.sessionReminder.method === "sms"
-                        ? styles.active
-                        : ""
-                    }`}
-                    onClick={() => changeMethod("sessionReminder", "sms")}
-                  >
-                    پیامک
-                  </button>
-                </div>
-              </div>
-
-              <div className={styles.optionGroup}>
-                <span className={styles.optionLabel}>زمان یادآوری:</span>
-                <div className={styles.timingButtons}>
-                  {[1, 2, 4, 12, 24].map((hours) => (
-                    <button
-                      key={hours}
-                      className={`${styles.timingBtn} ${
-                        notificationSettings.sessionReminder.timing === hours
-                          ? styles.active
-                          : ""
-                      }`}
-                      onClick={() => changeTiming("sessionReminder", hours)}
-                    >
-                      {hours} ساعت قبل
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* یادآوری تمارین */}
-        <div className={styles.settingCard}>
-          <div className={styles.settingHeader}>
-            <div className={styles.settingInfo}>
-              <div>
-                <h4>یادآوری تمارین</h4>
-                <p>یادآوری برای انجام تمارین روزانه</p>
-              </div>
-            </div>
-            <label className={styles.switch}>
-              <input
-                type="checkbox"
-                checked={notificationSettings.exerciseReminder.enabled}
-                onChange={() => toggleSetting("exerciseReminder", "enabled")}
-              />
-              <span className={styles.switchSlider}></span>
-            </label>
-          </div>
-
-          {notificationSettings.exerciseReminder.enabled && (
-            <div className={styles.settingOptions}>
-              <div className={styles.optionGroup}>
-                <span className={styles.optionLabel}>روش ارسال:</span>
-                <div className={styles.methodButtons}>
-                  <button
-                    className={`${styles.methodBtn} ${
-                      notificationSettings.exerciseReminder.method === "sms"
-                        ? styles.active
-                        : ""
-                    }`}
-                    onClick={() => changeMethod("exerciseReminder", "sms")}
-                  >
-                    پیامک
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* پیام‌های روانشناس */}
-        <div className={styles.settingCard}>
-          <div className={styles.settingHeader}>
-            <div className={styles.settingInfo}>
-              {/* <span className={styles.settingIcon}>💬</span> */}
-              <div>
-                <h4>پیام‌های روانشناس</h4>
-                <p>دریافت پیام‌های جدید از روانشناس</p>
-              </div>
-            </div>
-            <label className={styles.switch}>
-              <input
-                type="checkbox"
-                checked={notificationSettings.therapistMessages.enabled}
-                onChange={() => toggleSetting("therapistMessages", "enabled")}
-              />
-              <span className={styles.switchSlider}></span>
-            </label>
-          </div>
-
-          {notificationSettings.therapistMessages.enabled && (
-            <div className={styles.settingOptions}>
-              <div className={styles.optionGroup}>
-                <span className={styles.optionLabel}>روش ارسال:</span>
-                <div className={styles.methodButtons}>
-                  <button
-                    className={`${styles.methodBtn} ${
-                      notificationSettings.therapistMessages.method === "sms"
-                        ? styles.active
-                        : ""
-                    }`}
-                    onClick={() => changeMethod("therapistMessages", "sms")}
-                  >
-                    پیامک
-                  </button>
-                  <button
-                    className={`${styles.methodBtn} ${
-                      notificationSettings.therapistMessages.method === "email"
-                        ? styles.active
-                        : ""
-                    }`}
-                    onClick={() => changeMethod("therapistMessages", "email")}
-                  >
-                    ایمیل
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* گزارش هفتگی */}
-        <div className={styles.settingCard}>
-          <div className={styles.settingHeader}>
-            <div className={styles.settingInfo}>
-              <div>
-                <h4>گزارش هفتگی</h4>
-                <p>دریافت گزارش پیشرفت هفتگی</p>
-              </div>
-            </div>
-            <label className={styles.switch}>
-              <input
-                type="checkbox"
-                checked={notificationSettings.weeklyReport.enabled}
-                onChange={() => toggleSetting("weeklyReport", "enabled")}
-              />
-              <span className={styles.switchSlider}></span>
-            </label>
-          </div>
-
-          {notificationSettings.weeklyReport.enabled && (
-            <div className={styles.settingOptions}>
-              <div className={styles.optionGroup}>
-                <span className={styles.optionLabel}>روش ارسال:</span>
-                <div className={styles.methodButtons}>
-                  <button
-                    className={`${styles.methodBtn} ${
-                      notificationSettings.weeklyReport.method === "email"
-                        ? styles.active
-                        : ""
-                    }`}
-                    onClick={() => changeMethod("weeklyReport", "email")}
-                  >
-                    ایمیل
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* ===== بخش نمایش ===== */}
-      <div className={styles.settingsSection}>
-        <h3>نمایش</h3>
-        <p className={styles.sectionDescription}>
-          تنظیمات ظاهری و نمایشی برنامه
-        </p>
-
-        <div className={styles.settingCard}>
-          <div className={styles.settingHeader}>
-            <div className={styles.settingInfo}>
-              <span className={styles.settingIcon}>🌓</span>
-              <div>
-                <h4>حالت شب</h4>
-                <p>تغییر تم برنامه به حالت تاریک</p>
-              </div>
-            </div>
-            <label className={styles.switch}>
-              <input
-                type="checkbox"
-                checked={displaySettings.darkMode}
-                onChange={() =>
-                  setDisplaySettings((prev) => ({
-                    ...prev,
-                    darkMode: !prev.darkMode,
-                  }))
-                }
-              />
-              <span className={styles.switchSlider}></span>
-            </label>
-          </div>
-        </div>
-
-        <div className={styles.settingCard}>
-          <div className={styles.settingHeader}>
-            <div className={styles.settingInfo}>
-              <div>
-                <h4>زبان برنامه</h4>
-                <p>انتخاب زبان نمایشی</p>
-              </div>
-            </div>
-            <div className={styles.languageButtons}>
-              <button
-                className={`${styles.langBtn} ${
-                  displaySettings.language === "fa" ? styles.active : ""
-                }`}
-                onClick={() =>
-                  setDisplaySettings((prev) => ({ ...prev, language: "fa" }))
-                }
-              >
-                فارسی
-              </button>
-              <button
-                className={`${styles.langBtn} ${
-                  displaySettings.language === "en" ? styles.active : ""
-                }`}
-                onClick={() =>
-                  setDisplaySettings((prev) => ({ ...prev, language: "en" }))
-                }
-              >
-                English
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* ===== بخش امنیت ===== */}
-      <div className={styles.settingsSection}>
-        <h3>امنیت</h3>
-        <p className={styles.sectionDescription}>مدیریت رمز عبور و دسترسی‌ها</p>
-
-        <div className={styles.settingCard}>
-          <div className={styles.settingHeader}>
-            <div className={styles.settingInfo}>
-              <div>
-                <h4>تغییر شماره موبایل</h4>
-                <p>شماره موبایل خود را تغییر دهید</p>
-              </div>
-            </div>
-            <button className={styles.actionBtn}>تغییر</button>
-          </div>
-        </div>
-      </div>
-
-      {/* ===== بخش خطرناک ===== */}
-      <div className={styles.dangerSection}>
-        <h4>⚠️ هشدار</h4>
-        <p>
-          با حذف حساب کاربری، تمام اطلاعات شما به صورت دائمی پاک خواهد شد و قابل
-          بازیابی نیست.
-        </p>
-        <button className={styles.deleteAccountBtn}>🗑️ حذف حساب کاربری</button>
-      </div>
-    </div>
-  );
-}
 
 export default PatientDashboard;

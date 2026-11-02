@@ -1,13 +1,16 @@
+import React from "react";
+import styles from "./PatientSettings.module.css";
+
 // ============================================
-// COMPONENT: Setting Content
+// COMPONENT: Patient Settings
 // ============================================
-function PatientSettings() {
-  const [notificationSettings, setNotificationSettings] = useState(
-    seedData.settings.notificationSettings,
-  );
-  const [displaySettings, setDisplaySettings] = useState(
-    seedData.settings.displaySettings,
-  );
+
+function PatientSettings({
+  notificationSettings,
+  setNotificationSettings,
+  displaySettings,
+  setDisplaySettings,
+}) {
 
   // ===== تابع تغییر تنظیمات =====
   const toggleSetting = (category, key, subKey = null) => {

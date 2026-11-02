@@ -1,4 +1,3 @@
-// import React, { useState, useMemo } from "react";
 import React, { useState, useMemo, useEffect } from "react";
 
 import { FaPlus } from "react-icons/fa";
@@ -97,7 +96,6 @@ function PatientsList({
         const momentB = getAppointmentMoment(b);
         return momentB - momentA; // جدیدترین اول
       });
-    // }, [appointments, selectedPatient]);
   }, [appointments, selectedPatient, getAppointmentMoment]);
 
   // ===== آمار بیمار =====
