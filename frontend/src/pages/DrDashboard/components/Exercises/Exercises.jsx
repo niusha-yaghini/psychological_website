@@ -4,10 +4,6 @@ import styles from "./Exercises.module.css";
 
 import { FaPlus } from "react-icons/fa";
 
-import DatePicker from "react-multi-date-picker";
-import persian from "react-date-object/calendars/persian";
-import persian_fa from "react-date-object/locales/persian_fa";
-
 // ============================================
 // COMPONENT: Exercises Management (Doctor Panel)
 // ============================================
@@ -32,126 +28,128 @@ function ExercisesManagement({
   const [editingExercise, setEditingExercise] = useState(null); // { appointmentId, exercise }
   const [showPatientSelectModal, setShowPatientSelectModal] = useState(false);
 
+  // همه‌ی گروه‌ها در ابتدا باز هستند؛ با کلیک هر سطح می‌توان آن را بست.
+  const [collapsedPatients, setCollapsedPatients] = useState(() => new Set());
+  const [collapsedAppointments, setCollapsedAppointments] = useState(
+    () => new Set(),
+  );
+  const [collapsedExercises, setCollapsedExercises] = useState(() => new Set());
+
   // ==========================================
   // مشتق‌ها
   // ==========================================
 
-  // ===== همه‌ی تمارین (از همه‌ی appointments) =====
+  // ===== استخراج تمرین‌ها از جلسات doctorAppointments =====
+  // هر تمرین همراه با اطلاعات بیمار و جلسه‌ی مربوط به خودش نگهداری می‌شود.
   const allExercises = useMemo(() => {
-    const result = [];
+    return (appointments || []).flatMap((appointment) => {
+      if (!Array.isArray(appointment.exercises)) return [];
 
-    appointments.forEach((appointment) => {
-      if (
-        appointment.exercises &&
-        Array.isArray(appointment.exercises) &&
-        appointment.exercises.length > 0
-      ) {
-        appointment.exercises.forEach((exercise) => {
-          result.push({
-            ...exercise,
-            // ===== اطلاعات اضافه از appointment =====
-            appointmentId: appointment.id,
-            patientId: appointment.patientId,
-            patientName: appointment.patient,
-            appointmentDate: appointment.date,
-            appointmentType: appointment.type,
-            appointmentTypeKey: appointment.typeKey,
-          });
-        });
-      }
+      return appointment.exercises.map((exercise) => ({
+        ...exercise,
+        appointmentId: appointment.id,
+        patientId: appointment.patientId,
+        patientName: appointment.patient,
+        appointmentDate: appointment.date,
+        appointmentType: appointment.type,
+        appointmentTypeKey: appointment.typeKey,
+      }));
     });
-
-    return result;
   }, [appointments]);
 
-  // ===== آمار =====
-  const stats = useMemo(() => {
-    const now = moment();
-    let pending = 0;
-    let completed = 0;
-    let overdue = 0;
-
-    allExercises.forEach((ex) => {
-      if (ex.completed) {
-        completed++;
-      } else {
-        pending++;
-        // ===== چک کردن مهلت گذشته =====
-        if (ex.dueDate) {
-          const dueMoment = moment(
-            toEnglishDigits(ex.dueDate),
-            "jYYYY/jMM/jDD",
-          );
-          if (dueMoment.isValid() && dueMoment.isBefore(now, "day")) {
-            overdue++;
-          }
-        }
-      }
-    });
-
-    return {
-      total: allExercises.length,
-      pending,
-      completed,
-      overdue,
-    };
-  }, [allExercises, moment, toEnglishDigits]);
-
-  // ===== لیست بیمارانی که تمرین دارن =====
+  // ===== گروه‌بندی سلسله‌مراتبی: بیمار ← جلسه ← تمرین =====
   const patientsWithExercises = useMemo(() => {
     const patientMap = new Map();
 
-    allExercises.forEach((ex) => {
-      if (!patientMap.has(ex.patientId)) {
-        patientMap.set(ex.patientId, {
-          patientId: ex.patientId,
-          patientName: ex.patientName,
+    allExercises.forEach((exercise) => {
+      if (!patientMap.has(exercise.patientId)) {
+        patientMap.set(exercise.patientId, {
+          patientId: exercise.patientId,
+          patientName: exercise.patientName,
+          appointments: new Map(),
+        });
+      }
+
+      const patientGroup = patientMap.get(exercise.patientId);
+      if (!patientGroup.appointments.has(exercise.appointmentId)) {
+        patientGroup.appointments.set(exercise.appointmentId, {
+          appointmentId: exercise.appointmentId,
+          appointmentDate: exercise.appointmentDate,
+          appointmentType: exercise.appointmentType,
           exercises: [],
         });
       }
-      patientMap.get(ex.patientId).exercises.push(ex);
+
+      patientGroup.appointments
+        .get(exercise.appointmentId)
+        .exercises.push(exercise);
     });
 
-    return Array.from(patientMap.values());
-  }, [allExercises]);
+    return Array.from(patientMap.values()).map((patient) => ({
+      ...patient,
+      appointments: Array.from(patient.appointments.values()).sort((a, b) => {
+        const appointmentA = (appointments || []).find(
+          (item) => item.id === a.appointmentId,
+        );
+        const appointmentB = (appointments || []).find(
+          (item) => item.id === b.appointmentId,
+        );
+        return (
+          getAppointmentMoment(appointmentB) -
+          getAppointmentMoment(appointmentA)
+        );
+      }),
+    }));
+  }, [allExercises, appointments, getAppointmentMoment]);
 
-  // ===== فیلتر شده =====
+  // ===== اعمال فیلترها در سطح تمرین، سپس حفظ ساختار بیمار و جلسه =====
   const filteredPatientGroups = useMemo(() => {
     return patientsWithExercises
-      .filter((group) => {
-        if (filterPatientId !== "all" && group.patientId !== filterPatientId) {
-          return false;
-        }
-        return true;
-      })
+      .filter(
+        (group) =>
+          filterPatientId === "all" ||
+          String(group.patientId) === String(filterPatientId),
+      )
       .map((group) => {
-        const filteredExercises = group.exercises.filter((ex) => {
-          // ===== فیلتر وضعیت =====
-          if (filterStatus === "pending" && ex.completed) return false;
-          if (filterStatus === "completed" && !ex.completed) return false;
-          if (filterStatus === "overdue") {
-            if (ex.completed) return false;
-            const dueMoment = moment(
-              toEnglishDigits(ex.dueDate),
-              "jYYYY/jMM/jDD",
-            );
-            if (!dueMoment.isValid() || !dueMoment.isBefore(moment(), "day"))
-              return false;
-          }
+        const filteredAppointments = group.appointments
+          .map((appointment) => ({
+            ...appointment,
+            exercises: appointment.exercises.filter((exercise) => {
+              if (filterStatus === "pending" && exercise.completed)
+                return false;
+              if (filterStatus === "completed" && !exercise.completed)
+                return false;
 
-          // ===== فیلتر نوع =====
-          if (filterType !== "all" && ex.type !== filterType) return false;
+              if (filterStatus === "overdue") {
+                if (exercise.completed || !exercise.dueDate) return false;
+                const dueMoment = moment(
+                  toEnglishDigits(exercise.dueDate),
+                  "jYYYY/jMM/jDD",
+                );
+                if (
+                  !dueMoment.isValid() ||
+                  !dueMoment.isBefore(moment(), "day")
+                )
+                  return false;
+              }
 
-          return true;
-        });
+              if (filterType !== "all" && exercise.type !== filterType)
+                return false;
+              return true;
+            }),
+          }))
+          .filter((appointment) => appointment.exercises.length > 0);
 
         return {
           ...group,
-          exercises: filteredExercises,
+          appointments: filteredAppointments,
+          exerciseCount: filteredAppointments.reduce(
+            (total, appointment) => total + appointment.exercises.length,
+            0,
+          ),
         };
       })
-      .filter((group) => group.exercises.length > 0);
-    // }, [patientsWithExercises, filterPatientId, filterStatus, filterType]);
+      .filter((group) => group.appointments.length > 0);
   }, [
     patientsWithExercises,
     filterPatientId,
@@ -254,7 +252,6 @@ function ExercisesManagement({
 
       {/* ===== راهنمای بالا ===== */}
       <div className={styles.exercisesHint}>
-        {/* <span className={styles.exercisesHintIcon}>💡</span> */}
         <p>
           تمرین‌ها همیشه به یک <strong>جلسه‌ی برگزار شده</strong> متصل هستند.
           برای طراحی تمرین، ابتدا بیمار و جلسه را انتخاب کنید. بیمار می‌تواند
@@ -341,115 +338,268 @@ function ExercisesManagement({
         </div>
       </div>
 
-      {/* ===== لیست تمارین ===== */}
+      {/* ===== لیست تمرین‌ها با ساختار بیمار ← جلسه ← تمرین ===== */}
       <div className={styles.exercisesList}>
         {filteredPatientGroups.length > 0 ? (
-          filteredPatientGroups.map((group) => (
-            <div key={group.patientId} className={styles.patientExercisesGroup}>
-              {/* هدر بیمار */}
-              <div className={styles.patientExercisesHeader}>
-                <div className={styles.patientExercisesAvatar}>👤</div>
-                <span className={styles.patientExercisesName}>
-                  {group.patientName}
-                </span>
-                <span className={styles.patientExercisesCount}>
-                  {toPersianDigits(group.exercises.length)} تمرین
-                </span>
-              </div>
+          filteredPatientGroups.map((group) => {
+            const patientIsCollapsed = collapsedPatients.has(group.patientId);
 
-              {/* لیست تمارین */}
-              <div className={styles.patientExercisesItems}>
-                {group.exercises.map((exercise) => {
-                  const isOverdue =
-                    !exercise.completed &&
-                    exercise.dueDate &&
-                    moment(
-                      toEnglishDigits(exercise.dueDate),
-                      "jYYYY/jMM/jDD",
-                    ).isBefore(moment(), "day");
+            return (
+              <section
+                key={group.patientId}
+                className={styles.patientExercisesGroup}
+              >
+                {/* باکس بیمار */}
+                <button
+                  type="button"
+                  className={styles.patientExercisesHeader}
+                  aria-expanded={!patientIsCollapsed}
+                  onClick={() =>
+                    setCollapsedPatients((previous) => {
+                      const next = new Set(previous);
+                      if (next.has(group.patientId))
+                        next.delete(group.patientId);
+                      else next.add(group.patientId);
+                      return next;
+                    })
+                  }
+                >
+                  <span className={styles.patientExercisesAvatar}>👤</span>
+                  <span className={styles.patientExercisesName}>
+                    {group.patientName}
+                  </span>
+                  <span className={styles.patientExercisesCount}>
+                    {toPersianDigits(group.exerciseCount)} تمرین در{" "}
+                    {toPersianDigits(group.appointments.length)} جلسه
+                  </span>
+                  <span className={styles.expandIcon}>
+                    {patientIsCollapsed ? "▼" : "▲"}
+                  </span>
+                </button>
 
-                  return (
-                    <div
-                      key={`${exercise.appointmentId}-${exercise.id}`}
-                      className={`${styles.exerciseItem} ${
-                        exercise.completed ? styles.exerciseItemDone : ""
-                      }`}
-                    >
-                      {/* آیکون و محتوا */}
-                      <div className={styles.exerciseItemIcon}>
-                        {exercise.icon || "📋"}
-                      </div>
+                {!patientIsCollapsed && (
+                  <div className={styles.patientAppointmentsList}>
+                    {group.appointments.map((appointment) => {
+                      const appointmentKey = `${group.patientId}-${appointment.appointmentId}`;
+                      const appointmentIsCollapsed =
+                        collapsedAppointments.has(appointmentKey);
 
-                      <div className={styles.exerciseItemContent}>
-                        <div className={styles.exerciseItemHeader}>
-                          <span className={styles.exerciseItemTitle}>
-                            {exercise.title}
-                          </span>
-
-                          {/* بج‌ها */}
-                          <div className={styles.exerciseItemBadges}>
-                            <span className={styles.exerciseTypeBadge}>
-                              {exercise.type === "daily" && "روزانه"}
-                              {exercise.type === "weekly" && "هفتگی"}
-                              {exercise.type === "one-time" && "یک‌باره"}
+                      return (
+                        <section
+                          key={appointmentKey}
+                          className={styles.patientAppointmentGroup}
+                        >
+                          {/* باکس جلسه */}
+                          <button
+                            type="button"
+                            className={styles.patientAppointmentHeader}
+                            aria-expanded={!appointmentIsCollapsed}
+                            onClick={() =>
+                              setCollapsedAppointments((previous) => {
+                                const next = new Set(previous);
+                                if (next.has(appointmentKey))
+                                  next.delete(appointmentKey);
+                                else next.add(appointmentKey);
+                                return next;
+                              })
+                            }
+                          >
+                            <span className={styles.appointmentHeaderInfo}>
+                              <strong>
+                                جلسه {appointment.appointmentDate}
+                              </strong>
+                              <span>{appointment.appointmentType}</span>
                             </span>
+                            <span className={styles.appointmentExerciseCount}>
+                              {toPersianDigits(appointment.exercises.length)}{" "}
+                              تمرین
+                            </span>
+                            <span className={styles.expandIcon}>
+                              {appointmentIsCollapsed ? "▼" : "▲"}
+                            </span>
+                          </button>
 
-                            {/* {exercise.completed ? (
-                              <span className={styles.exerciseBadgeDone}>
-                                انجام شده
-                              </span>
-                            ) : isOverdue ? (
-                              <span className={styles.exerciseBadgeOverdue}>
-                                مهلت گذشته
-                              </span>
-                            ) : (
-                              <span className={styles.exerciseBadgePending}>
-                                در انتظار
-                              </span>
-                            )} */}
-                          </div>
-                        </div>
+                          {!appointmentIsCollapsed && (
+                            <div className={styles.patientExercisesItems}>
+                              {appointment.exercises.map((exercise) => {
+                                const exerciseKey = `${appointmentKey}-${exercise.id}`;
+                                const exerciseIsCollapsed =
+                                  collapsedExercises.has(exerciseKey);
+                                const dueMoment = exercise.dueDate
+                                  ? moment(
+                                      toEnglishDigits(exercise.dueDate),
+                                      "jYYYY/jMM/jDD",
+                                    )
+                                  : null;
+                                const isOverdue = Boolean(
+                                  !exercise.completed &&
+                                  dueMoment?.isValid() &&
+                                  dueMoment.isBefore(moment(), "day"),
+                                );
 
-                        <p className={styles.exerciseItemDesc}>
-                          {exercise.description}
-                        </p>
+                                return (
+                                  <article
+                                    key={exerciseKey}
+                                    className={`${styles.exerciseItem} ${exercise.completed ? styles.exerciseItemDone : ""}`}
+                                  >
+                                    <div
+                                      className={styles.exerciseAccordionHeader}
+                                    >
+                                      <button
+                                        type="button"
+                                        className={
+                                          styles.exerciseAccordionToggle
+                                        }
+                                        aria-expanded={!exerciseIsCollapsed}
+                                        onClick={() =>
+                                          setCollapsedExercises((previous) => {
+                                            const next = new Set(previous);
+                                            if (next.has(exerciseKey))
+                                              next.delete(exerciseKey);
+                                            else next.add(exerciseKey);
+                                            return next;
+                                          })
+                                        }
+                                      >
+                                        <span
+                                          className={styles.exerciseItemIcon}
+                                        >
+                                          {exercise.icon || "📋"}
+                                        </span>
+                                        <span
+                                          className={styles.exerciseItemTitle}
+                                        >
+                                          {exercise.title}
+                                        </span>
+                                        <span
+                                          className={styles.exerciseItemBadges}
+                                        >
+                                          <span
+                                            className={styles.exerciseTypeBadge}
+                                          >
+                                            {exercise.type === "daily"
+                                              ? "روزانه"
+                                              : exercise.type === "weekly"
+                                                ? "هفتگی"
+                                                : exercise.type === "one-time"
+                                                  ? "یک‌باره"
+                                                  : ""}
+                                          </span>
+                                          {isOverdue && (
+                                            <span
+                                              className={
+                                                styles.exerciseBadgeOverdue
+                                              }
+                                            >
+                                              مهلت گذشته
+                                            </span>
+                                          )}
+                                        </span>
+                                        <span className={styles.expandIcon}>
+                                          {exerciseIsCollapsed ? "▼" : "▲"}
+                                        </span>
+                                      </button>
 
-                        {/* اطلاعات متا */}
-                        <div className={styles.exerciseItemMeta}>
-                          <span>جلسه: {exercise.appointmentDate}</span>
-                          <span>•</span>
-                          {/* <span>مهلت: {exercise.dueDate}</span>
-                          <span>•</span> */}
-                          <span>{exercise.appointmentType}</span>
-                        </div>
-                      </div>
+                                      <div
+                                        className={styles.exerciseItemActions}
+                                      >
+                                        <button
+                                          type="button"
+                                          className={styles.exerciseBtnEdit}
+                                          onClick={() =>
+                                            handleOpenEditModal(exercise)
+                                          }
+                                          title="ویرایش"
+                                          aria-label="ویرایش تمرین"
+                                        >
+                                          ✏️
+                                        </button>
+                                        <button
+                                          type="button"
+                                          className={styles.exerciseBtnDelete}
+                                          onClick={() =>
+                                            handleDeleteExercise(exercise)
+                                          }
+                                          title="حذف"
+                                          aria-label="حذف تمرین"
+                                        >
+                                          🗑️
+                                        </button>
+                                      </div>
+                                    </div>
 
-                      {/* دکمه‌های اکشن */}
-                      <div className={styles.exerciseItemActions}>
-                        <button
-                          className={styles.exerciseBtnEdit}
-                          onClick={() => handleOpenEditModal(exercise)}
-                          title="ویرایش"
-                        >
-                          ✏️
-                        </button>
-                        <button
-                          className={styles.exerciseBtnDelete}
-                          onClick={() => handleDeleteExercise(exercise)}
-                          title="حذف"
-                        >
-                          🗑️
-                        </button>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          ))
+                                    {!exerciseIsCollapsed && (
+                                      <div
+                                        className={
+                                          styles.exerciseAccordionContent
+                                        }
+                                      >
+                                        {exercise.description && (
+                                          <p
+                                            className={styles.exerciseItemDesc}
+                                          >
+                                            {exercise.description}
+                                          </p>
+                                        )}
+                                        {Array.isArray(exercise.instructions) &&
+                                          exercise.instructions.length > 0 && (
+                                            <ul
+                                              className={
+                                                styles.exerciseInstructionsPreview
+                                              }
+                                            >
+                                              {exercise.instructions.map(
+                                                (instruction, index) => (
+                                                  <li
+                                                    key={`${exerciseKey}-instruction-${index}`}
+                                                  >
+                                                    {instruction}
+                                                  </li>
+                                                ),
+                                              )}
+                                            </ul>
+                                          )}
+                                        <div
+                                          className={styles.exerciseItemMeta}
+                                        >
+                                          {exercise.dueDate && (
+                                            <span>
+                                              مهلت انجام: {exercise.dueDate}
+                                            </span>
+                                          )}
+                                          {exercise.priority && (
+                                            <span>
+                                              اولویت:{" "}
+                                              {exercise.priority === "high"
+                                                ? "بالا"
+                                                : exercise.priority === "medium"
+                                                  ? "متوسط"
+                                                  : "کم"}
+                                            </span>
+                                          )}
+                                          {exercise.assignedBy && (
+                                            <span>
+                                              تعیین‌کننده: {exercise.assignedBy}
+                                            </span>
+                                          )}
+                                        </div>
+                                      </div>
+                                    )}
+                                  </article>
+                                );
+                              })}
+                            </div>
+                          )}
+                        </section>
+                      );
+                    })}
+                  </div>
+                )}
+              </section>
+            );
+          })
         ) : (
           <div className={styles.emptyState}>
-            {/* <span className={styles.emptyIcon}>🎯</span> */}
             <h3>هیچ تمرینی ثبت نشده</h3>
             <p>برای طراحی تمرین، روی دکمه «طراحی تمرین جدید» کلیک کنید.</p>
             <button className={styles.emptyBtn} onClick={handleOpenCreateModal}>
@@ -566,7 +716,7 @@ function PatientAppointmentSelectModal({
 
           {/* جستجو */}
           <div className={styles.patientSearchBox}>
-            <span className={styles.patientSearchIcon}>🔍</span>
+            {/* <span className={styles.patientSearchIcon}>🔍</span> */}
             <input
               type="text"
               className={styles.patientSearchInput}
@@ -619,10 +769,10 @@ function PatientAppointmentSelectModal({
                           >
                             <div className={styles.appointmentSelectInfo}>
                               <span className={styles.appointmentSelectDate}>
-                                📅 {app.date}
+                                {app.date}
                               </span>
                               <span className={styles.appointmentSelectTime}>
-                                ⏰{" "}
+                                {" "}
                                 {toPersianDigits(
                                   app.startTime || app.time.split(" - ")[0],
                                 )}
@@ -662,16 +812,6 @@ function PatientAppointmentSelectModal({
 // ============================================
 // COMPONENT: Exercise Design Modal
 // ============================================
-// function ExerciseDesignModal({
-//   mode,
-//   appointmentInfo,
-//   existingExercise,
-//   appointmentId,
-//   appointments,
-//   setAppointments,
-//   onClose,
-//   doctorName,
-// }) {
 function ExerciseDesignModal({
   mode,
   appointmentInfo,
@@ -691,7 +831,7 @@ function ExerciseDesignModal({
     type: existingExercise?.type || "daily",
     icon: existingExercise?.icon || "🧘",
     priority: existingExercise?.priority || "medium",
-    dueDate: null, // DatePicker value
+    dueDate: existingExercise?.dueDate || "",
     instructions: existingExercise?.instructions || [""],
   });
 
@@ -762,7 +902,7 @@ function ExerciseDesignModal({
     //   return;
     // }
 
-    const dueDateStr = toPersianDigits(form.dueDate.format("YYYY/MM/DD"));
+    const dueDateStr = form.dueDate || existingExercise?.dueDate || "";
 
     // ===== ساخت آبجکت تمرین =====
     const exerciseData = {

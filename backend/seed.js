@@ -1323,6 +1323,15 @@ const seedData = {
           completed: false,
           completedAt: null,
         },
+        {
+          id: 4,
+          title: "تمرین شکرگزاری روزانه",
+          description: "هر روز ۳ مورد که بابت آنها شکرگزار هستید را بنویسید.",
+          type: "daily",
+          icon: "🙏",
+          completed: false,
+          completedAt: null,
+        },
       ],
     },
 
