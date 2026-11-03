@@ -43,16 +43,6 @@ function ExerciseManagement({
   // Completed Appointments
   // ==========================================
 
-  // فقط جلسات انجام‌شده‌ای که حداقل یک تمرین دارند
-  // const completedAppointments = appointments
-  //   .filter((appointment) => appointment.status === "completed")
-  //   .filter((appointment) =>
-  //     exercises.some(
-  //       (exercise) => String(exercise.appointmentId) === String(appointment.id),
-  //     ),
-  //   )
-  //   .sort((a, b) => getDateSortValue(b.date) - getDateSortValue(a.date));
-
   const completedAppointments = appointments
     .filter((appointment) => appointment.status === "completed")
     .sort((a, b) => getDateSortValue(b.date) - getDateSortValue(a.date));
@@ -91,31 +81,6 @@ function ExerciseManagement({
     ) ||
     completedAppointments[0] ||
     null;
-
-  // // جلسه انتخاب‌شده
-  // const selectedAppointment =
-  //   completedAppointments.find(
-  //     (appointment) => String(appointment.id) === String(selectedAppointmentId),
-  //   ) ||
-  //   completedAppointments[0] ||
-  //   null;
-
-  // // تمرین‌های مربوط به جلسه انتخاب‌شده
-  // const appointmentExercises = selectedAppointment
-  //   ? exercises.filter(
-  //       (exercise) =>
-  //         String(exercise.appointmentId) === String(selectedAppointment.id),
-  //     )
-  //   : [];
-
-  // const selectedExerciseGroup = selectedAppointmentId
-  //   ? exerciseGroups.find(
-  //       (group) =>
-  //         String(group.appointmentId) === String(selectedAppointmentId.id),
-  //     )
-  //   : null;
-
-  // const appointmentExercises = selectedExerciseGroup?.exercises ?? [];
 
   const selectedExerciseGroup = selectedAppointment
     ? exerciseGroups.find(
@@ -163,17 +128,6 @@ function ExerciseManagement({
   const overallProgress =
     totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
 
-  // آمار کلی تمام تمرین‌های بیمار، نه فقط جلسه انتخاب‌شده
-  // const completedCount = exercises.filter(
-  //   (exercise) => exercise.completed,
-  // ).length;
-
-  // const totalCount = exercises.length;
-  // const remainingCount = totalCount - completedCount;
-
-  // const overallProgress =
-  //   totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
-
   // آمار جلسه انتخاب‌شده
   const sessionCompletedCount = appointmentExercises.filter(
     (exercise) => exercise.completed,
@@ -184,59 +138,6 @@ function ExerciseManagement({
   // ==========================================
   // Toggle Exercise Completion
   // ==========================================
-
-  // const toggleComplete = (exerciseId, appointmentId) => {
-  //   if (!setExercises) return;
-
-  //   setExercises((prev) =>
-  //     prev.map((exercise) => {
-  //       const isTargetExercise =
-  //         String(exercise.id) === String(exerciseId) &&
-  //         String(exercise.appointmentId) === String(appointmentId);
-
-  //       if (!isTargetExercise) return exercise;
-
-  //       const nextCompleted = !exercise.completed;
-
-  //       return {
-  //         ...exercise,
-  //         completed: nextCompleted,
-  //         progress: nextCompleted ? 100 : 0,
-  //       };
-  //     }),
-  //   );
-  // };
-
-  // const toggleComplete = (exerciseId, appointmentId) => {
-  //   if (!setExercises) return;
-
-  //   setExercises((prev) =>
-  //     prev.map((group) => {
-  //       if (String(group.appointmentId) !== String(appointmentId)) {
-  //         return group;
-  //       }
-
-  //       return {
-  //         ...group,
-
-  //         exercises: group.exercises.map((exercise) => {
-  //           if (String(exercise.id) !== String(exerciseId)) {
-  //             return exercise;
-  //           }
-
-  //           const nextCompleted = !exercise.completed;
-
-  //           return {
-  //             ...exercise,
-  //             completed: nextCompleted,
-  //             progress: nextCompleted ? 100 : 0,
-  //           };
-  //         }),
-  //       };
-  //     }),
-  //   );
-  // };
-
   const toggleComplete = (exerciseId, appointmentId) => {
     if (!setExercises) return;
 
@@ -333,205 +234,44 @@ function ExerciseManagement({
           <p>تمرین‌های تعیین‌شده توسط روانشناس برای شما</p>
         </div>
 
-        {/* <div className={styles.exerciseStats}>
-          <span className={styles.statItem}>
-            <span className={styles.statNumber}>{completedCount}</span>
-            <span className={styles.statLabel}>انجام‌شده</span>
-          </span>
-
-          <span className={styles.statDivider}>|</span>
-
-          <span className={styles.statItem}>
-            <span className={styles.statNumber}>{remainingCount}</span>
-            <span className={styles.statLabel}>انجام‌نشده</span>
-          </span>
-
-          <span className={styles.statDivider}>|</span>
-
-          <span className={styles.statItem}>
-            <span className={styles.statNumber}>{totalCount}</span>
-            <span className={styles.statLabel}>مجموع</span>
-          </span>
-        </div> */}
-      </div>
-
-      {/* ======================================
-          Appointment Selector
-      ====================================== */}
-
-      {/* <div className={styles.appointmentSelector}>
-        <label
-          htmlFor="exercise-appointment"
-          className={styles.appointmentLabel}
-        >
-          انتخاب جلسه
-        </label>
-
-        {completedAppointments.length > 0 ? (
-          <>
-            <div className={styles.appointmentSelectWrapper}>
-              <select
-                id="exercise-appointment"
-                className={styles.appointmentSelect}
-                value={selectedAppointment?.id ?? ""}
-                onChange={(e) => {
-                  setSelectedAppointmentId(e.target.value);
-                  setSelectedExercise(null);
-                  setFilter("all");
-                  setShowCompleted(true);
-                }}
+        <div className={styles.appointmentSelector}>
+          {completedAppointments.length > 0 ? (
+            <>
+              <label
+                htmlFor="exercise-appointment"
+                className={styles.appointmentLabel}
               >
-                {completedAppointments.map((appointment) => (
-                  <option key={appointment.id} value={appointment.id}>
-                    {appointment.type || "جلسه مشاوره"} - {appointment.date}
-                  </option>
-                ))}
-              </select>
+                انتخاب جلسه
+              </label>
 
-              <span className={styles.selectArrow}>⌄</span>
-            </div>
+              <div className={styles.appointmentSelectWrapper}>
+                <select
+                  id="exercise-appointment"
+                  className={styles.appointmentSelect}
+                  value={selectedAppointment?.id ?? ""}
+                  onChange={(e) => {
+                    setSelectedAppointmentId(e.target.value);
+                    setSelectedExercise(null);
+                    setFilter("all");
+                    setShowCompleted(true);
+                  }}
+                >
+                  {completedAppointments.map((appointment, index) => (
+                    <option key={appointment.id} value={appointment.id}>
+                      {getAppointmentOptionLabel(appointment, index)}
+                    </option>
+                  ))}
+                </select>
 
-            {selectedAppointment && (
-              <div className={styles.appointmentInfo}>
-                <div className={styles.appointmentInfoItem}>
-                  <span className={styles.appointmentInfoLabel}>
-                    تاریخ جلسه:
-                  </span>
-                  <span>{selectedAppointment.date}</span>
-                </div>
-
-                {selectedAppointment.time && (
-                  <div className={styles.appointmentInfoItem}>
-                    <span className={styles.appointmentInfoLabel}>ساعت:</span>
-                    <span>{selectedAppointment.time}</span>
-                  </div>
-                )}
-
-                <div className={styles.appointmentInfoItem}>
-                  <span className={styles.appointmentInfoLabel}>
-                    تعداد تمرین:
-                  </span>
-                  <span>{sessionTotalCount} تمرین</span>
-                </div>
+                <span className={styles.selectArrow}>⌄</span>
               </div>
-            )}
-          </>
-        ) : (
-          <div className={styles.noAppointment}>
-            <span className={styles.noAppointmentIcon}>📋</span>
-            <p>
-              هنوز جلسه انجام‌شده‌ای که برای آن تمرین تعیین شده باشد وجود ندارد.
-            </p>
-          </div>
-        )}
-      </div> */}
-
-      {/* <div className={styles.appointmentSelector}>
-        <label
-          htmlFor="exercise-appointment"
-          className={styles.appointmentLabel}
-        >
-          انتخاب جلسه
-        </label>
-
-        {completedAppointments.length > 0 ? (
-          <>
-            <div className={styles.appointmentSelectWrapper}>
-              <select
-                id="exercise-appointment"
-                className={styles.appointmentSelect}
-                value={selectedAppointment?.id ?? ""}
-                onChange={(e) => {
-                  setSelectedAppointmentId(e.target.value);
-                  setSelectedExercise(null);
-                  setFilter("all");
-                  setShowCompleted(true);
-                }}
-              >
-                {completedAppointments.map((appointment, index) => (
-                  <option key={appointment.id} value={appointment.id}>
-                    {appointment.title ||
-                      appointment.type ||
-                      `جلسه ${completedAppointments.length - index}`}
-                    {" - "}
-                    {appointment.date}
-                  </option>
-                ))}
-              </select>
-
-              <span className={styles.selectArrow}>⌄</span>
-            </div>
-
-            {selectedAppointment && (
-              <div className={styles.appointmentInfo}>
-                <div className={styles.appointmentInfoItem}>
-                  <span className={styles.appointmentInfoLabel}>
-                    تاریخ جلسه:
-                  </span>
-                  <span>{selectedAppointment.date}</span>
-                </div>
-
-                {selectedAppointment.time && (
-                  <div className={styles.appointmentInfoItem}>
-                    <span className={styles.appointmentInfoLabel}>ساعت:</span>
-                    <span>{selectedAppointment.time}</span>
-                  </div>
-                )}
-
-                <div className={styles.appointmentInfoItem}>
-                  <span className={styles.appointmentInfoLabel}>
-                    تعداد تمرین:
-                  </span>
-                  <span>{appointmentExercises.length} تمرین</span>
-                </div>
-              </div>
-            )}
-          </>
-        ) : (
-          <div className={styles.noAppointment}>
-            <span className={styles.noAppointmentIcon}>📋</span>
-            <p>هنوز جلسه انجام‌شده‌ای برای شما ثبت نشده است.</p>
-          </div>
-        )}
-      </div> */}
-
-      <div className={styles.appointmentSelector}>
-        {completedAppointments.length > 0 ? (
-          <>
-            <label
-              htmlFor="exercise-appointment"
-              className={styles.appointmentLabel}
-            >
-              انتخاب جلسه
-            </label>
-
-            <div className={styles.appointmentSelectWrapper}>
-              <select
-                id="exercise-appointment"
-                className={styles.appointmentSelect}
-                value={selectedAppointment?.id ?? ""}
-                onChange={(e) => {
-                  setSelectedAppointmentId(e.target.value);
-                  setSelectedExercise(null);
-                  setFilter("all");
-                  setShowCompleted(true);
-                }}
-              >
-                {completedAppointments.map((appointment, index) => (
-                  <option key={appointment.id} value={appointment.id}>
-                    {getAppointmentOptionLabel(appointment, index)}
-                  </option>
-                ))}
-              </select>
-
-              <span className={styles.selectArrow}>⌄</span>
-            </div>
-          </>
-        ) : (
-          <span className={styles.noCompletedAppointments}>
-            هنوز جلسه انجام‌شده‌ای برای شما ثبت نشده است.
-          </span>
-        )}
+            </>
+          ) : (
+            <span className={styles.noCompletedAppointments}>
+              هنوز جلسه انجام‌شده‌ای برای شما ثبت نشده است.
+            </span>
+          )}
+        </div>
       </div>
 
       {/* ======================================
@@ -540,19 +280,6 @@ function ExerciseManagement({
 
       {selectedAppointment && (
         <>
-          {/* Session Heading */}
-
-          {/* <div className={styles.sessionHeading}>
-            <div>
-              <h3>تمرین‌های این جلسه</h3>
-              <p>تمرین‌های اختصاص‌یافته به جلسه انتخاب‌شده</p>
-            </div>
-
-            <span className={styles.sessionExerciseCount}>
-              {sessionCompletedCount} از {sessionTotalCount} انجام‌شده
-            </span>
-          </div> */}
-
           {/* ==================================
               Filters
           ================================== */}
@@ -633,9 +360,6 @@ function ExerciseManagement({
               Exercise List
           ================================== */}
 
-          {/* <div className={styles.exerciseList}>
-            {filteredExercises.length > 0 ? (
-              filteredExercises.map((exercise) => { */}
           <div className={styles.exerciseList}>
             {appointmentExercises.length === 0 ? (
               <div className={styles.emptyState}>
