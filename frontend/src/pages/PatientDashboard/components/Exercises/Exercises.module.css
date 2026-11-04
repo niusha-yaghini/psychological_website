@@ -27,14 +27,22 @@
 }
 
 /* ===== Page Header ===== */
-
-.pageHeader {
+/* .pageHeader {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 24px;
   flex-wrap: wrap;
   gap: 16px;
+} */
+
+.pageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
 .headerInfo h2 {
@@ -52,7 +60,7 @@
 
 /* ===== Exercise Stats ===== */
 
-.exerciseStats {
+/* .exerciseStats {
   display: flex;
   align-items: center;
   gap: 16px;
@@ -80,9 +88,221 @@
 
 .statDivider {
   color: #d5d0ca;
+} */
+
+/* ============================================
+   APPOINTMENT SELECTOR
+============================================ */
+
+/* .appointmentSelector {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin-bottom: 28px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(0, 0, 0, 0.04);
 }
 
-/* ===== Filter Section ===== */
+.appointmentLabel {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 12px;
+}
+
+.appointmentSelectWrapper {
+  position: relative;
+  max-width: 520px;
+}
+
+.appointmentSelect {
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 16px 10px 42px;
+  border: 1px solid #e5e1dc;
+  border-radius: 10px;
+  background: var(--white);
+  color: var(--text-dark);
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  transition: var(--transition);
+}
+
+.appointmentSelect:hover {
+  border-color: #2d7d6e;
+}
+
+.appointmentSelect:focus {
+  border-color: #2d7d6e;
+  box-shadow: 0 0 0 3px rgba(45, 125, 110, 0.1);
+}
+
+.selectArrow {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
+  color: var(--text-muted);
+  pointer-events: none;
+} */
+
+/* ===== Appointment Selector in Header ===== */
+
+.appointmentSelector {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+.appointmentLabel {
+  flex-shrink: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.appointmentSelectWrapper {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  min-width: 250px;
+}
+
+.appointmentSelect {
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 14px 10px 40px;
+  border: 1px solid #e5e1dc;
+  border-radius: 10px;
+  background: var(--white);
+  color: var(--text-dark);
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  direction: rtl;
+  transition: var(--transition);
+}
+
+.appointmentSelect:hover {
+  border-color: #2d7d6e;
+}
+
+.appointmentSelect:focus {
+  border-color: #2d7d6e;
+  box-shadow: 0 0 0 3px rgba(45, 125, 110, 0.1);
+}
+
+.appointmentSelect option {
+  font-family: inherit;
+  font-size: 13px;
+  padding: 10px;
+}
+
+.selectArrow {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.noCompletedAppointments {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* .appointmentInfo {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--gray-light);
+}
+
+.appointmentInfoItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.appointmentInfoLabel {
+  color: var(--text-muted);
+} */
+
+.noAppointment {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: var(--gray-light);
+  border-radius: 10px;
+}
+
+.noAppointmentIcon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.noAppointment p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+/* ===== Session Heading ===== */
+
+.sessionHeading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.sessionHeading h3 {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0 0 5px;
+}
+
+.sessionHeading p {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.sessionExerciseCount {
+  font-size: 13px;
+  font-weight: 600;
+  color: #2d7d6e;
+  background: rgba(45, 125, 110, 0.1);
+  padding: 7px 14px;
+  border-radius: 30px;
+  white-space: nowrap;
+}
+
+/* ============================================
+   FILTER SECTION
+============================================ */
 
 .filterSection {
   display: flex;
@@ -96,7 +316,6 @@
 .filterTabs {
   display: flex;
   gap: 8px;
-  margin-bottom: 24px;
   padding: 4px;
   background: var(--gray-light);
   border-radius: 30px;
@@ -114,6 +333,7 @@
   cursor: pointer;
   transition: var(--transition);
   font-family: inherit;
+  white-space: nowrap;
 }
 
 .filterTab:hover {
@@ -190,7 +410,9 @@
   transform: translateX(-18px);
 }
 
-/* ===== Exercise List ===== */
+/* ============================================
+   EXERCISE LIST
+============================================ */
 
 .exerciseList {
   display: flex;
@@ -517,7 +739,9 @@
   margin: 0 0 24px;
 }
 
-/* ===== Overall Progress ===== */
+/* ============================================
+   OVERALL PROGRESS
+============================================ */
 
 .overallProgress {
   background: var(--white);
@@ -617,9 +841,66 @@
 ============================================ */
 
 @media (max-width: 768px) {
+  /* .pageHeader {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .exerciseStats {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .appointmentSelector {
+    padding: 16px;
+  }
+
+  .appointmentSelectWrapper {
+    max-width: none;
+  } */
+
+  .exerciseStats {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
   .pageHeader {
     flex-direction: column;
     align-items: stretch;
+    gap: 18px;
+  }
+
+  .appointmentSelector {
+    width: 100%;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .appointmentSelectWrapper {
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+  }
+
+  .appointmentSelect {
+    font-size: 13px;
+  }
+
+  /* .appointmentInfo {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  } */
+
+  .sessionHeading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .filterSection {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   .filterTabs {
@@ -693,6 +974,39 @@
 }
 
 @media (max-width: 480px) {
+  .pageHeader {
+    gap: 12px;
+  }
+
+  .exerciseStats {
+    gap: 10px;
+    padding: 10px 12px;
+  }
+
+  .statNumber {
+    font-size: 16px;
+  }
+
+  .statLabel {
+    font-size: 11px;
+  }
+
+  .statItem {
+    gap: 4px;
+  }
+
+  /* .appointmentSelector {
+    padding: 14px;
+  } */
+
+  .appointmentSelect {
+    font-size: 13px;
+  }
+
+  .sessionHeading h3 {
+    font-size: 17px;
+  }
+
   .exerciseCard {
     padding: 14px;
   }
@@ -725,5 +1039,13 @@
 
   .expandBtn {
     margin-top: 6px;
+  }
+
+  .overallProgress {
+    padding: 18px;
+  }
+
+  .emptyState {
+    padding: 40px 16px;
   }
 }

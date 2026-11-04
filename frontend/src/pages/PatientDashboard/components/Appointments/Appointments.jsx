@@ -68,16 +68,6 @@ function AppointmentsManagement({
   };
 
   // ===== تابع تبدیل زمان به عدد برای مقایسه =====
-  // const getTimeValue = (timeString) => {
-  //   try {
-  //     const [start] = timeString.split(" - ");
-  //     const [hours, minutes] = start.split(":");
-  //     return parseInt(hours) * 60 + parseInt(minutes);
-  //   } catch {
-  //     return 0;
-  //   }
-  // };
-
   const getTimeValue = (timeString) => {
     if (!timeString) return 0;
 
@@ -418,7 +408,7 @@ function AppointmentsManagement({
 
             <div className={styles.cancelModalBody}>
               <p className={styles.cancelWarning}>
-                ⚠️ آیا از لغو این نوبت اطمینان دارید؟
+                آیا از لغو این نوبت اطمینان دارید؟
               </p>
               <p className={styles.cancelHint}>
                 (اختیاری) در صورت تمایل، دلیل لغو را وارد کنید:
@@ -487,6 +477,7 @@ function NewAppointmentModal({
     isTimeAlreadyBooked,
     getDateFromWeekDay,
     toEnglishDigits,
+    confirmIcon,
   } = helpers;
 
   const [step, setStep] = useState(1); // 1: انتخاب روانشناس | 2: انتخاب زمان | 3: تأیید
@@ -780,9 +771,9 @@ function NewAppointmentModal({
         {step === 3 && (
           <div className={styles.modalStep}>
             <div className={styles.confirmBox}>
-              <div className={styles.confirmIcon}>
+              {/* <div className={styles.confirmIcon}>
                 <img src={confirmIcon} alt="تأیید" />
-              </div>
+              </div> */}
               <h3>اطلاعات نوبت شما</h3>
               <div className={styles.confirmDetails}>
                 <div className={styles.confirmItem}>

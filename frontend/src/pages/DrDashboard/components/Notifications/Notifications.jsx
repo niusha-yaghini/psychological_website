@@ -26,7 +26,7 @@ function DoctorNotifications({
       {/* ===== هدر ===== */}
       <div className={styles.pageHeader}>
         <div className={styles.headerInfo}>
-          <h2>🔔 اعلان‌ها</h2>
+          <h2>اعلان‌ها</h2>
           <p>رویدادها و یادآوری‌های مهم شما</p>
         </div>
         <div className={styles.notificationActions}>

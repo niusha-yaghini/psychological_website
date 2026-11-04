@@ -216,11 +216,8 @@ const seedData = {
       rating: 4.8,
       pricePerHour: 2800000,
       image: "/images/doctors/doctor1.png",
-      // ===== روزهای کاری =====
       availableDays: ["شنبه", "یکشنبه", "سه‌شنبه"],
-      // ===== ساعت‌های کاری =====
       availableTimes: ["۱۰:۰۰", "۱۱:۰۰", "۱۲:۰۰", "۱۴:۰۰", "۱۵:۰۰", "۱۶:۰۰"],
-      rating: 4.8, // ← میانگین (داینامیک یا ثابت)
       reviewsCount: 125, // ← تعداد نظرات
     },
     {
@@ -233,7 +230,6 @@ const seedData = {
       image: "/images/doctors/doctor2.png",
       availableDays: ["شنبه", "دوشنبه", "چهارشنبه"],
       availableTimes: ["۰۹:۰۰", "۱۰:۰۰", "۱۱:۰۰", "۱۶:۰۰", "۱۷:۰۰", "۱۸:۰۰"],
-      rating: 4.6, // ← میانگین (داینامیک یا ثابت)
       reviewsCount: 55, // ← تعداد نظرات
     },
     {
@@ -246,7 +242,6 @@ const seedData = {
       image: "/images/doctors/doctor3.png",
       availableDays: ["یکشنبه", "سه‌شنبه", "پنجشنبه"],
       availableTimes: ["۱۴:۰۰", "۱۵:۰۰", "۱۶:۰۰", "۱۷:۰۰"],
-      rating: 4.9, // ← میانگین (داینامیک یا ثابت)
       reviewsCount: 105, // ← تعداد نظرات
     },
   ],
@@ -254,7 +249,7 @@ const seedData = {
   // ============================================
   // نوبت‌های بیمار (Appointments)
   // ============================================
-  appointments: [
+  patientAppointments: [
     {
       id: 1,
       type: "جلسه مشاوره فردی",
@@ -462,7 +457,7 @@ const seedData = {
   // ============================================
   // اعلان‌ها (Notifications)
   // ============================================
-  notifications: [
+  patientNotifications: [
     {
       id: 1,
       type: "reminder",
@@ -549,156 +544,279 @@ const seedData = {
   // ============================================
   // اطلاعات پیشرفت (Progress)
   // ============================================
-  progress: {
-    totalSessions: 12,
-    completedSessions: 8,
-    cancelledSessions: 1,
-    upcomingSessions: 3,
-    percentage: 65,
-    status: "در مسیر",
-    startDate: "۱۴۰۳/۰۶/۱۵",
-    estimatedEndDate: "۱۴۰۳/۱۲/۱۵",
+  // progress: {
+  //   totalSessions: 12,
+  //   completedSessions: 8,
+  //   cancelledSessions: 1,
+  //   upcomingSessions: 3,
+  //   percentage: 65,
+  //   status: "در مسیر",
+  //   startDate: "۱۴۰۳/۰۶/۱۵",
+  //   estimatedEndDate: "۱۴۰۳/۱۲/۱۵",
 
-    monthlyProgress: [
-      { month: "مهر", sessions: 2 },
-      { month: "آبان", sessions: 3 },
-      { month: "آذر", sessions: 3 },
-      { month: "دی", sessions: 0 },
-    ],
+  //   monthlyProgress: [
+  //     { month: "مهر", sessions: 2 },
+  //     { month: "آبان", sessions: 3 },
+  //     { month: "آذر", sessions: 3 },
+  //     { month: "دی", sessions: 0 },
+  //   ],
 
-    milestones: [
-      {
-        id: 1,
-        title: "شروع درمان",
-        date: "۱۴۰۳/۰۶/۱۵",
-        completed: true,
-        description: "اولین جلسه مشاوره",
-      },
-      {
-        id: 2,
-        title: "ارزیابی اولیه",
-        date: "۱۴۰۳/۰۷/۰۵",
-        completed: true,
-        description: "تکمیل پرسشنامه‌ها",
-      },
-      {
-        id: 3,
-        title: "تثبیت پیشرفت",
-        date: "۱۴۰۳/۰۹/۱۵",
-        completed: false,
-        description: "هدف: کاهش ۵۰٪ علائم",
-      },
-      {
-        id: 4,
-        title: "پایان درمان",
-        date: "۱۴۰۳/۱۲/۱۵",
-        completed: false,
-        description: "ارزیابی نهایی",
-      },
-    ],
+  //   milestones: [
+  //     {
+  //       id: 1,
+  //       title: "شروع درمان",
+  //       date: "۱۴۰۳/۰۶/۱۵",
+  //       completed: true,
+  //       description: "اولین جلسه مشاوره",
+  //     },
+  //     {
+  //       id: 2,
+  //       title: "ارزیابی اولیه",
+  //       date: "۱۴۰۳/۰۷/۰۵",
+  //       completed: true,
+  //       description: "تکمیل پرسشنامه‌ها",
+  //     },
+  //     {
+  //       id: 3,
+  //       title: "تثبیت پیشرفت",
+  //       date: "۱۴۰۳/۰۹/۱۵",
+  //       completed: false,
+  //       description: "هدف: کاهش ۵۰٪ علائم",
+  //     },
+  //     {
+  //       id: 4,
+  //       title: "پایان درمان",
+  //       date: "۱۴۰۳/۱۲/۱۵",
+  //       completed: false,
+  //       description: "ارزیابی نهایی",
+  //     },
+  //   ],
 
-    improvementAreas: [
-      { label: "مدیریت استرس", score: 75, color: "#4CAF84" },
-      { label: "کیفیت خواب", score: 60, color: "#FF9800" },
-      { label: "اعتماد به نفس", score: 80, color: "#2196F3" },
-      { label: "روابط اجتماعی", score: 55, color: "#9C27B0" },
-      { label: "مدیریت خشم", score: 70, color: "#E91E63" },
-    ],
-  },
+  //   improvementAreas: [
+  //     { label: "مدیریت استرس", score: 75, color: "#4CAF84" },
+  //     { label: "کیفیت خواب", score: 60, color: "#FF9800" },
+  //     { label: "اعتماد به نفس", score: 80, color: "#2196F3" },
+  //     { label: "روابط اجتماعی", score: 55, color: "#9C27B0" },
+  //     { label: "مدیریت خشم", score: 70, color: "#E91E63" },
+  //   ],
+  // },
 
   // ============================================
   // تمارین (Exercises)
   // ============================================
-  exercises: [
+  // exercises: [
+  //   {
+  //     id: 1,
+  //     title: "تمرین تنفس عمیق",
+  //     description:
+  //       "هر شب قبل از خواب، ۱۰ دقیقه تنفس عمیق انجام دهید. ۴ ثانیه دم، ۷ ثانیه نگه‌داری، ۸ ثانیه بازدم.",
+  //     type: "daily",
+  //     category: "meditation",
+  //     icon: "🧘",
+  //     dueDate: "۱۴۰۳/۰۹/۳۰",
+  //     completed: false,
+  //     priority: "high",
+  //     progress: 0,
+  //     instructions: [
+  //       "در جای آرام بنشینید",
+  //       "چشم‌ها را ببندید",
+  //       "روی تنفس خود تمرکز کنید",
+  //       "۴ ثانیه دم، ۷ ثانیه نگه‌داری، ۸ ثانیه بازدم",
+  //     ],
+  //     assignedBy: "دکتر محمد رضایی",
+  //     assignedDate: "۱۴۰۳/۰۹/۲۰",
+  //   },
+  //   {
+  //     id: 2,
+  //     title: "نوشتن نامه به خود",
+  //     description:
+  //       "نامه‌ای به خودتان بنویسید و احساسات و افکارتان را بیان کنید.",
+  //     type: "one-time",
+  //     category: "writing",
+  //     icon: "✍️",
+  //     dueDate: "۱۴۰۳/۱۰/۰۵",
+  //     completed: false,
+  //     priority: "medium",
+  //     progress: 0,
+  //     instructions: [
+  //       "یک مکان آرام پیدا کنید",
+  //       "نامه را با 'خود عزیزم' شروع کنید",
+  //       "احساسات واقعی خود را بنویسید",
+  //       "نامه را برای خودتان بخوانید",
+  //     ],
+  //     assignedBy: "دکتر محمد رضایی",
+  //     assignedDate: "۱۴۰۳/۰۹/۲۲",
+  //   },
+  //   {
+  //     id: 3,
+  //     title: "تست ارزیابی استرس",
+  //     description:
+  //       "پرسشنامه ارزیابی سطح استرس را تکمیل کنید و نتیجه را ثبت کنید.",
+  //     type: "weekly",
+  //     category: "test",
+  //     icon: "📊",
+  //     dueDate: "۱۴۰۳/۱۰/۰۱",
+  //     completed: false,
+  //     priority: "high",
+  //     progress: 0,
+  //     instructions: [
+  //       "به سوالات با دقت پاسخ دهید",
+  //       "پاسخ‌ها را صادقانه بدهید",
+  //       "نتیجه را یادداشت کنید",
+  //       "در جلسه بعد با دکتر خود به اشتراک بگذارید",
+  //     ],
+  //     assignedBy: "دکتر محمد رضایی",
+  //     assignedDate: "۱۴۰۳/۰۹/۲۳",
+  //   },
+  //   {
+  //     id: 4,
+  //     title: "تمرین شکرگزاری روزانه",
+  //     description: "هر روز ۳ مورد که بابت آنها شکرگزار هستید را بنویسید.",
+  //     type: "daily",
+  //     category: "activity",
+  //     icon: "🙏",
+  //     dueDate: "۱۴۰۳/۰۹/۳۰",
+  //     completed: true,
+  //     priority: "low",
+  //     progress: 100,
+  //     instructions: [
+  //       "هر شب قبل از خواب انجام دهید",
+  //       "۳ مورد را یادداشت کنید",
+  //       "می‌توانید کوچک یا بزرگ باشند",
+  //       "احساس خود را هنگام نوشتن ثبت کنید",
+  //     ],
+  //     assignedBy: "دکتر محمد رضایی",
+  //     assignedDate: "۱۴۰۳/۰۹/۱۸",
+  //   },
+  // ],
+
+  //   patientExercises: [
+  //   {
+  //     id: 1,
+  //     patientId: 101,
+  //     appointmentId: 3,
+
+  //     title: "تمرین تنفس عمیق",
+  //     description:
+  //       "هر شب قبل از خواب، ۱۰ دقیقه تنفس عمیق انجام دهید.",
+
+  //     type: "daily",
+  //     category: "meditation",
+  //     icon: "🧘",
+
+  //     dueDate: "۱۴۰۵/۰۶/۳۰",
+  //     completed: false,
+
+  //     priority: "high",
+  //     progress: 0,
+
+  //     instructions: [
+  //       "در جای آرام بنشینید",
+  //       "چشم‌ها را ببندید",
+  //       "روی تنفس خود تمرکز کنید",
+  //     ],
+
+  //     assignedBy: "دکتر محمد رضایی",
+  //     assignedDate: "۱۴۰۵/۰۵/۲۰",
+  //   },
+  // ],
+
+  patientExercises: [
     {
-      id: 1,
-      title: "تمرین تنفس عمیق",
-      description:
-        "هر شب قبل از خواب، ۱۰ دقیقه تنفس عمیق انجام دهید. ۴ ثانیه دم، ۷ ثانیه نگه‌داری، ۸ ثانیه بازدم.",
-      type: "daily",
-      category: "meditation",
-      icon: "🧘",
-      dueDate: "۱۴۰۳/۰۹/۳۰",
-      completed: false,
-      priority: "high",
-      progress: 0,
-      instructions: [
-        "در جای آرام بنشینید",
-        "چشم‌ها را ببندید",
-        "روی تنفس خود تمرکز کنید",
-        "۴ ثانیه دم، ۷ ثانیه نگه‌داری، ۸ ثانیه بازدم",
+      patientId: 101,
+      appointmentId: 3,
+
+      exercises: [
+        {
+          id: 1,
+          title: "تمرین تنفس عمیق",
+          description: "هر شب قبل از خواب، ۱۰ دقیقه تنفس عمیق انجام دهید.",
+
+          type: "daily",
+          category: "meditation",
+          icon: "🧘",
+
+          dueDate: "۱۴۰۵/۰۶/۳۰",
+          completed: false,
+
+          priority: "high",
+          progress: 0,
+
+          instructions: [
+            "در جای آرام بنشینید",
+            "چشم‌ها را ببندید",
+            "روی تنفس خود تمرکز کنید",
+          ],
+
+          assignedBy: "دکتر محمد رضایی",
+          assignedDate: "۱۴۰۵/۰۵/۲۰",
+        },
+
+        {
+          id: 2,
+          title: "ثبت افکار روزانه",
+          description: "افکار و احساسات خود را در طول روز یادداشت کنید.",
+
+          type: "daily",
+          category: "writing",
+          icon: "✍️",
+
+          dueDate: "۱۴۰۵/۰۶/۳۰",
+          completed: false,
+
+          priority: "medium",
+          progress: 0,
+
+          instructions: [
+            "یک دفترچه مشخص انتخاب کنید",
+            "افکار خود را بدون قضاوت بنویسید",
+            "احساسات خود را ثبت کنید",
+          ],
+
+          assignedBy: "دکتر محمد رضایی",
+          assignedDate: "۱۴۰۵/۰۵/۲۰",
+        },
       ],
-      assignedBy: "دکتر محمد رضایی",
-      assignedDate: "۱۴۰۳/۰۹/۲۰",
     },
+
     {
-      id: 2,
-      title: "نوشتن نامه به خود",
-      description:
-        "نامه‌ای به خودتان بنویسید و احساسات و افکارتان را بیان کنید.",
-      type: "one-time",
-      category: "writing",
-      icon: "✍️",
-      dueDate: "۱۴۰۳/۱۰/۰۵",
-      completed: false,
-      priority: "medium",
-      progress: 0,
-      instructions: [
-        "یک مکان آرام پیدا کنید",
-        "نامه را با 'خود عزیزم' شروع کنید",
-        "احساسات واقعی خود را بنویسید",
-        "نامه را برای خودتان بخوانید",
+      patientId: 101,
+      appointmentId: 8,
+
+      exercises: [
+        {
+          id: 1,
+          title: "تمرین شناسایی محرک‌های استرس",
+          description:
+            "موقعیت‌هایی را که باعث افزایش استرس شما می‌شوند شناسایی کنید.",
+
+          type: "weekly",
+          category: "writing",
+          icon: "📝",
+
+          dueDate: "۱۴۰۵/۰۷/۱۰",
+          completed: false,
+
+          priority: "high",
+          progress: 0,
+
+          instructions: [
+            "موقعیت‌های استرس‌زا را یادداشت کنید",
+            "احساس خود را در هر موقعیت ثبت کنید",
+            "الگوهای تکرارشونده را مشخص کنید",
+          ],
+
+          assignedBy: "دکتر محمد رضایی",
+          assignedDate: "۱۴۰۵/۰۶/۲۰",
+        },
       ],
-      assignedBy: "دکتر محمد رضایی",
-      assignedDate: "۱۴۰۳/۰۹/۲۲",
-    },
-    {
-      id: 3,
-      title: "تست ارزیابی استرس",
-      description:
-        "پرسشنامه ارزیابی سطح استرس را تکمیل کنید و نتیجه را ثبت کنید.",
-      type: "weekly",
-      category: "test",
-      icon: "📊",
-      dueDate: "۱۴۰۳/۱۰/۰۱",
-      completed: false,
-      priority: "high",
-      progress: 0,
-      instructions: [
-        "به سوالات با دقت پاسخ دهید",
-        "پاسخ‌ها را صادقانه بدهید",
-        "نتیجه را یادداشت کنید",
-        "در جلسه بعد با دکتر خود به اشتراک بگذارید",
-      ],
-      assignedBy: "دکتر محمد رضایی",
-      assignedDate: "۱۴۰۳/۰۹/۲۳",
-    },
-    {
-      id: 4,
-      title: "تمرین شکرگزاری روزانه",
-      description: "هر روز ۳ مورد که بابت آنها شکرگزار هستید را بنویسید.",
-      type: "daily",
-      category: "activity",
-      icon: "🙏",
-      dueDate: "۱۴۰۳/۰۹/۳۰",
-      completed: true,
-      priority: "low",
-      progress: 100,
-      instructions: [
-        "هر شب قبل از خواب انجام دهید",
-        "۳ مورد را یادداشت کنید",
-        "می‌توانید کوچک یا بزرگ باشند",
-        "احساس خود را هنگام نوشتن ثبت کنید",
-      ],
-      assignedBy: "دکتر محمد رضایی",
-      assignedDate: "۱۴۰۳/۰۹/۱۸",
     },
   ],
 
   // ============================================
   // اطلاعات پروفایل (Profile)
   // ============================================
-  profile: {
+  patientProfile: {
     formData: {
       firstName: "محمد",
       lastName: "کریمی",
@@ -733,7 +851,7 @@ const seedData = {
   // ============================================
   // تنظیمات پیش‌فرض (Settings)
   // ============================================
-  settings: {
+  patientSettings: {
     notificationSettings: {
       sessionReminder: {
         enabled: true,
@@ -790,7 +908,7 @@ const seedData = {
   },
 
   // ===== بیماران دکتر =====
-  doctorPatients: [
+  doctorPatientsList: [
     {
       id: 101, // ← id جدید (FK در appointments)
       name: "محمد کریمی",
@@ -1205,6 +1323,15 @@ const seedData = {
           completed: false,
           completedAt: null,
         },
+        {
+          id: 4,
+          title: "تمرین شکرگزاری روزانه",
+          description: "هر روز ۳ مورد که بابت آنها شکرگزار هستید را بنویسید.",
+          type: "daily",
+          icon: "🙏",
+          completed: false,
+          completedAt: null,
+        },
       ],
     },
 
@@ -1307,335 +1434,6 @@ const seedData = {
     sessionReminders: true,
     autoConfirmBookings: false,
   },
-
-  // ============================================
-  // پنل دکتر (Doctor Panel)
-  // ============================================
-
-  // ===== پروفایل دکتر لاگین‌شده =====
-  // doctorProfile: {
-  //   name: "دکتر محمد رضایی",
-  //   specialty: "روانشناس بالینی",
-  //   phone: "۰۹۱۲۳۴۵۶۷۸۹",
-  //   email: "dr.rezaei@email.com",
-  //   avatar: "/images/Patient_Panel/usericon.png",
-  //   stats: {
-  //     activePatients: 12,
-  //     completedSessions: 48,
-  //   },
-  //   formData: {
-  //     firstName: "محمد",
-  //     lastName: "رضایی",
-  //     phone: "۰۹۱۲۳۴۵۶۷۸۹",
-  //     email: "dr.rezaei@email.com",
-  //     specialty: "روانشناس بالینی",
-  //     licenseNumber: "۱۲۳۴۵",
-  //     experience: "۱۲ سال",
-  //     bio: "روانشناس بالینی با تخصص در درمان اضطراب و افسردگی",
-  //   },
-  // },
-
-  // ===== آمار ثابت داشبورد =====
-  // (بقیه آمار مثل pendingSessions از doctorAppointments مشتق میشن)
-  // doctorDashboardStats: {
-  //   activePatients: 12,
-  //   exercisesSent: 18,
-  // },
-
-  // ===== نوبت‌های دکتر (منبع اصلی) =====
-  // شامل همه‌ی نوبت‌ها با همه‌ی وضعیت‌ها
-  // doctorAppointments: [
-  //   // ===== در انتظار تأیید =====
-  //   {
-  //     id: 1,
-  //     patient: "محمد کریمی",
-  //     patientPhone: "۹۱۲۳۴۵۶۷۸۹",
-  //     type: "جلسه مشاوره فردی",
-  //     typeKey: "individual",
-  //     date: "۱۴۰۵/۰۷/۰۵",
-  //     time: "۱۰:۰۰ - ۱۱:۰۰",
-  //     hours: ["۱۰:۰۰"],
-  //     startTime: "۱۰:۰۰",
-  //     endTime: "۱۱:۰۰",
-  //     status: "pending",
-  //     isOnline: true,
-  //     createdAt: "۱۴۰۵/۰۶/۰۳",
-  //     price: 2800000,
-  //     duration: 1,
-  //     meetingLink: null,
-  //   },
-  //   {
-  //     id: 2,
-  //     patient: "زهرا احمدی",
-  //     patientPhone: "۹۱۳۴۵۶۷۸۹۰",
-  //     type: "جلسه زوج درمانی",
-  //     typeKey: "couple",
-  //     date: "۱۴۰۵/۰۷/۰۲",
-  //     time: "۱۱:۳۰ - ۱۲:۳۰",
-  //     hours: ["۱۱:۳۰"],
-  //     startTime: "۱۱:۳۰",
-  //     endTime: "۱۲:۳۰",
-  //     status: "pending",
-  //     isOnline: true,
-  //     createdAt: "۱۴۰۵/۰۶/۰۳",
-  //     price: 3200000,
-  //     duration: 1,
-  //     meetingLink: null,
-  //   },
-  //   // {
-  //   //   id: 3,
-  //   //   patient: "علی رضایی",
-  //   //   patientPhone: "۹۱۴۵۶۷۸۹۰۱",
-  //   //   type: "جلسه مشاوره فردی",
-  //   //   typeKey: "individual",
-  //   //   date: "۱۴۰۵/۰۶/۰۵",
-  //   //   time: "۱۴:۰۰ - ۱۵:۰۰",
-  //   //   hours: ["۱۴:۰۰"],
-  //   //   startTime: "۱۴:۰۰",
-  //   //   endTime: "۱۵:۰۰",
-  //   //   status: "pending",
-  //   //   isOnline: true,
-  //   //   createdAt: "۱۴۰۵/۰۶/۰۴",
-  //   //   price: 2800000,
-  //   //   duration: 1,
-  //   // },
-  //   // {
-  //   //   id: 4,
-  //   //   patient: "سارا محمدی",
-  //   //   patientPhone: "۹۱۵۶۷۸۹۰۱۲",
-  //   //   type: "جلسه مشاوره نوجوان",
-  //   //   typeKey: "teen",
-  //   //   date: "۱۴۰۵/۰۶/۰۵",
-  //   //   time: "۱۶:۰۰ - ۱۷:۰۰",
-  //   //   hours: ["۱۶:۰۰"],
-  //   //   startTime: "۱۶:۰۰",
-  //   //   endTime: "۱۷:۰۰",
-  //   //   status: "pending",
-  //   //   isOnline: true,
-  //   //   createdAt: "۱۴۰۵/۰۶/۰۴",
-  //   //   price: 2500000,
-  //   //   duration: 1,
-  //   // },
-  //   {
-  //     id: 5,
-  //     patient: "رضا حسینی",
-  //     patientPhone: "۹۱۶۷۸۹۰۱۲۳",
-  //     type: "جلسه مشاوره فردی",
-  //     typeKey: "individual",
-  //     date: "۱۴۰۵/۰۶/۰۶",
-  //     time: "۱۰:۳۰ - ۱۱:۳۰",
-  //     hours: ["۱۰:۳۰"],
-  //     startTime: "۱۰:۳۰",
-  //     endTime: "۱۱:۳۰",
-  //     status: "pending",
-  //     isOnline: true,
-  //     createdAt: "۱۴۰۵/۰۶/۰۴",
-  //     price: 2800000,
-  //     duration: 1,
-  //     meetingLink: null,
-  //   },
-  //   {
-  //     id: 6,
-  //     patient: "نگار موسوی",
-  //     patientPhone: "۹۱۷۸۹۰۱۲۳۴",
-  //     type: "جلسه زوج درمانی",
-  //     typeKey: "couple",
-  //     date: "۱۴۰۵/۰۶/۰۷",
-  //     time: "۱۲:۰۰ - ۱۳:۰۰",
-  //     hours: ["۱۲:۰۰"],
-  //     startTime: "۱۲:۰۰",
-  //     endTime: "۱۳:۰۰",
-  //     status: "pending",
-  //     isOnline: true,
-  //     createdAt: "۱۴۰۵/۰۶/۰۵",
-  //     price: 3200000,
-  //     duration: 1,
-  //     meetingLink: null,
-  //   },
-
-  //   // ===== تأیید شده =====
-  //   {
-  //     id: 7,
-  //     patient: "زهرا احمدی",
-  //     patientPhone: "۹۱۳۴۵۶۷۸۹۰",
-  //     type: "جلسه زوج درمانی",
-  //     typeKey: "couple",
-  //     date: "۱۴۰۵/۰۷/۰۴",
-  //     time: "۱۱:۳۰ - ۱۲:۳۰",
-  //     hours: ["۱۱:۳۰"],
-  //     startTime: "۱۱:۳۰",
-  //     endTime: "۱۲:۳۰",
-  //     status: "confirmed",
-  //     isOnline: true,
-  //     createdAt: "۱۴۰۵/۰۶/۰۴",
-  //     price: 3200000,
-  //     duration: 1,
-  //     meetingLink: null,
-  //   },
-  //   {
-  //     id: 8,
-  //     patient: "علی رضایی",
-  //     patientPhone: "۹۱۴۵۶۷۸۹۰۱",
-  //     type: "جلسه مشاوره فردی",
-  //     typeKey: "individual",
-  //     date: "۱۴۰۵/۰۶/۱۰",
-  //     time: "۱۴:۰۰ - ۱۵:۰۰",
-  //     hours: ["۱۴:۰۰"],
-  //     startTime: "۱۴:۰۰",
-  //     endTime: "۱۵:۰۰",
-  //     status: "confirmed",
-  //     isOnline: true,
-  //     createdAt: "۱۴۰۵/۰۶/۰۵",
-  //     price: 2800000,
-  //     duration: 1,
-  //     meetingLink: null,
-  //   },
-  //   {
-  //     id: 9,
-  //     patient: "سارا محمدی",
-  //     patientPhone: "۹۱۵۶۷۸۹۰۱۲",
-  //     type: "جلسه مشاوره نوجوان",
-  //     typeKey: "teen",
-  //     date: "۱۴۰۵/۰۷/۱۱",
-  //     time: "۱۶:۰۰ - ۱۷:۰۰",
-  //     hours: ["۱۶:۰۰"],
-  //     startTime: "۱۶:۰۰",
-  //     endTime: "۱۷:۰۰",
-  //     status: "confirmed",
-  //     isOnline: true,
-  //     createdAt: "۱۴۰۵/۰۶/۰۵",
-  //     price: 2500000,
-  //     duration: 1,
-  //     meetingLink: null,
-  //   },
-
-  //   // ===== انجام شده =====
-  //   {
-  //     id: 10,
-  //     patient: "رضا حسینی",
-  //     patientPhone: "۹۱۶۷۸۹۰۱۲۳",
-  //     type: "جلسه مشاوره فردی",
-  //     typeKey: "individual",
-  //     date: "۱۴۰۵/۰۶/۰۴",
-  //     time: "۱۵:۰۰ - ۱۶:۰۰",
-  //     hours: ["۱۵:۰۰"],
-  //     startTime: "۱۵:۰۰",
-  //     endTime: "۱۶:۰۰",
-  //     status: "completed",
-  //     isOnline: true,
-  //     createdAt: "۱۴۰۵/۰۶/۰۱",
-  //     price: 2800000,
-  //     duration: 1,
-  //     notes: "جلسه انجام شده",
-  //     meetingLink: null,
-  //     sessionNotes: {
-  //       summary:
-  //         "پیشرفت خوبی در مدیریت استرس داشته. تکنیک‌های تنفس عمیق رو تمرین کرده.",
-  //       createdAt: "۱۴۰۵/۰۶/۰۴",
-  //       updatedAt: "۱۴۰۵/۰۶/۰۴",
-  //     },
-  //   },
-  //   {
-  //     id: 11,
-  //     patient: "علی رضایی",
-  //     patientPhone: "۹۱۴۵۶۷۸۹۰۱",
-  //     type: "جلسه مشاوره فردی",
-  //     typeKey: "individual",
-  //     date: "۱۴۰۵/۰۶/۰۴",
-  //     time: "۱۴:۰۰ - ۱۵:۰۰",
-  //     hours: ["۱۴:۰۰"],
-  //     startTime: "۱۴:۰۰",
-  //     endTime: "۱۵:۰۰",
-  //     status: "completed",
-  //     isOnline: true,
-  //     createdAt: "۱۴۰۵/۰۶/۰۱",
-  //     price: 2800000,
-  //     duration: 1,
-  //     notes: "پیشرفت خوب در مدیریت استرس",
-  //     meetingLink: null,
-  //   },
-
-  //   // ===== لغو شده =====
-  //   {
-  //     id: 12,
-  //     patient: "نگار موسوی",
-  //     patientPhone: "۹۱۷۸۹۰۱۲۳۴",
-  //     type: "جلسه زوج درمانی",
-  //     typeKey: "couple",
-  //     date: "۱۴۰۵/۰۶/۰۲",
-  //     time: "۱۷:۰۰ - ۱۸:۳۰",
-  //     hours: ["۱۷:۰۰"],
-  //     startTime: "۱۷:۰۰",
-  //     endTime: "۱۸:۳۰",
-  //     status: "cancelled",
-  //     isOnline: false,
-  //     createdAt: "۱۴۰۵/۰۵/۳۰",
-  //     price: 3200000,
-  //     duration: 1.5,
-  //     cancelledBy: "patient",
-  //     cancelReason: "مشکل شخصی",
-  //     notes: "لغو توسط بیمار",
-  //     meetingLink: null,
-  //   },
-  //   {
-  //     id: 13,
-  //     patient: "نگار موسوی",
-  //     patientPhone: "۹۱۷۸۹۰۱۲۳۴",
-  //     type: "جلسه زوج درمانی",
-  //     typeKey: "couple",
-  //     date: "۱۴۰۵/۰۶/۰۳",
-  //     time: "۱۷:۰۰ - ۱۸:۳۰",
-  //     hours: ["۱۷:۰۰"],
-  //     startTime: "۱۷:۰۰",
-  //     endTime: "۱۸:۳۰",
-  //     status: "cancelled",
-  //     isOnline: false,
-  //     createdAt: "۱۴۰۵/۰۵/۳۰",
-  //     price: 3200000,
-  //     duration: 1.5,
-  //     cancelledBy: "doctor",
-  //     cancelReason: "مشکل شخصی",
-  //     notes: "لغو توسط روانشناس",
-  //     meetingLink: null,
-  //   },
-  // ],
-
-  // ===== بیماران =====
-  // doctorPatients: [
-  //   {
-  //     id: 1,
-  //     name: "محمد کریمی",
-  //     phone: "۹۱۲۳۴۵۶۷۸۹",
-  //     sessions: 8,
-  //     lastVisit: "۱۴۰۵/۰۶/۰۳",
-  //     avatar: "👤",
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "زهرا احمدی",
-  //     phone: "۹۱۳۴۵۶۷۸۹۰",
-  //     sessions: 5,
-  //     lastVisit: "۱۴۰۵/۰۵/۲۸",
-  //     avatar: "👤",
-  //   },
-  //   {
-  //     id: 3,
-  //     name: "علی رضایی",
-  //     phone: "۹۱۴۵۶۷۸۹۰۱",
-  //     sessions: 12,
-  //     lastVisit: "۱۴۰۵/۰۶/۰۱",
-  //     avatar: "👤",
-  //   },
-  // ],
-
-  // ===== تنظیمات پنل دکتر =====
-  // doctorSettings: {
-  //   notificationsEnabled: true,
-  //   darkMode: false,
-  //   sessionReminders: true,
-  //   autoConfirmBookings: false,
-  //   doctorNotifications: [],
-  // },
 };
 
 export default seedData;

@@ -33,7 +33,7 @@ import AppointmentsManagement from "./components/Appointments/Appointments";
 import SessionsManagement from "./components/Sessions/Sessions";
 import PatientNotifications from "./components/Notifications/Notifications";
 import NotificationDropdown from "./components/NotificationDropdown/NotificationDropdown";
-import ProgressView from "./components/ProgressView/ProgressView";
+// import ProgressView from "./components/ProgressView/ProgressView";
 import ExerciseManagement from "./components/Exercises/Exercises";
 import PatientProfile from "./components/Profile/PatientProfile";
 import PatientSettings from "./components/Settings/PatientSettings";
@@ -375,16 +375,6 @@ const isSessionOngoing = (appointment) => {
 };
 
 // ===== تبدیل وضعیت به اطلاعات نمایشی =====
-// const getStatusInfo = (status) => {
-//   const map = {
-//     pending: { label: "در انتظار", className: "statusPending" },
-//     confirmed: { label: "تأیید شده", className: "statusConfirmed" },
-//     completed: { label: "انجام شده", className: "statusCompleted" },
-//     cancelled: { label: "لغو شده", className: "statusCancelled" },
-//   };
-//   return map[status] || map.pending;
-// };
-
 const appointmentsHelpers = {
   toPersianDigits,
   getDisplayStatus,
@@ -420,10 +410,19 @@ function PatientDashboard() {
   // ==========================================
 
   // ===== داده‌های نوبت‌ها =====
-  const [appointments, setAppointments] = useState(seedData.appointments);
+  const [patientAppointments, setPatientAppointments] = useState(
+    seedData.patientAppointments,
+  );
+
+  // ===== داده‌های تمرین ها =====
+  const [patientExercises, setPatientExercises] = useState(
+    seedData.patientExercises,
+  );
 
   // ===== داده‌های نوتیفیکیشن =====
-  const [notifications, setNotifications] = useState(seedData.notifications);
+  const [patientNotifications, setPatientNotifications] = useState(
+    seedData.patientNotifications,
+  );
 
   // ===== زمان ثابت ایجاد هر اعلان =====
   const [notificationCreatedAt, setNotificationCreatedAt] = useState(() => {
@@ -447,29 +446,30 @@ function PatientDashboard() {
 
   // ===== Settings State =====
   const [notificationSettings, setNotificationSettings] = useState(
-    seedData.settings.notificationSettings,
+    seedData.patientSettings.notificationSettings,
   );
 
   const [displaySettings, setDisplaySettings] = useState(
-    seedData.settings.displaySettings,
+    seedData.patientSettings.displaySettings,
   );
 
   // ===== محاسبه تعداد جلسات پیش‌رو =====
   const upcomingAppointmentsCount = useMemo(() => {
-    return appointments.filter((app) => {
+    return patientAppointments.filter((app) => {
       const displayStatus = getDisplayStatus(app);
+
       return displayStatus === "confirmed" || displayStatus === "pending";
     }).length;
-  }, [appointments]);
+  }, [patientAppointments]);
 
   // ===== محاسبه تعداد پیام‌های خوانده نشده =====
   const unreadMessagesCount = useMemo(() => {
-    return notifications.filter((n) => !n.isRead).length;
-  }, [notifications]);
+    return patientNotifications.filter((n) => !n.isRead).length;
+  }, [patientNotifications]);
 
   // ===== توابع =====
   const markAsRead = (id) => {
-    setNotifications((prev) =>
+    setPatientNotifications((prev) =>
       prev.map((notif) =>
         notif.id === id ? { ...notif, isRead: true } : notif,
       ),
@@ -477,14 +477,14 @@ function PatientDashboard() {
   };
 
   const markAllAsRead = () => {
-    setNotifications((prev) =>
+    setPatientNotifications((prev) =>
       prev.map((notif) => ({ ...notif, isRead: true })),
     );
   };
 
   // ===== ثبت زمان ایجاد اعلان‌های جدید =====
   useEffect(() => {
-    const missingNotifications = notifications.filter(
+    const missingNotifications = patientNotifications.filter(
       (notification) => !notificationCreatedAt[notification.id],
     );
 
@@ -503,7 +503,7 @@ function PatientDashboard() {
     );
 
     setNotificationCreatedAt(updatedTimestamps);
-  }, [notifications, notificationCreatedAt]);
+  }, [patientNotifications, notificationCreatedAt]);
 
   // ===== دریافت اطلاعات کاربر =====
   useEffect(() => {
@@ -551,12 +551,12 @@ function PatientDashboard() {
       path: "/messages",
       badge: unreadMessagesCount > 0 ? unreadMessagesCount : undefined,
     },
-    {
-      id: "progress",
-      label: "پیشرفت من",
-      icon: <FaChartLine />,
-      path: "/progress",
-    },
+    // {
+    //   id: "progress",
+    //   label: "پیشرفت من",
+    //   icon: <FaChartLine />,
+    //   path: "/progress",
+    // },
     {
       id: "exercise",
       label: "تمارین",
@@ -586,15 +586,15 @@ function PatientDashboard() {
       case "dashboard":
         return (
           <DashboardOverview
-            appointments={appointments}
+            appointments={patientAppointments}
             getDisplayStatus={getDisplayStatus}
           />
         );
       case "appointments":
         return (
           <AppointmentsManagement
-            appointments={appointments}
-            setAppointments={setAppointments}
+            appointments={patientAppointments}
+            setAppointments={setPatientAppointments}
             doctors={seedData.doctors}
             helpers={appointmentsHelpers}
             confirmIcon={confirmIcon}
@@ -603,8 +603,8 @@ function PatientDashboard() {
       case "sessions":
         return (
           <SessionsManagement
-            appointments={appointments}
-            setAppointments={setAppointments}
+            appointments={patientAppointments}
+            setAppointments={setPatientAppointments}
             getDisplayStatus={getDisplayStatus}
             getAppointmentMoment={getAppointmentMoment}
             isSessionOngoing={isSessionOngoing}
@@ -614,19 +614,27 @@ function PatientDashboard() {
       case "messages":
         return (
           <PatientNotifications
-            notifications={notifications}
-            setNotifications={setNotifications}
+            notifications={patientNotifications}
+            setNotifications={setPatientNotifications}
             formatNotificationTime={formatNotificationTime}
           />
         );
-      case "progress":
-        return <ProgressView progressData={seedData.progress} />;
+      // case "progress":
+      //   return <ProgressView progressData={seedData.progress} />;
+      // case "exercise":
+      //   return <ExerciseManagement initialExercises={seedData.exercises} />;
       case "exercise":
-        return <ExerciseManagement initialExercises={seedData.exercises} />;
+        return (
+          <ExerciseManagement
+            appointments={patientAppointments}
+            exerciseGroups={patientExercises}
+            setExercises={setPatientExercises}
+          />
+        );
       case "profile":
         return (
           <PatientProfile
-            profileData={seedData.profile}
+            profileData={seedData.patientProfile}
             userAvatar={userAvatar}
           />
         );
@@ -642,7 +650,7 @@ function PatientDashboard() {
       default:
         return (
           <DashboardOverview
-            appointments={appointments}
+            appointments={patientAppointments}
             getDisplayStatus={getDisplayStatus}
           />
         );
@@ -676,7 +684,7 @@ function PatientDashboard() {
 
           <div className={styles.headerRight}>
             <NotificationDropdown
-              notifications={notifications}
+              notifications={patientNotifications}
               onMarkAsRead={markAsRead}
               onMarkAllAsRead={markAllAsRead}
               formatNotificationTime={formatNotificationTime}

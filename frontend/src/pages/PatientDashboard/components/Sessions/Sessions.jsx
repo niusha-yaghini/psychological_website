@@ -229,7 +229,7 @@ function SessionsManagement({
       {/* هدر بخش */}
       <div className={styles.pageHeader}>
         <div className={styles.headerInfo}>
-          <h2>🎥 جلسات آنلاین</h2>
+          <h2>جلسات آنلاین</h2>
           <p>مدیریت و شرکت در جلسات مجازی</p>
         </div>
         <div className={styles.sessionStats}>
@@ -514,7 +514,7 @@ function SessionsManagement({
 
             <div className={styles.cancelModalBody}>
               <p className={styles.cancelWarning}>
-                ⚠️ آیا از لغو این جلسه اطمینان دارید؟
+                آیا از لغو این جلسه اطمینان دارید؟
               </p>
               <p className={styles.cancelHint}>
                 (اختیاری) در صورت تمایل، دلیل لغو را وارد کنید:

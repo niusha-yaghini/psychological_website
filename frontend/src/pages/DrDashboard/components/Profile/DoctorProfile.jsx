@@ -36,8 +36,8 @@ function DoctorProfile({ profile, patients, appointments, toPersianDigits }) {
         <div className={styles.profileInfo}>
           <h3>{profile.name}</h3>
           <p>{profile.specialty}</p>
-          <p>📱 {profile.phone}</p>
-          <p>📧 {profile.email}</p>
+          <p>{profile.phone}</p>
+          <p>{profile.email}</p>
           <div className={styles.profileStats}>
             <span>{toPersianDigits(stats.activePatients)} بیمار فعال</span>
             <span>

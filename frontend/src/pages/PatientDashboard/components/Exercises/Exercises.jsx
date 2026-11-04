@@ -2,322 +2,559 @@ import { useState } from "react";
 import styles from "./Exercises.module.css";
 
 // ============================================
-// COMPONENT: Exercise Content
+// COMPONENT: Exercise Management
 // ============================================
-function ExerciseManagement({ initialExercises }) {
-  const [exercises, setExercises] = useState(initialExercises);
 
+function ExerciseManagement({
+  appointments = [],
+  exerciseGroups = [],
+  setExercises,
+}) {
   const [selectedExercise, setSelectedExercise] = useState(null);
-  const [filter, setFilter] = useState("all"); // all | daily | weekly | one_time
+  const [selectedAppointmentId, setSelectedAppointmentId] = useState(null);
+  const [filter, setFilter] = useState("all");
   const [showCompleted, setShowCompleted] = useState(true);
 
-  // ===== تابع تیک زدن تمرین =====
-  const toggleComplete = (id) => {
+  // ==========================================
+  // Helper Functions
+  // ==========================================
+
+  // تبدیل ارقام فارسی و عربی به انگلیسی برای مرتب‌سازی تاریخ
+  const normalizeDigits = (value = "") =>
+    String(value)
+      .replace(/[۰-۹]/g, (digit) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(digit)))
+      .replace(/[٠-٩]/g, (digit) => String("٠١٢٣٤٥٦٧٨٩".indexOf(digit)));
+
+  // تبدیل تاریخ به مقدار قابل مرتب‌سازی
+  const getDateSortValue = (date = "") => {
+    const normalizedDate = normalizeDigits(date);
+    const parts = normalizedDate.split("/").map(Number);
+
+    if (parts.length !== 3 || parts.some(Number.isNaN)) {
+      return 0;
+    }
+
+    const [year, month, day] = parts;
+
+    return year * 10000 + month * 100 + day;
+  };
+
+  // ==========================================
+  // Completed Appointments
+  // ==========================================
+
+  const completedAppointments = appointments
+    .filter((appointment) => appointment.status === "completed")
+    .sort((a, b) => getDateSortValue(b.date) - getDateSortValue(a.date));
+
+  // تعداد تمرین‌های اختصاص‌یافته به هر جلسه
+  const getAppointmentExerciseCount = (appointmentId) => {
+    const group = exerciseGroups.find(
+      (item) => String(item.appointmentId) === String(appointmentId),
+    );
+
+    return group?.exercises?.length ?? 0;
+  };
+
+  // ساخت متن نمایشی گزینه‌های انتخاب جلسه
+  const getAppointmentOptionLabel = (appointment, index) => {
+    const sessionName =
+      appointment.title ||
+      appointment.type ||
+      `جلسه ${completedAppointments.length - index}`;
+
+    const exerciseCount = getAppointmentExerciseCount(appointment.id);
+
+    const details = [
+      appointment.date,
+      appointment.time,
+      `${exerciseCount} تمرین`,
+    ].filter(Boolean);
+
+    return `${sessionName} · ${details.join(" · ")}`;
+  };
+
+  // جلسه انتخاب‌شده
+  const selectedAppointment =
+    completedAppointments.find(
+      (appointment) => String(appointment.id) === String(selectedAppointmentId),
+    ) ||
+    completedAppointments[0] ||
+    null;
+
+  const selectedExerciseGroup = selectedAppointment
+    ? exerciseGroups.find(
+        (group) =>
+          String(group.appointmentId) === String(selectedAppointment.id),
+      )
+    : null;
+
+  const appointmentExercises = selectedExerciseGroup?.exercises ?? [];
+
+  // ==========================================
+  // Selected Appointment Exercises
+  // ==========================================
+
+  // فیلتر تمرین‌ها بر اساس نوع و وضعیت
+  const filteredExercises = appointmentExercises.filter((exercise) => {
+    const normalizedType =
+      exercise.type === "one-time" ? "one_time" : exercise.type;
+
+    if (filter !== "all" && normalizedType !== filter) {
+      return false;
+    }
+
+    if (!showCompleted && exercise.completed) {
+      return false;
+    }
+
+    return true;
+  });
+
+  // ==========================================
+  // Overall Statistics
+  // ==========================================
+
+  const allExercises = exerciseGroups.flatMap((group) => group.exercises ?? []);
+
+  const completedCount = allExercises.filter(
+    (exercise) => exercise.completed,
+  ).length;
+
+  const totalCount = allExercises.length;
+
+  const remainingCount = totalCount - completedCount;
+
+  const overallProgress =
+    totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+
+  // آمار جلسه انتخاب‌شده
+  const sessionCompletedCount = appointmentExercises.filter(
+    (exercise) => exercise.completed,
+  ).length;
+
+  const sessionTotalCount = appointmentExercises.length;
+
+  // ==========================================
+  // Toggle Exercise Completion
+  // ==========================================
+  const toggleComplete = (exerciseId, appointmentId) => {
+    if (!setExercises) return;
+
     setExercises((prev) =>
-      prev.map((ex) =>
-        ex.id === id
-          ? {
-              ...ex,
-              completed: !ex.completed,
-              progress: ex.completed ? 0 : 100,
+      prev.map((group) => {
+        if (String(group.appointmentId) !== String(appointmentId)) {
+          return group;
+        }
+
+        return {
+          ...group,
+
+          exercises: (group.exercises ?? []).map((exercise) => {
+            if (String(exercise.id) !== String(exerciseId)) {
+              return exercise;
             }
-          : ex,
-      ),
+
+            const nextCompleted = !exercise.completed;
+
+            return {
+              ...exercise,
+              completed: nextCompleted,
+              progress: nextCompleted ? 100 : 0,
+            };
+          }),
+        };
+      }),
     );
   };
 
-  // ===== فیلتر کردن =====
-  const getFilteredExercises = () => {
-    let filtered = exercises;
+  // ==========================================
+  // Exercise Type Information
+  // ==========================================
 
-    if (filter !== "all") {
-      filtered = filtered.filter((ex) => ex.type === filter);
-    }
-
-    if (!showCompleted) {
-      filtered = filtered.filter((ex) => !ex.completed);
-    }
-
-    return filtered;
-  };
-
-  const filteredExercises = getFilteredExercises();
-  const completedCount = exercises.filter((ex) => ex.completed).length;
-  const totalCount = exercises.length;
-
-  // ===== دریافت اطلاعات بر اساس نوع =====
   const getTypeInfo = (type) => {
     const types = {
-      daily: { label: "روزانه", className: styles.typeDaily, icon: "🌙" },
-      weekly: { label: "هفتگی", className: styles.typeWeekly, icon: "📅" },
-      one_time: { label: "یک‌باره", className: styles.typeOneTime, icon: "⭐" },
+      daily: {
+        label: "روزانه",
+        className: styles.typeDaily,
+      },
+      weekly: {
+        label: "هفتگی",
+        className: styles.typeWeekly,
+      },
+      one_time: {
+        label: "یک‌باره",
+        className: styles.typeOneTime,
+      },
+      "one-time": {
+        label: "یک‌باره",
+        className: styles.typeOneTime,
+      },
     };
+
     return types[type] || types.one_time;
   };
 
+  // ==========================================
+  // Exercise Priority Information
+  // ==========================================
+
   const getPriorityInfo = (priority) => {
     const priorities = {
-      high: { label: "اولویت بالا", className: styles.priorityHigh },
-      medium: { label: "اولویت متوسط", className: styles.priorityMedium },
-      low: { label: "اولویت کم", className: styles.priorityLow },
+      high: {
+        label: "اولویت بالا",
+        className: styles.priorityHigh,
+      },
+      medium: {
+        label: "اولویت متوسط",
+        className: styles.priorityMedium,
+      },
+      low: {
+        label: "اولویت کم",
+        className: styles.priorityLow,
+      },
     };
+
     return priorities[priority] || priorities.medium;
   };
 
-  const getCategoryIcon = (category) => {
-    const icons = {
-      meditation: "🧘",
-      writing: "✍️",
-      test: "📊",
-      activity: "🏃",
-    };
-    return icons[category] || "📋";
-  };
+  // ==========================================
+  // Render
+  // ==========================================
 
   return (
     <div className={styles.pageContent}>
-      {/* هدر بخش */}
+      {/* ======================================
+          Page Header
+      ====================================== */}
+
       <div className={styles.pageHeader}>
         <div className={styles.headerInfo}>
-          <h2>تمارین من</h2>
-          <p>تمارین تعیین شده توسط روانشناس برای شما</p>
-        </div>
-        <div className={styles.exerciseStats}>
-          <span className={styles.statItem}>
-            <span className={styles.statNumber}>{completedCount}</span>
-            <span className={styles.statLabel}>انجام شده</span>
-          </span>
-          <span className={styles.statDivider}>|</span>
-          <span className={styles.statItem}>
-            <span className={styles.statNumber}>
-              {totalCount - completedCount}
-            </span>
-            <span className={styles.statLabel}>انجام نشده</span>
-          </span>
-          <span className={styles.statDivider}>|</span>
-          <span className={styles.statItem}>
-            <span className={styles.statNumber}>{totalCount}</span>
-            <span className={styles.statLabel}>مجموع</span>
-          </span>
-        </div>
-      </div>
-
-      {/* فیلترها */}
-      <div className={styles.filterSection}>
-        <div className={styles.filterTabs}>
-          <button
-            className={`${styles.filterTab} ${
-              filter === "all" ? styles.active : ""
-            }`}
-            onClick={() => setFilter("all")}
-          >
-            همه &nbsp;
-            <span className={styles.filterCount}>{exercises.length}</span>
-          </button>
-          <button
-            className={`${styles.filterTab} ${
-              filter === "daily" ? styles.active : ""
-            }`}
-            onClick={() => setFilter("daily")}
-          >
-            🌙 روزانه &nbsp;
-            <span className={styles.filterCount}>
-              {exercises.filter((ex) => ex.type === "daily").length}
-            </span>
-          </button>
-          <button
-            className={`${styles.filterTab} ${
-              filter === "weekly" ? styles.active : ""
-            }`}
-            onClick={() => setFilter("weekly")}
-          >
-            📅 هفتگی &nbsp;
-            <span className={styles.filterCount}>
-              {exercises.filter((ex) => ex.type === "weekly").length}
-            </span>
-          </button>
-          <button
-            className={`${styles.filterTab} ${
-              // filter === "one-time" ? styles.active : ""
-              filter === "one_time" ? styles.active : ""
-            }`}
-            // onClick={() => setFilter("one-time")}
-            onClick={() => setFilter("one_time")}
-          >
-            ⭐ یک‌باره &nbsp;
-            <span className={styles.filterCount}>
-              {exercises.filter((ex) => ex.type === "one_time").length}
-            </span>
-          </button>
+          <h2>تمرین‌های من</h2>
+          <p>تمرین‌های تعیین‌شده توسط روانشناس برای شما</p>
         </div>
 
-        <label className={styles.showCompletedToggle}>
-          <input
-            type="checkbox"
-            checked={showCompleted}
-            onChange={() => setShowCompleted(!showCompleted)}
-          />
-          <span className={styles.toggleSlider}></span>
-          نمایش انجام شده‌ها
-        </label>
-      </div>
-
-      {/* لیست تمارین */}
-      <div className={styles.exerciseList}>
-        {filteredExercises.length > 0 ? (
-          filteredExercises.map((exercise) => {
-            const typeInfo = getTypeInfo(exercise.type);
-            const priorityInfo = getPriorityInfo(exercise.priority);
-            const isCompleted = exercise.completed;
-
-            return (
-              <div
-                key={exercise.id}
-                className={`${styles.exerciseCard} ${
-                  isCompleted ? styles.completed : ""
-                }`}
+        <div className={styles.appointmentSelector}>
+          {completedAppointments.length > 0 ? (
+            <>
+              <label
+                htmlFor="exercise-appointment"
+                className={styles.appointmentLabel}
               >
-                <button
-                  className={`${styles.checkCircle} ${
-                    isCompleted ? styles.checked : ""
-                  }`}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    toggleComplete(exercise.id);
+                انتخاب جلسه
+              </label>
+
+              <div className={styles.appointmentSelectWrapper}>
+                <select
+                  id="exercise-appointment"
+                  className={styles.appointmentSelect}
+                  value={selectedAppointment?.id ?? ""}
+                  onChange={(e) => {
+                    setSelectedAppointmentId(e.target.value);
+                    setSelectedExercise(null);
+                    setFilter("all");
+                    setShowCompleted(true);
                   }}
                 >
-                  {isCompleted ? (
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                      <path
-                        d="M5 12L10 17L20 7"
-                        stroke="white"
-                        strokeWidth="3"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  ) : (
-                    <span className={styles.checkPlaceholder}></span>
-                  )}
-                </button>
+                  {completedAppointments.map((appointment, index) => (
+                    <option key={appointment.id} value={appointment.id}>
+                      {getAppointmentOptionLabel(appointment, index)}
+                    </option>
+                  ))}
+                </select>
 
-                {/* محتوای اصلی */}
-                <div className={styles.exerciseContent}>
-                  <div className={styles.exerciseHeader}>
-                    <div className={styles.exerciseMainInfo}>
-                      <div className={styles.exerciseTitleRow}>
-                        <h4 className={styles.exerciseTitle}>
-                          {exercise.icon || getCategoryIcon(exercise.category)}
-                          <span>{exercise.title}</span>
-                        </h4>
-                        <div className={styles.exerciseMeta}>
-                          <span
-                            className={`${styles.typeBadge} ${typeInfo.className}`}
-                          >
-                            {typeInfo.icon} {typeInfo.label}
-                          </span>
-                          <span
-                            className={`${styles.priorityBadge} ${priorityInfo.className}`}
-                          >
-                            {priorityInfo.label}
-                          </span>
-                        </div>
-                      </div>
-                      <p className={styles.exerciseDescription}>
-                        {exercise.description}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* دکمه گسترش */}
-                  <button
-                    className={styles.expandBtn}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setSelectedExercise(
-                        selectedExercise === exercise.id ? null : exercise.id,
-                      );
-                    }}
-                  >
-                    {selectedExercise === exercise.id ? "▲" : "▼"}
-                    <span className={styles.expandLabel}>
-                      {selectedExercise === exercise.id
-                        ? "بستن"
-                        : "مشاهده دستورالعمل"}
-                    </span>
-                  </button>
-
-                  {/* جزئیات */}
-                  {selectedExercise === exercise.id && (
-                    <div className={styles.exerciseDetails}>
-                      <div className={styles.instructionsSection}>
-                        <h5>📋 دستورالعمل:</h5>
-                        <ul>
-                          {exercise.instructions.map((step, index) => (
-                            <li key={index}>{step}</li>
-                          ))}
-                        </ul>
-                      </div>
-                      <div className={styles.exerciseFooter}>
-                        <div className={styles.exerciseAssignInfo}>
-                          <span>👤 {exercise.assignedBy}</span>
-                          <span>📅 تاریخ تعیین: {exercise.assignedDate}</span>
-                          <span>⏳ مهلت: {exercise.dueDate}</span>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
+                <span className={styles.selectArrow}>⌄</span>
               </div>
-            );
-          })
-        ) : (
-          <div className={styles.emptyState}>
-            <span className={styles.emptyIcon}>🎯</span>
-            <h3>هیچ تمرینی موجود نیست</h3>
-            <p>
-              {showCompleted
-                ? "هنوز تمرینی برای شما تعیین نشده است."
-                : "همه تمرین‌ها را انجام داده‌اید! 🎉"}
-            </p>
-          </div>
-        )}
+            </>
+          ) : (
+            <span className={styles.noCompletedAppointments}>
+              هنوز جلسه انجام‌شده‌ای برای شما ثبت نشده است.
+            </span>
+          )}
+        </div>
       </div>
 
-      {/* کارت پیشرفت کلی */}
+      {/* ======================================
+          Exercise Section
+      ====================================== */}
+
+      {selectedAppointment && (
+        <>
+          {/* ==================================
+              Filters
+          ================================== */}
+
+          <div className={styles.filterSection}>
+            <div className={styles.filterTabs}>
+              <button
+                className={`${styles.filterTab} ${
+                  filter === "all" ? styles.active : ""
+                }`}
+                onClick={() => setFilter("all")}
+              >
+                همه
+                <span className={styles.filterCount}>
+                  {appointmentExercises.length}
+                </span>
+              </button>
+
+              <button
+                className={`${styles.filterTab} ${
+                  filter === "daily" ? styles.active : ""
+                }`}
+                onClick={() => setFilter("daily")}
+              >
+                روزانه
+                <span className={styles.filterCount}>
+                  {
+                    appointmentExercises.filter((ex) => ex.type === "daily")
+                      .length
+                  }
+                </span>
+              </button>
+
+              <button
+                className={`${styles.filterTab} ${
+                  filter === "weekly" ? styles.active : ""
+                }`}
+                onClick={() => setFilter("weekly")}
+              >
+                هفتگی
+                <span className={styles.filterCount}>
+                  {
+                    appointmentExercises.filter((ex) => ex.type === "weekly")
+                      .length
+                  }
+                </span>
+              </button>
+
+              <button
+                className={`${styles.filterTab} ${
+                  filter === "one_time" ? styles.active : ""
+                }`}
+                onClick={() => setFilter("one_time")}
+              >
+                یک‌باره
+                <span className={styles.filterCount}>
+                  {
+                    appointmentExercises.filter(
+                      (ex) => ex.type === "one_time" || ex.type === "one-time",
+                    ).length
+                  }
+                </span>
+              </button>
+            </div>
+
+            <label className={styles.showCompletedToggle}>
+              <input
+                type="checkbox"
+                checked={showCompleted}
+                onChange={(e) => setShowCompleted(e.target.checked)}
+              />
+              <span className={styles.toggleSlider}></span>
+              نمایش انجام‌شده‌ها
+            </label>
+          </div>
+
+          {/* ==================================
+              Exercise List
+          ================================== */}
+
+          <div className={styles.exerciseList}>
+            {appointmentExercises.length === 0 ? (
+              <div className={styles.emptyState}>
+                <span className={styles.emptyIcon}>📋</span>
+
+                <h3>تمرینی برای این جلسه وجود ندارد</h3>
+
+                <p>برای این جلسه هنوز تمرینی توسط روانشناس تعیین نشده است.</p>
+              </div>
+            ) : filteredExercises.length > 0 ? (
+              filteredExercises.map((exercise) => {
+                const typeInfo = getTypeInfo(exercise.type);
+                const priorityInfo = getPriorityInfo(exercise.priority);
+
+                const isCompleted = exercise.completed;
+                const isExpanded = selectedExercise === exercise.id;
+
+                return (
+                  <div
+                    key={`${selectedAppointment.id}-${exercise.id}`}
+                    className={`${styles.exerciseCard} ${
+                      isCompleted ? styles.completed : ""
+                    }`}
+                  >
+                    {/* Completion Button */}
+                    <button
+                      type="button"
+                      className={`${styles.checkCircle} ${
+                        isCompleted ? styles.checked : ""
+                      }`}
+                      onClick={() =>
+                        toggleComplete(exercise.id, selectedAppointment.id)
+                      }
+                      aria-label={
+                        isCompleted
+                          ? "علامت‌گذاری به‌عنوان انجام‌نشده"
+                          : "علامت‌گذاری به‌عنوان انجام‌شده"
+                      }
+                    >
+                      {isCompleted ? (
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                        >
+                          <path
+                            d="M5 12L10 17L20 7"
+                            stroke="white"
+                            strokeWidth="3"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      ) : (
+                        <span className={styles.checkPlaceholder} />
+                      )}
+                    </button>
+
+                    {/* Exercise Content */}
+                    <div className={styles.exerciseContent}>
+                      <div className={styles.exerciseHeader}>
+                        <div className={styles.exerciseMainInfo}>
+                          <div className={styles.exerciseTitleRow}>
+                            <h4 className={styles.exerciseTitle}>
+                              <span>{exercise.title}</span>
+                            </h4>
+
+                            <div className={styles.exerciseMeta}>
+                              <span
+                                className={`${styles.typeBadge} ${typeInfo.className}`}
+                              >
+                                {typeInfo.label}
+                              </span>
+
+                              <span
+                                className={`${styles.priorityBadge} ${priorityInfo.className}`}
+                              >
+                                {priorityInfo.label}
+                              </span>
+                            </div>
+                          </div>
+
+                          <p className={styles.exerciseDescription}>
+                            {exercise.description}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Expand Button */}
+                      <button
+                        type="button"
+                        className={styles.expandBtn}
+                        onClick={() =>
+                          setSelectedExercise(isExpanded ? null : exercise.id)
+                        }
+                        aria-expanded={isExpanded}
+                      >
+                        {isExpanded ? "▲" : "▼"}
+
+                        <span className={styles.expandLabel}>
+                          {isExpanded ? "بستن دستورالعمل" : "مشاهده دستورالعمل"}
+                        </span>
+                      </button>
+
+                      {/* Exercise Details */}
+                      {isExpanded && (
+                        <div className={styles.exerciseDetails}>
+                          {exercise.instructions?.length > 0 && (
+                            <div className={styles.instructionsSection}>
+                              <h5>📋 دستورالعمل:</h5>
+
+                              <ul>
+                                {exercise.instructions.map((step, index) => (
+                                  <li key={index}>{step}</li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+
+                          <div className={styles.exerciseFooter}>
+                            <div className={styles.exerciseAssignInfo}>
+                              {exercise.assignedBy && (
+                                <span>👤 {exercise.assignedBy}</span>
+                              )}
+
+                              {exercise.assignedDate && (
+                                <span>
+                                  📅 تاریخ تعیین: {exercise.assignedDate}
+                                </span>
+                              )}
+
+                              {exercise.dueDate && (
+                                <span>⏳ مهلت: {exercise.dueDate}</span>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                );
+              })
+            ) : (
+              <div className={styles.emptyState}>
+                <span className={styles.emptyIcon}>🎯</span>
+
+                <h3>تمرینی موجود نیست</h3>
+
+                <p>
+                  {showCompleted
+                    ? "برای این فیلتر تمرینی وجود ندارد."
+                    : "تمام تمرین‌های این بخش را انجام داده‌اید! 🎉"}
+                </p>
+              </div>
+            )}
+          </div>
+        </>
+      )}
+
+      {/* ======================================
+          Overall Progress
+      ====================================== */}
+
       <div className={styles.overallProgress}>
         <div className={styles.progressInfo}>
-          <span className={styles.progressTitle}>پیشرفت کلی تمارین</span>
-          <span className={styles.progressPercentage}>
-            {totalCount > 0
-              ? Math.round((completedCount / totalCount) * 100)
-              : 0}
-            %
-          </span>
+          <span className={styles.progressTitle}>پیشرفت کلی تمرین‌ها</span>
+
+          <span className={styles.progressPercentage}>{overallProgress}%</span>
         </div>
+
         <div className={styles.overallProgressBar}>
           <div
             className={styles.overallProgressFill}
-            style={{
-              width: `${
-                totalCount > 0 ? (completedCount / totalCount) * 100 : 0
-              }%`,
-            }}
+            style={{ width: `${overallProgress}%` }}
           />
         </div>
+
         <div className={styles.progressStats}>
-          <span>✅ {completedCount} انجام شده</span>
-          <span>⏳ {totalCount - completedCount} باقی‌مانده</span>
+          <span>{completedCount} انجام‌شده</span>
+          <span>{remainingCount} باقی‌مانده</span>
         </div>
       </div>
 
-      {/* دکمه گزارش */}
+      {/* ======================================
+          Exercise Actions
+      ====================================== */}
+
       <div className={styles.exerciseActions}>
-        <button className={styles.btnReportProgress}>
-          📊 گزارش پیشرفت تمارین
+        <button type="button" className={styles.btnReportProgress}>
+          گزارش پیشرفت تمرین‌ها
         </button>
-        <button className={styles.btnShareProgress}>
-          📤 اشتراک‌گذاری با روانشناس
+
+        <button type="button" className={styles.btnShareProgress}>
+          اشتراک‌گذاری با روانشناس
         </button>
       </div>
     </div>

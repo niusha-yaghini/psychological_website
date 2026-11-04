@@ -344,11 +344,11 @@ function PatientsList({
   // رندر تب‌ها
   // ==========================================
   const tabs = [
-    { id: "info", label: "اطلاعات فردی", icon: "📋" },
-    { id: "medications", label: "تاریخچه دارویی", icon: "💊" }, // ← جدید
-    { id: "sessions", label: "تاریخچه جلسات", icon: "📅" },
-    { id: "notes", label: "یادداشت‌ها و تمارین", icon: "📝" },
-    { id: "general", label: "توضیحات کلی", icon: "📌" },
+    { id: "info", label: "اطلاعات فردی" },
+    { id: "medications", label: "تاریخچه دارویی" },
+    { id: "sessions", label: "تاریخچه جلسات" },
+    { id: "notes", label: "یادداشت‌ها و تمارین" },
+    { id: "general", label: "توضیحات کلی" },
   ];
 
   // ==========================================
@@ -359,12 +359,9 @@ function PatientsList({
       {/* ===== هدر ===== */}
       <div className={styles.pageHeader}>
         <div className={styles.headerInfo}>
-          <h2>👤 بیماران من</h2>
+          <h2>بیماران من</h2>
           <p>لیست بیماران و پرونده‌های آنها</p>
         </div>
-        {/* <button className={styles.newBtn}>
-          <FaPlus /> افزودن بیمار
-        </button> */}
         <button className={styles.newBtn} onClick={handleOpenPatientModal}>
           <FaPlus /> افزودن بیمار
         </button>
@@ -372,7 +369,6 @@ function PatientsList({
 
       {/* ===== Split Layout ===== */}
       <div className={styles.patientsLayout}>
-        {/* ===== Sidebar - لیست بیماران ===== */}
         <div
           className={`${styles.patientSidebar} ${
             selectedPatientId ? styles.sidebarHiddenMobile : ""
@@ -380,7 +376,6 @@ function PatientsList({
         >
           {/* جستجو */}
           <div className={styles.patientSearchBox}>
-            {/* <span className={styles.patientSearchIcon}>🔍</span> */}
             <input
               type="text"
               className={styles.patientSearchInput}
@@ -446,7 +441,6 @@ function PatientsList({
         {/* ===== Patient Record - پنل راست ===== */}
         {selectedPatient ? (
           <div className={styles.patientRecordPanel}>
-            {/* هدر پرونده */}
             <div className={styles.patientRecordHeader}>
               {/* دکمه بستن (فقط موبایل) */}
               <button
@@ -479,9 +473,6 @@ function PatientsList({
                   }`}
                   onClick={() => setActiveTab(tab.id)}
                 >
-                  <span className={styles.patientRecordTabIcon}>
-                    {tab.icon}
-                  </span>
                   <span className={styles.patientRecordTabLabel}>
                     {tab.label}
                   </span>
@@ -662,7 +653,6 @@ function PatientsList({
                     </>
                   ) : (
                     <div className={styles.emptyState}>
-                      {/* <span className={styles.emptyIcon}>💊</span> */}
                       <h3>هیچ دارویی ثبت نشده</h3>
                       <p>برای این بیمار هیچ دارویی در پرونده ثبت نشده است.</p>
                       <button
@@ -907,7 +897,7 @@ function PatientsList({
                                   <div
                                     className={styles.patientNoteSectionTitle}
                                   >
-                                    <span>🎯 تمارین تعیین‌شده</span>
+                                    <span>تمارین تعیین‌شده</span>
                                   </div>
                                   <div className={styles.patientExercisesList}>
                                     {appointment.exercises.map((exercise) => (
@@ -1093,7 +1083,7 @@ function PatientsList({
         <div className={styles.modalOverlay}>
           <div className={styles.addModal}>
             <div className={styles.modalHeader}>
-              <h3>💊 افزودن دارو</h3>
+              <h3>افزودن دارو</h3>
               <button
                 className={styles.modalClose}
                 onClick={() => setShowMedicationModal(false)}
