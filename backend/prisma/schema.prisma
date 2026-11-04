@@ -6,3 +6,585 @@ generator client {
 datasource db {
   provider = "mysql"
 }
+
+// ==========================================
+// ENUMS
+// ==========================================
+
+enum UserRole {
+  PATIENT
+  DOCTOR
+  ADMIN
+}
+
+enum PatientStatus {
+  ACTIVE
+  INACTIVE
+  ARCHIVED
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+enum ExerciseType {
+  DAILY
+  WEEKLY
+  ONE_TIME
+}
+
+enum ExercisePriority {
+  HIGH
+  MEDIUM
+  LOW
+}
+
+enum ReviewCommentStatus {
+  NOT_SUBMITTED
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum TransactionStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  CARD
+  ONLINE
+  CASH
+  OTHER
+}
+
+enum QuestionType {
+  SINGLE
+  MULTIPLE
+  SCALE
+}
+
+enum NotificationType {
+  BOOKING
+  CONFIRMED
+  CANCELLED
+  REMINDER
+  EXERCISE
+  NOTE
+  PAYMENT
+  REVIEW
+  SYSTEM
+}
+
+// ==========================================
+// USERS
+// ==========================================
+
+model User {
+  id         Int      @id @default(autoincrement())
+  phone      String   @unique @db.VarChar(20)
+  role       UserRole
+  isVerified Boolean  @default(false)
+  isActive   Boolean  @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  doctor        Doctor?
+  patient       Patient?
+  notifications Notification[]
+  settings      UserSettings?
+
+  @@index([role])
+}
+
+// ==========================================
+// DOCTORS
+// ==========================================
+
+model Doctor {
+  id     Int @id @default(autoincrement())
+  userId Int @unique
+
+  fullName  String  @db.VarChar(150)
+  specialty String  @db.VarChar(150)
+  bio       String? @db.Text
+  image     String? @db.VarChar(500)
+
+  experienceYears Int @default(0)
+  pricePerHour    Int @default(0)
+
+  availableDays  Json?
+  availableTimes Json?
+
+  // Aggregated rating information
+  averageRating       Float @default(0)
+  ratingCount         Int   @default(0)
+  approvedReviewCount Int   @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user         User          @relation(fields: [userId], references: [id])
+  appointments Appointment[]
+  exercises    Exercise[]
+  medications  Medication[]
+  sessionNotes SessionNote[]
+
+  @@index([fullName])
+}
+
+// ==========================================
+// PATIENTS
+// ==========================================
+
+model Patient {
+  id     Int @id @default(autoincrement())
+  userId Int @unique
+
+  fullName String  @db.VarChar(150)
+  email    String? @db.VarChar(191)
+
+  gender    String?   @db.VarChar(30)
+  birthDate DateTime?
+  joinDate  DateTime  @default(now())
+
+  status PatientStatus @default(ACTIVE)
+
+  emergencyContact  String? @db.VarChar(20)
+  emergencyRelation String? @db.VarChar(100)
+  address           String? @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user                   User                    @relation(fields: [userId], references: [id])
+  appointments           Appointment[]
+  medications            Medication[]
+  questionnaireResponses QuestionnaireResponse[]
+
+  @@index([fullName])
+  @@index([status])
+}
+
+// ==========================================
+// APPOINTMENTS
+// ==========================================
+
+model Appointment {
+  id Int @id @default(autoincrement())
+
+  doctorId  Int
+  patientId Int
+
+  type    String  @db.VarChar(150)
+  typeKey String? @db.VarChar(50)
+
+  // Date and time are stored in Gregorian format
+  startAt DateTime
+  endAt   DateTime
+
+  durationMinutes Int
+
+  status AppointmentStatus @default(PENDING)
+
+  isOnline    Boolean @default(false)
+  meetingLink String? @db.VarChar(500)
+
+  price Int @default(0)
+
+  cancelledBy  String?   @db.VarChar(30)
+  cancelReason String?   @db.Text
+  cancelledAt  DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  doctor  Doctor  @relation(fields: [doctorId], references: [id])
+  patient Patient @relation(fields: [patientId], references: [id])
+
+  exercises    Exercise[]
+  sessionNote  SessionNote?
+  review       Review?
+  transactions Transaction[]
+
+  @@index([doctorId, startAt])
+  @@index([patientId, startAt])
+  @@index([status])
+}
+
+// ==========================================
+// SESSION NOTES
+// ==========================================
+
+model SessionNote {
+  id            Int @id @default(autoincrement())
+  appointmentId Int @unique
+  doctorId      Int
+
+  content String @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  appointment Appointment @relation(fields: [appointmentId], references: [id])
+  doctor      Doctor      @relation(fields: [doctorId], references: [id])
+
+  @@index([doctorId])
+}
+
+// ==========================================
+// EXERCISES
+// ==========================================
+
+model Exercise {
+  id            Int @id @default(autoincrement())
+  appointmentId Int
+  assignedById  Int
+
+  title       String  @db.VarChar(200)
+  description String? @db.Text
+
+  type     ExerciseType
+  category String?      @db.VarChar(100)
+  icon     String?      @db.VarChar(30)
+
+  dueDate      DateTime?
+  assignedDate DateTime  @default(now())
+
+  completed   Boolean   @default(false)
+  completedAt DateTime?
+  progress    Int       @default(0)
+
+  priority ExercisePriority @default(MEDIUM)
+
+  instructions Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  appointment Appointment @relation(fields: [appointmentId], references: [id])
+  assignedBy  Doctor      @relation(fields: [assignedById], references: [id])
+
+  @@index([appointmentId])
+  @@index([assignedById])
+}
+
+// ==========================================
+// MEDICATIONS
+// ==========================================
+
+model Medication {
+  id        Int @id @default(autoincrement())
+  patientId Int
+  doctorId  Int
+
+  name      String @db.VarChar(150)
+  dosage    String @db.VarChar(100)
+  frequency String @db.VarChar(150)
+
+  startDate DateTime
+  endDate   DateTime?
+
+  notes    String? @db.Text
+  isActive Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  patient Patient @relation(fields: [patientId], references: [id])
+  doctor  Doctor  @relation(fields: [doctorId], references: [id])
+
+  @@index([patientId])
+  @@index([doctorId])
+}
+
+// ==========================================
+// REVIEWS
+// ==========================================
+
+model Review {
+  id            Int @id @default(autoincrement())
+  appointmentId Int @unique
+
+  // Both fields are optional.
+  // Valid states:
+  // 1. rating = null, comment = null
+  // 2. rating = 1..5, comment = null
+  // 3. rating = 1..5, comment = text
+
+  rating  Int?
+  comment String? @db.Text
+
+  commentStatus ReviewCommentStatus @default(NOT_SUBMITTED)
+
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  approvedAt DateTime?
+
+  appointment Appointment @relation(fields: [appointmentId], references: [id])
+
+  @@index([rating])
+  @@index([commentStatus])
+}
+
+// ==========================================
+// TRANSACTIONS
+// ==========================================
+
+model Transaction {
+  id            Int @id @default(autoincrement())
+  appointmentId Int
+
+  amount Int
+
+  status TransactionStatus @default(PENDING)
+  method PaymentMethod     @default(OTHER)
+
+  trackingCode String?   @db.VarChar(150)
+  paidAt       DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  appointment Appointment @relation(fields: [appointmentId], references: [id])
+
+  @@index([appointmentId])
+  @@index([status])
+  @@index([paidAt])
+}
+
+// ==========================================
+// NOTIFICATIONS
+// ==========================================
+
+model Notification {
+  id     Int @id @default(autoincrement())
+  userId Int
+
+  type    NotificationType
+  title   String           @db.VarChar(200)
+  message String           @db.Text
+
+  link   String? @db.VarChar(500)
+  action String? @db.VarChar(100)
+
+  readAt DateTime?
+
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId, createdAt])
+  @@index([userId, readAt])
+}
+
+// ==========================================
+// QUESTIONNAIRES
+// ==========================================
+
+model Questionnaire {
+  id Int @id @default(autoincrement())
+
+  title       String  @db.VarChar(200)
+  description String? @db.Text
+
+  isActive Boolean @default(true)
+  version  Int     @default(1)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  questions Question[]
+  responses QuestionnaireResponse[]
+}
+
+// ==========================================
+// QUESTIONS
+// ==========================================
+
+model Question {
+  id              Int @id @default(autoincrement())
+  questionnaireId Int
+
+  title    String  @db.VarChar(500)
+  subtitle String? @db.Text
+
+  type  QuestionType
+  order Int
+
+  options  Json?
+  minValue Int?
+  maxValue Int?
+
+  isRequired Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  questionnaire Questionnaire    @relation(fields: [questionnaireId], references: [id])
+  answers       QuestionAnswer[]
+
+  @@unique([questionnaireId, order])
+}
+
+// ==========================================
+// QUESTIONNAIRE RESPONSES
+// ==========================================
+
+model QuestionnaireResponse {
+  id              Int @id @default(autoincrement())
+  questionnaireId Int
+  patientId       Int
+
+  completedAt DateTime @default(now())
+
+  questionnaire Questionnaire @relation(fields: [questionnaireId], references: [id])
+  patient       Patient       @relation(fields: [patientId], references: [id])
+
+  answers QuestionAnswer[]
+
+  @@unique([questionnaireId, patientId])
+  @@index([patientId])
+}
+
+// ==========================================
+// QUESTION ANSWERS
+// ==========================================
+
+model QuestionAnswer {
+  id         Int @id @default(autoincrement())
+  responseId Int
+  questionId Int
+
+  value Json
+
+  createdAt DateTime @default(now())
+
+  response QuestionnaireResponse @relation(fields: [responseId], references: [id])
+  question Question              @relation(fields: [questionId], references: [id])
+
+  @@unique([responseId, questionId])
+}
+
+// ==========================================
+// WORKSHOPS
+// ==========================================
+
+model Workshop {
+  id Int @id @default(autoincrement())
+
+  title       String  @db.VarChar(200)
+  description String? @db.Text
+
+  scheduledAt DateTime
+  startTime   String?  @db.VarChar(30)
+
+  location String? @db.VarChar(300)
+  price    Int     @default(0)
+
+  capacity   Int?
+  registered Int  @default(0)
+
+  image String? @db.VarChar(500)
+
+  tags     Json?
+  syllabus Json?
+
+  isUpcoming Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([scheduledAt])
+}
+
+// ==========================================
+// PODCASTS
+// ==========================================
+
+model Podcast {
+  id Int @id @default(autoincrement())
+
+  title       String  @db.VarChar(200)
+  description String? @db.Text
+
+  publishedAt     DateTime
+  durationSeconds Int?
+
+  audioUrl   String? @db.VarChar(500)
+  coverImage String? @db.VarChar(500)
+
+  isLatest      Boolean @default(false)
+  episodeNumber Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([publishedAt])
+}
+
+// ==========================================
+// CLINICS
+// ==========================================
+
+model Clinic {
+  id Int @id @default(autoincrement())
+
+  name    String @db.VarChar(150)
+  address String @db.Text
+
+  phone  String? @db.VarChar(30)
+  phone2 String? @db.VarChar(30)
+
+  workingHours    String? @db.VarChar(300)
+  additionalHours String? @db.VarChar(300)
+
+  mapLink String? @db.VarChar(500)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ==========================================
+// USER SETTINGS
+// ==========================================
+
+model UserSettings {
+  id     Int @id @default(autoincrement())
+  userId Int @unique
+
+  notificationsEnabled Boolean @default(true)
+  darkMode             Boolean @default(false)
+  sessionReminders     Boolean @default(true)
+
+  privacySettings Json?
+  displaySettings Json?
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+// ==========================================
+// SITE SETTINGS
+// ==========================================
+
+model SiteSettings {
+  id Int @id @default(1)
+
+  instagram String? @db.VarChar(500)
+  telegram  String? @db.VarChar(500)
+  whatsapp  String? @db.VarChar(500)
+  youtube   String? @db.VarChar(500)
+  email     String? @db.VarChar(191)
+
+  phone  String? @db.VarChar(30)
+  phone2 String? @db.VarChar(30)
+
+  updatedAt DateTime @updatedAt
+}
