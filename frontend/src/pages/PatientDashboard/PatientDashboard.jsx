@@ -375,16 +375,6 @@ const isSessionOngoing = (appointment) => {
 };
 
 // ===== تبدیل وضعیت به اطلاعات نمایشی =====
-// const getStatusInfo = (status) => {
-//   const map = {
-//     pending: { label: "در انتظار", className: "statusPending" },
-//     confirmed: { label: "تأیید شده", className: "statusConfirmed" },
-//     completed: { label: "انجام شده", className: "statusCompleted" },
-//     cancelled: { label: "لغو شده", className: "statusCancelled" },
-//   };
-//   return map[status] || map.pending;
-// };
-
 const appointmentsHelpers = {
   toPersianDigits,
   getDisplayStatus,
@@ -464,13 +454,6 @@ function PatientDashboard() {
   );
 
   // ===== محاسبه تعداد جلسات پیش‌رو =====
-  // const upcomingAppointmentsCount = useMemo(() => {
-  //   return appointments.filter((app) => {
-  //     const displayStatus = getDisplayStatus(app);
-  //     return displayStatus === "confirmed" || displayStatus === "pending";
-  //   }).length;
-  // }, [appointments]);
-
   const upcomingAppointmentsCount = useMemo(() => {
     return patientAppointments.filter((app) => {
       const displayStatus = getDisplayStatus(app);
@@ -480,29 +463,11 @@ function PatientDashboard() {
   }, [patientAppointments]);
 
   // ===== محاسبه تعداد پیام‌های خوانده نشده =====
-  // const unreadMessagesCount = useMemo(() => {
-  //   return notifications.filter((n) => !n.isRead).length;
-  // }, [notifications]);
-
   const unreadMessagesCount = useMemo(() => {
     return patientNotifications.filter((n) => !n.isRead).length;
   }, [patientNotifications]);
 
   // ===== توابع =====
-  // const markAsRead = (id) => {
-  //   setNotifications((prev) =>
-  //     prev.map((notif) =>
-  //       notif.id === id ? { ...notif, isRead: true } : notif,
-  //     ),
-  //   );
-  // };
-
-  // const markAllAsRead = () => {
-  //   setNotifications((prev) =>
-  //     prev.map((notif) => ({ ...notif, isRead: true })),
-  //   );
-  // };
-
   const markAsRead = (id) => {
     setPatientNotifications((prev) =>
       prev.map((notif) =>
@@ -518,28 +483,6 @@ function PatientDashboard() {
   };
 
   // ===== ثبت زمان ایجاد اعلان‌های جدید =====
-  // useEffect(() => {
-  //   const missingNotifications = notifications.filter(
-  //     (notification) => !notificationCreatedAt[notification.id],
-  //   );
-
-  //   if (missingNotifications.length === 0) return;
-
-  //   const now = Date.now();
-  //   const updatedTimestamps = { ...notificationCreatedAt };
-
-  //   missingNotifications.forEach((notification) => {
-  //     updatedTimestamps[notification.id] = now;
-  //   });
-
-  //   localStorage.setItem(
-  //     "patientNotificationCreatedAt",
-  //     JSON.stringify(updatedTimestamps),
-  //   );
-
-  //   setNotificationCreatedAt(updatedTimestamps);
-  // }, [notifications, notificationCreatedAt]);
-
   useEffect(() => {
     const missingNotifications = patientNotifications.filter(
       (notification) => !notificationCreatedAt[notification.id],

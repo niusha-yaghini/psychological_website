@@ -259,38 +259,6 @@ function ExercisesManagement({
         </p>
       </div>
 
-      {/* ===== آمار ===== */}
-      {/* <div className={styles.exercisesStatsGrid}>
-        <div className={styles.exerciseStatBox}>
-          <span className={styles.exerciseStatIcon}>📊</span>
-          <span className={styles.exerciseStatNumber}>
-            {toPersianDigits(stats.total)}
-          </span>
-          <span className={styles.exerciseStatLabel}>کل تمارین</span>
-        </div>
-        <div className={`${styles.exerciseStatBox} ${styles.statPending}`}>
-          <span className={styles.exerciseStatIcon}>⏳</span>
-          <span className={styles.exerciseStatNumber}>
-            {toPersianDigits(stats.pending)}
-          </span>
-          <span className={styles.exerciseStatLabel}>در انتظار</span>
-        </div>
-        <div className={`${styles.exerciseStatBox} ${styles.statCompleted}`}>
-          <span className={styles.exerciseStatIcon}>✅</span>
-          <span className={styles.exerciseStatNumber}>
-            {toPersianDigits(stats.completed)}
-          </span>
-          <span className={styles.exerciseStatLabel}>انجام شده</span>
-        </div>
-        <div className={`${styles.exerciseStatBox} ${styles.statOverdue}`}>
-          <span className={styles.exerciseStatIcon}>⚠️</span>
-          <span className={styles.exerciseStatNumber}>
-            {toPersianDigits(stats.overdue)}
-          </span>
-          <span className={styles.exerciseStatLabel}>مهلت گذشته</span>
-        </div>
-      </div> */}
-
       {/* ===== فیلترها ===== */}
       <div className={styles.exercisesFilters}>
         <div className={styles.exerciseFilterGroup}>
@@ -308,20 +276,6 @@ function ExercisesManagement({
             ))}
           </select>
         </div>
-
-        {/* <div className={styles.exerciseFilterGroup}>
-          <label>وضعیت:</label>
-          <select
-            className={styles.formSelect}
-            value={filterStatus}
-            onChange={(e) => setFilterStatus(e.target.value)}
-          >
-            <option value="all">همه</option>
-            <option value="pending">در انتظار</option>
-            <option value="completed">انجام شده</option>
-            <option value="overdue">مهلت گذشته</option>
-          </select>
-        </div> */}
 
         <div className={styles.exerciseFilterGroup}>
           <label>نوع:</label>
@@ -716,7 +670,6 @@ function PatientAppointmentSelectModal({
 
           {/* جستجو */}
           <div className={styles.patientSearchBox}>
-            {/* <span className={styles.patientSearchIcon}>🔍</span> */}
             <input
               type="text"
               className={styles.patientSearchInput}
