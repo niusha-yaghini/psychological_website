@@ -1,34 +1,101 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./Landing.module.css";
-import seedData from "../../../../backend/seed";
+
+// import seedData from "../../../../backend/seed";
+import { getLandingData } from "../../services/landing.service";
+
 import logo from "../../../public/images/logo/logo2.png";
 
 import individual_therapy from "../../../public/images/avatar/Individual_Therapy.png";
 import couple_therapy from "../../../public/images/avatar/Couple_Therapy.png";
 import teenage_therapy from "../../../public/images/avatar/Teenage_Therapy.png";
 
+// const formatPersianDate = (dateStr) => {
+//   if (!dateStr) return "";
+//   const parts = dateStr.split("/");
+//   return `${parts[2]}/${parts[1]}/${parts[0]}`;
+// };
+
 const formatPersianDate = (dateStr) => {
   if (!dateStr) return "";
-  const parts = dateStr.split("/");
-  return `${parts[2]}/${parts[1]}/${parts[0]}`;
+
+  const date = new Date(dateStr);
+
+  if (Number.isNaN(date.getTime())) return "";
+
+  return new Intl.DateTimeFormat("fa-IR", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(date);
 };
 
 function Landing() {
+  // const [data, setData] = useState(null);
+  // const [activeTab, setActiveTab] = useState("upcoming");
+  // const [imageErrors, setImageErrors] = useState({});
+  // const navigate = useNavigate();
+
   const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   const [activeTab, setActiveTab] = useState("upcoming");
   const [imageErrors, setImageErrors] = useState({});
+
   const navigate = useNavigate();
 
+  // useEffect(() => {
+  //   setData(seedData);
+  // }, []);
+
   useEffect(() => {
-    setData(seedData);
+    let isMounted = true;
+
+    const fetchLandingData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const landingData = await getLandingData();
+
+        if (isMounted) {
+          setData(landingData);
+        }
+      } catch (err) {
+        console.error("Failed to load landing data:", err);
+
+        if (isMounted) {
+          setError(err.message || "خطا در دریافت اطلاعات");
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchLandingData();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   if (!data) {
     return <div className={styles.loading}>در حال بارگذاری...</div>;
   }
 
-  const { doctor, workshops, podcasts, clinics, socialMedia } = data;
+  // const { doctor, workshops, podcasts, clinics, socialMedia } = data;
+  const {
+    doctors = [],
+    workshops = [],
+    podcasts = [],
+    clinics = [],
+    socialMedia = {},
+  } = data || {};
+
   const upcomingWorkshops = workshops.filter((w) => w.isUpcoming);
   const pastWorkshops = workshops.filter((w) => !w.isUpcoming);
   const latestPodcast = podcasts.find((p) => p.isLatest);
@@ -37,6 +104,19 @@ function Landing() {
   const handleImageError = (workshopId) => {
     setImageErrors((prev) => ({ ...prev, [workshopId]: true }));
   };
+
+  if (loading) {
+    return <div className={styles.loading}>در حال بارگذاری...</div>;
+  }
+
+  if (error) {
+    return (
+      <div className={styles.loading}>
+        <p>دریافت اطلاعات با مشکل مواجه شد.</p>
+        <p>{error}</p>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.landing}>
@@ -71,9 +151,15 @@ function Landing() {
           <div className={styles.heroContent}>
             <h1 className={styles.heroTitle}>کلینیک آنلاین روان کوک</h1>
             {/* <span className={styles.heroSubtitle}>{doctor.specialty}</span> */}
-            <h2 className={styles.herosubTitle}>روان کوک همراه شما در مسیر خودشناسی و رشد فردی</h2>
-            
-            <p className={styles.heroDescription}>{doctor.bio}</p>
+            <h2 className={styles.herosubTitle}>
+              روان کوک همراه شما در مسیر خودشناسی و رشد فردی
+            </h2>
+
+            {/* <p className={styles.heroDescription}>{doctor.bio}</p> */}
+            <p className={styles.heroDescription}>
+              در روان‌کوک، همراه شما هستیم تا با کمک متخصصان روانشناسی، مسیر
+              خودشناسی، رشد فردی و سلامت روان را با آگاهی و آرامش طی کنید.
+            </p>
             <div className={styles.heroButtons}>
               <Link to="/signup" className={styles.herobtnPrimary}>
                 چطوری اولین قدم رو بردارم؟
@@ -149,8 +235,8 @@ function Landing() {
                 <p>
                   {/* جلسات درمانی با توجه به نیاز شما و بر اساس طرح درمان تخصصی پیش
                   می‌رود. در صورت نیاز پرسشنامه های مخصوص شما داده شده و تحلیل می گردند. */}
-             {/* در طول مسیر، با توجه به نیاز شما پرسشنامه‌های تخصصی برای بررسی دقیق‌تر شرایط داده شده و  تحلیل می گردند.   */}
-                در صورت نیاز، دادن پرسشنامه‌های تخصصی و تحلیل آنها
+                  {/* در طول مسیر، با توجه به نیاز شما پرسشنامه‌های تخصصی برای بررسی دقیق‌تر شرایط داده شده و  تحلیل می گردند.   */}
+                  در صورت نیاز، دادن پرسشنامه‌های تخصصی و تحلیل آنها
                 </p>
                 {/* <div className={styles.stepDetail}>
                   <span>⏱️ ۶۰-۹۰ دقیقه</span>
@@ -164,9 +250,7 @@ function Landing() {
               <div className={styles.stepCard}>
                 <div className={styles.stepNumber}>۴</div>
                 <h3>پیگیری و تداوم</h3>
-                <p>
-                  برنامه‌های پیگیری و تمرینات عملی برای تثبیت تغییرات 
-                </p>
+                <p>برنامه‌های پیگیری و تمرینات عملی برای تثبیت تغییرات</p>
                 {/* <div className={styles.stepDetail}>
                   <span>📊 ارزیابی پیشرفت</span>
                   <span>💪 تمرینات عملی</span>
@@ -522,14 +606,14 @@ function Landing() {
                     </div>
                   </div>
                 </div>
-              )
+              ),
             )}
           </div>
         </div>
       </section>
 
       {/* ======== PODCASTS ======== */}
-      <section id="podcasts" className={styles.podcasts}>
+      {/* <section id="podcasts" className={styles.podcasts}>
         <div className={styles.container}>
           <div className={styles.sectionHeader}>
             <h2 className={styles.sectionTitle}>
@@ -727,6 +811,271 @@ function Landing() {
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                     <path d="M8 5V19L19 12L8 5Z" fill="currentColor" />
                   </svg>
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section> */}
+
+      <section id="podcasts" className={styles.podcasts}>
+        <div className={styles.container}>
+          <div className={styles.sectionHeader}>
+            <h2 className={styles.sectionTitle}>
+              پادکست‌های <span>روانشناسی</span>
+            </h2>
+          </div>
+
+          <div className={styles.podcastBelowHeader}>
+            <p className={styles.podcastDescription}>
+              با گوش دادن به پادکست‌های روانشناسی، گام‌های مؤثری در مسیر رشد
+              فردی و سلامت روان بردارید.
+            </p>
+
+            <Link to="/podcasts" className={styles.viewAll}>
+              مشاهده همه ←
+            </Link>
+          </div>
+
+          {latestPodcast && (
+            <div className={styles.podcastFeatured}>
+              {/* Podcast visual - بدون تصویر */}
+              <div className={styles.podcastVisual}>
+                <div className={styles.podcastVisualCircle}>
+                  <div className={styles.podcastVisualInner}>
+                    <svg
+                      width="64"
+                      height="64"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M12 2V22M8 5V19M4 9V15M16 5V19M20 9V15"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                  </div>
+                </div>
+
+                <span className={styles.podcastVisualLabel}>PODCAST</span>
+
+                <div className={styles.playButton}>
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <path d="M8 5V19L19 12L8 5Z" fill="currentColor" />
+                  </svg>
+                </div>
+              </div>
+
+              <div className={styles.podcastInfo}>
+                <div>
+                  <div className={styles.podcastBadge}>
+                    <span className={styles.badgePulse} />
+                    جدیدترین قسمت
+                  </div>
+
+                  <div className={styles.podcastHeader}>
+                    <h3>{latestPodcast.title}</h3>
+
+                    <div className={styles.podcastActions}>
+                      <button
+                        type="button"
+                        className={styles.btnPodcast}
+                        aria-label="پخش پادکست"
+                      >
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          aria-hidden="true"
+                        >
+                          <path d="M8 5V19L19 12L8 5Z" fill="currentColor" />
+                        </svg>
+                      </button>
+
+                      <button
+                        type="button"
+                        className={styles.btnShare}
+                        aria-label="اشتراک‌گذاری پادکست"
+                      >
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          aria-hidden="true"
+                        >
+                          <circle
+                            cx="18"
+                            cy="5"
+                            r="3"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          />
+                          <circle
+                            cx="6"
+                            cy="12"
+                            r="3"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          />
+                          <circle
+                            cx="18"
+                            cy="19"
+                            r="3"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          />
+                          <path
+                            d="M8.59 13.51L15.42 17.49M15.41 6.51L8.59 10.49"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className={styles.podcastMeta}>
+                    <span>
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        aria-hidden="true"
+                      >
+                        <path
+                          d="M3 9H21M7 3V5M17 3V5M6 12H8M11 12H13M16 12H18M6 16H8M11 16H13M16 16H18"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                        />
+                        <rect
+                          x="3"
+                          y="6"
+                          width="18"
+                          height="15"
+                          rx="2"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                        />
+                      </svg>
+                      {formatPersianDate(latestPodcast.date)}
+                    </span>
+
+                    <span>
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        aria-hidden="true"
+                      >
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                        />
+                        <path
+                          d="M12 6V12L16 14"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                      {latestPodcast.duration}
+                    </span>
+
+                    <span>
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        aria-hidden="true"
+                      >
+                        <path
+                          d="M20 12H4M12 4V20"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                      {latestPodcast.episodes} قسمت
+                    </span>
+                  </div>
+                </div>
+
+                <p className={styles.podcastDescription}>
+                  {latestPodcast.description}
+                </p>
+              </div>
+            </div>
+          )}
+
+          <div className={styles.podcastList}>
+            {otherPodcasts.map((podcast, index) => (
+              <div key={podcast.id} className={styles.podcastItem}>
+                <div className={styles.podcastItemNumber}>
+                  #{String(index + 1).padStart(2, "0")}
+                </div>
+
+                <div className={styles.podcastItemIcon}>
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M12 3V21M8 7V17M4 10V14M16 7V17M20 10V14"
+                      stroke="currentColor"
+                      strokeWidth="1.7"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </div>
+
+                <div className={styles.podcastItemInfo}>
+                  <h4>{podcast.title}</h4>
+
+                  <div className={styles.podcastItemMeta}>
+                    <span>{formatPersianDate(podcast.date)}</span>
+                    <span className={styles.metaDot}>•</span>
+                    <span>{podcast.duration}</span>
+                    <span className={styles.metaDot}>•</span>
+                    <span>{podcast.episodes} قسمت</span>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  className={styles.btnListen}
+                  aria-label={`شنیدن ${podcast.title}`}
+                >
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <path d="M8 5V19L19 12L8 5Z" fill="currentColor" />
+                  </svg>
+                  شنیدن
                 </button>
               </div>
             ))}

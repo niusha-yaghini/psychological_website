@@ -519,7 +519,6 @@ model Podcast {
   durationSeconds Int?
 
   audioUrl   String? @db.VarChar(500)
-  coverImage String? @db.VarChar(500)
 
   isLatest      Boolean @default(false)
   episodeNumber Int?

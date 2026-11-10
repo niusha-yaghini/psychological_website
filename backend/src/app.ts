@@ -1,9 +1,9 @@
-
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 
 import { prisma } from "./config/prisma.js";
+import landingRoutes from "./routes/landing.routes.js";
 
 const app = express();
 
@@ -11,7 +11,7 @@ app.use(helmet());
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "http://localhost:5174",
     credentials: true,
   }),
 );
@@ -42,5 +42,7 @@ app.get("/health/db", async (_req, res) => {
     });
   }
 });
+
+app.use("/api/landing", landingRoutes);
 
 export default app;

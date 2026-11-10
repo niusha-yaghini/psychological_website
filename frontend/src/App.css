@@ -45,7 +45,7 @@
   direction: rtl;
 }
 
-@font-face {
+/* @font-face {
   font-family: Shabnam;
   src: url("Shabnam.eot");
   src: url("Shabnam.eot?#iefix") format("embedded-opentype"),
@@ -92,4 +92,4 @@
     url("Shabnam-Medium.woff") format("woff"),
     url("Shabnam-Medium.ttf") format("truetype");
   font-weight: 500;
-}
+} */

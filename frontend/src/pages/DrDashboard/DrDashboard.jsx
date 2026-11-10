@@ -31,7 +31,7 @@ import {
 import logo from "../../../public/images/logo/logo2.png";
 import doctorAvatar from "../../../public/images/Patient_Panel/usericon.png";
 
-import seedData from "../../../../backend/prisma/seed";
+import seedData from "../../../../backend/seed";
 import moment from "moment-jalaali";
 
 moment.loadPersian({ usePersianDigits: false, dialect: "persian" });
