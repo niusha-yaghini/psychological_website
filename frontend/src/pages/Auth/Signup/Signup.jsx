@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./Signup.module.css";
 
 import face_emoji_1 from "../../../../public/images/SignUp_Login/face_emojies/face_emoji_1.png";
@@ -90,11 +90,50 @@ function Signup() {
   const [selectedOption, setSelectedOption] = useState(null);
   const [selectedMulti, setSelectedMulti] = useState([]);
   const [sliderValue, setSliderValue] = useState(5);
-  const [isComplete, setIsComplete] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const currentQuestion = QUESTIONS[currentStep];
   const isLast = currentStep === QUESTIONS.length - 1;
+
+  const finishOnboarding = (finalAnswers = answers) => {
+    const userPhone =
+      location.state?.phone || localStorage.getItem("signupPhone") || "";
+
+    sessionStorage.setItem(
+      "tempUserData",
+      JSON.stringify({
+        phone: userPhone,
+        answers: finalAnswers,
+        timestamp: Date.now(),
+        completedAt: new Date().toISOString(),
+      }),
+    );
+
+    localStorage.setItem("userOnboardingAnswers", JSON.stringify(finalAnswers));
+    localStorage.setItem("userOnboardingComplete", "true");
+    localStorage.setItem("userPhone", userPhone);
+    localStorage.setItem("fromSignup", "true");
+    if (userPhone) localStorage.setItem("signupPhone", userPhone);
+
+    navigate("/login", { state: { fromSignup: true }, replace: true });
+  };
+
+  const moveToNextQuestion = () => {
+    if (isLast) {
+      finishOnboarding(answers);
+      return;
+    }
+    setCurrentStep((step) => step + 1);
+    setSelectedOption(null);
+    setSelectedMulti([]);
+    setSliderValue(5);
+  };
+
+  const handleSkipQuestion = () => {
+    // سؤال ردشده در پاسخ‌ها ذخیره نمی‌شود.
+    moveToNextQuestion();
+  };
 
   // ===== صفحه خوش‌آمدگویی =====
   if (currentStep === -1) {
@@ -148,9 +187,18 @@ function Signup() {
               </div>
             </div>
           </div>
-          <button className={styles.button} onClick={() => setCurrentStep(0)}>
-            شروع پاسخ به سوالات
-          </button>
+          <div className={styles.welcomeActions}>
+            <button className={styles.button} onClick={() => setCurrentStep(0)}>
+              شروع پاسخ به سوالات
+            </button>
+            <button
+              type="button"
+              className={styles.skipAllButton}
+              onClick={() => finishOnboarding({})}
+            >
+              فعلاً مایلم از پاسخ به سؤال‌ها بگذرم
+            </button>
+          </div>
         </main>
       </div>
     );
@@ -160,16 +208,14 @@ function Signup() {
     const questionId = currentQuestion.id;
     let answer = null;
 
-    if (currentQuestion.type === "single") {
-      answer = selectedOption;
-    } else if (currentQuestion.type === "multi") {
-      answer = selectedMulti;
-    } else if (currentQuestion.type === "slider") {
-      answer = sliderValue;
-    }
+    if (currentQuestion.type === "single") answer = selectedOption;
+    if (currentQuestion.type === "multi") answer = selectedMulti;
+    if (currentQuestion.type === "slider") answer = sliderValue;
 
     if (answer === null || (Array.isArray(answer) && answer.length === 0)) {
-      alert("لطفاً یک گزینه رو انتخاب کن");
+      alert(
+        "لطفاً یک گزینه انتخاب کنید یا از گزینه «رد کردن سؤال» استفاده کنید.",
+      );
       return;
     }
 
@@ -177,49 +223,14 @@ function Signup() {
     setAnswers(updatedAnswers);
 
     if (isLast) {
-      // ===== ذخیره اطلاعات =====
-      const userPhone = localStorage.getItem("signupPhone") || "";
-
-      // ذخیره در sessionStorage (موقت)
-      sessionStorage.setItem(
-        "tempUserData",
-        JSON.stringify({
-          phone: userPhone,
-          answers: updatedAnswers,
-          timestamp: Date.now(),
-          completedAt: new Date().toISOString(),
-        }),
-      );
-
-      // ذخیره در localStorage (دائمی)
-      localStorage.setItem(
-        "userOnboardingAnswers",
-        JSON.stringify(updatedAnswers),
-      );
-      localStorage.setItem("userOnboardingComplete", "true");
-      localStorage.setItem("userPhone", userPhone);
-
-      // ===== مهم: فلگ برای لاگین =====
-      localStorage.setItem("fromSignup", "true");
-
-      // اگر شماره وجود داشت، برای لاگین ذخیره کن
-      if (userPhone) {
-        localStorage.setItem("signupPhone", userPhone);
-      }
-
-      console.log("✅ اطلاعات کاربر ذخیره شد:", {
-        phone: userPhone,
-        answers: updatedAnswers,
-      });
-
-      // هدایت به صفحه لاگین
-      navigate("/login", { state: { fromSignup: true } });
-    } else {
-      setCurrentStep(currentStep + 1);
-      setSelectedOption(null);
-      setSelectedMulti([]);
-      setSliderValue(5);
+      finishOnboarding(updatedAnswers);
+      return;
     }
+
+    setCurrentStep((step) => step + 1);
+    setSelectedOption(null);
+    setSelectedMulti([]);
+    setSliderValue(5);
   };
 
   const handlePrev = () => {
@@ -232,7 +243,7 @@ function Signup() {
       } else if (prevQuestion.type === "multi") {
         setSelectedMulti(prevAnswer || []);
       } else if (prevQuestion.type === "slider") {
-        setSliderValue(prevAnswer || 5);
+        setSliderValue(prevAnswer ?? 5);
       }
     }
   };
@@ -388,23 +399,32 @@ function Signup() {
             </svg>
             قبلی
           </button>
-          <button
-            onClick={handleNext}
-            className={`${styles.btnNav} ${styles.btnNext}`}
-          >
-            {isLast ? "مشاهده نتیجه" : "بعدی"}
-            {!isLast && (
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M15 19L8 12L15 5"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            )}
-          </button>
+          <div className={styles.questionActions}>
+            <button
+              type="button"
+              onClick={handleSkipQuestion}
+              className={styles.skipQuestionButton}
+            >
+              رد کردن این سؤال
+            </button>
+            <button
+              onClick={handleNext}
+              className={`${styles.btnNav} ${styles.btnNext}`}
+            >
+              {isLast ? "ادامه و ثبت پاسخ‌ها" : "بعدی"}
+              {!isLast && (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M15 19L8 12L15 5"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              )}
+            </button>
+          </div>
         </div>
       </div>
 

@@ -627,3 +627,64 @@ p {
 .btnNext:active {
   transform: scale(0.96);
 }
+
+/* ===== Signup skip controls ===== */
+.welcomeActions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 45px;
+}
+
+.welcomeActions .button {
+  margin-top: 0;
+}
+
+.skipAllButton,
+.skipQuestionButton {
+  border: 1px solid #d8e2d8;
+  background: transparent;
+  color: #557260;
+  border-radius: 999px;
+  padding: 11px 20px;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.skipAllButton:hover,
+.skipQuestionButton:hover {
+  background: #edf3ed;
+  border-color: #9ab49e;
+}
+
+.questionActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.skipQuestionButton {
+  border-color: transparent;
+}
+
+@media (max-width: 768px) {
+  .welcomeActions {
+    margin-top: 28px;
+  }
+
+  .questionActions {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .questionActions > button {
+    width: 100%;
+    justify-content: center;
+  }
+}
